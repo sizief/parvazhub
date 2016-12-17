@@ -1,0 +1,10 @@
+<%= form_for(:search, url: search_path) do |f| %>
+	<%= f.label :Origin %>
+	<%= f.text_field :origin %>
+
+	<%= f.label :Destination %>
+	<%= f.text_field :destination %>
+
+	<%= f.submit "Search" %>
+<%end%>
+
