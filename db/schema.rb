@@ -10,23 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161218182731) do
+ActiveRecord::Schema.define(version: 20161222193258) do
 
   create_table "flight_prices", force: :cascade do |t|
     t.integer  "flight_id"
     t.integer  "price"
     t.string   "supplier"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.date     "flight_date"
   end
 
   create_table "flights", force: :cascade do |t|
     t.integer  "route_id"
     t.string   "flight_number"
-    t.time     "deaprture_time"
-    t.string   "airline_name"
+    t.string   "departure_time"
+    t.string   "airline_code"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.string   "airplane_type"
   end
 
   create_table "routes", force: :cascade do |t|

@@ -1,0 +1,2 @@
+module StaticDataHelper
+end

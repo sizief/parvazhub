@@ -3,9 +3,11 @@
 one:
   flight_id: 1
   price: 1
-  supplier: MyString
+  supplier: zoraq
+  flight_date: "12-12-2016"
 
 two:
   flight_id: 1
   price: 1
   supplier: MyString
+  flight_date: "12-12-2016"

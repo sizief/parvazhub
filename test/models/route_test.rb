@@ -23,4 +23,9 @@ class RouteTest < ActiveSupport::TestCase
   	@route.destination = "mhd"
   	assert_not @route.valid?
   end
+
+  test "length should be 3" do
+  	@route.origin = "a" * 4
+  	assert_not @route.valid?
+  end
 end
