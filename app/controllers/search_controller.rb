@@ -13,9 +13,11 @@ class SearchController < ApplicationController
     json_response["PricedItineraries"].each do |flight|
       flight_number = flight["OriginDestinationOptions"][0]["FlightSegments"][0]["FlightNumber"]
       airline_name = flight["OriginDestinationOptions"][0]["FlightSegments"][0]["OperatingAirline"]["Code"]
-      departure_time = flight["OriginDestinationOptions"][0]["FlightSegments"][0]["DepartureDateTime"]
-      departure_time = parse_date(departure_time)
-      
+      departure_date_time = flight["OriginDestinationOptions"][0]["FlightSegments"][0]["DepartureDateTime"]
+      departure_date_time = parse_date(departure_date_time)
+      #departure_time = departure_date_time.strftime("%I:%M%p")
+      departure_time = Time.parse(departure_date_time.to_s)
+      debugger
       #puts "#{route_id}, #{flight_number}, #{airline}, #{departure_time}"
       Flight.create(route_id: "#{route_id}", flight_number:"#{flight_number}", deaprture_time:"#{departure_time}", airline_name:"#{airline_name}")
     end
