@@ -10,10 +10,22 @@
 			<%= f.label :Destination %>
 			<%= f.text_field :destination, class:'form-control'%>
 		</div>
+
+		<div class="form-group">
+			<%= f.label :Date %>
+			<%= f.text_field :date, {id: 'date-picker', class:'form-control'} %>
+		</div>
 	
 		<div class="form-group">
 			<%= f.submit "Search", class: "btn btn-primary btn-lg btn-block" %>
 		</div>
 	<%end%>
 </div>
+<script type="text/javascript">
+	    $('#date-picker').datepicker({
+	    	format: 'mm/dd/yyyy',
+	    	daysOfWeekHighlighted: "5",
+    		todayHighlight: true
+    });
+</script>
 

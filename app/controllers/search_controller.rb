@@ -5,9 +5,10 @@ class SearchController < ApplicationController
   def save_result
     origin = params[:search][:origin].downcase
     destination = params[:search][:destination].downcase
+    date = params[:search][:date]
     route_id = route_id(origin,destination)
 
-    import_flights(origin,destination,route_id)
+    import_flights(origin,destination,route_id,date)
     import_price()
     render html: route_id
   end
@@ -27,8 +28,8 @@ class SearchController < ApplicationController
     flight.id
   end
 
-  def import_flights(origin,destination, route_id)
-    response = zoraq_search(origin, destination) 
+  def import_flights(origin,destination, route_id,date)
+    response = zoraq_search(origin, destination,date) 
     json_response = JSON.parse(response)
     json_response["PricedItineraries"].each do |flight|
       flight_number = airline_code = airplane_type = departure_date_time = is_flight_created  = nil
@@ -63,11 +64,11 @@ class SearchController < ApplicationController
       #create new flightPrice object
   end
 
-  def zoraq_search(origin,destination)
+  def zoraq_search(origin,destination,date)
   	require "uri"
   	require "net/http"
     begin
-  	   params = {'OrginLocationIata' => "#{origin.upcase}", 'DestLocationIata' => "#{destination.upcase}", 'DepartureGo' => '12/25/2016 00:00:00 AM', 'DepartureReturn' => '12/26/2016 00:00:00 AM', 'Passengers[0].Type' =>'ADT', 'Passengers[0].Quantity'=>'1'}
+  	   params = {'OrginLocationIata' => "#{origin.upcase}", 'DestLocationIata' => "#{destination.upcase}", 'DepartureGo' => "#{date}", 'Passengers[0].Type' =>'ADT', 'Passengers[0].Quantity'=>'1'}
   	   x = Net::HTTP.post_form(URI.parse('http://zoraq.com/Flight/DeepLinkSearch'), params)
   	   x.body
     rescue
