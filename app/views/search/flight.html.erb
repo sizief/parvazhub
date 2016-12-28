@@ -1,10 +1,19 @@
-<%= form_for(:search, url: search_path) do |f| %>
-	<%= f.label :Origin %>
-	<%= f.text_field :origin %>
 
-	<%= f.label :Destination %>
-	<%= f.text_field :destination %>
-
-	<%= f.submit "Search" %>
-<%end%>
+<div class="row">
+  <div class="col-md-4 col-md-offset-4">
+	<%= form_for(:search, url: search_path) do |f| %>
+		<div class="form-group">
+			<%= f.label :Origin %>
+			<%= f.text_field :origin, class:'form-control' %>
+		</div>
+		<div class="form-group">
+			<%= f.label :Destination %>
+			<%= f.text_field :destination, class:'form-control'%>
+		</div>
+	
+		<div class="form-group">
+			<%= f.submit "Search", class: "btn btn-primary btn-lg btn-block" %>
+		</div>
+	<%end%>
+</div>
 

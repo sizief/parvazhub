@@ -1,0 +1,11 @@
+Add bootstrap to project
+Add datepicker
+Display zoraq results
+Add airline logos
+add alibaba -> sync
+chang it to Async
+Display merged results
+Add deeplink if exists
+Add cities to search box
+pick a domian and publish it
+
