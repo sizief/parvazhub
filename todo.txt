@@ -1,6 +1,7 @@
 X.Add bootstrap to project
 X.Add datepicker
 Display zoraq results
+log
 Add airline logos
 add alibaba -> sync
 chang it to Async
