@@ -11,3 +11,6 @@ Add deeplink if exists
 Add cities to search box
 pick a domian and publish it
 
+--
+https://github.com/mperham/sidekiq/
+https://ryanboland.com/blog/writing-your-first-background-worker/
