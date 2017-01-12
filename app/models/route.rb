@@ -3,6 +3,7 @@ class Route < ApplicationRecord
 	validates :destination, presence: true, :length => { :is => 3 }
 	validates :origin, :uniqueness => { :scope => :destination,
     :message => "already saved" }
+  has_many :flights
 
     #give the route id for given destination and origin
     def self.route_id(origin,destination)

@@ -1,4 +1,6 @@
 class SearchController < ApplicationController
+  @@route_id
+
   def flight
   end
 
@@ -6,11 +8,12 @@ class SearchController < ApplicationController
     origin = params[:search][:origin].downcase
     destination = params[:search][:destination].downcase
     date = params[:search][:date]
-    route_id = Route.route_id(origin,destination)
+    @@route_id = Route.route_id(origin,destination)
     
-    search_suppliers(origin,destination,route_id,date)
+    #search on suppliers
+    #search_suppliers(origin,destination,@@route_id,date)
     
-    render :test #html: route_id
+    results
   end
 
   def search_suppliers(origin,destination,route_id,date)
@@ -20,8 +23,9 @@ class SearchController < ApplicationController
     flight_list.import_zoraq_flights(zoraq_response,route_id)
   end
 
-  def test
-    logger.debug "this is test"
+  def results
+     @flights = Flight.where(:route_id => "#{@@route_id}")
+     render :results
   end
 
   def log(response)
@@ -30,6 +34,8 @@ class SearchController < ApplicationController
     log_file.puts(response)
     log_file.close
   end
+
+  
 
 
 

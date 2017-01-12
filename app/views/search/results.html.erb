@@ -1,0 +1,9 @@
+<table class="table table-striped">
+<% @flights.each do |flight|  %>
+	<tr>
+		<td><%= flight.flight_number %></td>
+		<td><%= flight.airplane_type %></td>
+	</tr>
+<% end %>
+</table>
+
