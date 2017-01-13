@@ -1,7 +1,9 @@
 class Flight < ApplicationRecord
-	validates :flight_number, uniqueness: true
+	validates :flight_number, :uniqueness => { :scope => :departure_time,
+    :message => "already saved" }
   validates :route_id, presence: true
   belongs_to :route
+  has_one :flight_price
 
 
 	def import_zoraq_flights(zoraq_response,route_id)

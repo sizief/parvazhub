@@ -1,8 +1,10 @@
 <table class="table table-striped">
 <% @flights.each do |flight|  %>
+
 	<tr>
 		<td><%= flight.flight_number %></td>
 		<td><%= flight.airplane_type %></td>
+		<td><%= flight.flight_price.nil? ? "--" : flight.flight_price.price %></td>
 	</tr>
 <% end %>
 </table>

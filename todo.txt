@@ -2,7 +2,8 @@ X.Add bootstrap to project
 X.Add datepicker
 X.Display zoraq results
 X.log
-How to select with join
+XHow to select with join
+-fix bug: new prices will not add to dlight price. solution: if flight exists then the insert for flight price did not work. should add an if for already exist flights.
 Add airline logos
 add alibaba -> sync
 chang it to Async
