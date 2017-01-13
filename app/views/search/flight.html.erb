@@ -1,7 +1,7 @@
 <% provide(:title,"Olla Search") %>
 <div class="row">
   <div class="col-md-4 col-md-offset-4">
-	<%= form_for(:search, url: search_path) do |f| %>
+	<%= form_for(:search, url: search_path, method: :get) do |f| %>
 		<div class="form-group">
 			<%= f.label :Origin %>
 			<%= f.text_field :origin, class:'form-control' %>

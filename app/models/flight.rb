@@ -1,5 +1,8 @@
 class Flight < ApplicationRecord
 	validates :flight_number, uniqueness: true
+  validates :route_id, presence: true
+  belongs_to :route
+
 
 	def import_zoraq_flights(zoraq_response,route_id)
       json_response = JSON.parse(zoraq_response)

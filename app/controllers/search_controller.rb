@@ -1,5 +1,5 @@
 class SearchController < ApplicationController
-  @@route_id
+  @@route
 
   def flight
   end
@@ -8,10 +8,11 @@ class SearchController < ApplicationController
     origin = params[:search][:origin].downcase
     destination = params[:search][:destination].downcase
     date = params[:search][:date]
-    @@route_id = Route.route_id(origin,destination)
+    @@route = Route.find_by(origin:"thr",destination:"mhd")
+
     
     #search on suppliers
-    #search_suppliers(origin,destination,@@route_id,date)
+    search_suppliers(origin,destination,@@route.id,date)
     
     results
   end
@@ -24,7 +25,7 @@ class SearchController < ApplicationController
   end
 
   def results
-     @flights = Flight.where(:route_id => "#{@@route_id}")
+     @flights = @@route.flights
      render :results
   end
 
