@@ -3,7 +3,7 @@ class Flight < ApplicationRecord
     :message => "already saved" }
   validates :route_id, presence: true
   belongs_to :route
-  has_one :flight_price
+  has_many :flight_prices
 
 
 	def import_zoraq_flights(zoraq_response,route_id)
@@ -55,21 +55,21 @@ class Flight < ApplicationRecord
 
   def airline_code_correction(zoraq_airline_code)
   	airline_codes = {
-  		"ak":"@1", #Atrak Airlines
-  		"b9":"@2", #Iran Airtour
+  		"ATR":"@1", #Atrak Airlines
+  		"B9":"@2", #Iran Airtour
   		"sepahan":"@3", #Sepahan Airlines
   		"hesa":"@4", #Hesa 
-  		"i3":"@5", #ATA Airlines
-  		"ji":"@7", #Meraj
-  		"iv":"@8", #Caspian Airlines
-  		"nv":"@9", #Iranian Naft Airlines
+  		"I3":"@5", #ATA Airlines
+  		"JI":"@7", #Meraj
+  		"IV":"@8", #Caspian Airlines
+  		"NV":"@9", #Iranian Naft Airlines
   		"saha":"@A", #Saha
-  		"zv":"@B" #Zagros 
+  		"ZV":"@B" #Zagros 
   	}
   	if airline_codes.key("#{zoraq_airline_code}").nil?
-  	  return zoraq_airline_code
+  	  return zoraq_airline_code.upcase
   	else
-      return airline_codes.key("#{zoraq_airline_code}").to_s
+      return airline_codes.key("#{zoraq_airline_code}").to_s.upcase
   	end
   end
 

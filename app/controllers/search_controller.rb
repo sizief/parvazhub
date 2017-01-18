@@ -25,6 +25,7 @@ class SearchController < ApplicationController
 
   def results(route,date)
      @flights = route.flights.where(departure_time: date.to_date.beginning_of_day..date.to_date.end_of_day)
+      #debugger
      render :results
   end
 

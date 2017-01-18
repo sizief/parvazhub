@@ -2,9 +2,10 @@
 <% @flights.each do |flight|  %>
 
 	<tr>
+		<td><%= airline_logo_for flight.airline_code %></td>
 		<td><%= flight.flight_number %></td>
 		<td><%= flight.airplane_type %></td>
-		<td><%= flight.flight_price.nil? ? "--" : flight.flight_price.price %></td>
+		<td><%= flight.flight_prices.nil? ? "-" : flight.flight_prices.all.last.price %></td>
 	</tr>
 <% end %>
 </table>
