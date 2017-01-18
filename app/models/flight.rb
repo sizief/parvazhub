@@ -38,7 +38,7 @@ class Flight < ApplicationRecord
 
         departure_date = departure_date_time.strftime("%F")
         price = flight["AirItineraryPricingInfo"]["PTC_FareBreakdowns"][0]["PassengerFare"]["TotalFare"]["Amount"]
-        flight_id = flight_id(flight_number)
+        flight_id = flight_id(flight_number,departure_time)
         FlightPrice.create(flight_id: "#{flight_id}", price: "#{price}", supplier:"zoraq", flight_date:"#{departure_date}" )
       end #end of each loop
   end
@@ -48,8 +48,8 @@ class Flight < ApplicationRecord
     return Time.at(seconds_since_epoch)
   end
 
-   def flight_id(flight_number)
-    flight = Flight.select(:id).find_by(flight_number:"#{flight_number}")
+   def flight_id(flight_number,departure_time)
+    flight = Flight.select(:id).find_by(flight_number:"#{flight_number}", departure_time: Time.zone.parse(departure_time.to_s))
     flight.id
   end
 
