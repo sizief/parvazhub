@@ -6,26 +6,72 @@ class Flight < ApplicationRecord
   has_many :flight_prices
 
 
-	def import_zoraq_flights(zoraq_response,route_id)
+	
+def import_domestic_alibaba_flights(response,route_id)
+      json_response = JSON.parse(response)
+      json_response["AvailableFlights"].each do |flight|
+        flight_number = airline_code = airplane_type = departure_date_time  = nil
+        #to add airline code to flight number for some corrupted flight numbers
+        if flight["FlightNumber"].upcase.include? flight["AirLineEnglish"]
+            flight_number = flight["FlightNumber"].upcase
+        else
+            flight_number = flight["AirLineEnglish"].upcase+flight["FlightNumber"]
+        end
+
+        airline_code = flight["AirLineEnglish"]
+        airplane_type = flight["Aircraft"]
+        
+        departure_date_array = flight["LeaveDate"].split("/")
+        departure_date = departure_date_array[2]+"-"+departure_date_array[0]+"-"+departure_date_array[1]
+        departure_time = flight["LeaveTime"][0..1]+":"+flight["LeaveTime"][2..3]
+        departure_date_time = departure_date+" "+departure_time
+        departure_time = departure_date_time.to_datetime
+        
+        Flight.create(route_id: "#{route_id}", flight_number:"#{flight_number}", departure_time:"#{departure_time}", airline_code:"#{airline_code}", airplane_type: "#{airplane_type}")
+
+        #beware of price 0
+        #departure_date = departure_date_time.strftime("%F")
+        #price = flight["AirItineraryPricingInfo"]["PTC_FareBreakdowns"][0]["PassengerFare"]["TotalFare"]["Amount"]
+        #flight_id = flight_id(flight_number,departure_time)
+        #FlightPrice.create(flight_id: "#{flight_id}", price: "#{price}", supplier:"zoraq", flight_date:"#{departure_date}" )
+      end #end of each loop
+  end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  def import_zoraq_flights(zoraq_response,route_id)
       json_response = JSON.parse(zoraq_response)
       json_response["PricedItineraries"].each do |flight|
         flight_number = airline_code = airplane_type = departure_date_time  = nil
         flight_legs = flight["OriginDestinationOptions"][0]["FlightSegments"]
       
         flight_legs.each do |leg|
-          correct_airline_code = airline_code_correction(leg["OperatingAirline"]["Code"])
+          corrected_airline_code = zoraq_airline_code_correction(leg["OperatingAirline"]["Code"])
 
           #to add airline code to flight number for some corrupted flight numbers
           #for example there is 4545 flight number which is not correct
           #the correct format is w54545
-          if leg["FlightNumber"].include? correct_airline_code
+          if leg["FlightNumber"].include? corrected_airline_code
             correct_flight_number = leg["FlightNumber"]
           else
-            correct_flight_number = correct_airline_code+leg["FlightNumber"]
+            correct_flight_number = corrected_airline_code+leg["FlightNumber"]
           end
 
           flight_number = flight_number.nil? ? correct_flight_number : flight_number +"|"+correct_flight_number
-          airline_code = airline_code.nil? ? correct_airline_code : airline_code +"|"+correct_airline_code
+          airline_code = airline_code.nil? ? corrected_airline_code : airline_code +"|"+corrected_airline_code
           airplane_type = airplane_type.nil? ? leg["OperatingAirline"]["Equipment"] : airplane_type +"|"+leg["OperatingAirline"]["Equipment"]
           #we need just first departre date time, so the other leg's departre time is commented
           departure_date_time = departure_date_time.nil? ? leg["DepartureDateTime"] : departure_date_time # +"|"+leg["DepartureDateTime"]
@@ -53,7 +99,7 @@ class Flight < ApplicationRecord
     flight.id
   end
 
-  def airline_code_correction(zoraq_airline_code)
+  def zoraq_airline_code_correction(zoraq_airline_code)
   	airline_codes = {
   		"ATR":"@1", #Atrak Airlines
   		"B9":"@2", #Iran Airtour

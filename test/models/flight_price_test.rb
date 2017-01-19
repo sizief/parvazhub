@@ -3,7 +3,7 @@ require 'test_helper'
 class FlightPriceTest < ActiveSupport::TestCase
   def setup
   	flight = Flight.last
-    @fp = flight.flight_price.build(supplier: "zoraq", flight_date: DateTime.now.to_date)
+    @fp = flight.flight_prices.build(supplier: "zoraq", flight_date: DateTime.now.to_date)
   end
   
   test "should be valid" do

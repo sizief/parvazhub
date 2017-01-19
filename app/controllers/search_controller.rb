@@ -17,10 +17,20 @@ class SearchController < ApplicationController
   end
 
   def search_suppliers(origin,destination,route_id,date)
-    zoraq_response = Suppliers::Zoraq.search(origin,destination,date)
-    log(zoraq_response)
+    #zoraq_response = Suppliers::Zoraq.search(origin,destination,date)
+    #log(zoraq_response)
+
+    alibaba_response = Suppliers::Alibaba.search(origin,destination,date)
+    log(alibaba_response)
+    #alibaba_flights = Suppliers::Alibaba.new()
+    #alibaba_response = alibaba_flights.search(origin,destination,date)
+
+    #log(alibaba_response)
+
     flight_list = Flight.new()
-    flight_list.import_zoraq_flights(zoraq_response,route_id)
+    #flight_list.import_zoraq_flights(zoraq_response,route_id)
+    flight_list.import_domestic_alibaba_flights(alibaba_response,route_id)
+
   end
 
   def results(route,date)
