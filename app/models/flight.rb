@@ -2,23 +2,23 @@ class Flight < ApplicationRecord
 	validates :flight_number, :uniqueness => { :scope => :departure_time,
     :message => "already saved" }
   validates :route_id, presence: true
+  #default_scope -> { order(created_at: :desc) }
   belongs_to :route
   has_many :flight_prices
-
-
 	
 def import_domestic_alibaba_flights(response,route_id)
       json_response = JSON.parse(response)
       json_response["AvailableFlights"].each do |flight|
         flight_number = airline_code = airplane_type = departure_date_time  = nil
+        corrected_airline_code = alibaba_airline_code_correction(flight["AirLineEnglish"])
         #to add airline code to flight number for some corrupted flight numbers
-        if flight["FlightNumber"].upcase.include? flight["AirLineEnglish"]
+        if flight["FlightNumber"].upcase.include? corrected_airline_code
             flight_number = flight["FlightNumber"].upcase
         else
-            flight_number = flight["AirLineEnglish"].upcase+flight["FlightNumber"]
+            flight_number = corrected_airline_code.upcase+flight["FlightNumber"].delete("^0-9")
         end
 
-        airline_code = flight["AirLineEnglish"]
+        airline_code = corrected_airline_code
         airplane_type = flight["Aircraft"]
         
         departure_date_array = flight["LeaveDate"].split("/")
@@ -29,27 +29,13 @@ def import_domestic_alibaba_flights(response,route_id)
         
         Flight.create(route_id: "#{route_id}", flight_number:"#{flight_number}", departure_time:"#{departure_time}", airline_code:"#{airline_code}", airplane_type: "#{airplane_type}")
 
-        #beware of price 0
-        #departure_date = departure_date_time.strftime("%F")
-        #price = flight["AirItineraryPricingInfo"]["PTC_FareBreakdowns"][0]["PassengerFare"]["TotalFare"]["Amount"]
-        #flight_id = flight_id(flight_number,departure_time)
-        #FlightPrice.create(flight_id: "#{flight_id}", price: "#{price}", supplier:"zoraq", flight_date:"#{departure_date}" )
+        price = flight["price"].to_i/10
+        unless price == 0
+          flight_id = flight_id(flight_number,departure_time)
+          FlightPrice.create(flight_id: "#{flight_id}", price: "#{price}", supplier:"alibaba", flight_date:"#{departure_date}" )
+        end
       end #end of each loop
   end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   def import_zoraq_flights(zoraq_response,route_id)
@@ -117,6 +103,18 @@ def import_domestic_alibaba_flights(response,route_id)
   	else
       return airline_codes.key("#{zoraq_airline_code}").to_s.upcase
   	end
+  end
+
+  def alibaba_airline_code_correction(alibaba_airline_code)
+    airline_codes = {
+      "IV":"rv",
+      "IV":"RV"
+    }
+    if airline_codes.key("#{alibaba_airline_code}").nil?
+      return alibaba_airline_code.upcase
+    else
+      return airline_codes.key("#{alibaba_airline_code}").to_s.upcase
+    end
   end
 
 
