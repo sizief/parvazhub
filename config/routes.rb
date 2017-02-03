@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   get '/about-us', to:'static_pages#about_us'
 
@@ -7,6 +9,10 @@ Rails.application.routes.draw do
   resources :routes
 
   root 'search#flight'
+
+
+# sidekiq
+mount Sidekiq::Web, at: '/sidekiq'
 
 
 end

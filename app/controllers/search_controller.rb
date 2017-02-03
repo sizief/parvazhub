@@ -7,10 +7,13 @@ class SearchController < ApplicationController
     origin = params[:search][:origin].downcase
     destination = params[:search][:destination].downcase
     date = params[:search][:date]
-    route = Route.find_by(origin: "#{origin}", destination:"#{destination}")
+    #route = Route.find_by(origin: "#{origin}", destination:"#{destination}") #Find route. This works only if route already exists
+    route = Route.route_id("#{origin}", "#{destination}") #create id if id route is not exist
 
-    #search on suppliers
-    #search_suppliers(origin,destination,route.id,date)
+    
+    #FlightSearchWorker.perform_async(origin,destination,route.id,date) #Search Async
+    #lightSearchWorker.new.perform(origin,destination,route.id,date)  #Search sync
+    #search_suppliers(origin,destination,route.id,date)  #Search without sidekiq
     
     results(route,date)
   end
@@ -29,7 +32,7 @@ class SearchController < ApplicationController
   end
 
   def results(route,date)
-     @flights = route.flights.where(departure_time: date.to_date.beginning_of_day..date.to_date.end_of_day)
+     @flights = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s)
       #debugger
      render :results
   end

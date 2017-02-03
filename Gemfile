@@ -11,9 +11,16 @@ gem 'turbolinks',   '5.0.1'
 gem 'jbuilder',     '2.4.1'
 gem 'bcrypt',         '3.1.11'
 gem 'parsi-date', '~> 0.3.1'
+gem 'redis'
+gem 'redis-namespace'
+gem 'sidekiq'
+gem 'sinatra', require: false
+gem 'slim'
+gem 'whenever', require: false
 
 group :development, :test do
-  gem 'sqlite3', '1.3.12'
+  gem 'pg', '~> 0.18.4'
+  #gem 'sqlite3', '1.3.12'
   gem 'byebug',  '9.0.0', platform: :mri
 end
 
@@ -32,7 +39,7 @@ group :test do
 end
 
 group :production do
-  gem 'pg', '0.18.4'
+  gem 'pg', '~> 0.18.4'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

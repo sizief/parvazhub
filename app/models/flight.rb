@@ -63,12 +63,12 @@ def import_domestic_alibaba_flights(response,route_id)
           departure_date_time = departure_date_time.nil? ? leg["DepartureDateTime"] : departure_date_time # +"|"+leg["DepartureDateTime"]
         end
 
-        departure_date_time = parse_date(departure_date_time)
-        departure_time = departure_date_time + 210.minutes # add 3:30 hours because zoraq date time is in iran time zone #.strftime("%H:%M")
+        departure_time = parse_date(departure_date_time).utc.to_datetime
+        departure_time = departure_time + 210.minutes # add 3:30 hours because zoraq date time is in iran time zone #.strftime("%H:%M")
         
         Flight.create(route_id: "#{route_id}", flight_number:"#{flight_number}", departure_time:"#{departure_time}", airline_code:"#{airline_code}", airplane_type: "#{airplane_type}")
 
-        departure_date = departure_date_time.strftime("%F")
+        departure_date = departure_time.strftime("%F")
         price = flight["AirItineraryPricingInfo"]["PTC_FareBreakdowns"][0]["PassengerFare"]["TotalFare"]["Amount"]
         flight_id = flight_id(flight_number,departure_time)
         FlightPrice.create(flight_id: "#{flight_id}", price: "#{price}", supplier:"zoraq", flight_date:"#{departure_date}" )
@@ -80,8 +80,8 @@ def import_domestic_alibaba_flights(response,route_id)
     return Time.at(seconds_since_epoch)
   end
 
-   def flight_id(flight_number,departure_time)
-    flight = Flight.select(:id).find_by(flight_number:"#{flight_number}", departure_time: Time.zone.parse(departure_time.to_s))
+  def flight_id(flight_number,departure_time)
+    flight = Flight.select(:id).find_by(flight_number:"#{flight_number}", departure_time: "#{departure_time}")
     flight.id
   end
 
@@ -107,7 +107,6 @@ def import_domestic_alibaba_flights(response,route_id)
 
   def alibaba_airline_code_correction(alibaba_airline_code)
     airline_codes = {
-      "IV":"rv",
       "IV":"RV"
     }
     if airline_codes.key("#{alibaba_airline_code}").nil?

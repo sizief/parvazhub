@@ -1,13 +1,14 @@
+count: <%= @flights.count %>
 <table class="table table-striped">
 <% @flights.each do |flight|  %>
 
 	<tr>
 		<td><%= airline_logo_for flight.airline_code %></td>
 		<td><%= flight.flight_number %></td>
-		<td><%= flight.departure_time.strftime("%H:%M") %></td>
+		<td><%= flight.departure_time.to_datetime.strftime("%H:%M") %></td>
 		<td><%= flight.airplane_type %></td>
 		<td>
-		<table>
+		<!--<table>
 			<% flight.flight_prices.group("supplier").order("price").each_with_index do |ticket,index| %>
 				<tr class="<%='best-price' if index==0 %>" >
 					<td><%= ticket.nil? ? "-" : ticket.supplier %></td>
@@ -15,6 +16,7 @@
 				</tr>
 			<% end %>
 		</table>
+		-->
 		</td>
 	</tr>
 <% end %>

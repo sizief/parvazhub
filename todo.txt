@@ -8,7 +8,7 @@ X.Add airline logos
 X.add alibaba -> sync
 add condition for search for alibaba domestic flight only
 change it to Async
-Display merged results
+X.Display merged results
 Add deeplink if exists
 Add cities to search box
 pick a domian and publish it
