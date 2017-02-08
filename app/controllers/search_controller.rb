@@ -20,10 +20,10 @@ class SearchController < ApplicationController
 
   def search_suppliers(origin,destination,route_id,date)
     zoraq_response = Suppliers::Zoraq.search(origin,destination,date)
-    log(zoraq_response)
+    log(zoraq_response) if Rails.env.development?  
 
     alibaba_response = Suppliers::Alibaba.search(origin,destination,date)
-    log(alibaba_response)
+    log(alibaba_response) if Rails.env.development?  
 
     flight_list = Flight.new()
     flight_list.import_zoraq_flights(zoraq_response,route_id)
