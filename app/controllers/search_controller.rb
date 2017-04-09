@@ -10,10 +10,7 @@ class SearchController < ApplicationController
     #route = Route.find_by(origin: "#{origin}", destination:"#{destination}") #Find route. This works only if route already exists
     route = Route.create_route("#{origin}", "#{destination}") #create id if id route is not exist
 
-    
-    #FlightSearchWorker.perform_async(origin,destination,route.id,date) #Search Async
-    #FlightSearchWorker.new.perform(origin,destination,route.id,date)  #Search sync
-    search_suppliers(origin,destination,route.id,date)  #Search without sidekiq
+    search_suppliers(origin,destination,route.id,date)  
     
     results(route,date)
   end
