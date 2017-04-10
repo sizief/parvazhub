@@ -19,12 +19,12 @@ class SearchController < ApplicationController
     zoraq_response = Suppliers::Zoraq.search(origin,destination,date)
     log(zoraq_response) if Rails.env.development?  
 
-    alibaba_response = Suppliers::Alibaba.search(origin,destination,date)
-    log(alibaba_response) if Rails.env.development?  
+    #alibaba_response = Suppliers::Alibaba.search(origin,destination,date)
+    #log(alibaba_response) if Rails.env.development?  
 
     flight_list = Flight.new()
     flight_list.import_zoraq_flights(zoraq_response,route_id)
-    flight_list.import_domestic_alibaba_flights(alibaba_response,route_id)
+    #flight_list.import_domestic_alibaba_flights(alibaba_response,route_id)
 
   end
 

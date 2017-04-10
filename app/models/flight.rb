@@ -56,6 +56,8 @@ def import_domestic_alibaba_flights(response,route_id)
             correct_flight_number = corrected_airline_code+leg["FlightNumber"]
           end
 
+          correct_flight_number = correct_flight_number.tr('.','') #sometimes zoraq responses with "." in start or end of a flight number
+
           flight_number = flight_number.nil? ? correct_flight_number : flight_number +"|"+correct_flight_number
           airline_code = airline_code.nil? ? corrected_airline_code : airline_code +"|"+corrected_airline_code
           airplane_type = airplane_type.nil? ? leg["OperatingAirline"]["Equipment"] : airplane_type +"|"+leg["OperatingAirline"]["Equipment"]
