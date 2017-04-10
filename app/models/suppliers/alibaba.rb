@@ -10,7 +10,7 @@ class Suppliers::Alibaba
       url = @search_flight_url+search_flight_params
       data = URI.parse("#{url}").read
     rescue
-      raise "Time out for zoraq" 
+      raise "Time out for Alibaba" 
     end
 
     request_id = JSON.parse(data)["RequestId"]
