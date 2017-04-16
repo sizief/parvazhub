@@ -1,14 +1,14 @@
 class Suppliers::Zoraq
-@url = "http://zoraq.com/Flight/DeepLinkSearch"
+    require "uri"
+    require "rest-client"
+    @url = "http://zoraq.com/Flight/DeepLinkSearch"
 
-  def self.search(origin,destination,date)
-  	require "uri"
-  	require "net/http"
-    begin
+    def self.search(origin,destination,date)
+      begin
   	   params = {'OrginLocationIata' => "#{origin.upcase}", 'DestLocationIata' => "#{destination.upcase}", 'DepartureGo' => "#{date}", 'Passengers[0].Type' =>'ADT', 'Passengers[0].Quantity'=>'1'}
-  	   x = Net::HTTP.post_form(URI.parse(@url), params)
-  	   x.body
-    rescue
+       response = RestClient.post("#{URI.parse(@url)}", params)
+       response.body
+      rescue
       raise "Time out for zoraq" 
     end
   end

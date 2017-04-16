@@ -9,6 +9,8 @@ E. install bundler
 F. install rails  
 G. install and create user for pgresql, see bottom for more help  
 H. install nodejs
+I. install build essential for unf_ext: apt-get install build-essential
+
   
 ## how to run  
 run sidekiq proccess then go to localhost:3000/sidekiq  

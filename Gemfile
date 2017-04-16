@@ -11,9 +11,10 @@ gem 'turbolinks',   '5.0.1'
 gem 'jbuilder',     '2.4.1'
 gem 'bcrypt',         '3.1.11'
 gem 'parsi-date', '~> 0.3.1'
-gem 'sinatra', require: false
 gem 'slim'
-gem 'whenever', require: false
+#test
+gem 'promise'
+gem 'rest-client'
 
 
 group :development, :test do
