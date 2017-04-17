@@ -7,30 +7,46 @@ class SearchController < ApplicationController
     origin = params[:search][:origin].downcase
     destination = params[:search][:destination].downcase
     date = params[:search][:date]
-    #route = Route.find_by(origin: "#{origin}", destination:"#{destination}") #Find route. This works only if route already exists
     route = Route.create_route("#{origin}", "#{destination}") #create id if id route is not exist
+    response_available = SearchHistory.where(route_id:1,departure_time:"2017-04-18").where('created_at >= ?', 10.minute.ago).count
 
-    search_suppliers(origin,destination,route.id,date)  
-    
+    search_suppliers(origin,destination,route.id,date) if response_available == 0
     results(route,date)
   end
 
   def search_suppliers(origin,destination,route_id,date)
-    zoraq_response = Suppliers::Zoraq.search(origin,destination,date)
-    log(zoraq_response) if Rails.env.development?  
-
-    alibaba_response = Suppliers::Alibaba.search(origin,destination,date)
-    log(alibaba_response) if Rails.env.development?  
-
-    flight_list = Flight.new()
-    flight_list.import_zoraq_flights(zoraq_response,route_id)
-    flight_list.import_domestic_alibaba_flights(alibaba_response,route_id)
+    Parallel.each([method(:search_alibaba),method(:search_zoraq)], in_processes: 2) { |x|
+         x.call(origin,destination,route_id,date) 
+    }
 
   end
 
+  def search_alibaba(origin,destination,route_id,date)
+    alibaba_response = Suppliers::Alibaba.search(origin,destination,date)
+    SearchHistory.create(supplier_name:"Alibaba",route_id:route_id,departure_time: date)
+    log(alibaba_response) if Rails.env.development?  
+    flight_list = Flight.new()
+    flight_list.import_domestic_alibaba_flights(alibaba_response,route_id)
+  end
+
+  def search_zoraq(origin,destination,route_id,date)
+    zoraq_response = Suppliers::Zoraq.search(origin,destination,date)
+    SearchHistory.create(supplier_name:"Zoraq",route_id:route_id,departure_time: date)
+    log(zoraq_response) if Rails.env.development?  
+    flight_list = Flight.new()
+    flight_list.import_zoraq_flights(zoraq_response,route_id)
+  end
+
+
   def results(route,date)
+      #following code is implemented just to solve the connection issue between pgsql and rails, see https://github.com/grosser/parallel/issues/62
+      begin
+        ActiveRecord::Base.connection.reconnect!
+      rescue
+        ActiveRecord::Base.connection.reconnect!
+      end
+
      @flights = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s)
-      #debugger
      render :results
   end
 

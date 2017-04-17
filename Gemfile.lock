@@ -117,9 +117,9 @@ GEM
     notiffany (0.1.1)
       nenv (~> 0.1)
       shellany (~> 0.0)
+    parallel (1.11.1)
     parsi-date (0.3.1)
     pg (0.18.4)
-    promise (0.3.1)
     pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -223,9 +223,9 @@ DEPENDENCIES
   jquery-rails (= 4.1.1)
   listen (= 3.0.8)
   minitest-reporters (= 1.1.9)
+  parallel
   parsi-date (~> 0.3.1)
   pg (~> 0.18.4)
-  promise
   puma (= 3.4.0)
   rails (= 5.0.0.1)
   rails-controller-testing (= 0.1.1)

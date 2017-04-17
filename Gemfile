@@ -12,9 +12,8 @@ gem 'jbuilder',     '2.4.1'
 gem 'bcrypt',         '3.1.11'
 gem 'parsi-date', '~> 0.3.1'
 gem 'slim'
-#test
-gem 'promise'
 gem 'rest-client'
+gem 'parallel'
 
 
 group :development, :test do

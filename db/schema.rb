@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161222193258) do
+ActiveRecord::Schema.define(version: 20170417080035) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,4 +41,14 @@ ActiveRecord::Schema.define(version: 20161222193258) do
     t.datetime "updated_at",  null: false
   end
 
+  create_table "search_histories", force: :cascade do |t|
+    t.string   "supplier_name"
+    t.integer  "route_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.string   "departure_time"
+    t.index ["route_id"], name: "index_search_histories_on_route_id", using: :btree
+  end
+
+  add_foreign_key "search_histories", "routes"
 end
