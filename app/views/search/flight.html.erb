@@ -1,32 +1,68 @@
 <% provide(:title,"Olla Search") %>
-<div class="row">
-  <div class="col-md-4 col-md-offset-4">
-	<%= form_for(:search, url: search_path, method: :get) do |f| %>
-		<div class="form-group">
-			<%= f.label :Origin %>
-			<%= f.text_field :origin, class:'form-control' %>
-		</div>
-		<div class="form-group">
-			<%= f.label :Destination %>
-			<%= f.text_field :destination, class:'form-control'%>
-		</div>
-
-		<div class="form-group">
-			<%= f.label :Date %>
-			<%= f.text_field :date, {id: 'date-picker', class:'form-control'} %>
-		</div>
-	
-		<div class="form-group">
-			<%= f.submit "Search", class: "btn btn-primary btn-lg btn-block" %>
-		</div>
-	<%end%>
+<div class="ui selection dropdown">
+  <input type="hidden" name="gender">
+  <i class="dropdown icon"></i>
+  <div class="default text">Gender</div>
+  <div class="menu">
+    <div class="item" data-value="1">Male</div>
+    <div class="item" data-value="0">Female</div>
+  </div>
 </div>
+ 
+<div class="ui vertical masthead segment" style="direction: rtl">  
+	<div class="ui container text center header" style="margin-top: 5%;font-size: 2.5em;color: #04a29b;">
+		<h1 class="ui huge header teal">compare flights</h1>
+	</div>
+
+	<div class="ui container" style="margin-top: 5%">
+	  	<div class="ui segments">
+	   		<%= form_for(:search, url: search_path, method: :get) do |f| %>
+	    		<div class="ui huge form" style="padding: 5%">
+	     			<div class="three fields">
+	      				<div class="field">
+	       					<%= f.label :Origin %>
+		   					<%# f.text_field :origin, class:'form-control' %>
+		   					<% @cities ={Tehran:"thr",Mashhad:"MHD"} %>
+		   					<%= f.select :origin, @cities.map{ |x,y| [x, y]}, {},{:class =>'ui dropdown'} %>
+
+	      				</div>
+	      				<div class="field">
+	      					<%= f.label :Destination %>
+		   					<%= f.text_field :destination, class:'form-control'%>
+	      				</div>
+	      				<div class="field">
+							<%= f.label :Date %>
+							<%= f.text_field :date, {id: 'date-picker', class:'form-control'} %>
+	      				</div>
+
+
+
+
+
+	  				</div>
+	  				<%= f.submit "Search", class: "ui submit button massive teal" %>
+				</div>
+			<%end%>
+		</div>		
+	</div>	
+
+</div>
+
 <script type="text/javascript">
+	$('.ui.dropdown')
+  .dropdown()
+;
+
+</script>
+<!--<script type="text/javascript">
 	    $('#date-picker').datepicker({
 	    	format: 'yyyy-mm-dd',
 	    	daysOfWeekHighlighted: "5",
     		todayHighlight: true,
     		autoclose:true
     });
-</script>
+</script>-->
+
+
+
 

@@ -11,7 +11,13 @@
 // about supported directives.
 //
 //= require jquery
-//= require bootstrap
-//= require bootstrap-datepicker.min
 //= require turbolinks
-//= require_tree .
+//= require_tree
+// Loads all Semantic javascripts
+//= require semantic-ui
+//=require rtlcss.js
+
+
+
+
+
