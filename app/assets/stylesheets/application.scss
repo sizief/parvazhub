@@ -2,6 +2,11 @@
 @import "semantic-ui/collections/menu";
 @import "rtlcss";
 
+/* fix for rtl semantic */
+.ui.form .field > .selection.dropdown > .dropdown.icon {
+    float: left;
+    text-align: left !important;
+}
 
 /* first page */
 

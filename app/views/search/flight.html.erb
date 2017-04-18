@@ -1,17 +1,8 @@
 <% provide(:title,"Olla Search") %>
-<div class="ui selection dropdown">
-  <input type="hidden" name="gender">
-  <i class="dropdown icon"></i>
-  <div class="default text">Gender</div>
-  <div class="menu">
-    <div class="item" data-value="1">Male</div>
-    <div class="item" data-value="0">Female</div>
-  </div>
-</div>
  
 <div class="ui vertical masthead segment" style="direction: rtl">  
 	<div class="ui container text center header" style="margin-top: 5%;font-size: 2.5em;color: #04a29b;">
-		<h1 class="ui huge header teal">compare flights</h1>
+		<h1 class="ui huge header teal">Compare Flights</h1>
 	</div>
 
 	<div class="ui container" style="margin-top: 5%">
@@ -21,14 +12,13 @@
 	     			<div class="three fields">
 	      				<div class="field">
 	       					<%= f.label :Origin %>
-		   					<%# f.text_field :origin, class:'form-control' %>
-		   					<% @cities ={Tehran:"thr",Mashhad:"MHD"} %>
+		   					<% @cities ={Tehran:"thr",Mashhad:"MHD",Kish:"kih",Isfahan:"isf"} %>
 		   					<%= f.select :origin, @cities.map{ |x,y| [x, y]}, {},{:class =>'ui dropdown'} %>
-
 	      				</div>
 	      				<div class="field">
 	      					<%= f.label :Destination %>
-		   					<%= f.text_field :destination, class:'form-control'%>
+		   					<%# f.text_field :destination, class:'form-control'%>
+		   					<%= f.select :destination, @cities.map{ |x,y| [x, y]}, {},{:class =>'ui dropdown'} %>
 	      				</div>
 	      				<div class="field">
 							<%= f.label :Date %>

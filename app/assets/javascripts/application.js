@@ -13,8 +13,9 @@
 //= require jquery
 //= require turbolinks
 //= require semantic-ui
-//= require rtlcss
-//= require_tree .
+//= require rtlcss.min
+
+//= require_tree
 
 
 
