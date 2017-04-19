@@ -10,12 +10,12 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
+//= require jquery2
 //= require turbolinks
 //= require semantic-ui
 //= require rtlcss.min
-
-//= require_tree
+//= require calendar.min
+//= require_tree .
 
 
 

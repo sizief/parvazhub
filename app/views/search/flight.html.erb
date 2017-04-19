@@ -1,8 +1,8 @@
 <% provide(:title,"Olla Search") %>
  
 <div class="ui vertical masthead segment" style="direction: rtl">  
-	<div class="ui container text center header" style="margin-top: 5%;font-size: 2.5em;color: #04a29b;">
-		<h1 class="ui huge header teal">Compare Flights</h1>
+	<div class="ui container text center header" style="margin-top: 5%;font-size: 2.2em;color: #04a29b;">
+		<h1 class="ui huge header teal center aligned">Lets Compare Flights</h1>
 	</div>
 
 	<div class="ui container" style="margin-top: 5%">
@@ -17,20 +17,20 @@
 	      				</div>
 	      				<div class="field">
 	      					<%= f.label :Destination %>
-		   					<%# f.text_field :destination, class:'form-control'%>
+							<% @cities ={Mashhad:"MHD",Tehran:"thr",Kish:"kih",Isfahan:"isf"} %>
 		   					<%= f.select :destination, @cities.map{ |x,y| [x, y]}, {},{:class =>'ui dropdown'} %>
 	      				</div>
-	      				<div class="field">
+	      				<div class="field ui calendar" id="date-picker">
 							<%= f.label :Date %>
-							<%= f.text_field :date, {id: 'date-picker', class:'form-control'} %>
+							<div class="ui input left icon">
+      							<i class="calendar icon"></i>
+								<%= f.text_field :date, {id: 'example3', class:'form-control'} %>
+							</div>
 	      				</div>
-
-
-
-
-
 	  				</div>
-	  				<%= f.submit "Search", class: "ui submit button massive teal" %>
+	  				<div class="ui center aligned basic segment">
+	  					<%= f.submit "Search", class: "ui submit button massive teal" %>
+	  				</div>
 				</div>
 			<%end%>
 		</div>		
@@ -39,20 +39,28 @@
 </div>
 
 <script type="text/javascript">
-	$('.ui.dropdown')
-  .dropdown()
-;
+	//dropdown for semantic-ui
+	$('.ui.dropdown').dropdown(); 
+	//calendar
+	$('#date-picker').calendar({
+	type: 'date',
+    formatter: {
+    	date: function (date, settings) {
+	      if (!date) return '';
+	      var day = date.getDate();
+	      var month = date.getMonth() + 1;
+	      var year = date.getFullYear();
+	      return year + '-' + month + '-' + day;
+    }
+  }
+});
+</script>
+
+
+  
+<script>
 
 </script>
-<!--<script type="text/javascript">
-	    $('#date-picker').datepicker({
-	    	format: 'yyyy-mm-dd',
-	    	daysOfWeekHighlighted: "5",
-    		todayHighlight: true,
-    		autoclose:true
-    });
-</script>-->
-
 
 
 
