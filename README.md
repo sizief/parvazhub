@@ -30,5 +30,7 @@ sudo -u postgres psql
   
   
 ## 3rdpart softwares  
-https://bootstrap-datepicker.readthedocs.io/en/latest/  
+https://github.com/mdehoog/Semantic-UI-Calendar
+https://github.com/doabit/semantic-ui-sass
+https://semantic-ui.com/
   

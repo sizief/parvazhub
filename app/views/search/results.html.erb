@@ -1,26 +1,38 @@
 count: <%= @flights.count %>
-<table class="table table-striped">
-<% @flights.each do |flight|  %>
-
-	<tr>
-		<td><%= airline_logo_for flight.airline_code %></td>
-		<td><%= flight.flight_number %></td>
-		<td><%= flight.departure_time.to_datetime.strftime("%H:%M") %></td>
-		<td><%= flight.airplane_type %></td>
-		<td>
-		<table>
-			<% flights_query = flight.flight_prices.select("DISTINCT ON (supplier) *").order("supplier,updated_at desc") %>
-			<% flights_query.to_a.sort_by(&:price).each_with_index do |ticket,index| %>
-				<tr class="<%='best-price' if index==0 %>" >
-					<td><%= ticket.nil? ? "-" : ticket.supplier %></td>
-					<td><%= ticket.nil? ? "-" : number_with_delimiter(ticket.price) %></td>
-					<td style="font-size: 0.7em;padding-left: 5px"><%=   (ticket.updated_at+210.minutes).strftime("%H:%M") %></td>
-				</tr>
-			<% end %>
-		</table>
-		</td>
-
-	</tr>
-<% end %>
+<div class="ui container">
+<table class="ui very basic striped table ">
+  	<thead>
+		<tr class="center aligned">
+  			<td><h4>Airline</h4></td>
+  			<td><h4>Flight Number</h4></td>
+  			<td><h4>Departure Time</h4></td>
+  			<td><h4>Airplane</h4></td>
+  			<td><h4>price</h4></td>
+  		</tr>
+  	</thead>
+	<tbody>
+		<% @flights.each do |flight|  %>
+		<tr class="center aligned">
+			<td><%= airline_logo_for flight.airline_code %></td>
+			<td><%= flight.flight_number %></td>
+			<td><%= flight.departure_time.to_datetime.strftime("%H:%M") %></td>
+			<td><%= flight.airplane_type %></td>
+			<td>
+			<table class="ui  very basic table">
+				<% flights_query = flight.flight_prices.select("DISTINCT ON (supplier) *").order("supplier,updated_at desc") %>
+				<% flights_query.to_a.sort_by(&:price).each_with_index do |ticket,index| %>
+					<tr class="center aligned <%='best-price' if index==0 %>" >
+						<td><%= ticket.nil? ? "-" : ticket.supplier %></td>
+						<td><%= ticket.nil? ? "-" : number_with_delimiter(ticket.price) %></td>
+						<td style="font-size: 0.7em;padding-left: 5px"><%=   (ticket.updated_at+210.minutes).strftime("%H:%M") %></td>
+					</tr>
+				<% end %>
+			</table>
+			</td>
+		</tr>
+		<% end %>
+	</tbody>
 </table>
+</div>
+
 

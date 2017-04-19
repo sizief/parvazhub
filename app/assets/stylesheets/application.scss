@@ -3,6 +3,11 @@
 @import "rtlcss";
 @import "calendar.min";
 
+/* general */
+table.ui.very.basic.striped.table > thead > tr > td > h4{
+  color: teal;
+}
+
 /* fix for rtl semantic */
 .ui.form .field > .selection.dropdown > .dropdown.icon {
     float: left;
@@ -10,40 +15,10 @@
 }
 
 /* first page */
-
 .masthead.segment {
   min-height:700px;
 }
 
-/* footer */
-
-footer {
-  margin-top: 45px;
-  padding-top: 5px;
-  color: #777;
-}
-
-footer a {
-  color: #555;
-}
-
-footer a:hover {
-  color: #222;
-}
-
-footer small {
-  float: left;
-}
-
-footer ul {
-  float: right;
-  list-style: none;
-}
-
-footer ul li {
-  float: left;
-  margin-left: 15px;
-}
 
 /* Search Results */
 .airline-logo{
