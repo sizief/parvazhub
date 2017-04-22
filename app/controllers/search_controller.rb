@@ -8,7 +8,7 @@ class SearchController < ApplicationController
     destination = params[:search][:destination].downcase
     date = params[:search][:date]
     route = Route.create_route("#{origin}", "#{destination}") #create id if id route is not exist
-    response_available = SearchHistory.where(route_id:route.id,departure_time:"#{date}").where('created_at >= ?', 10.minute.ago).count
+    response_available = SearchHistory.where(route_id:route.id,departure_time:"#{date}").where('created_at >= ?', 1.hour.ago).count
 
     search_suppliers(origin,destination,route.id,date) if response_available == 0
     results(route,date)
