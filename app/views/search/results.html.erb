@@ -19,7 +19,7 @@ count: <%= @flights.count %>
 			<td><%= flight.airplane_type %></td>
 			<td>
 			<table class="ui  very basic table">
-				<% flights_query = flight.flight_prices.select("DISTINCT ON (supplier) *").order("supplier,updated_at desc") %>
+				<% flights_query = flight.flight_prices.select("DISTINCT ON (supplier) *").where('created_at >= ?', 30.minute.ago).order("supplier,updated_at desc") %>
 				<% flights_query.to_a.sort_by(&:price).each_with_index do |ticket,index| %>
 					<tr class="center aligned <%='best-price' if index==0 %>" >
 						<td><%= ticket.nil? ? "-" : ticket.supplier %></td>

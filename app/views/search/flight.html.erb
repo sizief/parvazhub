@@ -12,12 +12,12 @@
 	     			<div class="three fields">
 	      				<div class="field">
 	       					<%= f.label :Origin %>
-		   					<% @cities ={Tehran:"thr",Mashhad:"MHD",Kish:"kih",Isfahan:"isf"} %>
+		   					<% @cities ={Tehran:"thr",Mashhad:"MHD",Kish:"kih", Shiraz: "syz", Isfahan:"isf"} %>
 		   					<%= f.select :origin, @cities.map{ |x,y| [x, y]}, {},{:class =>'ui dropdown'} %>
 	      				</div>
 	      				<div class="field">
 	      					<%= f.label :Destination %>
-							<% @cities ={Mashhad:"MHD",Tehran:"thr",Kish:"kih",Isfahan:"isf"} %>
+							<% @cities ={Mashhad:"MHD",Tehran:"thr",Kish:"kih", Shiraz: "syz", Isfahan:"isf"} %>
 		   					<%= f.select :destination, @cities.map{ |x,y| [x, y]}, {},{:class =>'ui dropdown'} %>
 	      				</div>
 	      				<div class="field ui calendar" id="date-picker">
