@@ -5,7 +5,7 @@ class RouteTest < ActiveSupport::TestCase
   #   assert true
   # end
   def setup
-  	@route = Route.new(origin: "IKA", destination: "PAR")
+  	@route = Route.new(origin: "ika", destination: "dxb")
   end
   
   test "should be valid" do
@@ -30,14 +30,9 @@ class RouteTest < ActiveSupport::TestCase
   end
 
   test "return the correct route id if exist" do
-    route_id = Route.route_id(@route.origin.downcase,@route.destination.downcase)  
-    assert route_id.is_a? Integer
+    route = Route.create_route("thr","mhd")  
+    assert route.id.is_a? Integer
   end
 
-  test "create new route id if its not exists" do
-    @route.origin = "par"
-    @route.destination = "ika" 
-    route_id = Route.route_id(@route.origin.downcase,@route.destination.downcase)  
-    assert route_id.is_a? Integer
-  end
+  
 end

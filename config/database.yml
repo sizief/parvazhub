@@ -23,6 +23,7 @@ development:
 
 test:
   <<: *default
+  adapter: sqlite3
   database: db/test
   username: sizief
   password: myheart

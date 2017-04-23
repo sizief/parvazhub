@@ -18,7 +18,7 @@ gem 'semantic-ui-sass', '~> 2.2', '>= 2.2.1.1'
 
 group :development, :test do
   gem 'pg', '~> 0.18.4'
-  #gem 'sqlite3', '1.3.12'
+  gem 'sqlite3', '1.3.12'
   gem 'byebug',  '9.0.0', platform: :mri
 end
 

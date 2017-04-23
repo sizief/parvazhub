@@ -1,7 +1,7 @@
 class Route < ApplicationRecord
 	validates :origin, presence: true, :length => { :is => 3 }
 	validates :destination, presence: true, :length => { :is => 3 }
-	validates :origin, :uniqueness => { :scope => :destination,
+	validates :origin, :uniqueness => { case_sensitive: false, :scope => :destination,
     :message => "already saved" }
   has_many :flights
 

@@ -18,6 +18,8 @@ def import_domestic_alibaba_flights(response,route_id)
             flight_number = corrected_airline_code.upcase+flight["FlightNumber"].delete("^0-9")
         end
 
+        flight_number = flight_number.tr('.','') #sometimes alibaba responses with "." in start or end of a flight number
+
         airline_code = corrected_airline_code
         airplane_type = flight["Aircraft"]
         
@@ -26,10 +28,12 @@ def import_domestic_alibaba_flights(response,route_id)
         departure_time = flight["LeaveTime"][0..1]+":"+flight["LeaveTime"][2..3]
         departure_date_time = departure_date+" "+departure_time
         departure_time = departure_date_time.to_datetime
-        
-        Flight.create(route_id: "#{route_id}", flight_number:"#{flight_number}", departure_time:"#{departure_time}", airline_code:"#{airline_code}", airplane_type: "#{airplane_type}")
-
         price = flight["price"].to_i/10
+
+        unless price == 0
+          Flight.create(route_id: "#{route_id}", flight_number:"#{flight_number}", departure_time:"#{departure_time}", airline_code:"#{airline_code}", airplane_type: "#{airplane_type}")
+        end
+
         unless price == 0
           flight_id = flight_id(flight_number,departure_time)
           FlightPrice.create(flight_id: "#{flight_id}", price: "#{price}", supplier:"alibaba", flight_date:"#{departure_date}" )
