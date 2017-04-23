@@ -66,7 +66,7 @@ def import_domestic_alibaba_flights(response,route_id)
         end
 
         departure_time = parse_date(departure_date_time).utc.to_datetime
-        departure_time = departure_time + 270.minutes # add 4:30 hours because zoraq date time is in iran time zone #.strftime("%H:%M")
+        departure_time = departure_time + IRAN_ADDITIONAL_TIMEZONE.minutes # add 4:30 hours because zoraq date time is in iran time zone #.strftime("%H:%M")
         
         Flight.create(route_id: "#{route_id}", flight_number:"#{flight_number}", departure_time:"#{departure_time}", airline_code:"#{airline_code}", airplane_type: "#{airplane_type}")
 
