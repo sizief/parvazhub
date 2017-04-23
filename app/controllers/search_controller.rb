@@ -6,7 +6,8 @@ class SearchController < ApplicationController
   def search_proccess
     origin = params[:search][:origin].downcase
     destination = params[:search][:destination].downcase
-    date = params[:search][:date]
+    date = Date.parse params[:search][:date]
+    date = date.to_s
     route = Route.create_route("#{origin}", "#{destination}") #create id if id route is not exist
     response_available = SearchHistory.where(route_id:route.id,departure_time:"#{date}").where('created_at >= ?', SEARCH_RESULT_VALIDITY_TIME.minute.ago).count
 
@@ -26,7 +27,7 @@ class SearchController < ApplicationController
     SearchHistory.create(supplier_name:"Alibaba",route_id:route_id,departure_time: date)
     log(alibaba_response) if Rails.env.development?  
     flight_list = Flight.new()
-    flight_list.import_domestic_alibaba_flights(alibaba_response,route_id)
+    flight_list.import_domestic_alibaba_flights(alibaba_response,route_id,origin,destination,date)
   end
 
   def search_zoraq(origin,destination,route_id,date)

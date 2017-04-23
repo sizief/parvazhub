@@ -19,6 +19,18 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
   min-height:700px;
 }
 
+#cover-photo{
+	background-image: url(/assets/first-page/1.jpg);
+    background-size: cover;
+    background-position: center;
+}
+
+/* search box */
+#search-box{
+	background-image: url(/assets/opacity-backgrounds/white70p.png);
+    background-repeat: repeat;
+}
+
 
 /* Search Results */
 .airline-logo{

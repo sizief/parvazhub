@@ -1,14 +1,13 @@
 <% provide(:title,"Olla Search") %>
- 
-<div class="ui vertical masthead segment" style="direction: rtl">  
+<div class="ui vertical masthead segment" id="cover-photo" style="direction: rtl">  
 	<div class="ui container text center header" style="margin-top: 5%;font-size: 2.2em;color: #04a29b;">
 		<h1 class="ui huge header teal center aligned">Lets Compare Flights</h1>
 	</div>
 
 	<div class="ui container" style="margin-top: 5%">
-	  	<div class="ui segments">
+	  	<div class="ui segments" id="search-box">
 	   		<%= form_for(:search, url: search_path, method: :get) do |f| %>
-	    		<div class="ui huge form" style="padding: 5%">
+	    		<div class="ui huge form" style="padding: 3%">
 	     			<div class="three fields">
 	      				<div class="field">
 	       					<%= f.label :Origin %>

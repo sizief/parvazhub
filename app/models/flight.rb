@@ -6,7 +6,7 @@ class Flight < ApplicationRecord
   belongs_to :route
   has_many :flight_prices
 	
-def import_domestic_alibaba_flights(response,route_id)
+def import_domestic_alibaba_flights(response,route_id,origin,destination,date)
       json_response = JSON.parse(response)
       json_response["AvailableFlights"].each do |flight|
         flight_number = airline_code = airplane_type = departure_date_time  = nil
@@ -35,8 +35,9 @@ def import_domestic_alibaba_flights(response,route_id)
         end
 
         unless price == 0
+          deeplink_url = "https://alibaba.ir/flights/#{origin}-#{destination}/#{date}/1-0-0" #create alibaba based on one search
           flight_id = flight_id(flight_number,departure_time)
-          FlightPrice.create(flight_id: "#{flight_id}", price: "#{price}", supplier:"alibaba", flight_date:"#{departure_date}" )
+          FlightPrice.create(flight_id: "#{flight_id}", price: "#{price}", supplier:"alibaba", flight_date:"#{departure_date}", deep_link:"#{deeplink_url}"  )
         end
       end #end of each loop
   end
@@ -76,8 +77,9 @@ def import_domestic_alibaba_flights(response,route_id)
 
         departure_date = departure_time.strftime("%F")
         price = flight["AirItineraryPricingInfo"]["PTC_FareBreakdowns"][0]["PassengerFare"]["TotalFare"]["Amount"]
+        deeplink_url = "http://zoraq.com"+flight["AirItineraryPricingInfo"]["FareSourceCode"]
         flight_id = flight_id(flight_number,departure_time)
-        FlightPrice.create(flight_id: "#{flight_id}", price: "#{price}", supplier:"zoraq", flight_date:"#{departure_date}" )
+        FlightPrice.create(flight_id: "#{flight_id}", price: "#{price}", supplier:"zoraq", flight_date:"#{departure_date}", deep_link:"#{deeplink_url}" )
       end #end of each loop
   end
 
@@ -93,7 +95,7 @@ def import_domestic_alibaba_flights(response,route_id)
 
   def zoraq_airline_code_correction(zoraq_airline_code)
   	airline_codes = {
-  		"ATR":"@1", #Atrak Airlines
+  		"AK":"@1", #Atrak Airlines
   		"B9":"@2", #Iran Airtour
   		"sepahan":"@3", #Sepahan Airlines
   		"hesa":"@4", #Hesa 
