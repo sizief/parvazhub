@@ -24,9 +24,18 @@ redis-server
 
 ### how to install pgresql  
 install pgresql on ubuntu, create user and password: tutorial here: https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-ruby-on-rails-application-on-ubuntu-14-04  
+####THIS IS FOR CREATING PG USER FOR ADMIN PURPOSE:  
 sudo -u postgres createuser -s pguser  
 sudo -u postgres psql  
 \password pguser  
+####Create user for rails db, in pg console  
+postgres=# create user "username" with password 'password';  
+postgres=# create database "development" owner "username"; 
+postgres=# ALTER USER username CREATEDB  
+####Run create and migration for each environment  
+rake db:create db:migrate RAILS_ENV=production  #if db is not exist  
+rake db:migrate RAILS_ENV=production #if db exist  
+  
   
   
 ## 3rdpart softwares  

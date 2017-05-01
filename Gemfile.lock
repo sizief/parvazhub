@@ -55,6 +55,10 @@ GEM
     debug_inspector (0.0.2)
     domain_name (0.5.20170404)
       unf (>= 0.0.5, < 1.0.0)
+    dotenv (2.2.1)
+    dotenv-rails (2.2.1)
+      dotenv (= 2.2.1)
+      railties (>= 3.2, < 5.2)
     erubis (2.7.0)
     execjs (2.7.0)
     ffi (1.9.14)
@@ -210,6 +214,7 @@ DEPENDENCIES
   bcrypt (= 3.1.11)
   byebug (= 9.0.0)
   coffee-rails (= 4.2.1)
+  dotenv-rails
   guard (= 2.13.0)
   guard-minitest (= 2.4.4)
   jbuilder (= 2.4.1)
