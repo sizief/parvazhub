@@ -42,4 +42,9 @@ rake db:migrate RAILS_ENV=production #if db exist
 https://github.com/mdehoog/Semantic-UI-Calendar
 https://github.com/doabit/semantic-ui-sass
 https://semantic-ui.com/
+https://github.com/bkeepers/dotenv
+
+###options for hosting
+http://parspack.com/hybrid-server
+http://parspack.com/vps/linux
   

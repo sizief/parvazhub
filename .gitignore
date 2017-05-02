@@ -21,4 +21,6 @@
 .byebug_history
 
 #Ignore environment varibales
+.git
 .env
+.dockerignore

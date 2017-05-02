@@ -2,7 +2,8 @@ source 'https://rubygems.org'
 
 gem 'dotenv-rails', groups: [:development, :test,:production]
 gem 'rails',        '5.0.0.1'
-gem 'puma',         '3.4.0'
+gem 'unicorn', '~> 5.0'
+#gem 'puma',         '3.4.0'
 gem 'sass-rails',   '5.0.6'
 gem 'uglifier',     '3.0.0'
 gem 'coffee-rails', '4.2.1'
@@ -15,11 +16,12 @@ gem 'parsi-date', '~> 0.3.1'
 gem 'rest-client'
 gem 'parallel'
 gem 'semantic-ui-sass', '~> 2.2', '>= 2.2.1.1'
+gem 'pg', '~> 0.18.4'
 
 
 group :development, :test do
-  gem 'pg', '~> 0.18.4'
-  gem 'sqlite3', '1.3.12'
+  #gem 'pg', '~> 0.18.4'
+  #gem 'sqlite3', '1.3.12'
   gem 'byebug',  '9.0.0', platform: :mri
 end
 
@@ -38,7 +40,7 @@ group :test do
 end
 
 group :production do
-  gem 'pg', '~> 0.18.4'
+  #gem 'pg', '~> 0.18.4'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
