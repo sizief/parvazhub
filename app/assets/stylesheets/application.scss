@@ -7,6 +7,11 @@
 table.ui.very.basic.striped.table > thead > tr > td > h4{
   color: teal;
 }
+#company-name{
+  padding-left:5px;
+  font-weight:bold;
+  color:#29aae1;
+}
 
 /* fix for rtl semantic */
 .ui.form .field > .selection.dropdown > .dropdown.icon {
@@ -20,15 +25,21 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
 }
 
 #cover-photo{
-	background-image: url(/assets/first-page/4.jpg);
-    background-size: cover;
-    background-position: center;
+	/*background-image: url(/assets/first-page/11.png);*/
+  background-color:#29aae1;
+  background-size: cover;
+  background-position: center;
 }
 
 /* search box */
 #search-box{
-	background-image: url(/assets/opacity-backgrounds/white70p.png);
-    background-repeat: repeat;
+/* background-image: url(/assets/opacity-backgrounds/white70p.png); 
+   background-repeat: repeat;
+*/
+}
+
+.search-box-label{
+  color:white !important;
 }
 
 

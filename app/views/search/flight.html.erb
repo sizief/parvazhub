@@ -1,7 +1,7 @@
 <% provide(:title,"Compare Flights") %>
 <div class="ui vertical masthead segment" id="cover-photo" style="direction: rtl">  
-	<div class="ui container text center header" style="margin-top: 5%;font-size: 2.2em;color: #04a29b;">
-		<h1 class="ui huge header teal center aligned">Lets Compare Flights</h1>
+	<div class="ui container text center header" style="margin-top: 5%;font-size: 2.2em;">
+		<h1 class="ui huge header inverted center aligned">Let's Compare Flights</h1>
 	</div>
 
 	<div class="ui container" style="margin-top: 5%">
@@ -10,17 +10,17 @@
 	    		<div class="ui huge form" style="padding: 3%">
 	     			<div class="three fields">
 	      				<div class="field">
-	       					<%= f.label :Origin %>
+	       					<%= f.label :Origin, :class => "search-box-label" %>
 		   					<% @cities ={Tehran:"thr",Mashhad:"MHD",Kish:"kih", Shiraz: "syz", Isfahan:"isf"} %>
 		   					<%= f.select :origin, @cities.map{ |x,y| [x, y]}, {},{:class =>'ui dropdown'} %>
 	      				</div>
 	      				<div class="field">
-	      					<%= f.label :Destination %>
+	      					<%= f.label :Destination, :class => "search-box-label" %>
 							<% @cities ={Mashhad:"MHD",Tehran:"thr",Kish:"kih", Shiraz: "syz", Isfahan:"isf"} %>
 		   					<%= f.select :destination, @cities.map{ |x,y| [x, y]}, {},{:class =>'ui dropdown'} %>
 	      				</div>
 	      				<div class="field ui calendar" id="date-picker">
-							<%= f.label :Date %>
+							<%= f.label :Date, :class => "search-box-label" %>
 							<div class="ui input left icon">
       							<i class="calendar icon"></i>
 								<%= f.text_field :date, {id: 'example3', class:'form-control'} %>
@@ -28,7 +28,7 @@
 	      				</div>
 	  				</div>
 	  				<div class="ui center aligned basic segment">
-	  					<%= f.submit "Search", class: "ui submit button massive teal" %>
+	  					<%= f.submit "Search", class: "ui submit button massive yellow" %>
 	  				</div>
 				</div>
 			<%end%>
