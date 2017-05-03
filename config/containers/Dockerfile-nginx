@@ -13,6 +13,10 @@ WORKDIR $RAILS_ROOT
 # create log directory
 RUN mkdir log
 
+# Add as abarcloud suggested
+RUN mkdir -p /var/run/nginx && \
+    chmod -R ug+rwx /var/run/nginx /var/cache/nginx /var/log/nginx log
+
 # copy over static assets
 COPY public public/
 
