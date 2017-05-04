@@ -9,5 +9,5 @@ one:
 two:
   flight_id: 1
   price: 1
-  supplier: MyString
+  supplier: Alibaba
   flight_date: "12-12-2016"

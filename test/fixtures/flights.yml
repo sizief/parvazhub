@@ -2,12 +2,12 @@
 
 one:
   route_id: 1
-  flight_number: MyString
+  flight_number: w5654
   departure_time: 2016-12-18 21:54:47
-  airline_code: MyString
+  airline_code: W5
 
 two:
-  route_id: 1
-  flight_number: MyString
+  route_id: 2
+  flight_number: W123
   departure_time: 2016-12-18 21:54:47
-  airline_code: MyString
+  airline_code: W5

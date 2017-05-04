@@ -17,7 +17,7 @@ app:
 
   # expose the port we configured Unicorn to bind to
   ports:
-   - "3000:3000"
+   - "3000" #"3000:3000"
 # service configuration for our database
 db:
  
@@ -28,18 +28,18 @@ db:
   # persist the database between containers by storing it in a volume
   volumes:
     - docker-flightsearch-postgres:/var/lib/postgresql/data
-web:
+#web:
  
   # set the build context to the root of the Rails app
-  build: .
+  #build: .
  
   # build with a different Dockerfile
-  dockerfile: config/containers/Dockerfile-nginx
+  #dockerfile: config/containers/Dockerfile-nginx
   
   # makes the web container aware of the app container
-  links:
-    - app
+  #links:
+  #  - app
   
   # expose the port we configured Nginx to bind to
-  ports:
-    - "3000:80"
+  #ports:
+  # - "3000:80"

@@ -4,7 +4,7 @@ app:
   volumes:
     - .:/var/www/flightsearch
 
-web:
+#web:
   # use whatever volumes are configured for the app container
-  volumes_from:
-    - app
+#  volumes_from:
+#    - app
