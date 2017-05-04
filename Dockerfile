@@ -4,6 +4,9 @@ FROM ruby:2.2.3-slim
 # Install essential Linux packages
 RUN apt-get update -qq && apt-get install -y build-essential libpq-dev postgresql-client ruby-dev
 
+#Install SQLITE for test
+RUN apt-get install libsqlite3-dev
+
 #For a JS runtime
 RUN apt-get install -y nodejs
 
@@ -33,6 +36,9 @@ EXPOSE 3000
 
 # Copy the Rails application into place
 COPY . .
+
+# Make folder writable for pid and log for unicorn 
+RUN chmod -R ug+rwx $RAILS_ROOT/tmp  $RAILS_ROOT/log
 
 # Define the script we want run once the container boots
 # Use the "exec" form of CMD so our script shuts down gracefully on SIGTERM (i.e. `docker stop`)
