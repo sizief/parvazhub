@@ -36,6 +36,8 @@ postgres=# ALTER USER username CREATEDB
 rake db:create db:migrate RAILS_ENV=production  #if db is not exist  
 rake db:migrate RAILS_ENV=production #if db exist  
   
+ delete tmp and run rake assets:precompile
+
   
   
 ## 3rdpart softwares  
