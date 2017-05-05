@@ -13,6 +13,9 @@ RUN apt-get install -y nodejs
 # Define where our application will live inside the image
 ENV RAILS_ROOT /var/www/flightsearch
 
+#Define home for bundler 
+ENV HOME=$RAILS_ROOT
+
 # Create application home. App server will need the pids dir so just create everything in one shot
 RUN mkdir -p $RAILS_ROOT/tmp/pids
 
@@ -38,7 +41,9 @@ EXPOSE 3000
 COPY . .
 
 # Make folder writable for pid and log for unicorn 
-RUN chmod -R ug+rwx $RAILS_ROOT/tmp  $RAILS_ROOT/log $RAILS_ROOT
+RUN chmod -R ug+rwx $RAILS_ROOT/tmp $RAILS_ROOT/log $RAILS_ROOT && \
+   chown -R 1001:0 $RAILS_ROOT
+#USER 1001
 
 # Define the script we want run once the container boots
 # Use the "exec" form of CMD so our script shuts down gracefully on SIGTERM (i.e. `docker stop`)
