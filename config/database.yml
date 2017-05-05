@@ -3,8 +3,7 @@ default: &default
   encoding: unicode
   pool: 25
   timeout: 5000
-  username: <%= ENV["DB_USERNAME"] %> 
-  password: <%= ENV["DB_PASSWORD"] %>
+  
 
 development:
   <<: *default
@@ -12,6 +11,8 @@ development:
   adapter: postgresql
   database: db/development
   port: 5432
+  username: <%= ENV["DB_USERNAME"] %> 
+  password: <%= ENV["DB_PASSWORD"] %>
 
 test:
   <<: *default
@@ -19,11 +20,15 @@ test:
   adapter: sqlite3
   database: db/test
   port: 5432
+  username: <%= ENV["DB_USERNAME"] %> 
+  password: <%= ENV["DB_PASSWORD"] %>
 
 production:
   <<: *default
-  host: postgresql://postgresql
+  host: postgresql://postgresql-flight-search/
   adapter: postgresql
   database: production
   port: 5432
+  username: <%= ENV["POD_USERNAME"] %> 
+  password: <%= ENV["POD_PASSWORD"] %>
 
