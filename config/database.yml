@@ -25,7 +25,7 @@ test:
 
 production:
   <<: *default
-  host: postgresql://postgresql-flight-search/
+  host: postgresql-flight-search
   adapter: postgresql
   database: production
   port: 5432
