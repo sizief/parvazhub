@@ -38,7 +38,7 @@ EXPOSE 3000
 COPY . .
 
 # Make folder writable for pid and log for unicorn 
-RUN chmod -R ug+rwx $RAILS_ROOT/tmp  $RAILS_ROOT/log
+RUN chmod -R ug+rwx $RAILS_ROOT/tmp  $RAILS_ROOT/log $RAILS_ROOT
 
 # Define the script we want run once the container boots
 # Use the "exec" form of CMD so our script shuts down gracefully on SIGTERM (i.e. `docker stop`)
