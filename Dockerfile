@@ -1,4 +1,3 @@
-# Base our image on an official, minimal image of our preferred Ruby
 FROM ruby:2.2.3-slim
 
 # Install essential Linux packages
@@ -22,9 +21,7 @@ RUN mkdir -p $RAILS_ROOT/tmp/pids
 # Set our working directory inside the image
 WORKDIR $RAILS_ROOT
 
-# Use the Gemfiles as Docker cache markers. Always bundle before copying app src.
-# (the src likely changed and we don't want to invalidate Docker's cache too early)
-# http://ilikestuffblog.com/2014/01/06/how-to-skip-bundle-install-when-deploying-a-rails-app-to-docker/
+
 COPY Gemfile Gemfile
 
 COPY Gemfile.lock Gemfile.lock
@@ -45,6 +42,4 @@ RUN chmod -R ug+rwx $RAILS_ROOT/tmp $RAILS_ROOT/log $RAILS_ROOT && \
    chown -R 1001:0 $RAILS_ROOT
 #USER 1001
 
-# Define the script we want run once the container boots
-# Use the "exec" form of CMD so our script shuts down gracefully on SIGTERM (i.e. `docker stop`)
 CMD [ "config/containers/app_cmd.sh" ]
