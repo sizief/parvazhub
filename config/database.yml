@@ -25,10 +25,10 @@ test:
 
 production:
   <<: *default
-  host: postgresql-flight-search
+  host: <%= ENV["DB_HOST"] %> 
   adapter: postgresql
   database: production
   port: 5432
-  username: <%= ENV["POD_USERNAME"] %> 
-  password: <%= ENV["POD_PASSWORD"] %>
+  username: <%= ENV["DB_USERNAME"] %> 
+  password: <%= ENV["DB_PASSWORD"] %> 
 

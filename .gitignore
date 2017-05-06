@@ -17,10 +17,9 @@
 
 #Ignore environment varibales
 .git
-#.env
 .dockerignore
 .docker-compose.override.yml
 .env.production
-.env.abarcloud
+.env.production.local
 public/assets
 
