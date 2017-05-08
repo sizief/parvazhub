@@ -1,3 +1,4 @@
+#!/bin/bash
 # Depending on your image, you might or might not need to start this file with "#!/bin/bash"
 # Try without it, and if it doesn't work, add it.
 
