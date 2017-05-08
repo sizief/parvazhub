@@ -3,16 +3,20 @@ X.Add datepicker
 X.Display zoraq results
 X.log
 X.How to select with join
-CNT FIND-fix bug: new prices will not add to dlight price. solution: if flight exists then the insert for flight price did not work. should add an if for already exist flights.
+X.CNT FIND-fix bug: new prices will not add to dlight price. solution: if flight exists then the insert for flight price did not work. should add an if for already exist flights.
 X.Add airline logos
 X.add alibaba -> sync
-add condition for search for alibaba domestic flight only
-change it to Async
+X.add condition for search for alibaba domestic flight only
+X.change it to Async
 X.Display merged results
-Add deeplink if exists
-Add cities to search box
+X.Add deeplink if exists
+X.Add cities to search box
 pick a domian and publish it
 
 --
 https://github.com/mperham/sidekiq/
 https://ryanboland.com/blog/writing-your-first-background-worker/
+
+###options for hosting  
+http://parspack.com/hybrid-server  
+http://parspack.com/vps/linux  
