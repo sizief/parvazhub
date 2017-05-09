@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 
 gem 'dotenv-rails', groups: [:development,:test,:production,:local]
 gem 'rails',        '5.0.0.1'
-gem 'unicorn', '~> 5.0'
 gem 'puma',         '3.6.0'
 gem 'sass-rails',   '5.0.6'
 gem 'uglifier',     '3.0.0'
