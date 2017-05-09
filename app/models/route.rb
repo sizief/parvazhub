@@ -4,6 +4,7 @@ class Route < ApplicationRecord
 	validates :origin, :uniqueness => { case_sensitive: false, :scope => :destination,
     :message => "already saved" }
   has_many :flights
+  has_many :user_Search_history
 
     #give the route id for given destination and origin
     def self.create_route(origin,destination)
