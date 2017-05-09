@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  route_id: 1
+  departure_time: MyString
+
+two:
+  route_id: 1
+  departure_time: MyString
