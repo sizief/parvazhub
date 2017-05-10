@@ -38,6 +38,13 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
 */
 }
 
+#search-box-inner{
+  direction: rtl;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  padding-right: 10%;
+}
+
 .search-box-label{
   color:white !important;
 }

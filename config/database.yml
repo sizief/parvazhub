@@ -7,7 +7,7 @@ default: &default
 
 development:
   <<: *default
-  host: db #localhost
+  host: localhost
   adapter: postgresql
   database: db/development
   port: 5432
