@@ -24,6 +24,5 @@ db/test
 .env.production
 .env.production.local
 public/assets
-
 .env
 

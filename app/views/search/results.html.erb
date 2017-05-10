@@ -6,23 +6,20 @@
 		<div class="ui form">
 			<div class="four fields">
 				<div class="field">
-					<%= f.label :Origin, :class => "search-box-label" %>
 					<% @cities ={thr:"Tehran",mhd:"Mashhad",kih:"Kish",syz:"Shiraz",isf:"Isfahan"} %>
 					<%= f.select :origin, @cities.map{ |x,y| [y,x]}, {:selected => @search_parameter[:origin]},{:class =>'ui dropdown'} %>
 				</div>
 				<div class="field">
-					<%= f.label :Destination, :class => "search-box-label" %>
 					<% @cities ={mhd:"Mashhad",thr:"Tehran",kih:"Kish",syz:"Shiraz",isf:"Isfahan"} %>
 					<%= f.select :destination, @cities.map{ |x,y| [y,x]}, {:selected => @search_parameter[:destination]},{:class =>'ui dropdown'} %>
 				</div>
 				<div class="field ui calendar" id="date-picker">
-					<%= f.label :Date, :class => "search-box-label" %>
 					<div class="ui input left icon">
 						<i class="calendar icon"></i>
 						<%= f.text_field :date, {id: 'example3', class:'form-control', value: @search_parameter[:date]} %>
 					</div>
 				</div>
-				<div class="ui basic segment" style="margin-top: 10px">
+				<div class="field center aligned">
 					<%= f.submit "Search", class: "ui submit button blue" %>
 				</div>
 			</div>
