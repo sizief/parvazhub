@@ -41,7 +41,9 @@ delete tmp and run rake assets:precompile
 https://github.com/mdehoog/Semantic-UI-Calendar  
 https://github.com/doabit/semantic-ui-sass  
 https://semantic-ui.com/  
-https://github.com/bkeepers/dotenv  
+https://github.com/bkeepers/dotenv 
+http://babakhani.github.io/PersianWebToolkit/doc/datepicker/#/quciksample/
+Font? 
   
 
 
