@@ -9,15 +9,11 @@
 //
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
-//
+//  this is georgian calendar: calendar.min
 //= require jquery2
 //= require turbolinks
 //= require semantic-ui
 //= require rtlcss.min
-//= require calendar.min
+//= require persian-date.min
+//= require persian-datepicker-0.4.5.min
 //= require_tree .
-
-
-
-
-

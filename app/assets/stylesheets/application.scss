@@ -1,7 +1,22 @@
 @import "semantic-ui";
 @import "semantic-ui/collections/menu";
 @import "rtlcss";
-@import "calendar.min";
+@import "persian-datepicker-0.4.5.min";
+/* this is georgian calendar: calendar.min */
+
+@font-face{
+  font-family:"samim";
+  font-weight:400;
+  src:url("samim.eot");
+  src:url("samim#iefix") format("embedded-opentype"),
+  url("samim.woff") format("woff"),
+  url("samim.ttf") format("truetype"),
+  url("samim.ttf") format('svg');
+}
+
+body{
+  font-family:"samim" !important;
+}
 
 /* general */
 table.ui.very.basic.striped.table > thead > tr > td > h4{
@@ -36,6 +51,10 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
 /* background-image: url(/assets/opacity-backgrounds/white70p.png); 
    background-repeat: repeat;
 */
+}
+
+#date-picker-field{
+  display:none;
 }
 
 #search-box-inner{

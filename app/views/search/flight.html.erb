@@ -5,29 +5,24 @@
 	</div>
 
 	<div class="ui container" style="margin-top: 5%">
-	  	<div class="ui segments" id="search-box">
+	  	<div class="ui segments" id="search-box" style="width: 70%;margin: auto;">
 	   		<%= form_for(:search, url: search_path, method: :get) do |f| %>
 	    		<div class="ui huge form" style="padding: 3%">
-	     			<div class="three fields">
+	     			<div class="two fields">
 	      				<div class="field">
-	       					<%= f.label :Origin, :class => "search-box-label" %>
 		   					<% @cities ={Tehran:"thr",Mashhad:"MHD",Kish:"kih", Shiraz: "syz", Isfahan:"isf"} %>
 		   					<%= f.select :origin, @cities.map{ |x,y| [x, y]}, {},{:class =>'ui dropdown'} %>
 	      				</div>
 	      				<div class="field">
-	      					<%= f.label :Destination, :class => "search-box-label" %>
 							<% @cities ={Mashhad:"MHD",Tehran:"thr",Kish:"kih", Shiraz: "syz", Isfahan:"isf"} %>
 		   					<%= f.select :destination, @cities.map{ |x,y| [x, y]}, {},{:class =>'ui dropdown'} %>
 	      				</div>
-	      				<div class="field ui calendar" id="date-picker">
-							<%= f.label :Date, :class => "search-box-label" %>
-							<div class="ui input left icon">
-      							<i class="calendar icon"></i>
-								<%= f.text_field :date, {id: 'example3', class:'form-control'} %>
-							</div>
-	      				</div>
+	      				
 	  				</div>
-	  				<div class="ui center aligned basic segment">
+	  				<div id="date-picker" style="height: 10em; font-family: samim;">
+							<%= f.text_field :date, {id: 'date-picker-field'} %>
+	      			</div>
+	  				<div class="ui center aligned basic segment" style="margin-top: 50px;">
 	  					<%= f.submit "Search", class: "ui submit button massive yellow" %>
 	  				</div>
 				</div>

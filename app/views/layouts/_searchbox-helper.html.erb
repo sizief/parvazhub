@@ -10,7 +10,7 @@
   		.modal('setting', 'closable', false)
   		.modal('attach events', '.ui.submit.button', 'show');
 	$('.ui.dropdown').dropdown(); 
-	$('#date-picker').calendar({
+	/*$('#date-picker').calendar({
 		type: 'date',
     	formatter: {
     		date: function (date, settings) {
@@ -22,4 +22,31 @@
     		}
   		}
 	});
+	*/
+	var today_timestamp = Math.round((new Date()).getTime() / 1000);
+    $("#date-picker").pDatepicker({
+        persianDigit: true,
+        /* format : "YYYY - MM - DD", */
+        altFieldFormatter : function(unix){
+            if (!unix) return '';
+            var date =  new Date(unix);
+	      		var day = date.getDate();
+	      		var month = date.getMonth() + 1;
+	      		var year = date.getFullYear();
+	      		return year + '-' + month + '-' + day;
+        },
+        formatter : function(unix){
+            if (!unix) return '';
+            var date =  new Date(unix);
+	      		var day = date.getDate();
+	      		var month = date.getMonth() + 1;
+	      		var year = date.getFullYear();
+	      		return year + '-' + month + '-' + day;
+        },
+        altField: '#date-picker-field',
+        toolbox: {enabled:false},
+        autoClose: true
+
+    });
+
 </script>

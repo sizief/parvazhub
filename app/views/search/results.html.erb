@@ -13,10 +13,10 @@
 					<% @cities ={mhd:"Mashhad",thr:"Tehran",kih:"Kish",syz:"Shiraz",isf:"Isfahan"} %>
 					<%= f.select :destination, @cities.map{ |x,y| [y,x]}, {:selected => @search_parameter[:destination]},{:class =>'ui dropdown'} %>
 				</div>
-				<div class="field ui calendar" id="date-picker">
+				<div class="field ui calendar">
 					<div class="ui input left icon">
 						<i class="calendar icon"></i>
-						<%= f.text_field :date, {id: 'example3', class:'form-control', value: @search_parameter[:date]} %>
+						<%= f.text_field :date, {id: 'date-picker', class:'form-control', value: @search_parameter[:date]} %>
 					</div>
 				</div>
 				<div class="field center aligned">
