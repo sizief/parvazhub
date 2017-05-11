@@ -63,24 +63,4 @@
 </table>
 </div>
 
-<script type="text/javascript">
-	$('.ui.basic.modal')
-  		.modal({blurring: true})
-  		.modal('setting', 'closable', false)
-  		.modal('attach events', '.ui.submit.button', 'show');
-	$('.ui.dropdown').dropdown(); 
-	$('#date-picker').calendar({
-		type: 'date',
-    	formatter: {
-    		date: function (date, settings) {
-	      		if (!date) return '';
-	      		var day = date.getDate();
-	      		var month = date.getMonth() + 1;
-	      		var year = date.getFullYear();
-	      		return year + '-' + month + '-' + day;
-    		}
-  		}
-	});
-</script>
-
-
+<%= render 'layouts/searchbox-helper' %>
