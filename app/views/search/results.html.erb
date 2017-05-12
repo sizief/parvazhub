@@ -6,11 +6,11 @@
 		<div class="ui form">
 			<div class="four fields">
 				<div class="field">
-					<% @cities ={thr:"Tehran",mhd:"Mashhad",kih:"Kish",syz:"Shiraz",isf:"Isfahan"} %>
+					<% @cities ={thr:"تهران",mhd:"مشهد",kih:"کیش",syz:"شیراز",isf:"اصفهان"} %>
 					<%= f.select :origin, @cities.map{ |x,y| [y,x]}, {:selected => @search_parameter[:origin]},{:class =>'ui dropdown'} %>
 				</div>
 				<div class="field">
-					<% @cities ={mhd:"Mashhad",thr:"Tehran",kih:"Kish",syz:"Shiraz",isf:"Isfahan"} %>
+					<% @cities ={mhd:"مشهد",thr:"تهران",kih:"کیش",syz:"شیراز",isf:"اصفهان"} %>
 					<%= f.select :destination, @cities.map{ |x,y| [y,x]}, {:selected => @search_parameter[:destination]},{:class =>'ui dropdown'} %>
 				</div>
 				<div class="field ui calendar">
@@ -20,7 +20,7 @@
 					</div>
 				</div>
 				<div class="field center aligned">
-					<%= f.submit "Search", class: "ui submit button blue" %>
+					<%= f.submit "Search", class: "ui submit primary basic button blue fluid" %>
 				</div>
 			</div>
 		</div>
@@ -28,15 +28,15 @@
 </div>
 
 
-<table class="ui very basic striped table ">
-  	<thead>
+<table class="ui unstackable very basic table rtl">
+  	<!--<thead>
 		<tr class="center aligned">
   			<td><h4>Airline</h4></td>
   			<td><h4>Flight Number</h4></td>
   			<td><h4>Departure Time</h4></td>
   			<td><h4>Airplane</h4></td>
   			<td><h4>price</h4></td>
-  		</tr>
+  		</tr>-->
   	</thead>
 	<tbody>
 		<% @flights.each do |flight|  %>
@@ -52,7 +52,7 @@
 					<tr class="center aligned <%='best-price' if index==0 %>" >
 						<td><%= ticket.nil? ? "-" : ticket.supplier %></td>
 						<td><%= link_to(ticket.nil? ? "-" : number_with_delimiter(ticket.price),ticket.deep_link)%></td>
-						<td style="font-size: 0.7em;padding-left: 5px"><%=   (ticket.updated_at+ENV["IRAN_ADDITIONAL_TIMEZONE"].to_i.minutes).strftime("%H:%M") %></td>
+						<td style="font-size: 0.7em;padding-left: 5px; display: none"><%=   (ticket.updated_at+ENV["IRAN_ADDITIONAL_TIMEZONE"].to_i.minutes).strftime("%H:%M") %></td>
 					</tr>
 				<% end %>
 			</table>

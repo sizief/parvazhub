@@ -1,21 +1,21 @@
 <% provide(:title,"Compare Flights") %>
 <div class="ui vertical masthead segment" id="cover-photo" style="direction: rtl">  
-	<div class="ui container text center header" style="margin-top: 5%;font-size: 2.2em;">
+	<div class="ui container text center header" style="margin-top: 3%;font-size: 1.8em;">
 		<h1 class="ui huge header inverted center aligned">Let's Compare Flights</h1>
 	</div>
 
-	<div class="ui container" style="margin-top: 5%">
-	  	<div class="ui segments" id="search-box" style="width: 70%;margin: auto;">
+	<div class="ui stackable one column grid centered" style="margin-top: 1em">
+
 	   		<%= form_for(:search, url: search_path, method: :get) do |f| %>
 	    		<div class="ui huge form" style="padding: 3%">
 	     			<div class="two fields">
 	      				<div class="field">
-		   					<% @cities ={Tehran:"thr",Mashhad:"MHD",Kish:"kih", Shiraz: "syz", Isfahan:"isf"} %>
-		   					<%= f.select :origin, @cities.map{ |x,y| [x, y]}, {},{:class =>'ui dropdown'} %>
+							<% @cities ={thr:"تهران",mhd:"مشهد",kih:"کیش",syz:"شیراز",isf:"اصفهان"} %>
+		   					<%= f.select :origin, @cities.map{ |x,y| [y,x]}, {},{:class =>'ui dropdown'} %>
 	      				</div>
 	      				<div class="field">
-							<% @cities ={Mashhad:"MHD",Tehran:"thr",Kish:"kih", Shiraz: "syz", Isfahan:"isf"} %>
-		   					<%= f.select :destination, @cities.map{ |x,y| [x, y]}, {},{:class =>'ui dropdown'} %>
+							<% @cities ={mhd:"مشهد",thr:"تهران",kih:"کیش",syz:"شیراز",isf:"اصفهان"} %>
+		   					<%= f.select :destination, @cities.map{ |x,y| [y,x]}, {},{:class =>'ui dropdown'} %>
 	      				</div>
 	      				
 	  				</div>
@@ -23,12 +23,13 @@
 							<%= f.text_field :date, {id: 'date-picker-field'} %>
 	      			</div>
 	  				<div class="ui center aligned basic segment" style="margin-top: 50px;">
-	  					<%= f.submit "Search", class: "ui submit button massive yellow" %>
+	  					<%= f.submit "نمایش پروازها", class: "ui submit button massive yellow web-font fluid" %>
 	  				</div>
 				</div>
 			<%end%>
-		</div>		
-	</div>	
-</div>
+			
+	</div>
 
+
+</div>
 <%= render 'layouts/searchbox-helper' %>

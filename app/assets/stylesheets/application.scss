@@ -14,11 +14,20 @@
   url("samim.ttf") format('svg');
 }
 
+
+/* general */
+.web-font{
+  font-family:"samim" !important;
+}
+
 body{
   font-family:"samim" !important;
 }
 
-/* general */
+.rtl {
+  direction:rtl;
+}
+
 table.ui.very.basic.striped.table > thead > tr > td > h4{
   color: teal;
 }
@@ -61,7 +70,6 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
   direction: rtl;
   text-align: center;
   border-bottom: 1px solid #eee;
-  padding-right: 10%;
   padding-top:1%;
 }
 
@@ -77,4 +85,9 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
 .best-price{
   color:green;
   font-weight:bold;
+}
+
+/* datepicker */
+.header-row-cell, .datepicker-plot-area{
+  font-family:samim !important;
 }
