@@ -7,11 +7,11 @@
 @font-face{
   font-family:"samim";
   font-weight:400;
-  src:url("samim.eot");
-  src:url("samim#iefix") format("embedded-opentype"),
-  url("samim.woff") format("woff"),
-  url("samim.ttf") format("truetype"),
-  url("samim.ttf") format('svg');
+  src:font-url("samim.eot");
+  src:font-url("samim#iefix") format("embedded-opentype"),
+  font-url("samim.woff") format("woff"),
+  font-url("samim.ttf") format("truetype"),
+  font-url("samim.ttf") format('svg');
 }
 
 
