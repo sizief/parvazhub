@@ -5,6 +5,12 @@ class Flight < ApplicationRecord
   #default_scope -> { order(created_at: :desc) }
   belongs_to :route
   has_many :flight_prices
+
+  @best_price
+
+  def self.best_price
+    @best_price
+  end
 	
 def import_domestic_alibaba_flights(response,route_id,origin,destination,date)
       json_response = JSON.parse(response)

@@ -16,4 +16,5 @@
 //= require rtlcss.min
 //= require persian-date.min
 //= require persian-datepicker-0.4.5.min
+//= require tablesort
 //= require_tree .

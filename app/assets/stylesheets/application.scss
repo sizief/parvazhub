@@ -19,15 +19,12 @@
 .web-font{
   font-family:"samim" !important;
 }
-
 body{
   font-family:"samim" !important;
 }
-
 .rtl {
   direction:rtl;
 }
-
 table.ui.very.basic.striped.table > thead > tr > td > h4{
   color: teal;
 }
@@ -47,7 +44,6 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
 .masthead.segment {
   min-height:700px;
 }
-
 #cover-photo{
 	/*background-image: url(/assets/first-page/11.png);*/
   background-color:#29aae1;
@@ -61,30 +57,34 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
    background-repeat: repeat;
 */
 }
-
 #date-picker-field{
   display:none;
 }
-
 #search-box-inner{
   direction: rtl;
   text-align: center;
-  border-bottom: 1px solid #eee;
   padding-top:1%;
 }
-
 .search-box-label{
   color:white !important;
 }
 
 
 /* Search Results */
+#search-results-container{
+  width: 70%;
+}
 .airline-logo{
   width:2.5em;
+  margin-bottom:7px;
 }
 .best-price{
   color:green;
   font-weight:bold;
+}
+.table-header{
+  font-weight: normal !important;
+  font-family: samim !important;
 }
 
 /* datepicker */

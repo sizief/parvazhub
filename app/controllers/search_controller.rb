@@ -49,6 +49,10 @@ class SearchController < ApplicationController
       end
 
      @flights = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s)
+     @flights.each do |flight|
+        flight.best_price = flight.flight_prices.select("price").order("price").first.price
+      end
+     @flights = @flights.sort_by(&:best_price)
      @search_parameter ={origin: origin,destination: destination,date: date}
      render :results
   end
