@@ -11,6 +11,7 @@
 // about supported directives.
 //  this is georgian calendar: calendar.min
 //= require jquery2
+//= require jquery_ujs
 //= require turbolinks
 //= require semantic-ui
 //= require rtlcss.min

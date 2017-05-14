@@ -1,0 +1,18 @@
+<% unless @flight_prices.nil? %>
+	<table class="ui teal table unstackable sortable rtl">
+		<tbody>
+			<% @flight_prices.each do |flight|  %>
+				<tr class="center aligned very basic">
+					<td><%= supplier_logo_for flight.supplier %></td>
+					<!--<td><% flight.supplier %></td>-->
+					<td><%= number_with_delimiter(flight.price)+" تومان" %></td>
+					<td>
+						<%= link_to "خرید", flight.deep_link, class: "ui teal label huge flight-price"%>
+					</td>
+				</tr>
+			<% end %>
+		</tbody>		
+	</table>
+<% end %>
+
+

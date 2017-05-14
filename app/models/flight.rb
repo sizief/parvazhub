@@ -15,6 +15,7 @@ class Flight < ApplicationRecord
 def import_domestic_alibaba_flights(response,route_id,origin,destination,date)
       json_response = JSON.parse(response)
       json_response["AvailableFlights"].each do |flight|
+        next if flight["ClassCount"] == 0 #Alibaba send a soldout seats too. 
         flight_number = airline_code = airplane_type = departure_date_time  = nil
         corrected_airline_code = alibaba_airline_code_correction(flight["AirLineEnglish"])
         #to add airline code to flight number for some corrupted flight numbers

@@ -1,4 +1,6 @@
 class SearchController < ApplicationController
+      protect_from_forgery except: :flight_prices
+
 
   def flight
   end
@@ -50,7 +52,12 @@ class SearchController < ApplicationController
 
      @flights = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s)
      @flights.each do |flight|
-        flight.best_price = flight.flight_prices.select("price").order("price").first.price
+        stored_flight_prices = flight.flight_prices.select("price").where('created_at >= ?', ENV["SEARCH_RESULT_VALIDITY_TIME"].to_f.minutes.ago).order("price").first
+        if stored_flight_prices.nil? 
+          flight.best_price = 0 #because we need to compare price in next step and if any nil exists then comparison failed
+        else
+          flight.best_price = stored_flight_prices.price 
+        end
       end
      @flights = @flights.sort_by(&:best_price)
      @search_parameter ={origin: origin,destination: destination,date: date}
@@ -64,8 +71,13 @@ class SearchController < ApplicationController
     log_file.close
   end
 
-  
-
-
+  def flight_prices
+    flight_id = params[:id]
+    @flight_prices = FlightPrice.where('created_at >= ?', ENV["SEARCH_RESULT_VALIDITY_TIME"].to_f.minutes.ago).where(flight_id: params[:id]).order(:price)
+    respond_to do |format|
+        format.js 
+        format.html
+    end
+  end
 
 end

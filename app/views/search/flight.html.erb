@@ -1,9 +1,8 @@
 <% provide(:title,"Compare Flights") %>
 <div class="ui vertical masthead segment" id="cover-photo" style="direction: rtl">  
 	<div class="ui container text center header" style="margin-top: 3%;font-size: 1.3em;">
-		<h1 class="ui huge header inverted center aligned web-font">با اطمینان بلیط پرواز بخرید</h1>
+		<h1 class="ui huge header inverted center aligned web-font">با اطمینان مقایسه کنید</h1>
 	</div>
-
 
 	<div class="ui stackable one column grid centered" style="margin-top: 1em">
 
@@ -11,11 +10,11 @@
 	    		<div class="ui huge form" style="padding: 3%">
 	     			<div class="two fields">
 	      				<div class="field">
-							<% @cities ={thr:"تهران",mhd:"مشهد",kih:"کیش",syz:"شیراز",isf:"اصفهان"} %>
+							<% @cities ={thr:"تهران",mhd:"مشهد",kih:"کیش",syz:"شیراز",ifn:"اصفهان"} %>
 		   					<%= f.select :origin, @cities.map{ |x,y| [y,x]}, {},{:class =>'ui dropdown'} %>
 	      				</div>
 	      				<div class="field">
-							<% @cities ={mhd:"مشهد",thr:"تهران",kih:"کیش",syz:"شیراز",isf:"اصفهان"} %>
+							<% @cities ={mhd:"مشهد",thr:"تهران",kih:"کیش",syz:"شیراز",ifn:"اصفهان"} %>
 		   					<%= f.select :destination, @cities.map{ |x,y| [y,x]}, {},{:class =>'ui dropdown'} %>
 	      				</div>
 	      				
@@ -29,7 +28,6 @@
 				</div>
 			<%end%>
 	</div>
-
 
 </div>
 <%= render 'layouts/searchbox-helper' %>

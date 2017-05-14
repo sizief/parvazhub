@@ -1,28 +1,16 @@
-<div class="ui basic modal" style="left: initial;text-align: center;font-size: x-large;">
+<div class="ui basic modal waiting" style="left: initial;text-align: center;font-size: x-large;">
   <div class="description">
       <p>لطفا چند ثانیه صبر کنید. در حال جستجوی پروازها</p>
   </div>   
 </div>
 
 <script type="text/javascript">
-	$('.ui.basic.modal')
-  		.modal({blurring: true,inverted: true})
+	$('.ui.dropdown').dropdown(); 
+  $('.ui.basic.modal.waiting')
+  		.modal({blurring: true,inverted: false})
   		.modal('setting', 'closable', false)
   		.modal('attach events', '.ui.submit.button', 'show');
-	$('.ui.dropdown').dropdown(); 
-	/*$('#date-picker').calendar({
-		type: 'date',
-    	formatter: {
-    		date: function (date, settings) {
-	      		if (!date) return '';
-	      		var day = date.getDate();
-	      		var month = date.getMonth() + 1;
-	      		var year = date.getFullYear();
-	      		return year + '-' + month + '-' + day;
-    		}
-  		}
-	});
-	*/
+
 	var today_timestamp = Math.round((new Date()).getTime() / 1000);
     $("#date-picker").pDatepicker({
         persianDigit: true,
@@ -53,7 +41,5 @@
             }
         },
         autoClose: true
-
     });
-
 </script>

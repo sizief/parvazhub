@@ -26,4 +26,9 @@ module SearchHelper
 		airlines[airline_code].nil? ? airline_code : airlines[airline_code]
 	end
 
+	def supplier_logo_for (supplier)
+		image_url = "suppliers/" + supplier + "-logo.png"
+		image_tag image_url , class: "image ui"
+	end
+
 end
