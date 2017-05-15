@@ -86,7 +86,10 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
   font-weight: normal !important;
   font-family: samim !important;
 }
-
+.supplier-logo{
+  display:inline !important;
+  width: 30%;
+}
 /* datepicker */
 .header-row-cell, .datepicker-plot-area{
   font-family:samim !important;

@@ -1,79 +1,72 @@
 <% provide(:title,"Compare Flights") %>
 <div class="ui container" id="search-results-container">
-	<%=  render partial:'search/flight_prices' %>
-<div class="ui" id="search-box-inner">
-	<%= form_for(:search, url: search_path, method: :get) do |f| %>
-		<div class="ui form">
-			<div class="four fields">
-				<div class="field">
-					<% @cities ={thr:"تهران",mhd:"مشهد",kih:"کیش",syz:"شیراز",ifn:"اصفهان"} %>
-					<%= f.select :origin, @cities.map{ |x,y| [y,x]}, {:selected => @search_parameter[:origin]},{:class =>'ui dropdown'} %>
-				</div>
-				<div class="field">
-					<% @cities ={mhd:"مشهد",thr:"تهران",kih:"کیش",syz:"شیراز",ifn:"اصفهان"} %>
-					<%= f.select :destination, @cities.map{ |x,y| [y,x]}, {:selected => @search_parameter[:destination]},{:class =>'ui dropdown'} %>
-				</div>
-				<div class="field ui calendar">
-					<div class="ui input left icon">
-						<i class="calendar icon"></i>
-						<%= f.text_field :date, {id: 'date-picker', class:'form-control', value: @search_parameter[:date]} %>
+
+	<div class="ui" id="search-box-inner">
+		<%= form_for(:search, url: search_path, method: :get) do |f| %>
+			<div class="ui form">
+				<div class="four fields">
+					<div class="field">
+						<% @cities ={thr:"تهران",mhd:"مشهد",kih:"کیش",syz:"شیراز",ifn:"اصفهان"} %>
+						<%= f.select :origin, @cities.map{ |x,y| [y,x]}, {:selected => @search_parameter[:origin]},{:class =>'ui dropdown'} %>
+					</div>
+					<div class="field">
+						<% @cities ={mhd:"مشهد",thr:"تهران",kih:"کیش",syz:"شیراز",ifn:"اصفهان"} %>
+						<%= f.select :destination, @cities.map{ |x,y| [y,x]}, {:selected => @search_parameter[:destination]},{:class =>'ui dropdown'} %>
+					</div>
+					<div class="field ui calendar">
+						<div class="ui input left icon">
+							<i class="calendar icon"></i>
+							<%= f.text_field :date, {id: 'date-picker', class:'form-control', value: @search_parameter[:date]} %>
+						</div>
+					</div>
+					<div class="field center aligned">
+						<%= f.submit "Search", class: "ui submit primary basic button blue fluid" %>
 					</div>
 				</div>
-				<div class="field center aligned">
-					<%= f.submit "Search", class: "ui submit primary basic button blue fluid" %>
-				</div>
 			</div>
-		</div>
-	<%end%>
-</div>
+		<%end%>
+	</div>
 
-
-<table class="ui teal table unstackable sortable rtl">
-  	<thead>
-		<tr class="center aligned web-font">
-  			<th class="table-header">ایرلاین</th>
-  			<th class="table-header">ساعت </th>
-  			<th class="table-header">هواپیما</th>
-  			<th class="table-header sorted ascending">قیمت</th>
-  		</tr>
-  	</thead>
-	<tbody>
-		<% @flights.each do |flight|  %>
-			<% unless flight.best_price == 0 %>
-				<tr class="center aligned very basic">
-					<td class="left aligned">
-						<h5 class="ui image header web-font">
-			          		<%= airline_logo_for flight.airline_code %> 
-			          		<div class="content">
-			            		<%= airline_name_for flight.airline_code %>
-			            		<div class="sub header" style="margin-top: 7px">
-			            			<%= flight.flight_number %>
-			          			</div>
-			        		</div>
-		      			</h5>
-					</td>
-					<td><%= flight.departure_time.to_datetime.strftime("%H:%M") %></td>
-					<td><%= flight.airplane_type %></td>
-					<td>
-						<%= link_to number_with_delimiter(flight.best_price)+" تومان", flight_prices_path(flight.id), class: "ui teal label large flight-price", :remote => true %>
-					</td>
-				</tr>
-			<% end %>	
-		<% end %>
-	</tbody>
-</table>
+	<table class="ui teal table unstackable sortable rtl">
+	  	<thead>
+			<tr class="center aligned web-font">
+	  			<th class="table-header">ایرلاین</th>
+	  			<th class="table-header">ساعت </th>
+	  			<th class="table-header">هواپیما</th>
+	  			<th class="table-header sorted ascending">قیمت</th>
+	  		</tr>
+	  	</thead>
+		<tbody>
+			<% @flights.each do |flight|  %>
+				<% unless flight.best_price == 0 %>
+					<tr class="center aligned very basic">
+						<td class="left aligned">
+							<h5 class="ui image header web-font">
+				          		<%= airline_logo_for flight.airline_code %> 
+				          		<div class="content">
+				            		<%= airline_name_for flight.airline_code %>
+				            		<div class="sub header" style="margin-top: 7px">
+				            			<%= flight.flight_number %>
+				          			</div>
+				        		</div>
+			      			</h5>
+						</td>
+						<td><%= flight.departure_time.to_datetime.strftime("%H:%M") %></td>
+						<td><%= flight.airplane_type %></td>
+						<td>
+							<%= link_to number_with_delimiter(flight.best_price)+" تومان", flight_prices_path(flight.id), class: "ui teal label large flight-price", :remote => true %>
+						</td>
+					</tr>
+				<% end %>	
+			<% end %>
+		</tbody>
+	</table>
 </div>
 
 <%= render 'layouts/searchbox-helper' %>
-<div class="ui basic modal prices" style="left: initial;text-align: center;font-size: x-large;">
-  <div class="description">
+<div class="ui basic modal prices" style="left: initial;text-align: center;">
       <p id="prices-modal-content"></p>
-  </div>   
 </div>
 <script type="text/javascript">
 	$('table').tablesort()
-	$('.ui.basic.modal.prices')
-    .modal({blurring: true,inverted: true})
-    .modal('setting', 'closable', true)
-    .modal('attach events', '.flight-price', 'show');
 </script>

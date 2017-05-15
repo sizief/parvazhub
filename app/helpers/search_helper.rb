@@ -28,7 +28,7 @@ module SearchHelper
 
 	def supplier_logo_for (supplier)
 		image_url = "suppliers/" + supplier + "-logo.png"
-		image_tag image_url , class: "image ui"
+		image_tag image_url , class: "image ui supplier-logo"
 	end
 
 end
