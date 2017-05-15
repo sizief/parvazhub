@@ -31,4 +31,18 @@ module SearchHelper
 		image_tag image_url , class: "image ui supplier-logo"
 	end
 
+	def hour_to_human (time)
+		time_without_colon  = "#{time}".tr(':', '')
+		phrase = case time_without_colon.to_i
+        	when 400..1159 then "صبح"
+        	when 1200..1559 then "ظهر"
+        	when 1600..1959 then "عصر"
+        	when 2000..2359 then "شب"
+        	when 0..359 then "شب"
+        else
+        	" "
+       	end
+       	time + " " + phrase
+	end
+
 end
