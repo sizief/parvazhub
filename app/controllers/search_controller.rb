@@ -1,6 +1,5 @@
 class SearchController < ApplicationController
-      protect_from_forgery except: :flight_prices
-
+  protect_from_forgery except: :flight_prices
 
   def flight
   end
@@ -10,8 +9,10 @@ class SearchController < ApplicationController
     destination = params[:search][:destination].downcase
     date = Date.parse params[:search][:date]
     date = date.to_s
+
     route = Route.create_route("#{origin}", "#{destination}") #create id if id route is not exist
-    UserSearchHistory.create(route_id:route.id,departure_time:"#{date}") #save user search
+    UserSearchHistory.create(route_id:route.id,departure_time:"#{date}") #save user search to show in admin panel
+    #check to see response from N minutes ago available or not. 
     response_available = SearchHistory.where(route_id:route.id,departure_time:"#{date}").where('created_at >= ?', ENV["SEARCH_RESULT_VALIDITY_TIME"].to_f.minutes.ago).count
 
     search_suppliers(origin,destination,route.id,date) if response_available == 0
@@ -23,6 +24,14 @@ class SearchController < ApplicationController
          x.call(origin,destination,route_id,date) 
     }
 
+  end
+
+  def search_flightio(origin,destination,route_id,date)
+    flightio_response = Suppliers::Alibaba.search(origin,destination,date)
+    SearchHistory.create(supplier_name:"Alibaba",route_id:route_id,departure_time: date)
+    log(alibaba_response) if Rails.env.development?  
+    flight_list = Flight.new()
+    flight_list.import_domestic_alibaba_flights(alibaba_response,route_id,origin,destination,date)
   end
 
   def search_alibaba(origin,destination,route_id,date)
