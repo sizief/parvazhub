@@ -2,7 +2,6 @@ class Flight < ApplicationRecord
 	validates :flight_number, :uniqueness => { :scope => :departure_time,
     :message => "already saved" }
   validates :route_id, presence: true
-  #default_scope -> { order(created_at: :desc) }
   belongs_to :route
   has_many :flight_prices
 
@@ -11,6 +10,30 @@ class Flight < ApplicationRecord
   def self.best_price
     @best_price
   end
+
+  def import_domestic_flightio_flights(response,route_id,origin,destination,date)
+      doc = Nokogiri::HTML(response[:response])
+      doc = doc.xpath('//div[@class="search-result flights-boxs depart"]')
+      doc.each do |flight|
+        price = flight['amount']
+        airline_code = flight['airline'].tr(",","")
+        deeplink_url = response[:deeplink]
+        departure_hour = flight['sourcedeparttime']
+        
+        departure_time_from = date +" "+ departure_hour + ":00:00"
+        departure_time_to = date+" "+(departure_hour.to_i+1).to_s+":00:00"
+        flight_id_list = Flight.where(route_id:route_id).where(airline_code:"#{airline_code}").where(departure_time: "#{departure_time_from}".."#{departure_time_to}")
+        
+        if flight_id_list.first.nil?
+          next
+        else
+          flight_id = flight_id_list.first[:id]
+        end
+
+        FlightPrice.create(flight_id: "#{flight_id}", price: "#{price}", supplier:"flightio", flight_date:"#{date}", deep_link:"#{deeplink_url}"  )
+      end #end of each loop
+  end
+
 	
 def import_domestic_alibaba_flights(response,route_id,origin,destination,date)
       json_response = JSON.parse(response)

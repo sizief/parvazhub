@@ -3,7 +3,8 @@ app:
   # map our application source code, in full, to the application root of our container
   volumes:
     - .:/var/www/flightsearch
-
+  tty: true
+  stdin_open: true
 #web:
   # use whatever volumes are configured for the app container
 #  volumes_from:
