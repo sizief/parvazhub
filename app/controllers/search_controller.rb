@@ -20,7 +20,7 @@ class SearchController < ApplicationController
   end
 
   def search_suppliers(origin,destination,route_id,date)
-    Parallel.each([method(:search_alibaba),method(:search_zoraq),method(:search_flightio)], in_processes: 3) { |x|
+    Parallel.each([method(:search_alibaba),method(:search_zoraq),method(:search_flightio)], in_threads: 3) { |x| #in_processes in_threads
          x.call(origin,destination,route_id,date) 
     }
     #search_zoraq(origin,destination,route_id,date)
