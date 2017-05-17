@@ -16,7 +16,7 @@
 					<div class="field ui calendar">
 						<div class="ui input left icon">
 							<i class="calendar icon"></i>
-							<%= f.text_field :date, {id: 'date-picker', class:'form-control', value: @search_parameter[:date]} %>
+							<%= f.text_field :date, {id: 'date-picker', class:'form-control', value: @search_parameter[:date], readonly: 'readonly', autocomplete: 'false'} %>
 						</div>
 					</div>
 					<div class="field center aligned">
