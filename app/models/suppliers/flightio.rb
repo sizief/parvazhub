@@ -21,7 +21,7 @@ class Suppliers::Flightio
     search_flight_url = "http://flightio.com/fa/FlightResult/ListTable?FSL_Id="+ request_id
     deep_link = "http://flightio.com/fa/FlightResult/List?FSL_Id=" + request_id
     second_response = RestClient.get("#{URI.parse(search_flight_url)}")
-    return {response: second_response, deeplink: @deep_link}
+    return {response: second_response, deeplink: deep_link}
   end
 
 end
