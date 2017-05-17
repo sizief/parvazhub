@@ -15,6 +15,8 @@ gem 'rest-client'
 gem 'parallel'
 gem 'semantic-ui-sass', '~> 2.2', '>= 2.2.1.1'
 gem 'pg', '~> 0.18.4'
+gem 'newrelic_rpm'
+
 
 group :development do
   gem 'web-console',           '3.1.1'
