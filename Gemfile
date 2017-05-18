@@ -15,8 +15,9 @@ gem 'rest-client'
 gem 'parallel'
 gem 'semantic-ui-sass', '~> 2.2', '>= 2.2.1.1'
 gem 'pg', '~> 0.18.4'
-gem 'newrelic_rpm'
-
+gem "activerecord-import", ">= 0.2.0"
+gem 'meta_request'
+gem 'peek'
 
 group :development do
   gem 'web-console',           '3.1.1'
@@ -35,6 +36,7 @@ group :test do
 end
 
 group :production do
+  gem 'newrelic_rpm'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

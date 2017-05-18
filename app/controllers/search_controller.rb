@@ -22,7 +22,7 @@ class SearchController < ApplicationController
     supplier_list = [{class: Suppliers::Flightio,name: "flightio"},{class: Suppliers::Zoraq,name: "zoraq"},{class: Suppliers::Alibaba,name: "alibaba"}]
     if Rails.env.production?  
       Parallel.each(supplier_list, in_threads: supplier_list.count) { |x| 
-         x.call(origin,destination,route_id,date) 
+       search_supplier(x[:name],x[:class],origin,destination,route_id,date)
       }
     else
      Parallel.each(supplier_list, in_processes: supplier_list.count) { |x| 
