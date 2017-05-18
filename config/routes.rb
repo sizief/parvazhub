@@ -9,7 +9,6 @@ Rails.application.routes.draw do
   get '/test', to:'search#test'
 
   get '/flight-prices/:id', to: 'search#flight_prices', as: 'flight-prices' #, :defaults => { :format => 'js' }
-  
   resources :routes
 
   root 'search#flight'

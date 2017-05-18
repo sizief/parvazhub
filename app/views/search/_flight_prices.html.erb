@@ -7,7 +7,7 @@
 					<!--<td><% flight.supplier %></td>-->
 					<td><%= number_with_delimiter(flight.price)+" تومان" %></td>
 					<td>
-						<%= link_to "خرید", flight.deep_link, class: "ui teal label big flight-price"%>
+						<%= link_to "خرید", flight.deep_link, class: "ui teal label big flight-price", target: '_blank'  %>
 					</td>
 				</tr>
 			<% end %>

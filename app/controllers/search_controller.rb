@@ -1,5 +1,4 @@
 class SearchController < ApplicationController
-  protect_from_forgery except: :flight_prices
 
   def flight
   end
@@ -20,44 +19,30 @@ class SearchController < ApplicationController
   end
 
   def search_suppliers(origin,destination,route_id,date)
+    supplier_list = [{class: Suppliers::Flightio,name: "flightio"},{class: Suppliers::Zoraq,name: "zoraq"},{class: Suppliers::Alibaba,name: "alibaba"}]
     if Rails.env.production?  
-      Parallel.each([method(:search_flightio),method(:search_alibaba),method(:search_zoraq)], in_threads: 3) { |x|  #in_threads
+      Parallel.each(supplier_list, in_threads: supplier_list.count) { |x| 
          x.call(origin,destination,route_id,date) 
       }
     else
-      Parallel.each([method(:search_alibaba),method(:search_zoraq),method(:search_flightio)], in_processes: 3) { |x|
-         x.call(origin,destination,route_id,date) 
+     Parallel.each(supplier_list, in_processes: supplier_list.count) { |x| 
+       search_supplier(x[:name],x[:class],origin,destination,route_id,date)
       }
     end
   end
 
-  def search_flightio(origin,destination,route_id,date)
-    flightio_response = Suppliers::Flightio.search(origin,destination,date)
-    SearchHistory.create(supplier_name:"Flightio",route_id:route_id,departure_time: date)
-    log(flightio_response[:response]) if Rails.env.development?  
-    flight_list = Flight.new() #we did not import flights from flightio, because they did not provide flight number. just import prices 
-    flight_list.import_domestic_flightio_flights(flightio_response,route_id,origin,destination,date)
+  def search_supplier(supplier_name,supplier_class,origin,destination,route_id,date)
+    flight_list = supplier_class.new()
+    response = flight_list.search(origin,destination,date)
+    unless response == false
+      SearchHistory.create(supplier_name:"#{supplier_name}",route_id:route_id,departure_time: date) #TODO: save the search status, false if it failed
+      log(response) if Rails.env.development?  
+      flight_list.import_domestic_flights(response,route_id,origin,destination,date)
+    end
   end
-
-  def search_alibaba(origin,destination,route_id,date)
-    alibaba_response = Suppliers::Alibaba.search(origin,destination,date)
-    SearchHistory.create(supplier_name:"Alibaba",route_id:route_id,departure_time: date)
-    log(alibaba_response) if Rails.env.development?  
-    flight_list = Flight.new()
-    flight_list.import_domestic_alibaba_flights(alibaba_response,route_id,origin,destination,date)
-  end
-
-  def search_zoraq(origin,destination,route_id,date)
-    zoraq_response = Suppliers::Zoraq.search(origin,destination,date)
-    SearchHistory.create(supplier_name:"Zoraq",route_id:route_id,departure_time: date)
-    log(zoraq_response) if Rails.env.development?  
-    flight_list = Flight.new()
-    flight_list.import_zoraq_flights(zoraq_response,route_id)
-  end
-
 
   def results(route,origin,destination,date)
-      #following code is implemented just to solve the connection issue between pgsql and rails, see https://github.com/grosser/parallel/issues/62
+      #just to solve the connection issue between pgsql and rails, see https://github.com/grosser/parallel/issues/62
       begin
         ActiveRecord::Base.connection.reconnect!
       rescue
