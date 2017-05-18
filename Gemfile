@@ -16,7 +16,6 @@ gem 'parallel'
 gem 'semantic-ui-sass', '~> 2.2', '>= 2.2.1.1'
 gem 'pg', '~> 0.18.4'
 gem "activerecord-import", ">= 0.2.0"
-gem 'meta_request'
 gem 'peek'
 
 group :development do
@@ -25,6 +24,8 @@ group :development do
   gem 'spring',                '1.7.2'
   gem 'spring-watcher-listen', '2.0.0'
   gem 'byebug',  '9.0.0', platform: :mri
+  gem 'meta_request'
+
 end
 
 group :test do

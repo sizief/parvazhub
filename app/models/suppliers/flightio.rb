@@ -3,6 +3,8 @@ class Suppliers::Flightio
   require "uri"
 
   def search(origin,destination,date)
+    #test_response = File.read("log/supplier/2017-05-18 08:56:18 +0000.log")
+    #{response: test_response, deeplink: "test"}
 
     get_flight_url = "http://flightio.com/fa/Home/DomesticSearch"
     shamsi_date_object = date.to_date.to_parsi   
@@ -41,9 +43,21 @@ class Suppliers::Flightio
         else
           flight_id = flight_id_list.first[:id]
         end
-        flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"flightio", flight_date:"#{date}", deep_link:"#{deeplink_url}")
-        #FlightPrice.create(flight_id: "#{flight_id}", price: "#{price}", supplier:"flightio", flight_date:"#{date}", deep_link:"#{deeplink_url}"  )
+        
+        #to prevent duplicate flight prices we compare flight prices before insert into database
+        flight_price_so_far = flight_prices.select {|flight_price| flight_price.flight_id == flight_id}
+        unless flight_price_so_far.empty? #check to see a flight price for given flight is exists
+          if flight_price_so_far.first.price.to_i <= price.to_i #exist price is cheaper or equal to new price so ignore it
+            next
+          else
+            flight_price_so_far.first.price = price #new price is cheaper, so update the old price and go to next price
+            next
+          end
+        end
+          
+          flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"flightio", flight_date:"#{date}", deep_link:"#{deeplink_url}")
       end #end of each loop
+      
       FlightPrice.import flight_prices
   end
 

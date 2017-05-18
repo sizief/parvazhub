@@ -19,11 +19,13 @@ class Suppliers::Alibaba
     get_flight_params = "id=#{request_id}&last=0&ffrom=#{origin}&fto=#{destination}&datefrom=#{shamsi_date}&count=1&interval=1&isReturn=false&isNew=true"
     flight_url = get_flight_url+get_flight_params
     second_response = RestClient.get("#{flight_url}")
+    return {response: second_response}
 
   end
 
   def import_domestic_flights(response,route_id,origin,destination,date)
-      json_response = JSON.parse(response)
+      flight_prices = Array.new()
+      json_response = JSON.parse(response[:response])
       json_response["AvailableFlights"].each do |flight|
         next if flight["ClassCount"] == 0 #Alibaba send a soldout seats too. 
         flight_number = airline_code = airplane_type = departure_date_time  = nil
@@ -47,18 +49,27 @@ class Suppliers::Alibaba
         departure_time = departure_date_time.to_datetime
         price = flight["price"].to_i/10
 
-        unless price == 0
-          Flight.create(route_id: "#{route_id}", flight_number:"#{flight_number}", departure_time:"#{departure_time}", airline_code:"#{airline_code}", airplane_type: "#{airplane_type}")
-        end
+        Flight.create(route_id: "#{route_id}", flight_number:"#{flight_number}", departure_time:"#{departure_time}", airline_code:"#{airline_code}", airplane_type: "#{airplane_type}")
+        
+        deeplink_url = "https://alibaba.ir/flights/#{origin}-#{destination}/#{date}/1-0-0" #create alibaba based on one search
+        flight_id = Flight.flight_id(flight_number,departure_time)
 
-        unless price == 0
-          deeplink_url = "https://alibaba.ir/flights/#{origin}-#{destination}/#{date}/1-0-0" #create alibaba based on one search
-          flight_id = Flight.flight_id(flight_number,departure_time)
-          FlightPrice.create(flight_id: "#{flight_id}", price: "#{price}", supplier:"alibaba", flight_date:"#{departure_date}", deep_link:"#{deeplink_url}"  )
+        unless price == 0 #Alibaba send a soldout seats. check here to avoid import sold out tickets
+          flight_price_so_far = flight_prices.select {|flight_price| flight_price.flight_id == flight_id}
+          unless flight_price_so_far.empty? #check to see a flight price for given flight is exists
+            if flight_price_so_far.first.price.to_i <= price.to_i #exist price is cheaper or equal to new price so ignore it
+              next
+            else
+              flight_price_so_far.first.price = price #new price is cheaper, so update the old price and go to next price
+              next
+            end
+          end
+          flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"alibaba", flight_date:"#{departure_date}", deep_link:"#{deeplink_url}")
         end
       end #end of each loop
-  end
+      FlightPrice.import flight_prices
 
+  end
 
   def airline_code_correction(alibaba_airline_code)
     airline_codes = {

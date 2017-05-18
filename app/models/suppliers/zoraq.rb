@@ -3,18 +3,23 @@ class Suppliers::Zoraq
     require "rest-client"
     
     def search(origin,destination,date)
+      #test_response = File.read("log/supplier/2017-05-18 09:51:05 +0000.log")
+      #{response: test_response, deeplink: "test"}
+
       begin
        url = "http://zoraq.com/Flight/DeepLinkSearch"
   	   params = {'OrginLocationIata' => "#{origin.upcase}", 'DestLocationIata' => "#{destination.upcase}", 'DepartureGo' => "#{date}", 'Passengers[0].Type' =>'ADT', 'Passengers[0].Quantity'=>'1'}
        response = RestClient.post("#{URI.parse(url)}", params)
-       response.body
       rescue 
         return false
       end
+
+      return {response: response.body}
     end
 
-    def import_domestic_flights(zoraq_response,route_id,origin,destination,date)
-      json_response = JSON.parse(zoraq_response)
+    def import_domestic_flights(response,route_id,origin,destination,date)
+      flight_prices = Array.new()
+      json_response = JSON.parse(response[:response])
       json_response["PricedItineraries"].each do |flight|
         flight_number = airline_code = airplane_type = departure_date_time  = nil
         flight_legs = flight["OriginDestinationOptions"][0]["FlightSegments"]
@@ -49,8 +54,23 @@ class Suppliers::Zoraq
         price = flight["AirItineraryPricingInfo"]["PTC_FareBreakdowns"][0]["PassengerFare"]["TotalFare"]["Amount"]
         deeplink_url = "http://zoraq.com"+flight["AirItineraryPricingInfo"]["FareSourceCode"]
         flight_id = Flight.flight_id(flight_number,departure_time)
-        FlightPrice.create(flight_id: "#{flight_id}", price: "#{price}", supplier:"zoraq", flight_date:"#{departure_date}", deep_link:"#{deeplink_url}" )
+        
+        #to prevent duplicate flight prices we compare flight prices before insert into database
+        flight_price_so_far = flight_prices.select {|flight_price| flight_price.flight_id == flight_id}
+        unless flight_price_so_far.empty? #check to see a flight price for given flight is exists
+          if flight_price_so_far.first.price.to_i <= price.to_i #exist price is cheaper or equal to new price so ignore it
+            next
+          else
+            flight_price_so_far.first.price = price #new price is cheaper, so update the old price and go to next price
+            next
+          end
+        end
+
+        flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"zoraq", flight_date:"#{departure_date}", deep_link:"#{deeplink_url}" )
+
       end #end of each loop
+      FlightPrice.import flight_prices
+
   end
 
   def parse_date(datestring)

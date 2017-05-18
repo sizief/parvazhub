@@ -19,7 +19,11 @@ class SearchController < ApplicationController
   end
 
   def search_suppliers(origin,destination,route_id,date)
-    supplier_list = [{class: Suppliers::Flightio,name: "flightio"},{class: Suppliers::Zoraq,name: "zoraq"},{class: Suppliers::Alibaba,name: "alibaba"}]
+    supplier_list = [
+      {class: Suppliers::Flightio,name: "flightio"},
+      {class: Suppliers::Zoraq,name: "zoraq"},
+      {class: Suppliers::Alibaba,name: "alibaba"}
+    ]
     if Rails.env.production?  
       Parallel.each(supplier_list, in_threads: supplier_list.count) { |x| 
        search_supplier(x[:name],x[:class],origin,destination,route_id,date)
@@ -36,7 +40,7 @@ class SearchController < ApplicationController
     response = flight_list.search(origin,destination,date)
     unless response == false
       SearchHistory.create(supplier_name:"#{supplier_name}",route_id:route_id,departure_time: date) #TODO: save the search status, false if it failed
-      log(response) if Rails.env.development?  
+      log(response[:response]) if Rails.env.development?  
       flight_list.import_domestic_flights(response,route_id,origin,destination,date)
     end
   end
