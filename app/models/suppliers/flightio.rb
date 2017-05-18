@@ -22,6 +22,7 @@ class Suppliers::Flightio
   end
 
   def import_domestic_flights(response,route_id,origin,destination,date)
+      flight_prices = Array.new()
       doc = Nokogiri::HTML(response[:response])
       doc = doc.xpath('//div[@class="search-result flights-boxs depart"]')
       doc.each do |flight|
@@ -32,17 +33,18 @@ class Suppliers::Flightio
         
         departure_time_from = date +" "+ departure_hour + ":00:00"
         departure_time_to = date+" "+(departure_hour.to_i+1).to_s+":00:00"
+
         flight_id_list = Flight.where(route_id:route_id).where(airline_code:"#{airline_code}").where(departure_time: "#{departure_time_from}".."#{departure_time_to}")
         
-        if flight_id_list.first.nil?
+        if flight_id_list.first.nil? #if true, then it means this flight is not available in our flight table
           next
         else
           flight_id = flight_id_list.first[:id]
         end
-
-        FlightPrice.create(flight_id: "#{flight_id}", price: "#{price}", supplier:"flightio", flight_date:"#{date}", deep_link:"#{deeplink_url}"  )
+        flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"flightio", flight_date:"#{date}", deep_link:"#{deeplink_url}")
+        #FlightPrice.create(flight_id: "#{flight_id}", price: "#{price}", supplier:"flightio", flight_date:"#{date}", deep_link:"#{deeplink_url}"  )
       end #end of each loop
+      FlightPrice.import flight_prices
   end
-
 
 end
