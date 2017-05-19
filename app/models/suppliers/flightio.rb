@@ -18,7 +18,8 @@ class Suppliers::Flightio
       end
       request_id = response[29..-1]
       search_flight_url = "http://flightio.com/fa/FlightResult/ListTable?FSL_Id="+ request_id
-      deep_link = "http://flightio.com/fa/FlightResult/List?FSL_Id=" + request_id
+      #deep_link = "http://flightio.com/fa/FlightResult/List?FSL_Id=" + request_id
+      deep_link = "http://flightio.com/fa/FlightPreview/Detail?FSL_Id=" + request_id + "&CombinationID="
       second_response = RestClient.get("#{URI.parse(search_flight_url)}")
       return {response: second_response, deeplink: deep_link}
   end
@@ -30,7 +31,8 @@ class Suppliers::Flightio
       doc.each do |flight|
         price = flight['amount']
         airline_code = flight['airline'].tr(",","")
-        deeplink_url = response[:deeplink]
+        combination_id = flight['combinationid']
+        deeplink_url = response[:deeplink]+combination_id
         departure_hour = flight['sourcedeparttime']
         
         departure_time_from = date +" "+ departure_hour + ":00:00"
