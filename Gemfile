@@ -16,7 +16,9 @@ gem 'parallel'
 gem 'semantic-ui-sass', '~> 2.2', '>= 2.2.1.1'
 gem 'pg', '~> 0.18.4'
 gem "activerecord-import", ">= 0.2.0"
-gem 'peek'
+gem 'sidekiq'
+gem 'foreman'
+
 
 group :development do
   gem 'web-console',           '3.1.1'
