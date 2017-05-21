@@ -56,6 +56,7 @@
 						<td>
 							<%= link_to number_with_delimiter(flight.best_price)+" تومان", flight_prices_path(flight.id), class: "ui teal label large flight-price", remote: true %>
 							<%= supplier_logo_for(flight.price_by) %>
+							<span style="font-size:x-small"><%=  time_ago_in_words(flight.created_at) %></span>
 						</td>
 					</tr>
 				<% end %>	
@@ -70,4 +71,4 @@
 </div>
 <script type="text/javascript">
 	$('table').tablesort()
-</script>
+</script>/

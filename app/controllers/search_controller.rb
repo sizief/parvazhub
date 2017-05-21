@@ -3,6 +3,16 @@ class SearchController < ApplicationController
   def flight
   end
 
+  def backgound_search_proccess(origin,destination,date)
+    origin = origin.downcase
+    destination = destination.downcase
+    date = Date.parse date
+    date = date.to_s
+
+    route = Route.create_route("#{origin}", "#{destination}") #create id if id route is not exist
+    search_suppliers(origin,destination,route.id,date)
+  end
+
   def search_proccess
     origin = params[:search][:origin].downcase
     destination = params[:search][:destination].downcase
@@ -37,11 +47,15 @@ class SearchController < ApplicationController
 
   def search_supplier(supplier_name,supplier_class,origin,destination,route_id,date)
     flight_list = supplier_class.new()
+    search_history = SearchHistory.create(supplier_name:"#{supplier_name}",route_id:route_id,departure_time: date) #TODO: save the search status, false if it failed
     response = flight_list.search(origin,destination,date)
-    unless response == false
-      SearchHistory.create(supplier_name:"#{supplier_name}",route_id:route_id,departure_time: date) #TODO: save the search status, false if it failed
+    
+    if response == false
+      search_history.update(status: "false")
+    else
       log(response[:response]) if Rails.env.development?  
       flight_list.import_domestic_flights(response,route_id,origin,destination,date)
+      search_history.update(status: "true")
     end
   end
 

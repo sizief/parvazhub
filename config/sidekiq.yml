@@ -1,0 +1,10 @@
+:schedule:
+  today_route_1:
+    every: '20m'
+    args: ['thr','mhd','2017-05-22']
+    class: SearchWorker
+
+  tomorrow_route_1:
+    every: '45m'
+    args: ['thr','mhd','2017-05-23']
+    class: SearchWorker

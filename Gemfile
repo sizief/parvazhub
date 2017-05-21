@@ -17,7 +17,8 @@ gem 'semantic-ui-sass', '~> 2.2', '>= 2.2.1.1'
 gem 'pg', '~> 0.18.4'
 gem "activerecord-import", ">= 0.2.0"
 gem 'sidekiq'
-gem 'foreman'
+gem 'redis-rails'
+gem 'sidekiq-scheduler'
 
 
 group :development do
