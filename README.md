@@ -44,6 +44,8 @@ https://semantic-ui.com/
 https://github.com/bkeepers/dotenv 
 http://babakhani.github.io/PersianWebToolkit/doc/datepicker/#/quciksample/
 Font? 
+
+<a href="https://icons8.com/icon/5195/Dolphin">Dolphin icon credits</a>
   
 
 
