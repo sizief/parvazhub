@@ -7,6 +7,7 @@
   			<th><h4>route</h4></th>
   			<th><h4>Departure Time</h4></th>
   			<th><h4>status</h4></th>
+  			<th><h4>suplier</h4></th>
   			<th><h4>created at</h4></th>
   		</tr>
   	</thead>
@@ -16,9 +17,10 @@
 			<td><%= item.id %></td>
 			<td><%= item.route.origin + " - " + item.route.destination %></td>
 			<td><%= item.departure_time %></td>
-			<% if item.status == 'true' %><td><span class="ui teal label"><%= item.status %></span></td>
-			<% else %><td><span class="ui orange label"><%= item.status %></span></td><% end %>
-
+			<% if item.status == 'true' %><td><span class="ui teal label"><%= item.status %></span></td><% end %>
+			<% if item.status == 'false' %><td><span class="ui orange label"><%= item.status %></span></td><% end %>
+			<% if item.status.nil? %><td><button class="ui loading button"></button></td><% end %>
+			<td><%= item.supplier_name %></td>
 			<td><%= time_ago_in_words(item.created_at) %></td>
 		</tr>
 		<% end %>

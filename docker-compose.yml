@@ -2,6 +2,8 @@ db:
   image: postgres:9.4.5
   volumes:
     - docker-flightsearch-postgres:/var/lib/postgresql/data
+  ports:
+   - "5435:5432"
 
 redis:
   image: redis

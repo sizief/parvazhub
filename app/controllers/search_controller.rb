@@ -69,7 +69,9 @@ class SearchController < ApplicationController
 
      @flights = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s)
      @flights.each do |flight|
-        stored_flight_prices = flight.flight_prices.select("price,supplier").where('created_at >= ?', ENV["SEARCH_RESULT_VALIDITY_TIME"].to_f.minutes.ago).order("price").first
+        #stored_flight_prices = flight.flight_prices.select("price,supplier").where('created_at >= ?', ENV["SEARCH_RESULT_VALIDITY_TIME"].to_f.minutes.ago).order("price").first
+         stored_flight_prices = flight.flight_prices.select("price,supplier").order("price").first
+
         if stored_flight_prices.nil? 
           flight.best_price = 0 #because we need to compare price in next step and if any nil exists then comparison failed
         else
@@ -91,7 +93,8 @@ class SearchController < ApplicationController
 
   def flight_prices
     flight_id = params[:id]
-    @flight_prices = FlightPrice.where('created_at >= ?', ENV["SEARCH_RESULT_VALIDITY_TIME"].to_f.minutes.ago).where(flight_id: params[:id]).order(:price)
+    #@flight_prices = FlightPrice.where('created_at >= ?', ENV["SEARCH_RESULT_VALIDITY_TIME"].to_f.minutes.ago).where(flight_id: params[:id]).order(:price)
+    @flight_prices = FlightPrice.where(flight_id: params[:id]).order(:price)
 
     respond_to do |format|
         format.js 
