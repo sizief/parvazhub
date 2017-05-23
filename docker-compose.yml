@@ -6,9 +6,10 @@ db:
    - "5435:5432"
 
 redis:
+  command: redis-server --requirepass ''
   image: redis
   ports:
-    - '6379'  
+    - '6379'
 
 sidekiq:
   build: .
