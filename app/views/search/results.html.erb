@@ -1,4 +1,5 @@
-<% provide(:title,"Compare Flights") %>
+<% @cities ={thr:"تهران",mhd:"مشهد",kih:"کیش",syz:"شیراز",ifn:"اصفهان"} %>
+<% provide(:title,"پروازهاب:‌ پروازهای  #{@cities[@search_parameter[:destination].to_sym]}") %>
 <div class="ui container" id="search-results-container">
 
 	<div class="ui" id="search-box-inner">
@@ -6,7 +7,7 @@
 			<div class="ui form">
 				<div class="four fields">
 					<div class="field">
-						<% @cities ={thr:"تهران",mhd:"مشهد",kih:"کیش",syz:"شیراز",ifn:"اصفهان"} %>
+						
 						<%= f.select :origin, @cities.map{ |x,y| [y,x]}, {:selected => @search_parameter[:origin]},{:class =>'ui dropdown'} %>
 					</div>
 					<div class="field">

@@ -40,6 +40,13 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
     text-align: left !important;
 }
 
+/* header */
+#header{
+      direction: rtl;
+    font-family: samim;
+    font-size: 1.2em;
+}
+
 /* first page */
 .masthead.segment {
   min-height:700px;
