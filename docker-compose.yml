@@ -12,24 +12,27 @@ redis:
 
 sidekiq:
   build: .
-  command: bundle exec sidekiq #-r app/workers/search_worker.rb #-L log/sidekiq.log
+  #command: bundle exec sidekiq #-r app/workers/search_worker.rb #-L log/sidekiq.log
   links:
     - db
     - redis
   env_file: .env
   environment:
     RAILS_ENV: $RAILS_ENV
+    ENTRYPOINT: background_job
 
 app:
   build: .
   env_file: .env
   environment:
     RAILS_ENV: $RAILS_ENV
+    ENTRYPOINT: app
   links:
     - db
     - redis
   ports:
    - "3000:3000" #"3000" #use "3000" if nginx is up
+
 
 
 #web:
