@@ -58,7 +58,7 @@ class Suppliers::Zoraq
         #to prevent duplicate flight prices we compare flight prices before insert into database
         flight_price_so_far = flight_prices.select {|flight_price| flight_price.flight_id == flight_id}
         unless flight_price_so_far.empty? #check to see a flight price for given flight is exists
-          if flight_price_so_far.first.price.to_i <= price.to_i #exist price is cheaper or equal to new price so ignore it
+          if flight_price_so_far.first.price.to_i <= price.to_i #saved price is cheaper or equal to new price so we dont touch it
             next
           else
             flight_price_so_far.first.price = price #new price is cheaper, so update the old price and go to next price
@@ -69,7 +69,11 @@ class Suppliers::Zoraq
         flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"zoraq", flight_date:"#{departure_date}", deep_link:"#{deeplink_url}" )
 
       end #end of each loop
-      FlightPrice.import flight_prices
+
+      # first we should remove the old flight price archive 
+      FlightPrice.delete_old_flight_prices("zoraq",route_id,date) unless flight_prices.empty?
+      # then bulk import enabled by a bulk import gem
+      FlightPrice.import flight_prices 
 
   end
 

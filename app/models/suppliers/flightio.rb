@@ -13,15 +13,19 @@ class Suppliers::Flightio
     begin
       params = {'DOM_TripMode' => '1', 'DOM_SourceCityCode' => "#{origin.upcase}", 'DOM_SourceCityName' => '', 'DOM_DestinationCityCode'=>"#{destination.upcase}", 'DOM_DestinationCityName'=>'','DOM_DepartDate_Str' => "#{shamsi_date}", 'DOM_ReturnDate_Str' => '', 'DOM_AdultCount' => '1', 'DOM_ChildCount' => '0', 'DOM_InfantCount' => '0'}  
       RestClient.post("#{URI.parse(get_flight_url)}", params)
-      rescue RestClient::Exception => ex
-        response  = ex.response.headers[:location] #the url redirected to another one
-      end
-      request_id = response[29..-1]
-      search_flight_url = "http://flightio.com/fa/FlightResult/ListTable?FSL_Id="+ request_id
-      #deep_link = "http://flightio.com/fa/FlightResult/List?FSL_Id=" + request_id
-      deep_link = "http://flightio.com/fa/FlightPreview/Detail?FSL_Id=" + request_id + "&CombinationID="
+    rescue RestClient::Exception => ex
+      response  = ex.response.headers[:location] #the url redirected to another one
+    end
+    request_id = response[29..-1]
+    search_flight_url = "http://flightio.com/fa/FlightResult/ListTable?FSL_Id="+ request_id
+    #deep_link = "http://flightio.com/fa/FlightResult/List?FSL_Id=" + request_id
+    deep_link = "http://flightio.com/fa/FlightPreview/Detail?FSL_Id=" + request_id + "&CombinationID="
+    begin
       second_response = RestClient.get("#{URI.parse(search_flight_url)}")
-      return {response: second_response, deeplink: deep_link}
+    rescue
+      return false
+    end
+    return {response: second_response, deeplink: deep_link}
   end
 
   def import_domestic_flights(response,route_id,origin,destination,date)
@@ -60,7 +64,10 @@ class Suppliers::Flightio
           flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"flightio", flight_date:"#{date}", deep_link:"#{deeplink_url}")
       end #end of each loop
       
-      FlightPrice.import flight_prices
+      # first we should remove the old flight price archive 
+      FlightPrice.delete_old_flight_prices("flightio",route_id,date) unless flight_prices.empty?
+      # then bulk import enabled by a bulk import gem
+      FlightPrice.import flight_prices 
   end
 
 end

@@ -5,6 +5,11 @@ app:
     - .:/var/www/flightsearch
   tty: true
   stdin_open: true
+
+sidekiq:
+  # use whatever volumes are configured for the app container
+  volumes_from:
+    - app
 #web:
   # use whatever volumes are configured for the app container
 #  volumes_from:

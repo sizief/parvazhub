@@ -67,7 +67,11 @@ class Suppliers::Alibaba
           flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"alibaba", flight_date:"#{departure_date}", deep_link:"#{deeplink_url}")
         end
       end #end of each loop
-      FlightPrice.import flight_prices
+      
+      # first we should remove the old flight price archive 
+      FlightPrice.delete_old_flight_prices("alibaba",route_id,date) unless flight_prices.empty?
+      # then bulk import enabled by a bulk import gem
+      FlightPrice.import flight_prices 
 
   end
 

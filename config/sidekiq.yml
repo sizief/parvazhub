@@ -1,0 +1,40 @@
+:schedule:
+  today_route_1:
+    every: '30m'
+    args: [<%= Date.today.to_s %>]
+    class: SearchWorker
+
+  tomorrow_route_1:
+    every: '110m'
+    args: [<%= (Date.today+1).to_s %>]
+    class: SearchWorker
+
+  dayafter_route_1:
+    every: '250m'
+    args: [<%= (Date.today+2).to_s %>]
+    class: SearchWorker
+
+  restofweek_1_route_1:
+    every: '370m'
+    args: [<%= (Date.today+3).to_s %>]
+    class: SearchWorker
+
+  restofweek_2_route_1:
+    every: '390m'
+    args: [<%= (Date.today+4).to_s %>]
+    class: SearchWorker
+
+  restofweek_3_route_1:
+    every: '410m'
+    args: [<%= (Date.today+5).to_s %>]
+    class: SearchWorker
+
+  restofweek_4_route_1:
+    every: '450m'
+    args: [<%= (Date.today+6).to_s %>]
+    class: SearchWorker
+
+  restofweek_5_route_1:
+    every: '460m'
+    args: [<%= (Date.today+7).to_s %>]
+    class: SearchWorker
