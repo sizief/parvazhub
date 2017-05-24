@@ -31,7 +31,7 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
 #company-name{
   padding-left:5px;
   font-weight:bold;
-  color:#29aae1;
+  color:white;
 }
 
 /* fix for rtl semantic */
@@ -42,9 +42,13 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
 
 /* header */
 #header{
-      direction: rtl;
-    font-family: samim;
-    font-size: 1.2em;
+  direction: rtl;
+  font-family: samim;
+  font-size: 1.4em;
+  color: white;
+  background:#29aae1;
+  padding: 1em;
+  border-top: 2px solid #19759c;
 }
 
 /* first page */
@@ -102,4 +106,7 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
 /* datepicker */
 .header-row-cell, .datepicker-plot-area{
   font-family:samim !important;
+}
+.datepicker-plot-area{
+  box-shadow:none !important;
 }

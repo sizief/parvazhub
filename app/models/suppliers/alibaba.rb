@@ -71,8 +71,8 @@ class Suppliers::Alibaba
       # first we should remove the old flight price archive 
       FlightPrice.delete_old_flight_prices("alibaba",route_id,date) unless flight_prices.empty?
       # then bulk import enabled by a bulk import gem
-      FlightPrice.import flight_prices 
-
+      FlightPrice.import flight_prices
+      FlightPriceArchive.import flight_prices
   end
 
   def airline_code_correction(alibaba_airline_code)

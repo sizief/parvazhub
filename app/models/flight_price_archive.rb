@@ -1,0 +1,2 @@
+class FlightPriceArchive < ApplicationRecord
+end

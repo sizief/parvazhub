@@ -68,6 +68,8 @@ class Suppliers::Flightio
       FlightPrice.delete_old_flight_prices("flightio",route_id,date) unless flight_prices.empty?
       # then bulk import enabled by a bulk import gem
       FlightPrice.import flight_prices 
+      FlightPriceArchive.import flight_prices
+
   end
 
 end

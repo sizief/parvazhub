@@ -1,7 +1,9 @@
 <% provide(:title,"پروازهاب") %>
 <div class="ui vertical masthead segment" id="cover-photo" style="direction: rtl">  
 	<div class="ui container text center header" style="margin-top: 3%;font-size: 1.3em;">
-		<h1 class="ui huge header inverted center aligned web-font">با اطمینان مقایسه کنید</h1>
+		<h3 class="ui header inverted center aligned web-font">
+			<i class="yellow plane icon"></i>ارزان‌ترین پرواز را پیدا کنید. سریع. رایگان.
+		</h3>
 	</div>
 
 	<div class="ui stackable one column grid centered" style="margin-top: 1em">
@@ -11,11 +13,11 @@
 	     			<div class="two fields">
 	      				<div class="field">
 							<% @cities ={thr:"تهران",mhd:"مشهد",kih:"کیش",syz:"شیراز",ifn:"اصفهان"} %>
-		   					<%= f.select :origin, @cities.map{ |x,y| [y,x]}, {},{:class =>'ui dropdown'} %>
+		   					<%= f.select :origin, @cities.map{ |x,y| [("از "+y),x]}, {},{:class =>'ui dropdown'} %>
 	      				</div>
 	      				<div class="field">
 							<% @cities ={mhd:"مشهد",thr:"تهران",kih:"کیش",syz:"شیراز",ifn:"اصفهان"} %>
-		   					<%= f.select :destination, @cities.map{ |x,y| [y,x]}, {},{:class =>'ui dropdown'} %>
+		   					<%= f.select :destination, @cities.map{ |x,y| [("به "+y),x]}, {},{:class =>'ui dropdown'} %>
 	      				</div>
 	      				
 	  				</div>
@@ -23,7 +25,11 @@
 							<%= f.text_field :date, {id: 'date-picker-field'} %>
 	      			</div>
 	  				<div class="ui center aligned basic segment" style="margin-top: 50px;">
-	  					<%= f.submit "نمایش پروازها", class: "ui submit button massive yellow web-font fluid" %>
+	  					<%#  f.submit "نمایش پروازها", class: "ui submit button massive yellow web-font fluid" %>
+	  					<button class="ui submit massive yellow web-font fluid right labeled  icon button" type="submit">
+  							<i class="right arrow icon"></i>
+  							نمایش پروازها
+						</button>
 	  				</div>
 				</div>
 			<%end%>

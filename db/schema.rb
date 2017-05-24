@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170521155429) do
+ActiveRecord::Schema.define(version: 20170524080619) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "flight_price_archives", force: :cascade do |t|
+    t.integer  "flight_id"
+    t.integer  "price"
+    t.string   "supplier"
+    t.date     "flight_date"
+    t.string   "deep_link"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "flight_prices", force: :cascade do |t|
     t.integer  "flight_id"
