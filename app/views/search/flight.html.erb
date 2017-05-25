@@ -1,14 +1,24 @@
 <% provide(:title,"پروازهاب") %>
 <div class="ui vertical masthead segment" id="cover-photo" style="direction: rtl; margin-bottom: 2em;">  
-	<div class="ui container text center header" style="margin-top: 3%;font-size: 1.3em;">
-		<h3 class="ui header inverted center aligned web-font">
-			<i class="yellow plane icon"></i>ارزان‌ترین پرواز را پیدا کنید؛ سریع. رایگان.
+	<div class="ui container text center aligned header" id="slogan">
+		<a href="/">
+    		<div class="item" id="slogan-text">
+      			<i class="circle notched icon" style="color: white"></i>
+      			<span id="company-name">پروازهاب</span>
+    		</div>
+  		</a>
+		<h3 class="ui header inverted center aligned web-font" style="line-height: 2em">
+			<div>
+				<span id="slogan-description">
+				  مقایسه‌ی قیمت سایت‌های فروش بلیط پرواز؛<span style="color: #eaae00;"> رایگان.</span> سریع.  
+				</span>
+			</div>
 		</h3>
 	</div>
 
 	<div class="ui stackable one column grid centered" style="margin-top: 1em">
    		<%= form_for(:search, url: search_path, method: :get) do |f| %>
-    		<div class="ui huge form" style="padding: 3%">
+    		<div class="ui huge form" >
      			<div class="two fields">
       				<div class="field">
 						<% @cities ={thr:"تهران",mhd:"مشهد",kih:"کیش",syz:"شیراز",ifn:"اصفهان"} %>
@@ -17,8 +27,7 @@
       				<div class="field">
 						<% @cities ={mhd:"مشهد",thr:"تهران",kih:"کیش",syz:"شیراز",ifn:"اصفهان"} %>
 	   					<%= f.select :destination, @cities.map{ |x,y| [("به "+y),x]}, {},{:class =>'ui dropdown'} %>
-      				</div>
-      				
+      				</div> 
   				</div>
   				<div id="date-picker" style="height: 10em; font-family: samim;">
 						<%= f.text_field :date, {id: 'date-picker-field'} %>

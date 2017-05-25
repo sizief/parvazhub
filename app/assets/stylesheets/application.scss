@@ -61,7 +61,20 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
   background-size: cover;
   background-position: center;
 }
-
+#slogan{
+  margin-top: 3%;
+  font-size: 1.3em;
+  margin-bottom: 2%
+}
+#slogan-text{
+  font-family: samim !important;
+  color: white;
+  font-size: 150%;
+}
+#slogan-description{
+  background-image: url(/assets/opacity-backgrounds/black20p.png); 
+  background-repeat: repeat;
+}
 /* search box */
 #search-box{
 /* background-image: url(/assets/opacity-backgrounds/white70p.png); 

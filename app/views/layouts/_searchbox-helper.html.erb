@@ -6,41 +6,47 @@
 </div>
 
 <script type="text/javascript">
-	$('.ui.dropdown').dropdown(); 
-  $('.ui.basic.modal.waiting')
-  		.modal({blurring: true,inverted: false})
-  		.modal('setting', 'closable', false)
-  		.modal('attach events', '.ui.submit.button', 'show');
+	$(document).ready(function(){
 
-	var today_timestamp = Math.round((new Date()).getTime() / 1000);
-    $("#date-picker").pDatepicker({
-        persianDigit: true,
-        /* format : "YYYY - MM - DD", */
-        altFieldFormatter : function(unix){
-            if (!unix) return '';
-            var date =  new Date(unix);
-	      		var day = date.getDate();
-	      		var month = date.getMonth() + 1;
-	      		var year = date.getFullYear();
-	      		return year + '-' + month + '-' + day;
-        },
-        formatter : function(unix){
-            if (!unix) return '';
-            var date =  new Date(unix);
-	      		var day = date.getDate();
-	      		var month = date.getMonth() + 1;
-	      		var year = date.getFullYear();
-	      		return year + '-' + month + '-' + day;
-        },
-        altField: '#date-picker-field',
-        toolbox: {enabled:false},
-        navigator: {
-            enabled: true,
-            text: {
-                btnNextText: ">",
-                btnPrevText: "<"
-            }
-        },
-        autoClose: true
-    });
+    
+
+  	var today_timestamp = Math.round((new Date()).getTime() / 1000);
+      $("#date-picker").pDatepicker({
+          persianDigit: true,
+          /* format : "YYYY - MM - DD", */
+          altFieldFormatter : function(unix){
+              if (!unix) return '';
+              var date =  new Date(unix);
+  	      		var day = date.getDate();
+  	      		var month = date.getMonth() + 1;
+  	      		var year = date.getFullYear();
+  	      		return year + '-' + month + '-' + day;
+          },
+          formatter : function(unix){
+              if (!unix) return '';
+              var date =  new Date(unix);
+  	      		var day = date.getDate();
+  	      		var month = date.getMonth() + 1;
+  	      		var year = date.getFullYear();
+  	      		return year + '-' + month + '-' + day;
+          },
+          altField: '#date-picker-field',
+          toolbox: {enabled:false},
+          navigator: {
+              enabled: true,
+              text: {
+                  btnNextText: ">",
+                  btnPrevText: "<"
+              }
+          },
+          autoClose: true
+      });
+
+      $('.ui.dropdown').dropdown('refresh'); 
+    $('.ui.basic.modal.waiting')
+        .modal({blurring: true,inverted: false})
+        .modal('setting', 'closable', false)
+        .modal('attach events', '.ui.submit.button', 'show');
+
+  });
 </script>
