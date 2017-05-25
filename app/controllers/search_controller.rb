@@ -11,6 +11,7 @@ class SearchController < ApplicationController
 
     route = Route.create_route("#{origin}", "#{destination}") #create id if id route is not exist
     search_suppliers(origin,destination,route.id,date)
+    update_flight_best_price(origin,destination,date) 
   end
 
   def search_proccess
@@ -25,6 +26,7 @@ class SearchController < ApplicationController
     response_available = SearchHistory.where(route_id:route.id,departure_time:"#{date}").where('created_at >= ?', ENV["SEARCH_RESULT_VALIDITY_TIME"].to_f.minutes.ago).count
 
     search_suppliers(origin,destination,route.id,date) if response_available == 0
+    update_flight_best_price(origin,destination,date) 
     results(route,origin,destination,date)
   end
 
@@ -59,26 +61,18 @@ class SearchController < ApplicationController
     end
   end
 
-  def results(route,origin,destination,date)
-      #just to solve the connection issue between pgsql and rails, see https://github.com/grosser/parallel/issues/62
+  def update_flight_best_price(origin,destination,date) 
+    #just to solve the connection issue between pgsql and rails, see https://github.com/grosser/parallel/issues/62
       begin
         ActiveRecord::Base.connection.reconnect!
       rescue
         ActiveRecord::Base.connection.reconnect!
       end
+      Flight.update_best_price(origin,destination,date) 
+  end
 
-     @flights = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s)
-     @flights.each do |flight|
-        #stored_flight_prices = flight.flight_prices.select("price,supplier").where('created_at >= ?', ENV["SEARCH_RESULT_VALIDITY_TIME"].to_f.minutes.ago).order("price").first
-         stored_flight_prices = flight.flight_prices.select("price,supplier").order("price").first
-
-        if stored_flight_prices.nil? 
-          flight.best_price = 0 #because we need to compare price in next step and if any nil exists then comparison failed
-        else
-          flight.best_price = stored_flight_prices.price 
-          flight.price_by = stored_flight_prices.supplier 
-        end
-      end
+  def results(route,origin,destination,date)
+     @flights = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s).where.not(best_price:0)
      @flights = @flights.sort_by(&:best_price)
      @search_parameter ={origin: origin,destination: destination,date: date}
      render :results

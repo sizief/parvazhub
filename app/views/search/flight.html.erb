@@ -1,39 +1,156 @@
 <% provide(:title,"پروازهاب") %>
-<div class="ui vertical masthead segment" id="cover-photo" style="direction: rtl">  
+<div class="ui vertical masthead segment" id="cover-photo" style="direction: rtl; margin-bottom: 2em;">  
 	<div class="ui container text center header" style="margin-top: 3%;font-size: 1.3em;">
 		<h3 class="ui header inverted center aligned web-font">
-			<i class="yellow plane icon"></i>ارزان‌ترین پرواز را پیدا کنید. سریع. رایگان.
+			<i class="yellow plane icon"></i>ارزان‌ترین پرواز را پیدا کنید؛ سریع. رایگان.
 		</h3>
 	</div>
 
 	<div class="ui stackable one column grid centered" style="margin-top: 1em">
-
-	   		<%= form_for(:search, url: search_path, method: :get) do |f| %>
-	    		<div class="ui huge form" style="padding: 3%">
-	     			<div class="two fields">
-	      				<div class="field">
-							<% @cities ={thr:"تهران",mhd:"مشهد",kih:"کیش",syz:"شیراز",ifn:"اصفهان"} %>
-		   					<%= f.select :origin, @cities.map{ |x,y| [("از "+y),x]}, {},{:class =>'ui dropdown'} %>
-	      				</div>
-	      				<div class="field">
-							<% @cities ={mhd:"مشهد",thr:"تهران",kih:"کیش",syz:"شیراز",ifn:"اصفهان"} %>
-		   					<%= f.select :destination, @cities.map{ |x,y| [("به "+y),x]}, {},{:class =>'ui dropdown'} %>
-	      				</div>
-	      				
-	  				</div>
-	  				<div id="date-picker" style="height: 10em; font-family: samim;">
-							<%= f.text_field :date, {id: 'date-picker-field'} %>
-	      			</div>
-	  				<div class="ui center aligned basic segment" style="margin-top: 50px;">
-	  					<%#  f.submit "نمایش پروازها", class: "ui submit button massive yellow web-font fluid" %>
-	  					<button class="ui submit massive yellow web-font fluid right labeled  icon button" type="submit">
-  							<i class="right arrow icon"></i>
-  							نمایش پروازها
-						</button>
-	  				</div>
-				</div>
-			<%end%>
+   		<%= form_for(:search, url: search_path, method: :get) do |f| %>
+    		<div class="ui huge form" style="padding: 3%">
+     			<div class="two fields">
+      				<div class="field">
+						<% @cities ={thr:"تهران",mhd:"مشهد",kih:"کیش",syz:"شیراز",ifn:"اصفهان"} %>
+	   					<%= f.select :origin, @cities.map{ |x,y| [("از "+y),x]}, {},{:class =>'ui dropdown'} %>
+      				</div>
+      				<div class="field">
+						<% @cities ={mhd:"مشهد",thr:"تهران",kih:"کیش",syz:"شیراز",ifn:"اصفهان"} %>
+	   					<%= f.select :destination, @cities.map{ |x,y| [("به "+y),x]}, {},{:class =>'ui dropdown'} %>
+      				</div>
+      				
+  				</div>
+  				<div id="date-picker" style="height: 10em; font-family: samim;">
+						<%= f.text_field :date, {id: 'date-picker-field'} %>
+      			</div>
+  				<div class="ui center aligned basic segment" style="margin-top: 50px;">
+  					<%#  f.submit "نمایش پروازها", class: "ui submit button massive yellow web-font fluid" %>
+  					<button class="ui submit massive yellow web-font fluid right labeled  icon button" type="submit">
+							<i class="right arrow icon"></i>
+							نمایش پروازها
+					</button>
+  				</div>
+			</div>
+		<%end%>
 	</div>
+	
+</div>
 
+
+<div class="six column stackable ui grid centered">
+  
+  <% fp = FlightPrice.new() %>
+ <% flight_list = fp.get_lowest_price_collection("thr","syz") %>
+  <div class="column">
+    <div class="ui fluid card">
+      <div class="image">
+        <%= image_tag "cities/shiraz.jpg",{class:"price-box-image"} %>
+      </div>
+      <div class="content">
+    	<% unless flight_list[:today].nil? %>
+	    	<div class="date price-box-text">
+	    		پرواز تهران به شیراز <b>امروز </b>
+				<span class="price-box-price">
+					<%= link_to number_with_delimiter(flight_list[:today].best_price), search_link_builder("thr","syz",(Date.today).to_s) %>
+				</span>تومان
+	    	</div>
+    	<% end %>
+    	<% unless flight_list[:tomorrow].nil? %>
+	    	<div class="ui divider"></div>
+	    	<div class="date price-box-text">
+	    		پرواز تهران به شیراز <b>فردا </b>
+				<span class="price-box-price">
+					<%= link_to number_with_delimiter(flight_list[:tomorrow].best_price), search_link_builder("thr","syz",(Date.today+1).to_s) %>
+				</span>تومان
+	    	</div>
+	    <% end %>
+    	<% unless flight_list[:dayaftertomorrow].nil? %>
+    		<div class="ui divider"></div>
+    		<div class="date price-box-text">
+    			پرواز تهران به شیراز <b>پس‌فردا </b>
+				<span class="price-box-price">
+					<%= link_to number_with_delimiter(flight_list[:dayaftertomorrow].best_price), search_link_builder("thr","syz",(Date.today+2).to_s) %>
+				</span>تومان
+    		</div>
+    	<% end %>
+      </div>
+    </div>
+  </div>
+
+ <% fp = FlightPrice.new() %>
+ <% flight_list = fp.get_lowest_price_collection("thr","kih") %>
+  <div class="column">
+    <div class="ui fluid card">
+      <div class="image">
+        <%= image_tag "cities/kish.jpg",{class:"price-box-image"} %>
+      </div>
+      <div class="content">
+    	<% unless flight_list[:today].nil? %>
+	    	<div class="date price-box-text">
+	    		پرواز تهران به کیش <b>امروز </b>
+				<span class="price-box-price">
+					<%= link_to number_with_delimiter(flight_list[:today].best_price), search_link_builder("thr","kih",(Date.today).to_s) %>
+				</span>تومان
+	    	</div>
+    	<% end %>
+    	<% unless flight_list[:tomorrow].nil? %>
+	    	<div class="ui divider"></div>
+	    	<div class="date price-box-text">
+	    		پرواز تهران به کیش <b>فردا </b>
+				<span class="price-box-price">
+					<%= link_to number_with_delimiter(flight_list[:tomorrow].best_price), search_link_builder("thr","kih",(Date.today+1).to_s) %>
+				</span>تومان
+	    	</div>
+	    <% end %>
+    	<% unless flight_list[:dayaftertomorrow].nil? %>
+    		<div class="ui divider"></div>
+    		<div class="date price-box-text">
+    			پرواز تهران به کیش <b>پس‌فردا </b>
+				<span class="price-box-price">
+					<%= link_to number_with_delimiter(flight_list[:dayaftertomorrow].best_price), search_link_builder("thr","kih",(Date.today+2).to_s) %>
+				</span>تومان
+    		</div>
+    	<% end %>
+      </div>
+    </div>
+  </div>
+
+ <% fp = FlightPrice.new() %>
+ <% flight_list = fp.get_lowest_price_collection("thr","mhd") %>
+  <div class="column">
+    <div class="ui fluid card">
+      <div class="image">
+        <%= image_tag "cities/mashad.jpg",{class:"price-box-image"} %>
+      </div>
+      <div class="content">
+    	<% unless flight_list[:today].nil? %>
+	    	<div class="date price-box-text">
+	    		پرواز تهران به مشهد <b>امروز </b>
+				<span class="price-box-price">
+					<%= link_to number_with_delimiter(flight_list[:today].best_price), search_link_builder("thr","mhd",(Date.today).to_s) %>
+				</span>تومان
+	    	</div>
+    	<% end %>
+    	<% unless flight_list[:tomorrow].nil? %>
+	    	<div class="ui divider"></div>
+	    	<div class="date price-box-text">
+	    		پرواز تهران به مشهد <b>فردا </b>
+				<span class="price-box-price">
+					<%= link_to number_with_delimiter(flight_list[:tomorrow].best_price), search_link_builder("thr","mhd",(Date.today+1).to_s) %>
+				</span>تومان
+	    	</div>
+	    <% end %>
+    	<% unless flight_list[:dayaftertomorrow].nil? %>
+    		<div class="ui divider"></div>
+    		<div class="date price-box-text">
+    			پرواز تهران به مشهد <b>پس‌فردا </b>
+				<span class="price-box-price">
+					<%= link_to number_with_delimiter(flight_list[:dayaftertomorrow].best_price), search_link_builder("thr","mhd",(Date.today+2).to_s) %>
+				</span>تومان
+    		</div>
+    	<% end %>
+      </div>
+    </div>
+  </div>
 </div>
 <%= render 'layouts/searchbox-helper' %>

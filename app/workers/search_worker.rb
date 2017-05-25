@@ -9,7 +9,7 @@ class SearchWorker
   	{origin:"thr",destination:"syz"},
     {origin:"mhd",destination:"thr"},
   	{origin:"kih",destination:"thr"},
-	{origin:"ifn",destination:"thr"},
+	  {origin:"ifn",destination:"thr"},
   	{origin:"syz",destination:"thr"}
   ]
 
@@ -20,4 +20,5 @@ class SearchWorker
       background_search.backgound_search_proccess(x[:origin],x[:destination],date)
     end
   end
+
 end

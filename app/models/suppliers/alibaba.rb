@@ -2,7 +2,6 @@ class Suppliers::Alibaba
   require "open-uri"
 
   def search(origin,destination,date)
-
     search_flight_url = "http://www.alibaba.ir/api/searchFlight?"
     get_flight_url = "https://www.alibaba.ir/api/GetFlight?"
     shamsi_date = date.to_date.to_parsi   
@@ -20,7 +19,6 @@ class Suppliers::Alibaba
     flight_url = get_flight_url+get_flight_params
     second_response = RestClient.get("#{flight_url}")
     return {response: second_response}
-
   end
 
   def import_domestic_flights(response,route_id,origin,destination,date)
