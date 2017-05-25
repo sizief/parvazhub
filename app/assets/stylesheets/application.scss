@@ -47,8 +47,8 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
   font-size: 1.4em;
   color: white;
   background:#29aae1;
-  padding: 1em;
-  border-top: 2px solid #19759c;
+  padding: 0.6em;
+  border-top: 1px solid #19759c;
 }
 
 /* first page */
@@ -85,6 +85,7 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
   display:none;
 }
 #search-box-inner{
+  display:none;
   direction: rtl;
   text-align: center;
   padding-top:1%;
@@ -136,4 +137,9 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
 }
 
 .price-box-image{
+}
+#results-message{
+ direction: rtl;
+ padding: 1%;
+ background:aliceblue;
 }

@@ -8,11 +8,10 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 
-    
-
   	var today_timestamp = Math.round((new Date()).getTime() / 1000);
       $("#date-picker").pDatepicker({
           persianDigit: true,
+          format : "YYYY-MM-DD dddd",
           /* format : "YYYY - MM - DD", */
           altFieldFormatter : function(unix){
               if (!unix) return '';
@@ -22,14 +21,7 @@
   	      		var year = date.getFullYear();
   	      		return year + '-' + month + '-' + day;
           },
-          formatter : function(unix){
-              if (!unix) return '';
-              var date =  new Date(unix);
-  	      		var day = date.getDate();
-  	      		var month = date.getMonth() + 1;
-  	      		var year = date.getFullYear();
-  	      		return year + '-' + month + '-' + day;
-          },
+          
           altField: '#date-picker-field',
           toolbox: {enabled:false},
           navigator: {
@@ -42,7 +34,8 @@
           autoClose: true
       });
 
-      $('.ui.dropdown').dropdown('refresh'); 
+    $('.ui.dropdown').dropdown('refresh'); 
+
     $('.ui.basic.modal.waiting')
         .modal({blurring: true,inverted: false})
         .modal('setting', 'closable', false)

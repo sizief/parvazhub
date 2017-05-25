@@ -1,7 +1,16 @@
 <%= render 'layouts/header' %>
 <% @cities ={thr:"تهران",mhd:"مشهد",kih:"کیش",syz:"شیراز",ifn:"اصفهان"} %>
 <% provide(:title,"پروازهاب:‌ پروازهای  #{@cities[@search_parameter[:destination].to_sym]}") %>
+
 <div class="ui container" id="search-results-container">
+	<div class="column" id="results-message">
+		 <%= @cities[@search_parameter[:origin].to_sym] %>
+		  به 
+		 <%= @cities[@search_parameter[:destination].to_sym] %>
+		 در 
+		 <%= @search_parameter[:date].to_date.to_parsi.strftime "%A %d %B %Y"   %>
+		  <a class="ui primary basic blue" onclick="$('#search-box-inner').transition('slide');" style="cursor:pointer"><i class="search icon"></i> جستجوی دوباره</a>
+	</div>
 
 	<div class="ui" id="search-box-inner">
 		<%= form_for(:search, url: search_path, method: :get) do |f| %>
@@ -12,21 +21,32 @@
 						<%= f.select :origin, @cities.map{ |x,y| [y,x]}, {:selected => @search_parameter[:origin]},{:class =>'ui dropdown'} %>
 					</div>
 					<div class="field">
-						<% @cities ={mhd:"مشهد",thr:"تهران",kih:"کیش",syz:"شیراز",ifn:"اصفهان"} %>
 						<%= f.select :destination, @cities.map{ |x,y| [y,x]}, {:selected => @search_parameter[:destination]},{:class =>'ui dropdown'} %>
 					</div>
 					<div class="field ui calendar">
 						<div class="ui input left icon">
 							<i class="calendar icon"></i>
-							<%= f.text_field :date, {id: 'date-picker', class:'form-control', value: @search_parameter[:date], readonly: 'readonly', autocomplete: 'false'} %>
+							<%= f.text_field :date_shamsi, {id: 'date-picker', class:'form-control web-font', value: @search_parameter[:date], readonly: 'readonly', autocomplete: 'false'} %>
+							<%= f.text_field :date, {id: 'date-picker-field'} %>
 						</div>
 					</div>
 					<div class="field center aligned">
-						<%= f.submit "Search", class: "ui submit primary basic button blue fluid" %>
+						<%= f.submit "جستجوی مجدد", class: "ui submit web-font grey button  fluid" %>
 					</div>
 				</div>
 			</div>
 		<%end%>
+	</div>
+
+	<div class="ui stackable five column grid center aligned" style="margin: 10px;direction: rtl">
+	  <% flight_list = FlightPrice.new.get_lowest_price_time_table(@search_parameter[:origin],@search_parameter[:destination],@search_parameter[:date]) %>
+	  <% flight_list.each do |key,value|%>
+		  <div class="column web-font" style="border: 1px solid #ccc;">
+		  	<%= value.nil? ? "-" : value.departure_time.to_date.to_parsi.strftime("%A %d %B")  %>
+		  <div class="ui divider"></div>
+		  	<%= value.nil? ? "-" : link_to(number_with_delimiter(value.best_price), search_link_builder(@search_parameter[:origin],@search_parameter[:destination],value.departure_time.to_date))   %>
+		  </div>
+	  <% end %>
 	</div>
 
 	<table class="ui teal table unstackable sortable rtl">
@@ -54,7 +74,7 @@
 			      			</h5>
 						</td>
 						<td><%= hour_to_human flight.departure_time.to_datetime.strftime("%H:%M") %></td>
-						<td><%= flight.airplane_type %></td>
+						<td><%= flight.airplane_type.empty? ? "-" : flight.airplane_type %></td>
 						<td>
 							<%= link_to number_with_delimiter(flight.best_price)+" تومان", flight_prices_path(flight.id), class: "ui teal label large flight-price", remote: true %>
 							<%= supplier_logo_for(flight.price_by) %>
