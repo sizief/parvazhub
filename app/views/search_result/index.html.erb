@@ -1,12 +1,12 @@
 <%= render 'layouts/header' %>
-<% @cities ={thr:"تهران",mhd:"مشهد",kih:"کیش",syz:"شیراز",ifn:"اصفهان"} %>
-<% provide(:title,"پروازهاب:‌ پروازهای  #{@cities[@search_parameter[:destination].to_sym]}") %>
+<% provide(:title,"پروازهاب:‌ پروازهای #{@cities[@search_parameter[:origin].to_sym][:fa]} به #{@cities[@search_parameter[:destination].to_sym][:fa]} برای #{@search_parameter[:date].to_date.to_parsi.strftime '%A %d %B %Y'} ")%>
+<% provide(:description,"لیست پروازهای #{@cities[@search_parameter[:origin].to_sym][:fa]} به #{@cities[@search_parameter[:destination].to_sym][:fa]} در تاریخ #{@search_parameter[:date].to_date.to_parsi.strftime '%A %d %B %Y'}") %>
 
 <div class="ui container" id="search-results-container">
 	<div class="column" id="results-message">
-		 <%= @cities[@search_parameter[:origin].to_sym] %>
+		 <%= @cities[@search_parameter[:origin].to_sym][:fa] %>
 		  به 
-		 <%= @cities[@search_parameter[:destination].to_sym] %>
+		 <%= @cities[@search_parameter[:destination].to_sym][:fa] %>
 		 در 
 		 <%= @search_parameter[:date].to_date.to_parsi.strftime "%A %d %B %Y"   %>
 		  <a class="ui primary basic blue" onclick="$('#search-box-inner').transition('slide');" style="cursor:pointer"><i class="search icon"></i> جستجوی دوباره</a>
@@ -18,10 +18,10 @@
 				<div class="four fields">
 					<div class="field">
 						
-						<%= f.select :origin, @cities.map{ |x,y| [y,x]}, {:selected => @search_parameter[:origin]},{:class =>'ui dropdown'} %>
+						<%= f.select :origin, @cities.map{ |key,value| [value[:fa],key]}, {:selected => @search_parameter[:origin]},{:class =>'ui dropdown'} %>
 					</div>
 					<div class="field">
-						<%= f.select :destination, @cities.map{ |x,y| [y,x]}, {:selected => @search_parameter[:destination]},{:class =>'ui dropdown'} %>
+						<%= f.select :destination, @cities.map{ |key,value| [value[:fa],key]}, {:selected => @search_parameter[:destination]},{:class =>'ui dropdown'} %>
 					</div>
 					<div class="field ui calendar">
 						<div class="ui input left icon">

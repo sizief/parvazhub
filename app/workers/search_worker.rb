@@ -13,11 +13,10 @@ class SearchWorker
   	{origin:"syz",destination:"thr"}
   ]
 
-
   def perform(date)
   	@@origin_destination.each do |x|
-      background_search = SearchController.new()
-      background_search.backgound_search_proccess(x[:origin],x[:destination],date)
+      background_search = SupplierSearch.new()
+      background_search.search(x[:origin],x[:destination],date)
     end
   end
 

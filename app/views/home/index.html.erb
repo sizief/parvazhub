@@ -1,4 +1,6 @@
-<% provide(:title,"پروازهاب") %>
+<% provide(:title,"پروازهاب: مقایسه قیمت بلیط") %>
+<% provide(:description,"مقایسه قیمت بهترین سایت‌های فروش بلیط پرواز") %>
+
 <div class="ui vertical masthead segment" id="cover-photo" style="direction: rtl; margin-bottom: 2em;">  
 	<div class="ui container text center aligned header" id="slogan">
 		<a href="/">
@@ -7,13 +9,13 @@
       			<span id="company-name">پروازهاب</span>
     		</div>
   		</a>
-		<h3 class="ui header inverted center aligned web-font" style="line-height: 2em">
+		<h1 class="ui header inverted center aligned web-font" style="line-height: 2em;font-size: 1.28rem !important;">
 			<div>
 				<span id="slogan-description">
 				  مقایسه‌ی قیمت سایت‌های فروش بلیط پرواز؛<span style="color: #eaae00;"> رایگان.</span> سریع.  
 				</span>
 			</div>
-		</h3>
+		</h1>
 	</div>
 
 	<div class="ui stackable one column grid centered" style="margin-top: 1em">
@@ -21,10 +23,10 @@
     		<div class="ui huge form" >
      			<div class="two fields">
       				<div class="field">
-	   					<%= f.select :origin, @cities.map{ |x,y| [("از "+y),x]}, {},{:class =>'ui dropdown'} %>
+	   					<%= f.select :origin, @cities.map{ |key,value| [("از "+"#{value[:fa]}"),key]}, {},{:class =>'ui dropdown'} %>
       				</div>
       				<div class="field">
-	   					<%= f.select :destination, @cities.map{ |x,y| [("به "+y),x]}, {:selected => @default_destination_city},{:class =>'ui dropdown'} %>
+	   					<%= f.select :destination, @cities.map{ |key,value| [("به "+"#{value[:fa]}"),key]}, {:selected => @default_destination_city},{:class =>'ui dropdown'} %>
       				</div> 
   				</div>
   				<div id="date-picker" style="height: 10em; font-family: samim;">
@@ -48,14 +50,14 @@
 	  	<div class="column">
 			<div class="ui fluid card">
 			    <div class="image">
-			    	<%= image_tag "cities/"+city+".jpg",{class:"price-box-image"} %>
+			    	<%= image_tag "cities/"+@cities[city.to_sym][:en]+".jpg",{class:"price-box-image"} %>
 			    </div>
 			    <div class="content">
 			    	<% flight_list.each do |day,price| %>
 						<% unless flight_list[day.to_sym].nil? %>
 					    	<div class="date price-box-text">
 					    		پرواز تهران به 
-					    		<%= @cities[city.to_sym] %>
+					    		<%= @cities[city.to_sym][:fa] %>
 					    		<b><%= day_name_to_human day %></b>
 								<span class="price-box-price">
 									<%= link_to number_with_delimiter(flight_list[day.to_sym].best_price), search_link_builder("thr","#{city}",(Date.today).to_s) %>
