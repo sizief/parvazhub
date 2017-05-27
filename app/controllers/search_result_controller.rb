@@ -1,9 +1,6 @@
-class SearchController < ApplicationController
+class SearchResultController < ApplicationController
 
-  def flight
-  end
-
-  def backgound_search_proccess(origin,destination,date)
+def backgound_search_proccess(origin,destination,date)
     origin = origin.downcase
     destination = destination.downcase
     date = Date.parse date
@@ -75,7 +72,7 @@ class SearchController < ApplicationController
      @flights = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s).where.not(best_price:0)
      @flights = @flights.sort_by(&:best_price)
      @search_parameter ={origin: origin,destination: destination,date: date}
-     render :results
+     render :index
   end
 
   def log(response)

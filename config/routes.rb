@@ -2,6 +2,8 @@ Rails.application.routes.draw do
 	require 'sidekiq/web'
 	require 'sidekiq-scheduler/web'
 	
+	resources :routes
+
 	namespace :admin do
 		get 'dashboard/user_search_history'
 		get 'dashboard/search_history'
@@ -10,11 +12,9 @@ Rails.application.routes.draw do
 
 	get '/about-us', to:'static_pages#about_us'
 
-	get '/search', to:'search#search_proccess'
-	get '/test', to:'search#test'
+	get '/search', to:'search_result#search_proccess'
 
-	get '/flight-prices/:id', to: 'search#flight_prices', as: 'flight-prices' #, :defaults => { :format => 'js' }
-	resources :routes
+	get '/flight-prices/:id', to: 'search_result#flight_prices', as: 'flight-prices' #, :defaults => { :format => 'js' }
 
-	root 'search#flight'
+	root 'home#index'
 end

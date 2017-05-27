@@ -39,7 +39,7 @@
 	</div>
 
 	<div class="ui stackable five column grid center aligned" style="margin: 10px;direction: rtl">
-	  <% flight_list = FlightPrice.new.get_lowest_price_time_table(@search_parameter[:origin],@search_parameter[:destination],@search_parameter[:date]) %>
+	  <% flight_list = Flight.new.get_lowest_price_time_table(@search_parameter[:origin],@search_parameter[:destination],@search_parameter[:date]) %>
 	  <% flight_list.each do |key,value|%>
 		  <div class="column web-font" style="border: 1px solid #ccc;">
 		  	<%= value.nil? ? "-" : value.departure_time.to_date.to_parsi.strftime("%A %d %B")  %>

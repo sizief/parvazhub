@@ -49,4 +49,9 @@ module SearchHelper
 		link = "/search?utf8=✓&search%5Borigin%5D=#{origin}&search%5Bdestination%5D=#{destination}&search%5Bdate%5D=#{date}"
 	end
 
+	def day_name_to_human (day)
+		days_in_farsi = {today: 'امروز', tomorrow: 'فردا', dayaftertomorrow: 'پس فردا'}
+		days_in_farsi[day]
+	end
+
 end

@@ -1,0 +1,4 @@
+class SupplierSearch
+
+
+end
