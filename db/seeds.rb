@@ -5,3 +5,10 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+cities = City.list
+cities.each do |origin_key,origin_value|
+	cities.each do |destination_key,destination_value|
+		Route.create(origin: origin_key, destination: destination_key) unless destination_key == origin_key
+	end
+end

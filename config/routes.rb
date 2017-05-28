@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 
 	get '/about-us', to:'static_pages#about_us'
 
-	get '/search', to:'search_result#search'
+	get '/flights', to:'search_result#search', as: 'flights'
 
 	get '/flight-prices/:id', to: 'search_result#flight_prices', as: 'flight-prices' #, :defaults => { :format => 'js' }
 

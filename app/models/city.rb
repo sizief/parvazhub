@@ -10,4 +10,8 @@ class City
 		}
 	end
 
+	def self.default_destination_city
+		"kih"
+	end
+
 end

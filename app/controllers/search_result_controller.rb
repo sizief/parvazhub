@@ -8,12 +8,21 @@ class SearchResultController < ApplicationController
     date = date.to_s
 
     route = Route.find_by(origin:"#{origin}", destination:"#{destination}")
-    UserSearchHistory.create(route_id:route.id,departure_time:"#{date}") #save user search to show in admin panel
-    response_available = SearchHistory.where(route_id:route.id,departure_time:"#{date}").where('created_at >= ?', ENV["SEARCH_RESULT_VALIDITY_TIME"].to_f.minutes.ago).count
 
-    SupplierSearch.new.search(origin,destination,date) if response_available == 0
+    if route.nil?
+      notfound
+    else
+      UserSearchHistory.create(route_id:route.id,departure_time:"#{date}") #save user search to show in admin panel
+      response_available = SearchHistory.where(route_id:route.id,departure_time:"#{date}").where('created_at >= ?', ENV["SEARCH_RESULT_VALIDITY_TIME"].to_f.minutes.ago).count
+      SupplierSearch.new.search(origin,destination,date) if response_available == 0
+      index(route,origin,destination,date)
+    end
+  end
 
-    index(route,origin,destination,date)
+  def notfound
+    @default_destination_city = City.default_destination_city
+    @cities = City.list 
+    render :notfound
   end
 
   def index(route,origin,destination,date)
