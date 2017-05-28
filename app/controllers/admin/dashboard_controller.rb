@@ -1,9 +1,9 @@
 class Admin::DashboardController < ApplicationController
   def user_search_history
-  	@ush = UserSearchHistory.last(500)
+  	@ush = UserSearchHistory.order(id: :desc).last(500)
   end
 
   def search_history
-  	@sh = SearchHistory.last(300)
+  	@sh = SearchHistory.order(id: :desc).last(300)
   end
 end

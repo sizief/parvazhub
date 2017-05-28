@@ -31,7 +31,7 @@
 						</div>
 					</div>
 					<div class="field center aligned">
-						<%= f.submit "جستجوی مجدد", class: "ui submit web-font grey button  fluid" %>
+						<%= f.submit "جستجوی مجدد", class: "ui submit web-font grey button  fluid showmodal" %>
 					</div>
 				</div>
 			</div>
@@ -39,14 +39,14 @@
 	</div>
 
 	<% flight_list = Flight.new.get_lowest_price_time_table(@search_parameter[:origin],@search_parameter[:destination],@search_parameter[:date]) %>
-	<div class="ui mini five statistics" id="flight-price-table">
+	<div class="ui mini five statistics" id="flight-price-table" >
 	  <% flight_list.each do |key,value|%>
 	  	<div class=" grey statistic">
 		  <div class="value ">
-		  	<%= value.nil? ? "-" : number_with_delimiter(value.best_price)  %>
+		  	<%= value.nil? ? "<i class='plane icon'></i>".html_safe : number_with_delimiter(value.best_price)  %>
 		  </div>
 		  <div class="label web-font">
-		  	<%= value.nil? ? "-" : link_to(value.departure_time.to_date.to_parsi.strftime("%d %B"), search_link_builder(@search_parameter[:origin],@search_parameter[:destination],value.departure_time.to_date))   %>
+		  	<%= link_to(key.to_s.to_date.to_parsi.strftime("%d %B"), search_link_builder(@search_parameter[:origin],@search_parameter[:destination],key.to_s.to_date),{class:"showmodal"})   %>
 		  </div>
 	   	</div>
 	  <% end %>

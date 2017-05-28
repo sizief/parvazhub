@@ -35,31 +35,38 @@ class Flight < ApplicationRecord
       end
       
       prices
-    end
+  end
 
-    def get_lowest_price_time_table(origin,destination,date)
+  def get_lowest_price_time_table(origin,destination,date)
 
-        route = Route.find_by(origin:origin, destination:destination)
-        if date.to_date == Date.today
-          starting_date = date
-        elsif date.to_date == (Date.today+1)
-          starting_date = (date.to_date-1).to_s
-        else
-          starting_date = (date.to_date-2).to_s
-        end
-        
-        dates = {first: (starting_date.to_date).to_s, second: (starting_date.to_date+1).to_s, third: (starting_date.to_date+2).to_s, fourth: (starting_date.to_date+3).to_s, fifth: (starting_date.to_date+4).to_s}
-        prices = {first:'', second:'',third:'', fourth: '', fifth: ''}
+      route = Route.find_by(origin:origin, destination:destination)
+      if date.to_date == Date.today
+        starting_date = date
+      elsif date.to_date == (Date.today+1)
+        starting_date = (date.to_date-1).to_s
+      else
+        starting_date = (date.to_date-2).to_s
+      end
+      
+      #dates = {first: (starting_date.to_date).to_s, second: (starting_date.to_date+1).to_s, third: (starting_date.to_date+2).to_s, fourth: (starting_date.to_date+3).to_s, fifth: (starting_date.to_date+4).to_s}
+      #prices = {first:'', second:'',third:'', fourth: '', fifth: ''}
 
-        dates.each do |title,date|
-            prices[title.to_sym] = get_lowest_price(route,date)
-        end
-        prices
-    end
+      #dates.each do |title,date|
+      #    prices[title.to_sym] = get_lowest_price(route,date)
+      #end
+      #prices.reject{|price|}
+      prices = Hash.new()
+      dates = [(starting_date.to_date).to_s, (starting_date.to_date+1).to_s, (starting_date.to_date+2).to_s, (starting_date.to_date+3).to_s, (starting_date.to_date+4).to_s]
+      dates.each do |date|
+        prices[date.to_sym] =  get_lowest_price(route,date)
+      end
+      prices
 
-    def get_lowest_price(route,date)
-        flight = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s).where.not(best_price:0).sort_by(&:best_price).first
-        flight
-    end
+  end
+
+  def get_lowest_price(route,date)
+      flight = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s).where.not(best_price:0).sort_by(&:best_price).first
+      flight
+  end
 
 end
