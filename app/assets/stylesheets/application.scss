@@ -142,4 +142,19 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
  direction: rtl;
  padding: 1%;
  background:aliceblue;
+ margin-bottom:1em;
+}
+
+#flight-price-table {
+  direction: rtl;
+  background: aliceblue;
+  padding-top: 1em;
+  border-top: 1px solid #eee;
+  }
+
+
+@screen and (max-device-width : 480px) {
+#flight-price-table {
+     display:none;
+}
 }

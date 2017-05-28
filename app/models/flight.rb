@@ -38,9 +38,18 @@ class Flight < ApplicationRecord
     end
 
     def get_lowest_price_time_table(origin,destination,date)
+
         route = Route.find_by(origin:origin, destination:destination)
-        dates = {twodaybefore: (date.to_date-2).to_s, onedaybefore: (date.to_date-1).to_s, theday: (date.to_date).to_s, dayafter: (date.to_date+1).to_s, twodayafter: (date.to_date+2).to_s}
-        prices = {twodaybefore:'', onedaybefore:'',theday:'', dayafter: '', twodayafter: ''}
+        if date.to_date == Date.today
+          starting_date = date
+        elsif date.to_date == (Date.today+1)
+          starting_date = (date.to_date-1).to_s
+        else
+          starting_date = (date.to_date-2).to_s
+        end
+        
+        dates = {first: (starting_date.to_date).to_s, second: (starting_date.to_date+1).to_s, third: (starting_date.to_date+2).to_s, fourth: (starting_date.to_date+3).to_s, fifth: (starting_date.to_date+4).to_s}
+        prices = {first:'', second:'',third:'', fourth: '', fifth: ''}
 
         dates.each do |title,date|
             prices[title.to_sym] = get_lowest_price(route,date)

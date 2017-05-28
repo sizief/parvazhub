@@ -38,16 +38,21 @@
 		<%end%>
 	</div>
 
-	<div class="ui stackable five column grid center aligned" style="margin: 10px;direction: rtl">
-	  <% flight_list = Flight.new.get_lowest_price_time_table(@search_parameter[:origin],@search_parameter[:destination],@search_parameter[:date]) %>
+	<% flight_list = Flight.new.get_lowest_price_time_table(@search_parameter[:origin],@search_parameter[:destination],@search_parameter[:date]) %>
+	<div class="ui mini five statistics" id="flight-price-table">
 	  <% flight_list.each do |key,value|%>
-		  <div class="column web-font" style="border: 1px solid #ccc;">
-		  	<%= value.nil? ? "-" : value.departure_time.to_date.to_parsi.strftime("%A %d %B")  %>
-		  <div class="ui divider"></div>
-		  	<%= value.nil? ? "-" : link_to(number_with_delimiter(value.best_price), search_link_builder(@search_parameter[:origin],@search_parameter[:destination],value.departure_time.to_date))   %>
+	  	<div class=" grey statistic">
+		  <div class="value ">
+		  	<%= value.nil? ? "-" : number_with_delimiter(value.best_price)  %>
 		  </div>
+		  <div class="label web-font">
+		  	<%= value.nil? ? "-" : link_to(value.departure_time.to_date.to_parsi.strftime("%d %B"), search_link_builder(@search_parameter[:origin],@search_parameter[:destination],value.departure_time.to_date))   %>
+		  </div>
+	   	</div>
 	  <% end %>
 	</div>
+
+
 
 	<table class="ui teal table unstackable sortable rtl">
 	  	<thead>
