@@ -24,7 +24,7 @@ Rails.application.configure do
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = true
-  #Rails.application.config.assets.precompile += %w( *.js ^[^_]*.css *.css.erb )
+  #Rails.application.config.assets.precompile += %w( *.js ^[^_]*.css *.css.erb )  
 
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
