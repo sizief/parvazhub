@@ -7,5 +7,10 @@ one:
 
 two:
   id: 2
-  origin: ika
-  destination: par
+  origin: thr
+  destination: syz
+
+three:
+  id: 3
+  origin: thr
+  destination: kih

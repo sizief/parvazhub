@@ -28,7 +28,7 @@ group :development do
   gem 'spring-watcher-listen', '2.0.0'
   gem 'byebug',  '9.0.0', platform: :mri
   gem 'meta_request'
-
+  gem 'simplecov', :require => false, :group => :test
 end
 
 group :test do

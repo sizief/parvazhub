@@ -1,13 +1,119 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+#route 1 (thr mhd) today 
+<% (10..19).each do |n| %>
+flight_<%= n %>:
+  id: <%= n %>
   route_id: 1
-  flight_number: w5654
-  departure_time: 2016-12-18 21:54:47
+  flight_number: <%= "w5654"+(n.to_s) %>
+  departure_time: <%= Time.now.strftime("%Y-%m-%d %H:%M:%S") %>
   airline_code: W5
+  airplane_type: "Airbus"
+  best_price: 123456
+  price_by: "zoraq"
+<% end %>
 
-two:
-  route_id: 2
-  flight_number: W123
-  departure_time: 2016-12-18 21:54:47
+#route 1 (thr mhd) tomorrow 
+<% (20..29).each do |n| %>
+flight_<%= n %>:
+  id: <%= n %>
+  route_id: 1
+  flight_number: <%= "w5654"+(n.to_s) %>
+  departure_time: <%= ((Time.now)+(60*60*24)).strftime("%Y-%m-%d %H:%M:%S") %>
   airline_code: W5
+  airplane_type: "Airbus"
+  best_price: 123456
+  price_by: "zoraq"
+<% end %>
+
+#route 1 (thr mhd) aftertomorrow 
+<% (30..39).each do |n| %>
+flight_<%= n %>:
+  id: <%= n %>
+  route_id: 1
+  flight_number: <%= "w5654"+(n.to_s) %>
+  departure_time: <%= ((Time.now)+(60*60*24*2)).strftime("%Y-%m-%d %H:%M:%S") %>
+  airline_code: W5
+  airplane_type: "Airbus"
+  best_price: 123456
+  price_by: "zoraq"
+<% end %>
+
+#route 2 (thr syz) today 
+<% (40..49).each do |n| %>
+flight_<%= n %>:
+  id: <%= n %>
+  route_id: 2
+  flight_number: <%= "w5654"+(n.to_s) %>
+  departure_time: <%= Time.now.strftime("%Y-%m-%d %H:%M:%S") %>
+  airline_code: W5
+  airplane_type: "Airbus"
+  best_price: 123456
+  price_by: "zoraq"
+<% end %>
+
+#route 2 (thr syz) tomorrow 
+<% (50..59).each do |n| %>
+flight_<%= n %>:
+  id: <%= n %>
+  route_id: 2
+  flight_number: <%= "w5654"+(n.to_s) %>
+  departure_time: <%= ((Time.now)+(60*60*24)).strftime("%Y-%m-%d %H:%M:%S") %>
+  airline_code: W5
+  airplane_type: "Airbus"
+  best_price: 123456
+  price_by: "zoraq"
+<% end %>
+
+#route 2 (thr syz) aftertomorrow 
+<% (60..69).each do |n| %>
+flight_<%= n %>:
+  id: <%= n %>
+  route_id: 2
+  flight_number: <%= "w5654"+(n.to_s) %>
+  departure_time: <%= ((Time.now)+(60*60*24*2)).strftime("%Y-%m-%d %H:%M:%S") %>
+  airline_code: W5
+  airplane_type: "Airbus"
+  best_price: 123456
+  price_by: "zoraq"
+<% end %>
+
+#route 3 (thr kih) today 
+<% (70..79).each do |n| %>
+flight_<%= n %>:
+  id: <%= n %>
+  route_id: 3
+  flight_number: <%= "w5654"+(n.to_s) %>
+  departure_time: <%= Time.now.strftime("%Y-%m-%d %H:%M:%S") %>
+  airline_code: W5
+  airplane_type: "Airbus"
+  best_price: 123456
+  price_by: "zoraq"
+<% end %>
+
+#route 3 (thr kih) tomorrow 
+<% (80..89).each do |n| %>
+flight_<%= n %>:
+  id: <%= n %>
+  route_id: 3
+  flight_number: <%= "w5654"+(n.to_s) %>
+  departure_time: <%= ((Time.now)+(60*60*24)).strftime("%Y-%m-%d %H:%M:%S") %>
+  airline_code: W5
+  airplane_type: "Airbus"
+  best_price: 123456
+  price_by: "zoraq"
+<% end %>
+
+#route 3 (thr kih) aftertomorrow 
+<% (90..99).each do |n| %>
+flight_<%= n %>:
+  id: <%= n %>
+  route_id: 3
+  flight_number: <%= "w5654"+(n.to_s) %>
+  departure_time: <%= ((Time.now)+(60*60*24*2)).strftime("%Y-%m-%d %H:%M:%S") %>
+  airline_code: W5
+  airplane_type: "Airbus"
+  best_price: 123456
+  price_by: "zoraq"
+<% end %>
+
