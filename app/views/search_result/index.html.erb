@@ -46,7 +46,7 @@
 		  	<%= value.nil? ? "<i class='plane icon'></i>".html_safe : number_with_delimiter(value.best_price)  %>
 		  </div>
 		  <div class="label web-font">
-		  	<%= link_to(key.to_s.to_date.to_parsi.strftime("%d %B"), search_link_builder(@search_parameter[:origin],@search_parameter[:destination],key.to_s.to_date),{class:"showmodal"})   %>
+		  	<%= link_to(key.to_s.to_date.to_parsi.strftime("%A %d %B "), search_link_builder(@search_parameter[:origin],@search_parameter[:destination],key.to_s.to_date),{class:"showmodal"})   %>
 		  </div>
 	   	</div>
 	  <% end %>
