@@ -1,10 +1,10 @@
 class SearchResultController < ApplicationController
 
   def search
-    origin = "thr"#params[:search][:origin].downcase
-    destination = "mhd"#params[:search][:destination].downcase
+    origin = params[:search][:origin].downcase
+    destination = params[:search][:destination].downcase
     #TODO: what the following line do? its already string
-    date = "2017-06-01"#Date.parse params[:search][:date]
+    date = Date.parse params[:search][:date]
     date = date.to_s
 
     route = Route.find_by(origin:"#{origin}", destination:"#{destination}")
