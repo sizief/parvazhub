@@ -53,14 +53,14 @@
 			    	<%= image_tag "cities/"+@cities[city.to_sym][:en]+".jpg",{class:"price-box-image"} %>
 			    </div>
 			    <div class="content">
-			    	<% flight_list.each do |day,price| %>
-						<% unless flight_list[day.to_sym].nil? %>
+			    	<% flight_list.each do |day,flight| %>
+						<% unless flight.nil? %>
 					    	<div class="date price-box-text">
 					    		پرواز تهران به 
 					    		<%= @cities[city.to_sym][:fa] %>
 					    		<b><%= day_name_to_human day %></b>
 								<span class="price-box-price">
-									<%= link_to number_with_delimiter(flight_list[day.to_sym].best_price), search_link_builder("thr","#{city}",(Date.today).to_s) %>
+									<%= link_to number_with_delimiter(flight.best_price), search_link_builder("thr","#{city}",(flight.departure_time).to_date.to_s) %>
 								</span>تومان
 					    	</div>
 				    	<% end %>
