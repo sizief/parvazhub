@@ -19,4 +19,6 @@ Rails.application.routes.draw do
 	get 'home/index'
 	get 'static_pages/about_us'
 	root 'home#index'
+
+	get '/airport', to:'search_result#airport'
 end
