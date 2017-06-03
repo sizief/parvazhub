@@ -14,7 +14,10 @@ class City
   end
 
   def City.get_city_code_based_on_name persian_name
-  	city_code = false
+    persian_name = persian_name.sub "ك", "ک"
+    persian_name = persian_name.sub "ي", "ی"
+
+    city_code = false
   	City.list.each do |key,value|
   	  if value[:fa] == persian_name.strip
   	    city_code =  key.to_s

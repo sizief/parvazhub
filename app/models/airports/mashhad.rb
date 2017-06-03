@@ -1,13 +1,13 @@
-class Airports::Mehrabad < Airports::DomesticAirport
+class Airports::Mashhad < Airports::DomesticAirport
   require "open-uri"
   require "uri"
 
   def search
-    get_flight_url = "https://mehrabad.airport.ir/flight-info"
+    get_flight_url = "https://mashhad.airport.ir/flight-info"
   
     begin
       if Rails.env.test?
-        response = File.read("test/fixtures/files/mehrabad.log") 
+        response = File.read("test/fixtures/files/mashhad.log") 
       else
         response = RestClient.get("#{URI.parse(get_flight_url)}")
     end
@@ -19,11 +19,12 @@ class Airports::Mehrabad < Airports::DomesticAirport
 
   def import_domestic_flights(response)
     flight_details = Array.new()
-    origin = "thr"
+    origin = "mhd"
     doc = Nokogiri::HTML(response)
     doc = doc.xpath('//*[@id="dep-flights-info"]/tbody/tr')
 
     doc.each do |flight|
+
       destination_name_in_persian = flight.css(".cell-dest p").text
       destination = City.get_city_code_based_on_name destination_name_in_persian
 
@@ -31,9 +32,8 @@ class Airports::Mehrabad < Airports::DomesticAirport
 
       route = Route.find_by(origin:"#{origin}",destination:"#{destination}")
       call_sign = flight.css(".cell-fno p").text
-      actual_departure_time = flight.css(".cell-dateTime2 p").text
-      status = flight.css(".cell-status p").text
-      terminal = flight.css(".terminal p").text
+      actual_departure_time = flight.css(".cell-airline p")[1].text
+      status = flight.css(".cell-status p").text.tr("|","")
       airplane_type = flight.css(".cell-aircraft p").text
       departure_time = (flight.css(".cell-time p").text+(":00")).to_time
       day = flight.css(".cell-day p").text
@@ -49,7 +49,6 @@ class Airports::Mehrabad < Airports::DomesticAirport
         departure_time: "#{departure_date_time}",
         airplane_type: "#{airplane_type}",
         status: "#{status}",
-        terminal:"#{terminal}",
         actual_departure_time:"#{actual_departure_time}")
 
     end

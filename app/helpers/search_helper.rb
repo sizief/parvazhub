@@ -4,28 +4,6 @@ module SearchHelper
 		image_tag image_url , class: "airline-logo image ui "
 	end
 
-	def airline_name_for(airline_code)
-		airlines ={"W5"=>"ماهان",
-			"AK"=>"اترک", 
-  			"B9"=>"ایران‌ایر‌تور", 
-	  		"sepahan"=>"سپاهان", 
-	  		"hesa"=>"هسا",  
-	  		"I3"=>"آتا", 
-	  		"JI"=>"معراج", 
-	  		"IV"=>"کاسپین", 
-	  		"NV"=>"نفت", 
-	  		"saha"=>"ساها", 
-	  		"ZV"=>"زاگرس",
-	  		"HH"=>"تابان",
-	  		"QB"=>"قشم" ,
-	  		"Y9"=>"کیش",
-	  		"EP"=>"آسمان",
-	  		"IR"=>"ایران‌ایر",
-	  		"SR"=>"سپهران"
-  		}
-		airlines[airline_code].nil? ? airline_code : airlines[airline_code]
-	end
-
 	def supplier_logo_for (supplier)
 		image_url = "suppliers/" + supplier + "-logo.png"
 		image_tag image_url , class: "image ui supplier-logo tiny"
@@ -54,4 +32,53 @@ module SearchHelper
 		days_in_farsi[day]
 	end
 
+    def airline_name_for(airline_code)
+	  airlines ={"W5"=>"ماهان",
+		"AK"=>"اترک", 
+			"B9"=>"ایران‌ایر‌تور", 
+			"sepahan"=>"سپاهان", 
+			"hesa"=>"هسا",  
+			"I3"=>"آتا", 
+			"JI"=>"معراج", 
+			"IV"=>"کاسپین", 
+			"NV"=>"نفت", 
+			"saha"=>"ساها", 
+			"ZV"=>"زاگرس",
+			"HH"=>"تابان",
+			"QB"=>"قشم" ,
+			"Y9"=>"کیش",
+			"EP"=>"آسمان",
+			"IR"=>"ایران‌ایر",
+			"SR"=>"سپهران"
+		}
+	airlines[airline_code].nil? ? airline_code : airlines[airline_code]
+	end
+
+	def airplane_name_for airplane_type
+	  case airplane_type.upcase
+	  when "MD80","MD-80","MD82","MD-82","MD83","MD-83","MD88","MD-88"
+	  	ariplane_name = "بویینگ MD"
+	  when "AB3"
+	  	ariplane_name = "ایرباس"
+	  when "A300-600"
+	  	ariplane_name= "ایرباس ۳۰۰"
+	  when "A310","AIRBUS A310"
+	  	ariplane_name = "ایرباس ۳۱۰"
+	  when "A320","AIRBUS A320"
+	  	ariplane_name = "ایرباس ۳۲۰"
+	  when "BOEING 727-200","727","727-200"
+	  	ariplane_name = "بویینگ ۷۲۷"
+	  when "B737","737","737-500","B737-400","737-300","737-600","737-300"
+	  	ariplane_name = "بویینگ ۷۳۷"
+	  when "FOKKER 100","F100"
+	  	ariplane_name = "فوکر ۱۰۰"
+	  when "747"
+	  	ariplane_name = "بویینگ ۷۴۷"
+	  		
+	  end
+	  
+	  ariplane_name ||= airplane_type
+	end
+
+	
 end

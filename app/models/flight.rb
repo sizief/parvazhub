@@ -48,13 +48,6 @@ class Flight < ApplicationRecord
         starting_date = (date.to_date-2).to_s
       end
       
-      #dates = {first: (starting_date.to_date).to_s, second: (starting_date.to_date+1).to_s, third: (starting_date.to_date+2).to_s, fourth: (starting_date.to_date+3).to_s, fifth: (starting_date.to_date+4).to_s}
-      #prices = {first:'', second:'',third:'', fourth: '', fifth: ''}
-
-      #dates.each do |title,date|
-      #    prices[title.to_sym] = get_lowest_price(route,date)
-      #end
-      #prices.reject{|price|}
       prices = Hash.new()
       dates = [(starting_date.to_date).to_s, (starting_date.to_date+1).to_s, (starting_date.to_date+2).to_s, (starting_date.to_date+3).to_s, (starting_date.to_date+4).to_s]
       dates.each do |date|
@@ -67,6 +60,41 @@ class Flight < ApplicationRecord
   def get_lowest_price(route,date)
       flight = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s).where.not(best_price:0).sort_by(&:best_price).first
       flight
+  end
+
+  def airline_call_sign(airline_code)
+  airlines ={"W5"=>"IRM",
+    "AK"=>"ATR", 
+      "B9"=>"IRB", 
+      "sepahan"=>"SON", 
+      "hesa"=>"SON",  
+      "I3"=>"TBZ", 
+      "JI"=>"MRJ", 
+      "IV"=>"CPN", 
+      "NV"=>"IRG", 
+      "saha"=>"IRZ", 
+      "ZV"=>"IZG",
+      "HH"=>"TBN",
+      "QB"=>"QSM" ,
+      "Y9"=>"KIS",
+      "EP"=>"IRC",
+      "IR"=>"IRA",
+      "SR"=>"SHI"
+    }
+  airlines[airline_code].nil? ? airline_code : airlines[airline_code]
+  end
+
+  def flight_list(route,date)
+    flight_list = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s).where.not(best_price:0)
+    flight_list.each do |flight|
+       if flight.airplane_type.empty?
+         airline_code = flight.airline_code.upcase
+         call_sign = flight.flight_number.upcase.sub airline_code, airline_call_sign(airline_code)
+         airplane_type = FlightDetail.find_by(call_sign: call_sign)
+         flight.airplane_type = airplane_type.airplane_type unless airplane_type.nil?
+       end
+     end
+    flight_list = flight_list.sort_by(&:best_price)
   end
 
 end

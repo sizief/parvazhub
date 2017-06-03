@@ -3,8 +3,8 @@ class SearchResultController < ApplicationController
   def search
     origin = params[:search][:origin].downcase
     destination = params[:search][:destination].downcase
-    #TODO: what the following line do? its already string
     date = Date.parse params[:search][:date]
+    #TODO: what the following line do? its already string
     date = date.to_s
 
     route = Route.find_by(origin:"#{origin}", destination:"#{destination}")
@@ -26,8 +26,7 @@ class SearchResultController < ApplicationController
   end
 
   def index(route,origin,destination,date)
-     @flights = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s).where.not(best_price:0)
-     @flights = @flights.sort_by(&:best_price)
+     @flights = Flight.new.flight_list(route,date)
      @search_parameter ={origin: origin,destination: destination,date: date}
      @cities = City.list 
 
