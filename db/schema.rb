@@ -10,10 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170524080619) do
+ActiveRecord::Schema.define(version: 20170602101403) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "flight_details", force: :cascade do |t|
+    t.integer  "route_id"
+    t.string   "call_sign"
+    t.datetime "departure_time"
+    t.string   "airplane_type"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+    t.string   "status"
+    t.integer  "terminal"
+    t.datetime "actual_departure_time"
+  end
 
   create_table "flight_price_archives", force: :cascade do |t|
     t.integer  "flight_id"
@@ -70,6 +82,16 @@ ActiveRecord::Schema.define(version: 20170524080619) do
     t.string   "departure_time"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string   "name"
+    t.string   "email"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.string   "password_digest"
+    t.string   "remember_digest"
+    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
   end
 
   add_foreign_key "search_histories", "routes"

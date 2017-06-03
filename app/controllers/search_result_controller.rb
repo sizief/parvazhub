@@ -44,11 +44,4 @@ class SearchResultController < ApplicationController
     end
   end
 
-  def airport
-    flight_list = Airports::Mehrabad.new
-    response = flight_list.search
-    flight_list.import_domestic_flights(response)
-    
-  end
-
 end

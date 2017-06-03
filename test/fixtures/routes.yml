@@ -1,16 +1,19 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  id: 1
-  origin: thr
-  destination: mhd
+<% id = 1 %>
+<% cities = City.list %>
+<% cities.each do |origin_key,origin_value| %>
+<%   cities.each do |destination_key,destination_value| %>
+<%     next if destination_key == origin_key   %>
+<%=origin_key.to_s+destination_key.to_s+":" %>
+  id: <%= id.to_s %>
+  origin: <%= origin_key.to_s %>
+  destination: <%= destination_key.to_s %>
+<%     id+=1 %>
+<%    end %>
+<% end %>
 
-two:
-  id: 2
-  origin: thr
-  destination: syz
-
-three:
-  id: 3
-  origin: thr
-  destination: kih
+#one:
+#  id: 1
+#  origin: thr
+#  destination: mhd

@@ -8,30 +8,15 @@ class RouteTest < ActiveSupport::TestCase
   	@route = Route.new(origin: "ika", destination: "dxb")
   end
   
-  test "should be valid" do
-  	assert @route.valid?
-  end
 
-  test "origin and destination should NOT be empty" do
-  	@route.origin = ""
-  	@route.destination = ""
-  	assert_not @route.valid?
-  end
-
-  test "origin and destinations should be unique" do
-  	@route.origin = "thr"
-  	@route.destination = "mhd"
-  	assert_not @route.valid?
-  end
-
-  test "length should be 3" do
-  	@route.origin = "a" * 4
-  	assert_not @route.valid?
-  end
-
-  test "return the correct route id if exist" do
-    route = Route.create_route("thr","mhd")  
+  test "return route if finded" do
+    route = Route.find_by(origin:"thr",destination:"mhd")
     assert route.id.is_a? Integer
+  end
+
+  test "seed data loaded" do
+    route = Route.find_by(origin: "ifn", destination: "thr")
+    assert_not route.nil?
   end
 
   
