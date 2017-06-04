@@ -44,5 +44,6 @@ RUN chmod -R ug+rwx $RAILS_ROOT/tmp $RAILS_ROOT/log $RAILS_ROOT && \
 
 # Create precomplie assets
 run rake assets:precompile
+run rake db:setup
 
 CMD [ "config/containers/app_cmd.sh" ]
