@@ -50,12 +50,18 @@ class Suppliers::Zoraq
         departure_time = parse_date(departure_date_time).utc.to_datetime
         departure_time = departure_time + ENV["IRAN_ADDITIONAL_TIMEZONE"].to_f.minutes # add 4:30 hours because zoraq date time is in iran time zone #.strftime("%H:%M")
         
-        Flight.create(route_id: "#{route_id}", flight_number:"#{flight_number}", departure_time:"#{departure_time}", airline_code:"#{airline_code}", airplane_type: "#{airplane_type}")
+        is_flight_exist = Flight.find_by(flight_number:flight_number,departure_time:departure_time)
+        if is_flight_exist.nil?
+          stored_flight = Flight.create(route_id: "#{route_id}", flight_number:"#{flight_number}", departure_time:"#{departure_time}", airline_code:"#{airline_code}", airplane_type: "#{airplane_type}")
+          next if stored_flight.id.nil? #add this because this is a Async action and this flight might be exists in miliseconds
+          flight_id = stored_flight.id
+        else
+          flight_id = is_flight_exist.id
+        end
 
         departure_date = departure_time.strftime("%F")
         price = flight["AirItineraryPricingInfo"]["PTC_FareBreakdowns"][0]["PassengerFare"]["TotalFare"]["Amount"]
         deeplink_url = "http://zoraq.com"+flight["AirItineraryPricingInfo"]["FareSourceCode"]
-        flight_id = Flight.flight_id(flight_number,departure_time)
         
         #to prevent duplicate flight prices we compare flight prices before insert into database
         flight_price_so_far = flight_prices.select {|flight_price| flight_price.flight_id == flight_id}

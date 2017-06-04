@@ -52,10 +52,16 @@ class Suppliers::Alibaba
         departure_time = departure_date_time.to_datetime
         price = flight["price"].to_i/10
 
-        Flight.create(route_id: "#{route_id}", flight_number:"#{flight_number}", departure_time:"#{departure_time}", airline_code:"#{airline_code}", airplane_type: "#{airplane_type}")
-        
+        is_flight_exist = Flight.find_by(flight_number:flight_number,departure_time:departure_time)
+        if is_flight_exist.nil?
+          stored_flight = Flight.create(route_id: "#{route_id}", flight_number:"#{flight_number}", departure_time:"#{departure_time}", airline_code:"#{airline_code}", airplane_type: "#{airplane_type}")
+          next if stored_flight.id.nil? #add this because this is a Async action and this flight might be exists in miliseconds
+          flight_id = stored_flight.id
+        else
+          flight_id = is_flight_exist.id
+        end
+
         deeplink_url = "https://alibaba.ir/flights/#{origin}-#{destination}/#{date}/1-0-0" #create alibaba based on one search
-        flight_id = Flight.flight_id(flight_number,departure_time)
 
         unless price == 0 #Alibaba send a soldout seats. check here to avoid import sold out tickets
           flight_price_so_far = flight_prices.select {|flight_price| flight_price.flight_id == flight_id}

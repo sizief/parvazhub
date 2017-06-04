@@ -17,7 +17,10 @@ class Suppliers::Flightio
       RestClient.post("#{URI.parse(get_flight_url)}", params)
     rescue RestClient::Exception => ex
       response  = ex.response.headers[:location] #the url redirected to another one
+    rescue #this is for get socket error, DNS error
+      return false
     end
+
     request_id = response[29..-1]
     search_flight_url = "http://flightio.com/fa/FlightResult/ListTable?FSL_Id="+ request_id
     #deep_link = "http://flightio.com/fa/FlightResult/List?FSL_Id=" + request_id

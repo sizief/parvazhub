@@ -5,10 +5,10 @@ class Flight < ApplicationRecord
   belongs_to :route
   has_many :flight_prices
 	
-  def self.flight_id(flight_number,departure_time)
-    flight = Flight.select(:id).find_by(flight_number:"#{flight_number}", departure_time: "#{departure_time}")
-    flight.id
-  end
+  #def self.flight_id(flight_number,departure_time)
+  #  flight = Flight.select(:id).find_by(flight_number:"#{flight_number}", departure_time: "#{departure_time}")
+  #  flight.id
+  #end
 
   def self.update_best_price(origin,destination,date) 
     route = Route.find_by(origin:"#{origin}",destination:"#{destination}")
