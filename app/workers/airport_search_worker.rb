@@ -8,7 +8,6 @@ class AirportSearchWorker
       ]
 
   def perform
-    debugger
     @@airport_list.each do |airport| 
       flights = airport[:class].new
       list = flights.search

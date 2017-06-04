@@ -41,7 +41,7 @@
     class: SearchWorker
 
 #airport search worker
-  mehrabad:
+  airports:
     every: "1440m"
     class: AirportSearchWorker
 
