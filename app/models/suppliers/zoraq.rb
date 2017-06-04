@@ -3,8 +3,10 @@ class Suppliers::Zoraq
     require "rest-client"
     
     def search(origin,destination,date)
-      #test_response = File.read("log/supplier/2017-05-18 09:51:05 +0000.log")
-      #{response: test_response, deeplink: "test"}
+      if Rails.env.test?
+        response = File.read("test/fixtures/files/domestic-zoraq.log") 
+        return {response: response}
+      end
 
       begin
        url = "http://zoraq.com/Flight/DeepLinkSearch"

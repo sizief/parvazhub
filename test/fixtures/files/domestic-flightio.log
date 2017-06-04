@@ -1,0 +1,957 @@
+
+
+
+<input id="IsToWay" name="IsToWay" type="hidden" value="False" />
+
+<div id="departior-container">
+    <div class="search-between">
+        <p id="SelectDE" class="sb-text">پرواز رفت را انتخاب کنید</p>
+        <span class="next-day-btn">
+                <a href="/fa/FlightResult/SearchOtherDay?FSL_Id=7a71e015-fa42-4f47-99e4-4055b6f3ad15&amp;DayStatus=Tomorrow&amp;RouteType=Depart" class="btn"><span class="ion-chevron-left"></span>روز بعد</a>
+        </span>
+        <span class="prev-day-btn">
+                <a href="/fa/FlightResult/SearchOtherDay?FSL_Id=7a71e015-fa42-4f47-99e4-4055b6f3ad15&amp;DayStatus=Yesterday&amp;RouteType=Depart" class="btn"><span class="ion-chevron-right"></span> روز قبل</a>
+        </span>
+    </div>
+        <div class="search-result flights-boxs depart" amount="110900" airline="W5," flightType="NoneStop" SourceDepartTime="19" SourceArrivalTime="21" DestinationDepartTime="19" DestinationArrivalTime="21" CombinationID="60255b61-5b1d-46a3-a729-ec9cfbc0e212" CabinTypeName="Economy-W">
+            <div class="sr-order">
+                    <img class="sr-img" src="/Uploads/Airlines/Logo/W5.png" alt="" title="" />
+                <span class="descr">قیمت برای 1 مسافر</span>
+                <span class="price">110,900 تومان</span>
+                <span class="city">ماهان </span>
+                
+                <button name="select" class="btn btn-orange item-submit depart" onclick="">انتخاب</button>
+                
+            </div>
+            <div class="sr-info">
+                    <div class="sr-info-went">
+                        <div class="one">
+                            <span class="hour">19:50</span>
+                            <span class="name">Tehran</span>
+                            <span class="abbr">THR</span>
+                        </div>
+                        <div class="time">
+                            
+                            <span class="val"></span>
+                            <div class="arrow">
+                                <span class="arrow-width"></span>
+                                <span class="icon ion-arrow-left-b went"></span>
+                            </div>
+                        </div>
+                        <div class="two">
+                            <span class="hour">
+                                21:20
+                            </span>
+                            <span class="name">Mashhad</span>
+                            <span class="abbr">MHD</span>
+                        </div>
+                        <div class="stop">
+                                                            <span class="title">قابل استرداد</span>
+
+                            
+                                <span class="title" title="Mahan">سیستمی</span>
+
+                            <span class="title">Economy-W</span>
+
+                            <span class="title">ظرفیت : 1 نفر</span>
+                        </div>
+                    </div>
+            </div>
+            <div class="sr-other" >
+                
+                
+
+                
+
+                <a class="btn btn-default left rules-btn" data-ajax="true" data-ajax-begin="InProgressBlockUIEmpty();" data-ajax-method="Get" data-ajax-success="BlockUIAlert(data);" href="/fa/FlightResult/FlightRule?FSL_Id=7a71e015-fa42-4f47-99e4-4055b6f3ad15&amp;CombinationID=60255b61-5b1d-46a3-a729-ec9cfbc0e212">قوانین بلیط</a>
+
+            </div>
+        </div>
+        <div class="search-result flights-boxs depart" amount="135200" airline="W5," flightType="NoneStop" SourceDepartTime="05" SourceArrivalTime="07" DestinationDepartTime="05" DestinationArrivalTime="07" CombinationID="a19d00af-1adc-423b-90de-b9b589d793ec" CabinTypeName="Economy-N">
+            <div class="sr-order">
+                    <img class="sr-img" src="/Uploads/Airlines/Logo/W5.png" alt="" title="" />
+                <span class="descr">قیمت برای 1 مسافر</span>
+                <span class="price">135,200 تومان</span>
+                <span class="city">ماهان </span>
+                
+                <button name="select" class="btn btn-orange item-submit depart" onclick="">انتخاب</button>
+                
+            </div>
+            <div class="sr-info">
+                    <div class="sr-info-went">
+                        <div class="one">
+                            <span class="hour">05:55</span>
+                            <span class="name">Tehran</span>
+                            <span class="abbr">THR</span>
+                        </div>
+                        <div class="time">
+                            
+                            <span class="val"></span>
+                            <div class="arrow">
+                                <span class="arrow-width"></span>
+                                <span class="icon ion-arrow-left-b went"></span>
+                            </div>
+                        </div>
+                        <div class="two">
+                            <span class="hour">
+                                07:25
+                            </span>
+                            <span class="name">Mashhad</span>
+                            <span class="abbr">MHD</span>
+                        </div>
+                        <div class="stop">
+                                                            <span class="title">قابل استرداد</span>
+
+                            
+                                <span class="title" title="Mahan">سیستمی</span>
+
+                            <span class="title">Economy-N</span>
+
+                            <span class="title">ظرفیت : 1 نفر</span>
+                        </div>
+                    </div>
+            </div>
+            <div class="sr-other" >
+                
+                
+
+                
+
+                <a class="btn btn-default left rules-btn" data-ajax="true" data-ajax-begin="InProgressBlockUIEmpty();" data-ajax-method="Get" data-ajax-success="BlockUIAlert(data);" href="/fa/FlightResult/FlightRule?FSL_Id=7a71e015-fa42-4f47-99e4-4055b6f3ad15&amp;CombinationID=a19d00af-1adc-423b-90de-b9b589d793ec">قوانین بلیط</a>
+
+            </div>
+        </div>
+        <div class="search-result flights-boxs depart" amount="135200" airline="W5," flightType="NoneStop" SourceDepartTime="13" SourceArrivalTime="15" DestinationDepartTime="13" DestinationArrivalTime="15" CombinationID="4d3d3170-dd50-4bdb-a96d-c814a0eba6b0" CabinTypeName="Economy-N">
+            <div class="sr-order">
+                    <img class="sr-img" src="/Uploads/Airlines/Logo/W5.png" alt="" title="" />
+                <span class="descr">قیمت برای 1 مسافر</span>
+                <span class="price">135,200 تومان</span>
+                <span class="city">ماهان </span>
+                
+                <button name="select" class="btn btn-orange item-submit depart" onclick="">انتخاب</button>
+                
+            </div>
+            <div class="sr-info">
+                    <div class="sr-info-went">
+                        <div class="one">
+                            <span class="hour">13:30</span>
+                            <span class="name">Tehran</span>
+                            <span class="abbr">THR</span>
+                        </div>
+                        <div class="time">
+                            
+                            <span class="val"></span>
+                            <div class="arrow">
+                                <span class="arrow-width"></span>
+                                <span class="icon ion-arrow-left-b went"></span>
+                            </div>
+                        </div>
+                        <div class="two">
+                            <span class="hour">
+                                15:00
+                            </span>
+                            <span class="name">Mashhad</span>
+                            <span class="abbr">MHD</span>
+                        </div>
+                        <div class="stop">
+                                                            <span class="title">قابل استرداد</span>
+
+                            
+                                <span class="title" title="Mahan">سیستمی</span>
+
+                            <span class="title">Economy-N</span>
+
+                            <span class="title">ظرفیت : 1 نفر</span>
+                        </div>
+                    </div>
+            </div>
+            <div class="sr-other" >
+                
+                
+
+                
+
+                <a class="btn btn-default left rules-btn" data-ajax="true" data-ajax-begin="InProgressBlockUIEmpty();" data-ajax-method="Get" data-ajax-success="BlockUIAlert(data);" href="/fa/FlightResult/FlightRule?FSL_Id=7a71e015-fa42-4f47-99e4-4055b6f3ad15&amp;CombinationID=4d3d3170-dd50-4bdb-a96d-c814a0eba6b0">قوانین بلیط</a>
+
+            </div>
+        </div>
+        <div class="search-result flights-boxs depart" amount="216900" airline="QB," flightType="NoneStop" SourceDepartTime="06" SourceArrivalTime="08" DestinationDepartTime="06" DestinationArrivalTime="08" CombinationID="2220853" CabinTypeName="اکونومی">
+            <div class="sr-order">
+                    <img class="sr-img" src="/Uploads/Airlines/Logo/QB.png" alt="" title="" />
+                <span class="descr">قیمت برای 1 مسافر</span>
+                <span class="price">216,900 تومان</span>
+                <span class="city">قشم ایر  - Fokker 100</span>
+                
+                <button name="select" class="btn btn-orange item-submit depart" onclick="">انتخاب</button>
+                
+            </div>
+            <div class="sr-info">
+                    <div class="sr-info-went">
+                        <div class="one">
+                            <span class="hour">06:25</span>
+                            <span class="name">Tehran</span>
+                            <span class="abbr">THR</span>
+                        </div>
+                        <div class="time">
+                            
+                            <span class="val"></span>
+                            <div class="arrow">
+                                <span class="arrow-width"></span>
+                                <span class="icon ion-arrow-left-b went"></span>
+                            </div>
+                        </div>
+                        <div class="two">
+                            <span class="hour">
+                                08:00
+                            </span>
+                            <span class="name">Mashhad</span>
+                            <span class="abbr">MHD</span>
+                        </div>
+                        <div class="stop">
+                                                            <span class="title">قابل استرداد</span>
+
+                            
+                                <span class="title" title="G">سیستمی</span>
+
+                            <span class="title">اکونومی</span>
+
+                            <span class="title">ظرفیت : 9+ نفر</span>
+                        </div>
+                    </div>
+            </div>
+            <div class="sr-other" >
+                
+                
+
+                
+
+                <a class="btn btn-default left rules-btn" data-ajax="true" data-ajax-begin="InProgressBlockUIEmpty();" data-ajax-method="Get" data-ajax-success="BlockUIAlert(data);" href="/fa/FlightResult/FlightRule?FSL_Id=7a71e015-fa42-4f47-99e4-4055b6f3ad15&amp;CombinationID=2220853">قوانین بلیط</a>
+
+            </div>
+        </div>
+        <div class="search-result flights-boxs depart" amount="247600" airline="EP," flightType="NoneStop" SourceDepartTime="06" SourceArrivalTime="08" DestinationDepartTime="06" DestinationArrivalTime="08" CombinationID="1938654" CabinTypeName="اکونومی">
+            <div class="sr-order">
+                    <img class="sr-img" src="/Uploads/Airlines/Logo/EP.png" alt="" title="" />
+                <span class="descr">قیمت برای 1 مسافر</span>
+                <span class="price">247,600 تومان</span>
+                <span class="city">آسمان  - Fokker 100</span>
+                
+                <button name="select" class="btn btn-orange item-submit depart" onclick="">انتخاب</button>
+                
+            </div>
+            <div class="sr-info">
+                    <div class="sr-info-went">
+                        <div class="one">
+                            <span class="hour">06:30</span>
+                            <span class="name">Tehran</span>
+                            <span class="abbr">THR</span>
+                        </div>
+                        <div class="time">
+                            
+                            <span class="val"></span>
+                            <div class="arrow">
+                                <span class="arrow-width"></span>
+                                <span class="icon ion-arrow-left-b went"></span>
+                            </div>
+                        </div>
+                        <div class="two">
+                            <span class="hour">
+                                08:00
+                            </span>
+                            <span class="name">Mashhad</span>
+                            <span class="abbr">MHD</span>
+                        </div>
+                        <div class="stop">
+                                                            <span class="title">قابل استرداد</span>
+
+                            
+                                <span class="title" title="G">سیستمی</span>
+
+                            <span class="title">اکونومی</span>
+
+                            <span class="title">ظرفیت : 9+ نفر</span>
+                        </div>
+                    </div>
+            </div>
+            <div class="sr-other" >
+                
+                
+
+                
+
+                <a class="btn btn-default left rules-btn" data-ajax="true" data-ajax-begin="InProgressBlockUIEmpty();" data-ajax-method="Get" data-ajax-success="BlockUIAlert(data);" href="/fa/FlightResult/FlightRule?FSL_Id=7a71e015-fa42-4f47-99e4-4055b6f3ad15&amp;CombinationID=1938654">قوانین بلیط</a>
+
+            </div>
+        </div>
+        <div class="search-result flights-boxs depart" amount="251800" airline="IR," flightType="NoneStop" SourceDepartTime="08" SourceArrivalTime="10" DestinationDepartTime="08" DestinationArrivalTime="10" CombinationID="d6684778-7e32-4e2d-890f-847bb605f865" CabinTypeName="Economy-Y">
+            <div class="sr-order">
+                    <img class="sr-img" src="/Uploads/Airlines/Logo/IR.png" alt="" title="" />
+                <span class="descr">قیمت برای 1 مسافر</span>
+                <span class="price">251,800 تومان</span>
+                <span class="city">ایران ایر </span>
+                
+                <button name="select" class="btn btn-orange item-submit depart" onclick="">انتخاب</button>
+                
+            </div>
+            <div class="sr-info">
+                    <div class="sr-info-went">
+                        <div class="one">
+                            <span class="hour">08:50</span>
+                            <span class="name">Tehran</span>
+                            <span class="abbr">THR</span>
+                        </div>
+                        <div class="time">
+                            
+                            <span class="val"></span>
+                            <div class="arrow">
+                                <span class="arrow-width"></span>
+                                <span class="icon ion-arrow-left-b went"></span>
+                            </div>
+                        </div>
+                        <div class="two">
+                            <span class="hour">
+                                10:20
+                            </span>
+                            <span class="name">Mashhad</span>
+                            <span class="abbr">MHD</span>
+                        </div>
+                        <div class="stop">
+                                                            <span class="title">قابل استرداد</span>
+
+                            
+                                <span class="title" title="IranAir">سیستمی</span>
+
+                            <span class="title">Economy-Y</span>
+
+                            <span class="title">ظرفیت : 1 نفر</span>
+                        </div>
+                    </div>
+            </div>
+            <div class="sr-other" >
+                
+                
+
+                
+
+                <a class="btn btn-default left rules-btn" data-ajax="true" data-ajax-begin="InProgressBlockUIEmpty();" data-ajax-method="Get" data-ajax-success="BlockUIAlert(data);" href="/fa/FlightResult/FlightRule?FSL_Id=7a71e015-fa42-4f47-99e4-4055b6f3ad15&amp;CombinationID=d6684778-7e32-4e2d-890f-847bb605f865">قوانین بلیط</a>
+
+            </div>
+        </div>
+        <div class="search-result flights-boxs depart" amount="251800" airline="IR," flightType="NoneStop" SourceDepartTime="12" SourceArrivalTime="14" DestinationDepartTime="12" DestinationArrivalTime="14" CombinationID="767e8936-596f-4347-8e26-ba62f26b9cae" CabinTypeName="Economy-Y">
+            <div class="sr-order">
+                    <img class="sr-img" src="/Uploads/Airlines/Logo/IR.png" alt="" title="" />
+                <span class="descr">قیمت برای 1 مسافر</span>
+                <span class="price">251,800 تومان</span>
+                <span class="city">ایران ایر </span>
+                
+                <button name="select" class="btn btn-orange item-submit depart" onclick="">انتخاب</button>
+                
+            </div>
+            <div class="sr-info">
+                    <div class="sr-info-went">
+                        <div class="one">
+                            <span class="hour">12:55</span>
+                            <span class="name">Tehran</span>
+                            <span class="abbr">THR</span>
+                        </div>
+                        <div class="time">
+                            
+                            <span class="val"></span>
+                            <div class="arrow">
+                                <span class="arrow-width"></span>
+                                <span class="icon ion-arrow-left-b went"></span>
+                            </div>
+                        </div>
+                        <div class="two">
+                            <span class="hour">
+                                14:25
+                            </span>
+                            <span class="name">Mashhad</span>
+                            <span class="abbr">MHD</span>
+                        </div>
+                        <div class="stop">
+                                                            <span class="title">قابل استرداد</span>
+
+                            
+                                <span class="title" title="IranAir">سیستمی</span>
+
+                            <span class="title">Economy-Y</span>
+
+                            <span class="title">ظرفیت : 1 نفر</span>
+                        </div>
+                    </div>
+            </div>
+            <div class="sr-other" >
+                
+                
+
+                
+
+                <a class="btn btn-default left rules-btn" data-ajax="true" data-ajax-begin="InProgressBlockUIEmpty();" data-ajax-method="Get" data-ajax-success="BlockUIAlert(data);" href="/fa/FlightResult/FlightRule?FSL_Id=7a71e015-fa42-4f47-99e4-4055b6f3ad15&amp;CombinationID=767e8936-596f-4347-8e26-ba62f26b9cae">قوانین بلیط</a>
+
+            </div>
+        </div>
+        <div class="search-result flights-boxs depart" amount="251800" airline="IR," flightType="NoneStop" SourceDepartTime="16" SourceArrivalTime="18" DestinationDepartTime="16" DestinationArrivalTime="18" CombinationID="0329d922-2a2f-4634-b92a-a6dafa5f290c" CabinTypeName="Economy-Y">
+            <div class="sr-order">
+                    <img class="sr-img" src="/Uploads/Airlines/Logo/IR.png" alt="" title="" />
+                <span class="descr">قیمت برای 1 مسافر</span>
+                <span class="price">251,800 تومان</span>
+                <span class="city">ایران ایر </span>
+                
+                <button name="select" class="btn btn-orange item-submit depart" onclick="">انتخاب</button>
+                
+            </div>
+            <div class="sr-info">
+                    <div class="sr-info-went">
+                        <div class="one">
+                            <span class="hour">16:50</span>
+                            <span class="name">Tehran</span>
+                            <span class="abbr">THR</span>
+                        </div>
+                        <div class="time">
+                            
+                            <span class="val"></span>
+                            <div class="arrow">
+                                <span class="arrow-width"></span>
+                                <span class="icon ion-arrow-left-b went"></span>
+                            </div>
+                        </div>
+                        <div class="two">
+                            <span class="hour">
+                                18:25
+                            </span>
+                            <span class="name">Mashhad</span>
+                            <span class="abbr">MHD</span>
+                        </div>
+                        <div class="stop">
+                                                            <span class="title">قابل استرداد</span>
+
+                            
+                                <span class="title" title="IranAir">سیستمی</span>
+
+                            <span class="title">Economy-Y</span>
+
+                            <span class="title">ظرفیت : 1 نفر</span>
+                        </div>
+                    </div>
+            </div>
+            <div class="sr-other" >
+                
+                
+
+                
+
+                <a class="btn btn-default left rules-btn" data-ajax="true" data-ajax-begin="InProgressBlockUIEmpty();" data-ajax-method="Get" data-ajax-success="BlockUIAlert(data);" href="/fa/FlightResult/FlightRule?FSL_Id=7a71e015-fa42-4f47-99e4-4055b6f3ad15&amp;CombinationID=0329d922-2a2f-4634-b92a-a6dafa5f290c">قوانین بلیط</a>
+
+            </div>
+        </div>
+        <div class="search-result flights-boxs depart" amount="251800" airline="IR," flightType="NoneStop" SourceDepartTime="19" SourceArrivalTime="20" DestinationDepartTime="19" DestinationArrivalTime="20" CombinationID="fe4c9d1f-9735-465f-9c54-c254d505e14b" CabinTypeName="Economy-Y">
+            <div class="sr-order">
+                    <img class="sr-img" src="/Uploads/Airlines/Logo/IR.png" alt="" title="" />
+                <span class="descr">قیمت برای 1 مسافر</span>
+                <span class="price">251,800 تومان</span>
+                <span class="city">ایران ایر </span>
+                
+                <button name="select" class="btn btn-orange item-submit depart" onclick="">انتخاب</button>
+                
+            </div>
+            <div class="sr-info">
+                    <div class="sr-info-went">
+                        <div class="one">
+                            <span class="hour">19:15</span>
+                            <span class="name">Tehran</span>
+                            <span class="abbr">THR</span>
+                        </div>
+                        <div class="time">
+                            
+                            <span class="val"></span>
+                            <div class="arrow">
+                                <span class="arrow-width"></span>
+                                <span class="icon ion-arrow-left-b went"></span>
+                            </div>
+                        </div>
+                        <div class="two">
+                            <span class="hour">
+                                20:45
+                            </span>
+                            <span class="name">Mashhad</span>
+                            <span class="abbr">MHD</span>
+                        </div>
+                        <div class="stop">
+                                                            <span class="title">قابل استرداد</span>
+
+                            
+                                <span class="title" title="IranAir">سیستمی</span>
+
+                            <span class="title">Economy-Y</span>
+
+                            <span class="title">ظرفیت : 1 نفر</span>
+                        </div>
+                    </div>
+            </div>
+            <div class="sr-other" >
+                
+                
+
+                
+
+                <a class="btn btn-default left rules-btn" data-ajax="true" data-ajax-begin="InProgressBlockUIEmpty();" data-ajax-method="Get" data-ajax-success="BlockUIAlert(data);" href="/fa/FlightResult/FlightRule?FSL_Id=7a71e015-fa42-4f47-99e4-4055b6f3ad15&amp;CombinationID=fe4c9d1f-9735-465f-9c54-c254d505e14b">قوانین بلیط</a>
+
+            </div>
+        </div>
+        <div class="search-result flights-boxs depart" amount="304800" airline="IR," flightType="NoneStop" SourceDepartTime="12" SourceArrivalTime="14" DestinationDepartTime="12" DestinationArrivalTime="14" CombinationID="82578f3e-74fa-4f3e-b806-906c029b092a" CabinTypeName="Business-C">
+            <div class="sr-order">
+                    <img class="sr-img" src="/Uploads/Airlines/Logo/IR.png" alt="" title="" />
+                <span class="descr">قیمت برای 1 مسافر</span>
+                <span class="price">304,800 تومان</span>
+                <span class="city">ایران ایر </span>
+                
+                <button name="select" class="btn btn-orange item-submit depart" onclick="">انتخاب</button>
+                
+            </div>
+            <div class="sr-info">
+                    <div class="sr-info-went">
+                        <div class="one">
+                            <span class="hour">12:55</span>
+                            <span class="name">Tehran</span>
+                            <span class="abbr">THR</span>
+                        </div>
+                        <div class="time">
+                            
+                            <span class="val"></span>
+                            <div class="arrow">
+                                <span class="arrow-width"></span>
+                                <span class="icon ion-arrow-left-b went"></span>
+                            </div>
+                        </div>
+                        <div class="two">
+                            <span class="hour">
+                                14:25
+                            </span>
+                            <span class="name">Mashhad</span>
+                            <span class="abbr">MHD</span>
+                        </div>
+                        <div class="stop">
+                                                            <span class="title">قابل استرداد</span>
+
+                            
+                                <span class="title" title="IranAir">سیستمی</span>
+
+                            <span class="title">Business-C</span>
+
+                            <span class="title">ظرفیت : 5 نفر</span>
+                        </div>
+                    </div>
+            </div>
+            <div class="sr-other" >
+                
+                
+
+                
+
+                <a class="btn btn-default left rules-btn" data-ajax="true" data-ajax-begin="InProgressBlockUIEmpty();" data-ajax-method="Get" data-ajax-success="BlockUIAlert(data);" href="/fa/FlightResult/FlightRule?FSL_Id=7a71e015-fa42-4f47-99e4-4055b6f3ad15&amp;CombinationID=82578f3e-74fa-4f3e-b806-906c029b092a">قوانین بلیط</a>
+
+            </div>
+        </div>
+        <div class="search-result flights-boxs depart" amount="314600" airline="W5," flightType="NoneStop" SourceDepartTime="05" SourceArrivalTime="07" DestinationDepartTime="05" DestinationArrivalTime="07" CombinationID="89a97fdf-9477-4d5d-8130-f6d2d59d1c48" CabinTypeName="Business-C">
+            <div class="sr-order">
+                    <img class="sr-img" src="/Uploads/Airlines/Logo/W5.png" alt="" title="" />
+                <span class="descr">قیمت برای 1 مسافر</span>
+                <span class="price">314,600 تومان</span>
+                <span class="city">ماهان </span>
+                
+                <button name="select" class="btn btn-orange item-submit depart" onclick="">انتخاب</button>
+                
+            </div>
+            <div class="sr-info">
+                    <div class="sr-info-went">
+                        <div class="one">
+                            <span class="hour">05:55</span>
+                            <span class="name">Tehran</span>
+                            <span class="abbr">THR</span>
+                        </div>
+                        <div class="time">
+                            
+                            <span class="val"></span>
+                            <div class="arrow">
+                                <span class="arrow-width"></span>
+                                <span class="icon ion-arrow-left-b went"></span>
+                            </div>
+                        </div>
+                        <div class="two">
+                            <span class="hour">
+                                07:25
+                            </span>
+                            <span class="name">Mashhad</span>
+                            <span class="abbr">MHD</span>
+                        </div>
+                        <div class="stop">
+                                                            <span class="title">قابل استرداد</span>
+
+                            
+                                <span class="title" title="Mahan">سیستمی</span>
+
+                            <span class="title">Business-C</span>
+
+                            <span class="title">ظرفیت : 1 نفر</span>
+                        </div>
+                    </div>
+            </div>
+            <div class="sr-other" >
+                
+                
+
+                
+
+                <a class="btn btn-default left rules-btn" data-ajax="true" data-ajax-begin="InProgressBlockUIEmpty();" data-ajax-method="Get" data-ajax-success="BlockUIAlert(data);" href="/fa/FlightResult/FlightRule?FSL_Id=7a71e015-fa42-4f47-99e4-4055b6f3ad15&amp;CombinationID=89a97fdf-9477-4d5d-8130-f6d2d59d1c48">قوانین بلیط</a>
+
+            </div>
+        </div>
+        <div class="search-result flights-boxs depart" amount="314600" airline="W5," flightType="NoneStop" SourceDepartTime="13" SourceArrivalTime="15" DestinationDepartTime="13" DestinationArrivalTime="15" CombinationID="17fee6ca-97c2-452e-b601-e5e6538f2fab" CabinTypeName="Business-C">
+            <div class="sr-order">
+                    <img class="sr-img" src="/Uploads/Airlines/Logo/W5.png" alt="" title="" />
+                <span class="descr">قیمت برای 1 مسافر</span>
+                <span class="price">314,600 تومان</span>
+                <span class="city">ماهان </span>
+                
+                <button name="select" class="btn btn-orange item-submit depart" onclick="">انتخاب</button>
+                
+            </div>
+            <div class="sr-info">
+                    <div class="sr-info-went">
+                        <div class="one">
+                            <span class="hour">13:30</span>
+                            <span class="name">Tehran</span>
+                            <span class="abbr">THR</span>
+                        </div>
+                        <div class="time">
+                            
+                            <span class="val"></span>
+                            <div class="arrow">
+                                <span class="arrow-width"></span>
+                                <span class="icon ion-arrow-left-b went"></span>
+                            </div>
+                        </div>
+                        <div class="two">
+                            <span class="hour">
+                                15:00
+                            </span>
+                            <span class="name">Mashhad</span>
+                            <span class="abbr">MHD</span>
+                        </div>
+                        <div class="stop">
+                                                            <span class="title">قابل استرداد</span>
+
+                            
+                                <span class="title" title="Mahan">سیستمی</span>
+
+                            <span class="title">Business-C</span>
+
+                            <span class="title">ظرفیت : 1 نفر</span>
+                        </div>
+                    </div>
+            </div>
+            <div class="sr-other" >
+                
+                
+
+                
+
+                <a class="btn btn-default left rules-btn" data-ajax="true" data-ajax-begin="InProgressBlockUIEmpty();" data-ajax-method="Get" data-ajax-success="BlockUIAlert(data);" href="/fa/FlightResult/FlightRule?FSL_Id=7a71e015-fa42-4f47-99e4-4055b6f3ad15&amp;CombinationID=17fee6ca-97c2-452e-b601-e5e6538f2fab">قوانین بلیط</a>
+
+            </div>
+        </div>
+        <div class="search-result flights-boxs depart" amount="314600" airline="W5," flightType="NoneStop" SourceDepartTime="19" SourceArrivalTime="21" DestinationDepartTime="19" DestinationArrivalTime="21" CombinationID="54f392b3-12ae-4158-9815-848c8644429d" CabinTypeName="Business-C">
+            <div class="sr-order">
+                    <img class="sr-img" src="/Uploads/Airlines/Logo/W5.png" alt="" title="" />
+                <span class="descr">قیمت برای 1 مسافر</span>
+                <span class="price">314,600 تومان</span>
+                <span class="city">ماهان </span>
+                
+                <button name="select" class="btn btn-orange item-submit depart" onclick="">انتخاب</button>
+                
+            </div>
+            <div class="sr-info">
+                    <div class="sr-info-went">
+                        <div class="one">
+                            <span class="hour">19:50</span>
+                            <span class="name">Tehran</span>
+                            <span class="abbr">THR</span>
+                        </div>
+                        <div class="time">
+                            
+                            <span class="val"></span>
+                            <div class="arrow">
+                                <span class="arrow-width"></span>
+                                <span class="icon ion-arrow-left-b went"></span>
+                            </div>
+                        </div>
+                        <div class="two">
+                            <span class="hour">
+                                21:20
+                            </span>
+                            <span class="name">Mashhad</span>
+                            <span class="abbr">MHD</span>
+                        </div>
+                        <div class="stop">
+                                                            <span class="title">قابل استرداد</span>
+
+                            
+                                <span class="title" title="Mahan">سیستمی</span>
+
+                            <span class="title">Business-C</span>
+
+                            <span class="title">ظرفیت : 1 نفر</span>
+                        </div>
+                    </div>
+            </div>
+            <div class="sr-other" >
+                
+                
+
+                
+
+                <a class="btn btn-default left rules-btn" data-ajax="true" data-ajax-begin="InProgressBlockUIEmpty();" data-ajax-method="Get" data-ajax-success="BlockUIAlert(data);" href="/fa/FlightResult/FlightRule?FSL_Id=7a71e015-fa42-4f47-99e4-4055b6f3ad15&amp;CombinationID=54f392b3-12ae-4158-9815-848c8644429d">قوانین بلیط</a>
+
+            </div>
+        </div>
+        <div class="search-result flights-boxs depart" amount="389600" airline="IR," flightType="NoneStop" SourceDepartTime="06" SourceArrivalTime="09" DestinationDepartTime="06" DestinationArrivalTime="09" CombinationID="8c757896-f13d-498e-80fb-1c6ad5d7406d" CabinTypeName="Business-J">
+            <div class="sr-order">
+                    <img class="sr-img" src="/Uploads/Airlines/Logo/IR.png" alt="" title="" />
+                <span class="descr">قیمت برای 1 مسافر</span>
+                <span class="price">389,600 تومان</span>
+                <span class="city">ایران ایر </span>
+                
+                <button name="select" class="btn btn-orange item-submit depart" onclick="">انتخاب</button>
+                
+            </div>
+            <div class="sr-info">
+                    <div class="sr-info-went">
+                        <div class="one">
+                            <span class="hour">06:20</span>
+                            <span class="name">Tehran</span>
+                            <span class="abbr">THR</span>
+                        </div>
+                        <div class="time">
+                            
+                            <span class="val"></span>
+                            <div class="arrow">
+                                <span class="arrow-width"></span>
+                                <span class="icon ion-arrow-left-b went"></span>
+                            </div>
+                        </div>
+                        <div class="two">
+                            <span class="hour">
+                                09:30
+                            </span>
+                            <span class="name">Mashhad</span>
+                            <span class="abbr">MHD</span>
+                        </div>
+                        <div class="stop">
+                                                            <span class="title">قابل استرداد</span>
+
+                            
+                                <span class="title" title="IranAir">سیستمی</span>
+
+                            <span class="title">Business-J</span>
+
+                            <span class="title">ظرفیت : 7 نفر</span>
+                        </div>
+                    </div>
+            </div>
+            <div class="sr-other" >
+                
+                
+
+                
+
+                <a class="btn btn-default left rules-btn" data-ajax="true" data-ajax-begin="InProgressBlockUIEmpty();" data-ajax-method="Get" data-ajax-success="BlockUIAlert(data);" href="/fa/FlightResult/FlightRule?FSL_Id=7a71e015-fa42-4f47-99e4-4055b6f3ad15&amp;CombinationID=8c757896-f13d-498e-80fb-1c6ad5d7406d">قوانین بلیط</a>
+
+            </div>
+        </div>
+        <div class="search-result flights-boxs depart" amount="389600" airline="IR," flightType="NoneStop" SourceDepartTime="08" SourceArrivalTime="10" DestinationDepartTime="08" DestinationArrivalTime="10" CombinationID="02fc7aed-3d4e-4d0f-863f-b5bbf4754ed7" CabinTypeName="Business-J">
+            <div class="sr-order">
+                    <img class="sr-img" src="/Uploads/Airlines/Logo/IR.png" alt="" title="" />
+                <span class="descr">قیمت برای 1 مسافر</span>
+                <span class="price">389,600 تومان</span>
+                <span class="city">ایران ایر </span>
+                
+                <button name="select" class="btn btn-orange item-submit depart" onclick="">انتخاب</button>
+                
+            </div>
+            <div class="sr-info">
+                    <div class="sr-info-went">
+                        <div class="one">
+                            <span class="hour">08:50</span>
+                            <span class="name">Tehran</span>
+                            <span class="abbr">THR</span>
+                        </div>
+                        <div class="time">
+                            
+                            <span class="val"></span>
+                            <div class="arrow">
+                                <span class="arrow-width"></span>
+                                <span class="icon ion-arrow-left-b went"></span>
+                            </div>
+                        </div>
+                        <div class="two">
+                            <span class="hour">
+                                10:20
+                            </span>
+                            <span class="name">Mashhad</span>
+                            <span class="abbr">MHD</span>
+                        </div>
+                        <div class="stop">
+                                                            <span class="title">قابل استرداد</span>
+
+                            
+                                <span class="title" title="IranAir">سیستمی</span>
+
+                            <span class="title">Business-J</span>
+
+                            <span class="title">ظرفیت : 1 نفر</span>
+                        </div>
+                    </div>
+            </div>
+            <div class="sr-other" >
+                
+                
+
+                
+
+                <a class="btn btn-default left rules-btn" data-ajax="true" data-ajax-begin="InProgressBlockUIEmpty();" data-ajax-method="Get" data-ajax-success="BlockUIAlert(data);" href="/fa/FlightResult/FlightRule?FSL_Id=7a71e015-fa42-4f47-99e4-4055b6f3ad15&amp;CombinationID=02fc7aed-3d4e-4d0f-863f-b5bbf4754ed7">قوانین بلیط</a>
+
+            </div>
+        </div>
+        <div class="search-result flights-boxs depart" amount="389600" airline="IR," flightType="NoneStop" SourceDepartTime="12" SourceArrivalTime="14" DestinationDepartTime="12" DestinationArrivalTime="14" CombinationID="78c3ea49-d577-4684-9227-05541c262de6" CabinTypeName="Business-J">
+            <div class="sr-order">
+                    <img class="sr-img" src="/Uploads/Airlines/Logo/IR.png" alt="" title="" />
+                <span class="descr">قیمت برای 1 مسافر</span>
+                <span class="price">389,600 تومان</span>
+                <span class="city">ایران ایر </span>
+                
+                <button name="select" class="btn btn-orange item-submit depart" onclick="">انتخاب</button>
+                
+            </div>
+            <div class="sr-info">
+                    <div class="sr-info-went">
+                        <div class="one">
+                            <span class="hour">12:55</span>
+                            <span class="name">Tehran</span>
+                            <span class="abbr">THR</span>
+                        </div>
+                        <div class="time">
+                            
+                            <span class="val"></span>
+                            <div class="arrow">
+                                <span class="arrow-width"></span>
+                                <span class="icon ion-arrow-left-b went"></span>
+                            </div>
+                        </div>
+                        <div class="two">
+                            <span class="hour">
+                                14:25
+                            </span>
+                            <span class="name">Mashhad</span>
+                            <span class="abbr">MHD</span>
+                        </div>
+                        <div class="stop">
+                                                            <span class="title">قابل استرداد</span>
+
+                            
+                                <span class="title" title="IranAir">سیستمی</span>
+
+                            <span class="title">Business-J</span>
+
+                            <span class="title">ظرفیت : 1 نفر</span>
+                        </div>
+                    </div>
+            </div>
+            <div class="sr-other" >
+                
+                
+
+                
+
+                <a class="btn btn-default left rules-btn" data-ajax="true" data-ajax-begin="InProgressBlockUIEmpty();" data-ajax-method="Get" data-ajax-success="BlockUIAlert(data);" href="/fa/FlightResult/FlightRule?FSL_Id=7a71e015-fa42-4f47-99e4-4055b6f3ad15&amp;CombinationID=78c3ea49-d577-4684-9227-05541c262de6">قوانین بلیط</a>
+
+            </div>
+        </div>
+        <div class="search-result flights-boxs depart" amount="389600" airline="IR," flightType="NoneStop" SourceDepartTime="19" SourceArrivalTime="20" DestinationDepartTime="19" DestinationArrivalTime="20" CombinationID="c26d3cb3-45ea-4a60-bc59-624ce27aae95" CabinTypeName="Business-J">
+            <div class="sr-order">
+                    <img class="sr-img" src="/Uploads/Airlines/Logo/IR.png" alt="" title="" />
+                <span class="descr">قیمت برای 1 مسافر</span>
+                <span class="price">389,600 تومان</span>
+                <span class="city">ایران ایر </span>
+                
+                <button name="select" class="btn btn-orange item-submit depart" onclick="">انتخاب</button>
+                
+            </div>
+            <div class="sr-info">
+                    <div class="sr-info-went">
+                        <div class="one">
+                            <span class="hour">19:15</span>
+                            <span class="name">Tehran</span>
+                            <span class="abbr">THR</span>
+                        </div>
+                        <div class="time">
+                            
+                            <span class="val"></span>
+                            <div class="arrow">
+                                <span class="arrow-width"></span>
+                                <span class="icon ion-arrow-left-b went"></span>
+                            </div>
+                        </div>
+                        <div class="two">
+                            <span class="hour">
+                                20:45
+                            </span>
+                            <span class="name">Mashhad</span>
+                            <span class="abbr">MHD</span>
+                        </div>
+                        <div class="stop">
+                                                            <span class="title">قابل استرداد</span>
+
+                            
+                                <span class="title" title="IranAir">سیستمی</span>
+
+                            <span class="title">Business-J</span>
+
+                            <span class="title">ظرفیت : 1 نفر</span>
+                        </div>
+                    </div>
+            </div>
+            <div class="sr-other" >
+                
+                
+
+                
+
+                <a class="btn btn-default left rules-btn" data-ajax="true" data-ajax-begin="InProgressBlockUIEmpty();" data-ajax-method="Get" data-ajax-success="BlockUIAlert(data);" href="/fa/FlightResult/FlightRule?FSL_Id=7a71e015-fa42-4f47-99e4-4055b6f3ad15&amp;CombinationID=c26d3cb3-45ea-4a60-bc59-624ce27aae95">قوانین بلیط</a>
+
+            </div>
+        </div>
+</div>
+
+<div id="Repart-container">
+
+</div>
+
+<div id="continue-container" style="display:none;text-align:center;">
+    <button id="continue-btn" class="btn btn-blue-light" style="padding: 14px 40px; font-size: 16px;">ادامه خرید</button>
+</div>
+<script>
+    $(document).ready(function () {
+        $(".s-count").html('17' + " پرواز موجود است ");
+
+
+    });
+</script>
+
+
+
+<style>
+    .unselected {
+        display: none;
+    }
+</style>

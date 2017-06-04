@@ -3,8 +3,10 @@ class Suppliers::Flightio
   require "uri"
 
   def search(origin,destination,date)
-    #test_response = File.read("log/supplier/2017-05-18 08:56:18 +0000.log")
-    #{response: test_response, deeplink: "test"}
+    if Rails.env.test?
+        response = File.read("test/fixtures/files/domestic-flightio.log") 
+        return {response: response, deeplink: "http://flightio.com/fa/"}
+    end
 
     get_flight_url = "http://flightio.com/fa/Home/DomesticSearch"
     shamsi_date_object = date.to_date.to_parsi   

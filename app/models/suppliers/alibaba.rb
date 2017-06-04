@@ -2,6 +2,11 @@ class Suppliers::Alibaba
   require "open-uri"
 
   def search(origin,destination,date)
+    if Rails.env.test?
+        response = File.read("test/fixtures/files/domestic-alibaba.log") 
+        return {response: response}
+    end
+
     search_flight_url = "http://www.alibaba.ir/api/searchFlight?"
     get_flight_url = "https://www.alibaba.ir/api/GetFlight?"
     shamsi_date = date.to_date.to_parsi   

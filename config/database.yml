@@ -21,6 +21,7 @@ test:
   port: 5432
   username: <%= ENV["DB_USERNAME"] %> 
   password: <%= ENV["DB_PASSWORD"] %>
+  timeout: 5000
 
 production:
   <<: *default
