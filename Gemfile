@@ -19,6 +19,8 @@ gem "activerecord-import", ">= 0.2.0"
 gem 'sidekiq'
 gem 'redis-rails'
 gem 'sidekiq-scheduler'
+gem 'airbrake', '~> 6.1'
+gem 'scout_apm'
 
 
 
