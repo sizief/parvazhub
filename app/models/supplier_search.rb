@@ -12,6 +12,11 @@ class SupplierSearch
 	      {class: Suppliers::Zoraq,name: "zoraq"},
 	      {class: Suppliers::Alibaba,name: "alibaba"}
 	    ]
+	    
+	    supplier_list.each do |x|
+	      SupplierSearchWorker.perform_async(x[:name],x[:class],origin,destination,route_id,date)
+	    end
+=begin	    
 	    if Rails.env.production?  
 	      Parallel.each(supplier_list, in_threads: supplier_list.count) { |x| 
 	       search_supplier(x[:name],x[:class],origin,destination,route_id,date)
@@ -21,10 +26,12 @@ class SupplierSearch
 	       search_supplier(x[:name],x[:class],origin,destination,route_id,date)
 	      }
 	    end
+=end	    
   	end
 
   	def search_supplier(supplier_name,supplier_class,origin,destination,route_id,date)
-	    flight_list = supplier_class.new()
+	    flight_list = supplier_class.constantize.new()
+	    #flight_list = supplier_class.new()
 	    search_history = SearchHistory.create(supplier_name:"#{supplier_name}",route_id:route_id,departure_time: date) #TODO: save the search status, false if it failed
 	    response = flight_list.search(origin,destination,date)
 	    

@@ -20,3 +20,7 @@ https://ryanboland.com/blog/writing-your-first-background-worker/
 ###options for hosting  
 http://parspack.com/hybrid-server  
 http://parspack.com/vps/linux  
+
+###options for logging
+https://rollbar.com/
+https://www.bugsnag.com/

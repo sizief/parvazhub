@@ -73,6 +73,7 @@ class Suppliers::Alibaba
               next
             end
           end
+          debugger
           flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"alibaba", flight_date:"#{departure_date}", deep_link:"#{deeplink_url}")
         end
       end #end of each loop
