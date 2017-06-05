@@ -12,7 +12,6 @@ gem 'jbuilder',     '2.4.1'
 gem 'bcrypt',         '3.1.11'
 gem 'parsi-date', '~> 0.3.1'
 gem 'rest-client'
-gem 'parallel'
 gem 'semantic-ui-sass', '~> 2.2', '>= 2.2.1.1'
 gem 'pg', '~> 0.18.4'
 gem "activerecord-import", ">= 0.2.0"
@@ -21,7 +20,7 @@ gem 'redis-rails'
 gem 'sidekiq-scheduler'
 gem 'airbrake', '~> 6.1'
 gem 'scout_apm'
-
+gem 'sidekiq-status'
 
 
 group :development do

@@ -1,64 +1,69 @@
 class SupplierSearch
+  @@supplier_list = [
+        {class: Suppliers::Flightio,name: "flightio"},
+        {class: Suppliers::Zoraq,name: "zoraq"},
+        {class: Suppliers::Alibaba,name: "alibaba"}
+    ]
 
 	def search(origin,destination,date)
-		route = Route.find_by(origin:"#{origin}", destination:"#{destination}")
-	    search_suppliers(origin,destination,route.id,date) 
-	    update_flight_best_price(origin,destination,date) 
+	  route = Route.find_by(origin:"#{origin}", destination:"#{destination}")
+    search_suppliers(15,origin,destination,route.id,date) 
+    update_flight_best_price(origin,destination,date) 
 	end
 
-	def search_suppliers(origin,destination,route_id,date)
-	    supplier_list = [
-	      {class: Suppliers::Flightio,name: "flightio"},
-	      {class: Suppliers::Zoraq,name: "zoraq"},
-	      {class: Suppliers::Alibaba,name: "alibaba"}
-	    ]
-	    
-	    supplier_list.each do |x|
-	      SupplierSearchWorker.perform_async(x[:name],x[:class],origin,destination,route_id,date)
-	    end
-=begin	    
-	    if Rails.env.production?  
-	      Parallel.each(supplier_list, in_threads: supplier_list.count) { |x| 
-	       search_supplier(x[:name],x[:class],origin,destination,route_id,date)
-	      }
-	    else
-	     Parallel.each(supplier_list, in_processes: supplier_list.count) { |x| 
-	       search_supplier(x[:name],x[:class],origin,destination,route_id,date)
-	      }
-	    end
-=end	    
-  	end
+  def background_search(origin,destination,date)
+    route = Route.find_by(origin:"#{origin}", destination:"#{destination}")
+    search_suppliers(30,origin,destination,route.id,date) 
+    update_flight_best_price(origin,destination,date) 
+  end
+
+	def search_suppliers(delay,origin,destination,route_id,date)
+    job_ids = Hash.new
+
+    @@supplier_list.each do |x|
+      job_ids[x[:name].to_sym] = SupplierSearchWorker.perform_async(x[:name],x[:class],origin,destination,route_id,date)
+    end
+    wait_to_finish_all_requests(delay,job_ids)
+  end
+
+  def wait_to_finish_all_requests (delay,job_ids)
+    1.upto(delay.to_i) do 
+      results_ready = Array.new
+      job_ids.each do |key,value|
+      	 #puts "#{key}" + (Sidekiq::Status::complete? value).to_s
+      	 results_ready << (Sidekiq::Status::complete? value)
+      end
+      if (results_ready.all? {|x| x == true })
+      	break
+      else
+      	sleep 1 
+      end
+    end	
+  end
 
   	def search_supplier(supplier_name,supplier_class,origin,destination,route_id,date)
-	    flight_list = supplier_class.constantize.new()
-	    #flight_list = supplier_class.new()
-	    search_history = SearchHistory.create(supplier_name:"#{supplier_name}",route_id:route_id,departure_time: date) #TODO: save the search status, false if it failed
-	    response = flight_list.search(origin,destination,date)
-	    
-	    if response == false
-	      search_history.update(status: "false")
-	    else
-	      log(response[:response]) if Rails.env.development?  
-	      flight_list.import_domestic_flights(response,route_id,origin,destination,date)
-	      search_history.update(status: "true")
-	    end
+      flight_list = supplier_class.constantize.new()
+      search_history = SearchHistory.create(supplier_name:"#{supplier_name}",route_id:route_id,departure_time: date) #TODO: save the search status, false if it failed
+      response = flight_list.search(origin,destination,date)
+    
+      if response == false
+        search_history.update(status: "false")
+      else
+        log(response[:response]) if Rails.env.development?  
+        flight_list.import_domestic_flights(response,route_id,origin,destination,date)
+        search_history.update(status: "true")
+      end
   	end
 
   	def update_flight_best_price(origin,destination,date) 
-    	#just to solve the connection issue between pgsql and rails, see https://github.com/grosser/parallel/issues/62
-		begin
-			ActiveRecord::Base.connection.reconnect!
-		rescue
-			ActiveRecord::Base.connection.reconnect!
-		end
-		Flight.update_best_price(origin,destination,date) 
-  	end
+	  Flight.update_best_price(origin,destination,date) 
+    end
 
 	def log(response)
-		log_file_path_name = "log/supplier/"+Time.now.to_s+".log"
-		log_file = File.new("#{log_file_path_name}", "w")
-		log_file.puts(response)
-		log_file.close
+	  log_file_path_name = "log/supplier/"+Time.now.to_s+".log"
+	  log_file = File.new("#{log_file_path_name}", "w")
+	  log_file.puts(response)
+	  log_file.close
 	end
 
 end

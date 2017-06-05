@@ -1,3 +1,29 @@
+require 'sidekiq'
+require 'sidekiq-status'
+
+Sidekiq.configure_client do |config|
+  config.redis = { url: ENV['REDIS'], password: ENV["REDIS_PASSWORD"]}
+  config.client_middleware do |chain|
+    # accepts :expiration (optional)
+    chain.add Sidekiq::Status::ClientMiddleware, expiration: 30.minutes # default
+  end
+end
+
+Sidekiq.configure_server do |config|
+  config.redis = { url: ENV['REDIS'], password: ENV["REDIS_PASSWORD"]}
+  config.server_middleware do |chain|
+    # accepts :expiration (optional)
+    chain.add Sidekiq::Status::ServerMiddleware, expiration: 30.minutes # default
+  end
+  config.client_middleware do |chain|
+    # accepts :expiration (optional)
+    chain.add Sidekiq::Status::ClientMiddleware, expiration: 30.minutes # default
+  end
+end
+
+
+=begin
+	
 Sidekiq.configure_server do |config|
   config.redis = { url: ENV['REDIS'], password: ENV["REDIS_PASSWORD"]}
 end
@@ -6,4 +32,5 @@ Sidekiq.configure_client do |config|
   config.redis = { url: ENV['REDIS'], password: ENV["REDIS_PASSWORD"]}
 end
 
-#SearchWorker.perform_in(5.seconds,'thr','mhd',"2017-05-29")
+	
+=end

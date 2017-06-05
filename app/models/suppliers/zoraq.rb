@@ -49,15 +49,8 @@ class Suppliers::Zoraq
 
         departure_time = parse_date(departure_date_time).utc.to_datetime
         departure_time = departure_time + ENV["IRAN_ADDITIONAL_TIMEZONE"].to_f.minutes # add 4:30 hours because zoraq date time is in iran time zone #.strftime("%H:%M")
-        
-        is_flight_exist = Flight.find_by(flight_number:flight_number,departure_time:departure_time)
-        if is_flight_exist.nil?
-          stored_flight = Flight.create(route_id: "#{route_id}", flight_number:"#{flight_number}", departure_time:"#{departure_time}", airline_code:"#{airline_code}", airplane_type: "#{airplane_type}")
-          next if stored_flight.id.nil? #add this because this is a Async action and this flight might be exists in miliseconds
-          flight_id = stored_flight.id
-        else
-          flight_id = is_flight_exist.id
-        end
+
+        flight_id = Flight.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
 
         departure_date = departure_time.strftime("%F")
         price = flight["AirItineraryPricingInfo"]["PTC_FareBreakdowns"][0]["PassengerFare"]["TotalFare"]["Amount"]

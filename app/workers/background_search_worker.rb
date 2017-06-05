@@ -1,7 +1,8 @@
 require 'sidekiq-scheduler'
 
-class SearchWorker
+class BackgroundSearchWorker
   include Sidekiq::Worker
+  sidekiq_options :retry => 1, :backtrace => true
   @@origin_destination = [
   	{origin:"thr",destination:"mhd"},
   	{origin:"thr",destination:"kih"},
@@ -16,7 +17,7 @@ class SearchWorker
   def perform(date)
   	@@origin_destination.each do |x|
       background_search = SupplierSearch.new()
-      background_search.search(x[:origin],x[:destination],date)
+      background_search.background_search(x[:origin],x[:destination],date)
       break if Rails.env.test? 
     end
   end

@@ -24,3 +24,4 @@ http://parspack.com/vps/linux
 ###options for logging
 https://rollbar.com/
 https://www.bugsnag.com/
+https://github.com/teamcapybara/capybara

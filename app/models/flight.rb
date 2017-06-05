@@ -4,11 +4,20 @@ class Flight < ApplicationRecord
   validates :route_id, presence: true
   belongs_to :route
   has_many :flight_prices
-	
-  #def self.flight_id(flight_number,departure_time)
-  #  flight = Flight.select(:id).find_by(flight_number:"#{flight_number}", departure_time: "#{departure_time}")
-  #  flight.id
-  #end
+
+  def self.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
+    is_flight_exist = Flight.find_by(flight_number:flight_number,departure_time:departure_time)
+    if is_flight_exist.nil?
+      begin
+        stored_flight = Flight.create(route_id: "#{route_id}", flight_number:"#{flight_number}", departure_time:"#{departure_time}", airline_code:"#{airline_code}", airplane_type: "#{airplane_type}")
+        flight_id = stored_flight.id
+      rescue
+        flight_id = is_flight_exist.id
+      end
+    else
+      flight_id = is_flight_exist.id
+    end
+  end
 
   def self.update_best_price(origin,destination,date) 
     route = Route.find_by(origin:"#{origin}",destination:"#{destination}")

@@ -3,42 +3,42 @@
   today_route_1:
     every: <%= interval(0) %>
     args: [<%= Date.today.to_s %>]
-    class: SearchWorker
+    class: BackgroundSearchWorker
 
   tomorrow_route_1:
     every: <%= interval(2) %>
     args: [<%= (Date.today+1).to_s %>]
-    class: SearchWorker
+    class: BackgroundSearchWorker
 
   dayafter_route_1:
     every: <%= interval(3) %>
     args: [<%= (Date.today+2).to_s %>]
-    class: SearchWorker
+    class: BackgroundSearchWorker
 
   restofweek_1_route_1:
     every: <%= interval(4) %>
     args: [<%= (Date.today+3).to_s %>]
-    class: SearchWorker
+    class: BackgroundSearchWorker
 
   restofweek_2_route_1:
     every: <%= interval(6) %>
     args: [<%= (Date.today+4).to_s %>]
-    class: SearchWorker
+    class: BackgroundSearchWorker
 
   restofweek_3_route_1:
     every: <%= interval(8) %>
     args: [<%= (Date.today+5).to_s %>]
-    class: SearchWorker
+    class: BackgroundSearchWorker
 
   restofweek_4_route_1:
     every: <%= interval(9) %>
     args: [<%= (Date.today+6).to_s %>]
-    class: SearchWorker
+    class: BackgroundSearchWorker
 
   restofweek_5_route_1:
     every: <%= interval(10) %>
     args: [<%= (Date.today+7).to_s %>]
-    class: SearchWorker
+    class: BackgroundSearchWorker
 
 #airport search worker
   airports:
