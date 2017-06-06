@@ -1,6 +1,5 @@
 $("#prices-modal-content").html("<%= escape_javascript(render partial: 'flight_prices') %>");
 $('.ui.basic.modal.prices')
-    .modal({blurring: true,inverted: true})
     .modal('setting', 'closable', true)
     .modal('show')
     .modal('attach events', '.ui.cancel.button', 'hide')

@@ -8,13 +8,13 @@ class SupplierSearch
 	def search(origin,destination,date)
 	  route = Route.find_by(origin:"#{origin}", destination:"#{destination}")
     search_suppliers(15,origin,destination,route.id,date) 
-    update_flight_best_price(origin,destination,date) 
+    #update_flight_best_price(origin,destination,date) 
 	end
 
   def background_search(origin,destination,date)
     route = Route.find_by(origin:"#{origin}", destination:"#{destination}")
     search_suppliers(30,origin,destination,route.id,date) 
-    update_flight_best_price(origin,destination,date) 
+    
   end
 
 	def search_suppliers(delay,origin,destination,route_id,date)
@@ -52,6 +52,7 @@ class SupplierSearch
         log(response[:response]) if Rails.env.development?  
         flight_list.import_domestic_flights(response,route_id,origin,destination,date)
         search_history.update(status: "true")
+        update_flight_best_price(origin,destination,date) 
       end
   	end
 
