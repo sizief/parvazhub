@@ -1,0 +1,96 @@
+<%= render 'layouts/header' %>
+<% provide(:title,"پروازهاب: بهترین زمان سفر به @city[:fa] ") %>
+<% provide(:description,"بهترین زمان سفر به @city[:fa] و مقایسه قیمت بر اساس تاریخ پرواز") %>
+
+<div class="web-font city-header-image" style=" background-image: url(/assets/cities/<%=@city[:en] %>-big.jpg);background-size: cover; ">
+	<h1 style="background: url(/assets/opacity-backgrounds/black50p.png); " class="city-page-title web-font">
+		بهترین زمان سفر به <%=@city[:fa]%> را راحت پیدا کنید
+	</h1>
+</div>
+
+<div class="ui container" id="search-results-container" style="padding-top: 1em">
+	
+	<div class="city-calendar" >
+		<h3><i class="teal plane icon"></i>هزینه پرواز تهران به <%=@city[:fa] %> برای یک نفر</h3>
+		<table class="ui celled table stackable rtl">
+		  	<thead>
+				<tr class="center aligned web-font">
+		  			<th class="table-header">شنبه</th>
+		  			<th class="table-header">یکشنبه </th>
+		  			<th class="table-header">دوشنبه</th>
+		  			<th class="table-header">سه‌شنبه</th>
+		  			<th class="table-header">چهارشنبه</th>
+		  			<th class="table-header">پنج‌شنبه</th>
+		  			<th class="table-header">جمعه</th>
+		  		</tr>
+		  	</thead>
+			<tbody>
+				<% @prices[:from_thr].each_with_index do |price,index|%>
+					<% if index%7 == 0 %>
+						<tr class="center aligned very basic">
+					<% end %>	
+						<td class="center aligned <%='disable' if price.keys[0].to_s.to_date<Date.today %>">
+							<div class="">
+								<div style="font-size: 1.5em">
+									<%= link_to(number_with_delimiter(price.values[0]), search_link_builder("thr",@city_code,price.keys[0].to_s.to_date),class:"showmodal") %>
+								</div>
+			               		<div style="font-size: 0.7em;color: gray;">
+									<%=price.keys[0].to_s.to_date.to_parsi.strftime "%d %B"  %>
+								</div>
+							</div>	
+						</td>
+					
+					<% if ((index%7 == 6) || (index == 34)) %>
+						</tr>
+					<% end %>	
+							
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="city-calendar" >
+		<h3><i class="teal plane icon"></i>هزینه پرواز <%=@city[:fa] %> به تهران برای یک نفر</h3>
+		<table class="ui celled table stackable rtl">
+		  	<thead>
+				<tr class="center aligned web-font">
+		  			<th class="table-header">شنبه</th>
+		  			<th class="table-header">یکشنبه </th>
+		  			<th class="table-header">دوشنبه</th>
+		  			<th class="table-header">سه‌شنبه</th>
+		  			<th class="table-header">چهارشنبه</th>
+		  			<th class="table-header">پنج‌شنبه</th>
+		  			<th class="table-header">جمعه</th>
+		  		</tr>
+		  	</thead>
+			<tbody>
+				<% @prices[:to_thr].each_with_index do |price,index|%>
+					<% if index%7 == 0 %>
+						<tr class="center aligned very basic">
+					<% end %>	
+						<td class="center aligned <%='disable' if price.keys[0].to_s.to_date<Date.today %>">
+							<div class="">
+								<div style="font-size: 1.5em">
+									<%= link_to(number_with_delimiter(price.values[0]), search_link_builder(@city_code,"thr",price.keys[0].to_s.to_date),class:"showmodal") %>
+								</div>
+			               		<div style="font-size: 0.7em;color: gray;">
+									<%=price.keys[0].to_s.to_date.to_parsi.strftime "%d %B"  %>
+								</div>
+							</div>	
+						</td>
+					
+					<% if ((index%7 == 6) || (index == 34)) %>
+						</tr>
+					<% end %>	
+							
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+
+
+
+</div>
+
+
+<%= render 'layouts/waiting_modal' %>

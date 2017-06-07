@@ -18,7 +18,8 @@ Rails.application.routes.draw do
 
 	get 'home/index'
 	get 'static_pages/about_us'
+	
+	get 'city/:city_name', to: 'city_page#index', as: 'city_page'
+     
 	root 'home#index'
-
-	get '/airport', to:'search_result#airport'
 end

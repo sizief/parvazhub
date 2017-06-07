@@ -52,8 +52,6 @@
 	  <% end %>
 	</div>
 
-
-
 	<table class="ui teal table unstackable sortable rtl">
 	  	<thead>
 			<tr class="center aligned web-font">
@@ -89,9 +87,16 @@
 			<% end %>
 		</tbody>
 	</table>
+
+	<% unless which_city_page(@search_parameter[:origin],@search_parameter[:destination]).nil? %>
+	<%= render partial: 'layouts/city_page',  locals: {city_code: which_city_page(@search_parameter[:origin],@search_parameter[:destination])} %>
+	<% end %>
+ 
 </div>
 
 <%= render 'layouts/searchbox-helper' %>
+<%= render 'layouts/waiting_modal' %>
+
 <div class="ui basic modal prices" style="left: initial;text-align: center;">
       <p id="prices-modal-content"></p>
 </div>

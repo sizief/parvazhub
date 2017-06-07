@@ -16,10 +16,14 @@
 
 
 /* general */
+.turbolinks-progress-bar {
+  height: 3px;
+  background-color: yellow;
+}
 .web-font{
   font-family:"samim" !important;
 }
-body{
+body, h1, h2, h3, h4{
   font-family:"samim" !important;
 }
 .rtl {
@@ -32,6 +36,9 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
   padding-left:5px;
   font-weight:bold;
   color:white;
+}
+.disable{
+  background-color:#eee;
 }
 
 /* fix for rtl semantic */
@@ -74,6 +81,10 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
 #slogan-description{
   background-image: url(/assets/opacity-backgrounds/black20p.png); 
   background-repeat: repeat;
+}
+.city-page-link{
+  color: #eaae00;
+  text-decoration:underline;
 }
 /* search box */
 #search-box{
@@ -151,6 +162,26 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
   padding-top: 1em;
   border-top: 1px solid #eee;
   }
+
+
+/* city pages */
+.city-header-image{
+  direction: rtl;
+  width: 100%;
+  background-position: center center;
+  padding-top: 12%;
+  padding-bottom: 11%;
+  background-color:#eee;
+  text-align:center;
+}
+.city-calendar{
+  direction:rtl;
+  margin-bottom:2em;
+}
+.city-page-title{
+  display: inline-block;
+  color: white;
+}
 
 
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {

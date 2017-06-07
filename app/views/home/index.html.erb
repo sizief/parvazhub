@@ -41,10 +41,22 @@
 			</div>
 		<%end%>
 	</div>
+	<div>
+		<h4 style="text-align: center;
+    color: white;
+    margin-top: 2em;">
+		<i class="checked calendar icon"></i>
+			تاریخی برای سفرتان ندارید؟ قیمت‌های بلیط
+			<%= link_to "کیش", city_page_path(city_name:  "kish"),class:"city-page-link" %>،
+			<%= link_to "مشهد", city_page_path(city_name:  "mashhad"),class:"city-page-link" %> یا
+			<%= link_to "شیراز", city_page_path(city_name:  "shiraz"), class:"city-page-link" %>
+			را ببینید و تصمیم بگیرید.
+		</h4>
+	</div>
 	
 </div>
 
-<div class="six column stackable ui grid centered">
+<div class="five column stackable ui grid centered">
   	<% @flight_price_showoff_cities.each do |city| %>
 		<% flight_list = Flight.new.get_lowest_price_collection("thr",city) %>
 	  	<div class="column">
@@ -72,3 +84,4 @@
 </div>
 
 <%= render 'layouts/searchbox-helper' %>
+<%= render 'layouts/waiting_modal' %>

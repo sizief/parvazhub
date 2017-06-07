@@ -26,6 +26,7 @@ class SearchResultController < ApplicationController
   end
 
   def index(route,origin,destination,date)
+     
      @flights = Flight.new.flight_list(route,date)
      @search_parameter ={origin: origin,destination: destination,date: date}
      @cities = City.list 
