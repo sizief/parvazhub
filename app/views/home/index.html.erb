@@ -56,7 +56,7 @@
 	
 </div>
 
-<div class="five column stackable ui grid centered">
+<div class="six column stackable ui grid centered">
   	<% @flight_price_showoff_cities.each do |city| %>
 		<% flight_list = Flight.new.get_lowest_price_collection("thr",city) %>
 	  	<div class="column">

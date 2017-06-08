@@ -5,12 +5,13 @@ class City
 	  mhd:{fa:"مشهد",en:"mashhad"},
 	  kih:{fa:"کیش",en:"kish"},
 	  syz:{fa:"شیراز",en:"shiraz"},
-	  ifn:{fa:"اصفهان",en:"isfahan"}
+	  ifn:{fa:"اصفهان",en:"isfahan"},
+    tbz:{fa:"تبریز",en:"tabriz"}
    }
   end
 
   def City.pages
-    city_pages=["kih","mhd","syz","ifn"]
+    city_pages=["kih","mhd","syz","ifn","tbz"]
   end
 
   def City.default_destination_city

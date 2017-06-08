@@ -8,10 +8,12 @@ class BackgroundSearchWorker
   	{origin:"thr",destination:"kih"},
   	{origin:"thr",destination:"ifn"},
   	{origin:"thr",destination:"syz"},
+    {origin:"thr",destination:"tbz"},
     {origin:"mhd",destination:"thr"},
   	{origin:"kih",destination:"thr"},
 	  {origin:"ifn",destination:"thr"},
-  	{origin:"syz",destination:"thr"}
+  	{origin:"syz",destination:"thr"},
+    {origin:"tbz",destination:"thr"}
   ]
 
   def perform(date)

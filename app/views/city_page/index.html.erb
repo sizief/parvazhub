@@ -1,6 +1,6 @@
 <%= render 'layouts/header' %>
-<% provide(:title,"پروازهاب: بهترین زمان سفر به @city[:fa] ") %>
-<% provide(:description,"بهترین زمان سفر به @city[:fa] و مقایسه قیمت بر اساس تاریخ پرواز") %>
+<% provide(:title,"پروازهاب: بهترین زمان سفر به #{@city[:fa]} ") %>
+<% provide(:description,"بهترین زمان سفر به #{@city[:fa]} و مقایسه قیمت بر اساس تاریخ پرواز") %>
 
 <div class="web-font city-header-image" style=" background-image: url(/assets/cities/<%=@city[:en] %>-big.jpg);background-size: cover; ">
 	<h1 style="background: url(/assets/opacity-backgrounds/black50p.png); " class="city-page-title web-font">
