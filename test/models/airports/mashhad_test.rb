@@ -7,8 +7,8 @@ class AirportsMashhadTest < ActiveSupport::TestCase
   end
     
   test "airport data should saved to flight details" do
-    #the provided sample file has 144 record
-    assert_difference 'FlightDetail.count',99 do
+    #the provided sample file has 106 record
+    assert_difference 'FlightDetail.count',106 do
       @results = @airport.search
       @airport.import_domestic_flights @results
     end   
