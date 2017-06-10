@@ -37,10 +37,11 @@ EXPOSE 3000
 # Copy the Rails application into place
 COPY . .
 
-
-
 # Create precomplie assets
 run rake assets:precompile
+
+ENV TZ=Asia/Tehran
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Make folder writable for pid and log for unicorn 
 RUN chmod -R ug+rwx $RAILS_ROOT/tmp $RAILS_ROOT/log $RAILS_ROOT && \
