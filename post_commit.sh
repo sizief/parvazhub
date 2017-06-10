@@ -18,18 +18,10 @@ BUILD_LOG_URL="https://dashboard.abarcloud.com/console/project/$OPENSHIFT_BUILD_
 $TEST_COMMAND
 if [[ $? == 0 ]]
 then
+#succesful
+  bundle exec rails db:migrate
+  bundle exec rails db:seed
 
- # Uncomment the following section as required to notify of tests passing
-
- # GitHub example:
- # See https://developer.github.com/v3/repos/statuses/#create-a-status for more info
- # curl "https://api.github.com/repos/$GITHUB_REPO/statuses/$OPENSHIFT_BUILD_COMMIT?access_token=$SCM_TOKEN" \
- #   -H "Content-Type: application/json" \
- #   -X POST --max-time 60 \
- #   -d "{\"state\": \"success\", \"context\": \"AbarCloud\", \"description\": \"Tests passed\", \"target_url\": \"$BUILD_LOG_URL\"}"
-
- # GitLab example:
- # See https://docs.gitlab.com/ce/api/commits.html#post-the-build-status-to-a-commit for more info
   curl -X POST --max-time 60 \
     -H "PRIVATE-TOKEN: $SCM_TOKEN" \
     "https://gitlab.com/api/v4/projects/$GITLAB_PROJECT_ID/statuses/$OPENSHIFT_BUILD_COMMIT?state=success&context=AbarCloud&description=Tests%20passed&target_url=$BUILD_LOG_URL"
@@ -39,17 +31,7 @@ then
 
 else
 
- # Uncomment the following section as required to notify of tests failing
 
- # GitHub example:
- # See https://developer.github.com/v3/repos/statuses/#create-a-status for more info
- # curl "https://api.github.com/repos/$GITHUB_REPO/statuses/$OPENSHIFT_BUILD_COMMIT?access_token=$SCM_TOKEN" \
- #   -H "Content-Type: application/json" \
- #   -X POST --max-time 60 \
- #   -d "{\"state\": \"failure\", \"context\": \"AbarCloud\", \"description\": \"Tests failed\", \"target_url\": \"$BUILD_LOG_URL\"}"
-
- # GitLab example:
- # See https://docs.gitlab.com/ce/api/commits.html#post-the-build-status-to-a-commit for more info
   curl -X POST --max-time 60 \
     -H "PRIVATE-TOKEN: $SCM_TOKEN" \
     "https://gitlab.com/api/v4/projects/$GITLAB_PROJECT_ID/statuses/$OPENSHIFT_BUILD_COMMIT?state=failed&context=AbarCloud&description=Tests%20failed&target_url=$BUILD_LOG_URL"
