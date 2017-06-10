@@ -1,9 +1,4 @@
 class SupplierSearch
-  @@supplier_list = [
-        {class: Suppliers::Flightio,name: "flightio"},
-        {class: Suppliers::Zoraq,name: "zoraq"},
-        {class: Suppliers::Alibaba,name: "alibaba"}
-    ]
 
 	def search(origin,destination,date)
 	  route = Route.find_by(origin:"#{origin}", destination:"#{destination}")
@@ -19,9 +14,10 @@ class SupplierSearch
 
 	def search_suppliers(delay,origin,destination,route_id,date)
     job_ids = Hash.new
+    supplier_list = Supplier.where(status:true)
 
-    @@supplier_list.each do |x|
-      job_ids[x[:name].to_sym] = SupplierSearchWorker.perform_async(x[:name],x[:class],origin,destination,route_id,date)
+    supplier_list.each do |x|
+      job_ids[x[:name].to_sym] = SupplierSearchWorker.perform_async(x[:name],x[:class_name],origin,destination,route_id,date)
     end
     wait_to_finish_all_requests(delay,job_ids)
   end
@@ -43,7 +39,7 @@ class SupplierSearch
 
   	def search_supplier(supplier_name,supplier_class,origin,destination,route_id,date)
       flight_list = supplier_class.constantize.new()
-      search_history = SearchHistory.create(supplier_name:"#{supplier_name}",route_id:route_id,departure_time: date) #TODO: save the search status, false if it failed
+      search_history = SearchHistory.create(supplier_name:"#{supplier_name}",route_id:route_id,departure_time: date)
       response = flight_list.search(origin,destination,date)
     
       if response == false

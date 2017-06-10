@@ -12,3 +12,13 @@ cities.each do |origin_key,origin_value|
 		Route.create(origin: origin_key, destination: destination_key) unless destination_key == origin_key
 	end
 end
+
+supplier_list = [
+        {class: "Suppliers::Flightio",name: "flightio"},
+        {class: "Suppliers::Zoraq",name: "zoraq"},
+        {class: "Suppliers::Alibaba",name: "alibaba"}
+    ]
+
+supplier_list.each do |supplier|
+  Supplier.create(name: supplier[:name],class_name: supplier[:class],status: true)
+end

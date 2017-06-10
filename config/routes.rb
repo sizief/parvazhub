@@ -7,6 +7,9 @@ Rails.application.routes.draw do
 	namespace :admin do
 		get 'dashboard/user_search_history'
 		get 'dashboard/search_history'
+		get 'dashboard/supplier_control'
+		post 'dashboard/supplier_control', to:'dashboard#update_supplier'
+
 		mount Sidekiq::Web => '/sidekiq'
 	end
 
