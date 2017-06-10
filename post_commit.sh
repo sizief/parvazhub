@@ -19,9 +19,6 @@ $TEST_COMMAND
 if [[ $? == 0 ]]
 then
 #succesful
-  bundle exec rails db:migrate
-  bundle exec rails db:seed
-
   curl -X POST --max-time 60 \
     -H "PRIVATE-TOKEN: $SCM_TOKEN" \
     "https://gitlab.com/api/v4/projects/$GITLAB_PROJECT_ID/statuses/$OPENSHIFT_BUILD_COMMIT?state=success&context=AbarCloud&description=Tests%20passed&target_url=$BUILD_LOG_URL"
