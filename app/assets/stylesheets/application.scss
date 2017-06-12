@@ -13,9 +13,25 @@
   font-url("samim.ttf") format("truetype"),
   font-url("samim.ttf") format('svg');
 }
-
+/* helper */
+.text-left{
+  text-align:left !important;
+}
+.full-width{
+  width:100% !important;
+}
 
 /* general */
+.field_with_errors{
+  width: 100%;
+    border: 1px solid red;
+    border-radius: 5px;
+}
+#error_explanation{
+  direction: rtl !important;
+  color: gray;
+}
+
 .turbolinks-progress-bar {
   height: 3px;
   background-color: yellow;
@@ -56,6 +72,7 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
   background:#29aae1;
   padding: 0.6em;
   border-top: 1px solid #19759c;
+  padding-bottom: 0 !important;
 }
 
 /* first page */
@@ -109,6 +126,7 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
 /* Search Results */
 #search-results-container{
   width: 70%;
+  margin-top: 1em;
 }
 .airline-logo{
   width:2.5em;
@@ -181,6 +199,12 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
 .city-page-title{
   display: inline-block;
   color: white;
+}
+
+/* menu links */
+.menu-links{
+    color: white;
+    font-size: 0.7em;
 }
 
 

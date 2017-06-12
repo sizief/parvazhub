@@ -2,7 +2,7 @@
 <% provide(:title,"پروازهاب: بهترین زمان سفر به #{@city[:fa]} ") %>
 <% provide(:description,"بهترین زمان سفر به #{@city[:fa]} و مقایسه قیمت بر اساس تاریخ پرواز") %>
 
-<div class="web-font city-header-image" style=" background-image: url(/assets/cities/<%=@city[:en] %>-big.jpg);background-size: cover; ">
+<div class="web-font city-header-image" style=" background-image: url(/assets/cities/<%=@city[:en] %>-big.jpg);background-size: cover;margin-top: 1em; ">
 	<h1 style="background: url(/assets/opacity-backgrounds/black50p.png); " class="city-page-title web-font">
 		بهترین زمان سفر به <%=@city[:fa]%> را راحت پیدا کنید
 	</h1>
@@ -94,3 +94,4 @@
 
 
 <%= render 'layouts/waiting_modal' %>
+<%= render 'layouts/footer' %>
