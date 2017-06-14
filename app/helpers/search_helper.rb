@@ -1,7 +1,11 @@
 module SearchHelper
-	def airline_logo_for (airline_code)
+	def airline_logo_for (airline_code,size=nil)
 		image_url = "airline-logos/" + airline_code[0..1] + "@2x.png"
-		image_tag image_url , class: "airline-logo image ui "
+		if size == nil
+			image_tag image_url , class: "airline-logo image ui "
+		else
+			image_tag(image_url , class: "airline-logo image ui ", style: "width:#{size}")
+		end
 	end
 
 	def supplier_logo_for (supplier)

@@ -1,11 +1,23 @@
 <header>
-<div class="ui" id="header">
-  <a href="/">
-    <div class="item">
-      <i class="circle notched icon" style="color: white"></i>
-      <span id="company-name">پروازهاب</span>
-    </div>
-  </a>
-  <!--<a class="item">Sign-in</a>-->
-</div>
+	<div class="ui grid" id="header">
+  		<div class="two column row">
+    		<div class="right floated left aligned column">
+    			<a href="/">
+    				<div class="item">
+      					<i class="circle notched icon" style="color: white"></i>
+      					<span id="company-name">پروازهاب</span>
+    				</div>
+  				</a>
+    		</div>
+    		<div class="left floated right aligned column">
+    			<%#= render 'devise/menu/registration_items' %>
+    			<%#= render 'devise/menu/login_items' %>
+    		</div>
+    		
+  		</div>
+	</div>
 </header>
+
+
+   <!-- <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>  -->

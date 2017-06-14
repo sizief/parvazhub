@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  route: one
+  date: MyString
+  email: MyString
+  notification_type: 
+
+two:
+  route: two
+  date: MyString
+  email: MyString
+  notification_type: 

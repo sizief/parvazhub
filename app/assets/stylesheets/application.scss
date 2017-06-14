@@ -13,9 +13,28 @@
   font-url("samim.ttf") format("truetype"),
   font-url("samim.ttf") format('svg');
 }
-
+/* helper */
+.text-left{
+  text-align:left !important;
+}
+.text-right{
+  text-align:right !important;
+}
+.full-width{
+  width:100% !important;
+}
 
 /* general */
+.field_with_errors{
+  width: 100%;
+    border: 1px solid red;
+    border-radius: 5px;
+}
+#error_explanation{
+  direction: rtl !important;
+  color: gray;
+}
+
 .turbolinks-progress-bar {
   height: 3px;
   background-color: yellow;
@@ -56,6 +75,7 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
   background:#29aae1;
   padding: 0.6em;
   border-top: 1px solid #19759c;
+  padding-bottom: 0 !important;
 }
 
 /* first page */
@@ -99,7 +119,8 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
   display:none;
   direction: rtl;
   text-align: center;
-  padding-top:1%;
+  padding:1em;
+  border-top: 1px #26a1d6 solid;
 }
 .search-box-label{
   color:white !important; 
@@ -109,6 +130,7 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
 /* Search Results */
 #search-results-container{
   width: 70%;
+  margin-top: 1em;
 }
 .airline-logo{
   width:2.5em;
@@ -146,14 +168,15 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
   color:green;
   font-weight:bold;
 }
-
 .price-box-image{
 }
 #results-message{
  direction: rtl;
- padding: 1%;
- background:aliceblue;
- margin-bottom:1em;
+ padding: 0;
+ background: aliceblue;
+ margin-left: 0 !important;
+ margin-right: 0 !important;
+ margin-bottom: 1px;
 }
 
 #flight-price-table {
@@ -162,6 +185,13 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
   padding-top: 1em;
   border-top: 1px solid #eee;
   }
+#price-alert-register{
+  display:none;
+  padding: 1em;
+  direction: rtl;
+  background: white;
+  border-top: 1px #26a1d6 solid;
+}
 
 
 /* city pages */
@@ -181,6 +211,12 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
 .city-page-title{
   display: inline-block;
   color: white;
+}
+
+/* menu links */
+.menu-links{
+    color: white;
+    font-size: 0.7em;
 }
 
 

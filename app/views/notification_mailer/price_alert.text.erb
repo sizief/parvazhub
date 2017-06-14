@@ -1,0 +1,6 @@
+لیست پروازهای <%= @cities[@search_parameter[:origin].to_sym][:fa]%> به <%= @cities[@search_parameter[:destination].to_sym][:fa]%>  برای <%= @search_parameter[:date].to_date.to_parsi.strftime "%A %d %B %Y" %> 
+<% @flights.each do |flight|  %>
+    <% unless flight.best_price == 0 %>
+        <%= airline_name_for flight.airline_code %><%= " "+"|"+" "%> <%= hour_to_human flight.departure_time.to_datetime.strftime("%H:%M") %><%= " "+"|"+" "%><%= number_with_delimiter(flight.best_price) %>
+    <% end %> 
+<% end %>

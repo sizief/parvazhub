@@ -21,6 +21,7 @@ gem 'sidekiq-scheduler'
 gem 'airbrake', '~> 6.1'
 gem 'scout_apm'
 gem 'sidekiq-status'
+gem 'devise'
 
 
 group :development do

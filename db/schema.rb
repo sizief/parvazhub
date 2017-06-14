@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170610143109) do
+ActiveRecord::Schema.define(version: 20170614161712) do
 
   create_table "flight_details", force: :cascade do |t|
     t.integer  "route_id"
@@ -57,6 +57,17 @@ ActiveRecord::Schema.define(version: 20170610143109) do
     t.index ["route_id", "flight_number", "departure_time"], name: "index_flights_on_route_id_and_flight_number_and_departure_time", unique: true
   end
 
+  create_table "notifications", force: :cascade do |t|
+    t.integer  "route_id"
+    t.string   "date"
+    t.string   "email"
+    t.string   "notification_type"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.boolean  "status"
+    t.index ["route_id"], name: "index_notifications_on_route_id"
+  end
+
   create_table "routes", force: :cascade do |t|
     t.string   "origin"
     t.string   "destination"
@@ -90,13 +101,20 @@ ActiveRecord::Schema.define(version: 20170610143109) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "name"
-    t.string   "email"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-    t.string   "password_digest"
-    t.string   "remember_digest"
+    t.string   "email",                  default: "", null: false
+    t.string   "encrypted_password",     default: "", null: false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          default: 0,  null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
 end

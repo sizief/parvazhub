@@ -1,5 +1,18 @@
 <% provide(:title,"پروازهاب: مقایسه قیمت بلیط") %>
 <% provide(:description,"مقایسه قیمت بهترین سایت‌های فروش بلیط پرواز") %>
+<header>
+<div class="ui grid" id="header">
+  		<div class="two column row">
+    		<div class="right floated left aligned column">
+    		</div>
+    		<div class="left floated right aligned column">
+    			<%#= render 'devise/menu/login_items' %>
+    			<%#= render 'devise/menu/registration_items' %>
+       		</div>
+  		</div>
+	</div>
+</header>
+
 
 <div class="ui vertical masthead segment" id="cover-photo" style="direction: rtl; margin-bottom: 2em;">  
 	<div class="ui container text center aligned header" id="slogan">
@@ -85,3 +98,4 @@
 
 <%= render 'layouts/searchbox-helper' %>
 <%= render 'layouts/waiting_modal' %>
+<%= render 'layouts/footer' %>
