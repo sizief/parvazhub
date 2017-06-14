@@ -1,0 +1,25 @@
+<% provide(:title,"Price Alert") %>
+<div class="ui container" style="margin-top: 2em">
+<table class="ui celled striped table ">
+	<thead>
+		<tr class="center aligned">
+  			<th><h4>Email</h4></th>
+  			<th><h4>Route</h4></th>
+  			<th><h4>Departure</h4></th>
+  			<th><h4>Status</h4></th>
+  			<th><h4>created at</h4></th>
+  		</tr>
+  	</thead>
+	<tbody>
+		<% @subscribers.each do |subscriber|  %>
+		<tr class="center aligned">
+			<td><%= subscriber.email %></td>
+			<td><%= subscriber.route.origin + " - " + subscriber.route.destination %></td>
+			<td><%= subscriber.date %></td>
+			<td><%= subscriber.status %></td>
+			<td><%= time_ago_in_words(subscriber.created_at) %></td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
+</div>

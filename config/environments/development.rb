@@ -44,7 +44,7 @@ Rails.application.configure do
 
   # Suppress logger output for asset requests.
   config.assets.quiet = true
-    config.assets.compile = true
+  config.assets.compile = true
 
 
   # Raises error for missing translations
@@ -60,5 +60,9 @@ Rails.application.configure do
   logger.formatter = config.log_formatter
   config.logger = ActiveSupport::TaggedLogging.new(logger)
 
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+   config.action_mailer.raise_delivery_errors = true
+   config.action_mailer.default_url_options = { host: "localhost", port:3000  }
+
+   #config.action_controller.asset_host = "localhost"
+   config.action_mailer.asset_host = "http://parvazhub.com"
 end

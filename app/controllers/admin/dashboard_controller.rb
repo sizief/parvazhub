@@ -20,4 +20,10 @@ class Admin::DashboardController < ApplicationController
   	@supplier_list = Supplier.all
   	render :supplier_control
   end
+
+  def price_alert
+    @subscribers = Notification.all
+  end
+    
+  
 end

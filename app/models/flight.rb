@@ -84,8 +84,12 @@ class Flight < ApplicationRecord
   end
 
   def get_lowest_price(route,date)
+    begin
       flight = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s).where.not(best_price:0).sort_by(&:best_price).first
-      flight
+     rescue
+      flight = nil
+     end 
+      
   end
 
   def airline_call_sign(airline_code)

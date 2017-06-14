@@ -3,13 +3,45 @@
 <% provide(:description,"لیست پروازهای #{@cities[@search_parameter[:origin].to_sym][:fa]} به #{@cities[@search_parameter[:destination].to_sym][:fa]} در تاریخ #{@search_parameter[:date].to_date.to_parsi.strftime '%A %d %B %Y'}") %>
 
 <div class="ui container" id="search-results-container">
-	<div class="column" id="results-message">
-		 <%= @cities[@search_parameter[:origin].to_sym][:fa] %>
-		  به 
-		 <%= @cities[@search_parameter[:destination].to_sym][:fa] %>
-		 در 
-		 <%= @search_parameter[:date].to_date.to_parsi.strftime "%A %d %B %Y"   %>
-		  <a class="ui primary basic blue" onclick="$('#search-box-inner').transition('slide');" style="cursor:pointer"><i class="search icon"></i> جستجوی دوباره</a>
+	<div class="ui grid" id="results-message">
+  		<div class="two column row">
+    		<div class="left floated column">
+				 <%= @cities[@search_parameter[:origin].to_sym][:fa] %>
+				  به 
+				 <%= @cities[@search_parameter[:destination].to_sym][:fa] %>
+				 در 
+				 <%= @search_parameter[:date].to_date.to_parsi.strftime "%A %d %B %Y"   %>
+				 <br>
+				 <a class="ui primary basic blue" onclick="$('#search-box-inner').transition('slide');" style="cursor:pointer">
+				 <i class="bordered search icon"></i> جستجوی دوباره</a>
+		 	</div>
+		 	<div class="left floated column right aligned">
+		  		<button class="ui tiny blue button web-font" onclick="$('#price-alert-register').transition('slide');">
+		  		هر روز به ایمیلم بفرست
+		  		</button>
+		  	</div>
+		</div> 	
+	</div>
+
+	<div class="ui" id="price-alert-register">
+	<%= form_tag(price_alert_register_path, method: :post, class: "ui form", remote: true) do %>			<div class="ui form">
+			<div class="three fields">
+				<div class="field text-right">
+					<i class="alarm outline icon teal"></i>
+					به چه آدرسی بفرستیم؟
+				</div>
+				<div class="field">
+					<%= text_field_tag :email %>
+					<%= hidden_field_tag(:origin, @search_parameter[:origin]) %>
+					<%= hidden_field_tag(:destination, @search_parameter[:destination]) %>
+					<%= hidden_field_tag(:date, @search_parameter[:date]) %>
+				</div>
+				<div class="field center aligned">
+					<%= submit_tag "ثبت کن", class: "ui submit web-font blue button fluid" %>
+				</div>	
+			</div>
+		</div>
+	<%end%>
 	</div>
 
 	<div class="ui" id="search-box-inner">
@@ -17,7 +49,6 @@
 			<div class="ui form">
 				<div class="four fields">
 					<div class="field">
-						
 						<%= f.select :origin, @cities.map{ |key,value| [value[:fa],key]}, {:selected => @search_parameter[:origin]},{:class =>'ui dropdown'} %>
 					</div>
 					<div class="field">
@@ -31,7 +62,7 @@
 						</div>
 					</div>
 					<div class="field center aligned">
-						<%= f.submit "جستجوی مجدد", class: "ui submit web-font grey button  fluid showmodal" %>
+						<%= f.submit "جستجوی مجدد", class: "ui submit web-font yellow button  fluid showmodal" %>
 					</div>
 				</div>
 			</div>
@@ -80,7 +111,7 @@
 						<td><%= flight.airplane_type.empty? ? "-" : airplane_name_for(flight.airplane_type) %></td>
 						<td>
 							<%= link_to number_with_delimiter(flight.best_price)+" تومان", flight_prices_path(flight.id), class: "ui teal label large flight-price", remote: true %>
-							<%= supplier_logo_for(flight.price_by) %>
+							<%#= supplier_logo_for(flight.price_by) %>
 						</td>
 					</tr>
 				<% end %>	

@@ -95,5 +95,5 @@ Rails.application.configure do
   # Generate digests for assets URLs  
   config.assets.digest = true
 
-  config.action_mailer.default_url_options = { host: 'http://parvazhub.com', port: 3000 }
+  config.action_mailer.default_url_options = { host: 'parvazhub.com', port: 3000 }
   end

@@ -48,3 +48,8 @@
   airports:
     cron: '0 0 0,12 * * *'
     class: AirportSearchWorker
+
+#notification 
+  price_alert:
+    cron: '0 0 8 * * *'
+    class: NotificationMailerWorker

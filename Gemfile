@@ -24,7 +24,6 @@ gem 'sidekiq-status'
 gem 'devise'
 
 
-
 group :development do
   gem 'web-console',           '3.1.1'
   gem 'listen',                '3.0.8'
