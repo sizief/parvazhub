@@ -1,0 +1,8 @@
+<%= render 'layouts/header' %>
+<% provide(:title,"پروازهاب: انتقال به سایت فروشنده") %>
+<% provide(:description,"مقایسه قیمت سایت‌های فروش بلیط") %>
+
+<h1>در حال انتقال به سایت <%= @flight_price.supplier %></h1>
+
+<%= render 'layouts/waiting_modal' %>
+<%= render 'layouts/footer' %>

@@ -30,6 +30,8 @@ Rails.application.routes.draw do
 	get 'city/:city_name', to: 'city_page#index', as: 'city_page'
 
 	post 'notification/price_alert_register', to: 'notification#price_alert_register', as: 'price_alert_register'
+
+	get 'redirect/:flight_price_id', to: 'redirect#redirect', as: 'redirect'
      
 	root 'home#index'
 end

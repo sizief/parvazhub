@@ -1,17 +1,15 @@
 	<div style="text-align: right"><i class="close big icon"></i></div>
 	<table class="ui teal table rtl">
 		<tbody>
-			<% @flight_prices.each do |flight|  %>
+			<% @flight_prices.each do |flight_price|  %>
 				<tr class="center aligned very basic">
-					<td><%= supplier_logo_for flight.supplier %></td>
-					<!--<td><% flight.supplier %></td>-->
-					<td><%= number_with_delimiter(flight.price)+" تومان" %></td>
+					<td><%= supplier_logo_for flight_price.supplier %></td>
+					<td><%= number_with_delimiter(flight_price.price)+" تومان" %></td>
 					<td>
-						 <a href="<%=flight.deep_link%>" class="ui teal label big flight-price"  target= "_blank">
-						 	<i class="external icon"></i> خرید؛ سفر بخیر 
+						 <a href="/redirect/<%= flight_price.id%>" class="ui teal label big flight-price"  target= "_blank">
+						 	<i class="external icon"></i> خرید از سایت <%= flight_price.supplier %> 
 						 </a>
-						<!--<span style="font-size:x-small"><%=  time_ago_in_words(flight.created_at) %></span>-->
-
+						<!--<span style="font-size:x-small"><%=  time_ago_in_words(flight_price.created_at) %></span>-->
 					</td>
 				</tr>
 			<% end %>
