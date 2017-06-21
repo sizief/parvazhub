@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 	resources :routes
 
 	namespace :admin do
+		get 'dashboard', to:'dashboard#index'
 		get 'dashboard/user_search_history'
 		get 'dashboard/search_history'
 		get 'dashboard/supplier_control'

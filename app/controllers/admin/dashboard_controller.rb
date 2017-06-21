@@ -24,6 +24,9 @@ class Admin::DashboardController < ApplicationController
   def price_alert
     @subscribers = Notification.all
   end
+
+  def index
+  end
     
   
 end

@@ -1,0 +1,92 @@
+<% provide(:title,"Admin dashboard") %>
+<div class="ui container" style="margin-top: 2em">
+  	
+  	<div class="row" style="padding: 1em">
+  		<div class="ui label">
+  			User Search History: <%= user_search_hsitory_all %>
+		</div>
+	</div>
+	<div class="row" style="direction: rtl">
+		<div class="ui small seven statistics" >
+  			<% 0.upto(6).each do |x| %>
+	  			<div class=" green statistic" >
+		  			<div class="value ">
+	  					<%= user_search_hsitory Date.today-x %>
+	  				</div>
+		  			<div class="label web-font">
+	  					<%= (Date.today-x).to_parsi.strftime "%A %d "  %>
+	  				</div>
+	  			</div>
+  			<% end %>
+  		</div>
+  	</div>
+
+  	<div class="ui divider"></div>
+
+  	<div class="row" style="padding: 1em">
+  		<div class="ui label">
+  			Redirect: <%= redirect_all %>
+		</div>
+	</div>
+	<div class="row" style="direction: rtl">
+		<div class="ui small seven statistics" >
+  			<% 0.upto(6).each do |x| %>
+	  			<div class=" teal statistic" >
+		  			<div class="value ">
+	  					<%= redirect Date.today-x %>
+	  				</div>
+		  			<div class="label web-font">
+	  					<%= (Date.today-x).to_parsi.strftime "%A %d "  %>
+	  				</div>
+	  			</div>
+  			<% end %>
+  		</div>
+  	</div>
+
+
+  	<div class="ui divider"></div>
+
+  	<div class="row" style="padding: 1em">
+  		<div class="ui label">
+  			Notification: <%= notification_all %>
+		</div>
+	</div>
+	<div class="row" style="direction: rtl">
+		<div class="ui small seven statistics" >
+  			<% 0.upto(6).each do |x| %>
+	  			<div class=" yellow statistic" >
+		  			<div class="value ">
+	  					<%= notification Date.today-x %>
+	  				</div>
+		  			<div class="label web-font">
+	  					<%= (Date.today-x).to_parsi.strftime "%A %d "  %>
+	  				</div>
+	  			</div>
+  			<% end %>
+  		</div>
+  	</div>
+
+  	<div class="ui divider"></div>
+
+  	<div class="row" style="padding: 1em">
+  		<div class="ui label">
+  			Search History: <%= search_history_all %>
+		</div>
+	</div>
+	<div class="row" style="direction: rtl">
+		<div class="ui small seven statistics" >
+  			<% 0.upto(6).each do |x| %>
+	  			<div class="orange statistic" >
+		  			<div class="value ">
+	  					<%= search_history Date.today-x %>
+	  				</div>
+		  			<div class="label web-font">
+	  					<%= (Date.today-x).to_parsi.strftime "%A %d "  %>
+	  				</div>
+	  			</div>
+  			<% end %>
+  		</div>
+  	</div>
+
+
+</div>
