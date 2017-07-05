@@ -19,4 +19,5 @@ class NotificationController < ApplicationController
         format.html
     end
   end
+
 end

@@ -1,7 +1,7 @@
 # Instal with Docker  
 A. pull the repo  
-B. Install Postgres and create user  
-C. copy .env.production.local and docker-compose.override.yml to root  
+B. copy .env.production.local and docker-compose.override.yml to root  
+C. run docker-compose run app db:create db:migrate db:seed
 D. run docker-compose build  
 E. run docker-compose up  
   
