@@ -2,7 +2,8 @@ class Suppliers::Alibaba
   require "open-uri"
 
   def search(origin,destination,date)
-    #RestClient.proxy = "13.73.23.36:3128"
+    RestClient.proxy = 'http://125.162.26.193:53281'
+    #proxy = '125.162.26.193:53281'
     if Rails.env.test?
         response = File.read("test/fixtures/files/domestic-alibaba.log") 
         return {response: response}
@@ -16,8 +17,7 @@ class Suppliers::Alibaba
       search_flight_params = "ffrom=#{origin.upcase}&fto=#{destination.upcase}&datefrom=#{shamsi_date}&adult=1&child=0&infant=0"
       search_url = search_flight_url+search_flight_params
       #first_response = RestClient.get("#{search_url}")
-      first_response = RestClient::Request.execute(method: :get, url: "#{search_url}",
-                            proxy: 'http://13.73.23.36:3128')
+      first_response = RestClient::Request.execute(method: :get, url: "#{search_url}")
     rescue 
       return false
     end
@@ -26,8 +26,7 @@ class Suppliers::Alibaba
     get_flight_params = "id=#{request_id}&last=0&ffrom=#{origin}&fto=#{destination}&datefrom=#{shamsi_date}&count=1&interval=1&isReturn=false&isNew=true"
     flight_url = get_flight_url+get_flight_params
     #second_response = RestClient.get("#{flight_url}")
-    second_response = RestClient::Request.execute(method: :get, url: "#{flight_url}",
-                            proxy: 'http://13.73.23.36:3128')
+    second_response = RestClient::Request.execute(method: :get, url: "#{flight_url}")
     return {response: second_response}
   end
 
