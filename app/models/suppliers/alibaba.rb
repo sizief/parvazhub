@@ -2,7 +2,7 @@ class Suppliers::Alibaba
   require "open-uri"
 
   def search(origin,destination,date)
-    RestClient.proxy = 'http://125.162.26.193:53281'
+    #RestClient.proxy = 'http://125.162.26.193:53281'
     #proxy = '125.162.26.193:53281'
     if Rails.env.test?
         response = File.read("test/fixtures/files/domestic-alibaba.log") 
