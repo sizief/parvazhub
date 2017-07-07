@@ -2,9 +2,9 @@ class Suppliers::Alibaba
   require "open-uri"
 
   def new_proxy
-    proxy_list_page = "https://gimmeproxy.com/api/getProxy?port=3128&post=true"
-    proxy_list = RestClient::Request.execute(method: :get, url: "#{proxy_list_page}")
-    JSON.parse(proxy_list)["curl"]
+    ip = Proxy.offset(rand(Proxy.count)).first.ip
+    port = Proxy.offset(rand(Proxy.count)).first.port
+    proxy = ip.to_s+":"+port.to_s
   end
 
   def search(origin,destination,date)
@@ -24,6 +24,7 @@ class Suppliers::Alibaba
       search_url = search_flight_url+search_flight_params
       #first_response = RestClient.get("#{search_url}")
       first_response = RestClient::Request.execute(method: :get, url: "#{search_url}", post: new_proxy)
+      
     rescue 
       return false
     end

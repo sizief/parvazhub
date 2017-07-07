@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170620113258) do
+ActiveRecord::Schema.define(version: 20170707155752) do
 
   create_table "flight_details", force: :cascade do |t|
     t.integer  "route_id"
@@ -66,6 +66,13 @@ ActiveRecord::Schema.define(version: 20170620113258) do
     t.datetime "updated_at",        null: false
     t.boolean  "status"
     t.index ["route_id"], name: "index_notifications_on_route_id"
+  end
+
+  create_table "proxies", force: :cascade do |t|
+    t.string   "ip"
+    t.integer  "port"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "redirects", force: :cascade do |t|
