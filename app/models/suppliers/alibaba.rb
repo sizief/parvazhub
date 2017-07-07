@@ -4,7 +4,7 @@ class Suppliers::Alibaba
   def new_proxy
     ip = Proxy.offset(rand(Proxy.count)).first.ip
     port = Proxy.offset(rand(Proxy.count)).first.port
-    proxy = "http://"+ip.to_s+":"+port.to_s
+    proxy = "https://"+ip.to_s+":"+port.to_s
   end
 
   def search(origin,destination,date)
