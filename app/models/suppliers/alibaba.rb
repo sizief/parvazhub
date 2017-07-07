@@ -1,6 +1,12 @@
 class Suppliers::Alibaba
   require "open-uri"
 
+  def new_proxy
+    proxy_list_page = "https://gimmeproxy.com/api/getProxy?port=3128&post=true"
+    proxy_list = RestClient::Request.execute(method: :get, url: "#{proxy_list_page}")
+    JSON.parse(proxy_list)["curl"]
+  end
+
   def search(origin,destination,date)
     #RestClient.proxy = 'http://125.162.26.193:53281'
     #proxy = '125.162.26.193:53281'
@@ -17,7 +23,7 @@ class Suppliers::Alibaba
       search_flight_params = "ffrom=#{origin.upcase}&fto=#{destination.upcase}&datefrom=#{shamsi_date}&adult=1&child=0&infant=0"
       search_url = search_flight_url+search_flight_params
       #first_response = RestClient.get("#{search_url}")
-      first_response = RestClient::Request.execute(method: :get, url: "#{search_url}")
+      first_response = RestClient::Request.execute(method: :get, url: "#{search_url}", post: new_proxy)
     rescue 
       return false
     end
@@ -26,7 +32,7 @@ class Suppliers::Alibaba
     get_flight_params = "id=#{request_id}&last=0&ffrom=#{origin}&fto=#{destination}&datefrom=#{shamsi_date}&count=1&interval=1&isReturn=false&isNew=true"
     flight_url = get_flight_url+get_flight_params
     #second_response = RestClient.get("#{flight_url}")
-    second_response = RestClient::Request.execute(method: :get, url: "#{flight_url}")
+    second_response = RestClient::Request.execute(method: :get, url: "#{flight_url}", post: new_proxy)
     return {response: second_response}
   end
 
