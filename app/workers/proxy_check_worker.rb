@@ -1,11 +1,11 @@
 require 'sidekiq-scheduler'
 
-class ProxyUpdateWorker
+class ProxyCheckWorker
   include Sidekiq::Worker
   sidekiq_options :retry => true, :backtrace => true
  
   def perform
      worker = Proxy.new
-     worker.update_proxy
+     worker.clean_up
   end
 end

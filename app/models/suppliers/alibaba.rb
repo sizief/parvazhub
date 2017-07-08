@@ -1,10 +1,7 @@
 class Suppliers::Alibaba
   require "open-uri"
 
-  def new_proxy
-    random_proxy = Proxy.offset(rand(Proxy.count)).first
-    proxy_url = "http://"+random_proxy.ip.to_s+":"+random_proxy.port.to_s
-  end
+
 
   def search(origin,destination,date)
     #RestClient.proxy = 'http://125.162.26.193:53281'
@@ -22,7 +19,7 @@ class Suppliers::Alibaba
       search_flight_params = "ffrom=#{origin.upcase}&fto=#{destination.upcase}&datefrom=#{shamsi_date}&adult=1&child=0&infant=0"
       search_url = search_flight_url+search_flight_params
       #first_response = RestClient.get("#{search_url}")
-      first_response = RestClient::Request.execute(method: :get, url: "#{search_url}", proxy: new_proxy)
+      first_response = RestClient::Request.execute(method: :get, url: "#{search_url}", proxy: Proxy.new_proxy)
       
     rescue 
       return false
@@ -32,7 +29,7 @@ class Suppliers::Alibaba
     get_flight_params = "id=#{request_id}&last=0&ffrom=#{origin}&fto=#{destination}&datefrom=#{shamsi_date}&count=1&interval=1&isReturn=false&isNew=true"
     flight_url = get_flight_url+get_flight_params
     #second_response = RestClient.get("#{flight_url}")
-    second_response = RestClient::Request.execute(method: :get, url: "#{flight_url}", proxy: new_proxy)
+    second_response = RestClient::Request.execute(method: :get, url: "#{flight_url}", proxy: Proxy.new_proxy)
     return {response: second_response}
   end
 
