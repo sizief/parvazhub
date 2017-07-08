@@ -56,5 +56,5 @@
 
 #proxy
   proxy_update:
-    cron: '0 35 * * * *'
+    cron: '* /120 * * * *'
     class: ProxyUpdateWorker

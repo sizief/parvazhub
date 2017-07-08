@@ -2,9 +2,8 @@ class Suppliers::Alibaba
   require "open-uri"
 
   def new_proxy
-    ip = Proxy.offset(rand(Proxy.count)).first.ip
-    port = Proxy.offset(rand(Proxy.count)).first.port
-    proxy = "https://"+ip.to_s+":"+port.to_s
+    random_proxy = Proxy.offset(rand(Proxy.count)).first
+    proxy_url = "http://"+random_proxy.ip.to_s+":"+random_proxy.port.to_s
   end
 
   def search(origin,destination,date)
