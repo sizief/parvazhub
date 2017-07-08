@@ -5,6 +5,7 @@ class ProxyUpdateWorker
   sidekiq_options :retry => true, :backtrace => true
  
   def perform
-     Proxy.import_list
+     worker = Proxy.new
+     worker.import_list
   end
 end

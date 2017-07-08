@@ -1,6 +1,6 @@
 class Proxy < ApplicationRecord
     
-    def self.import_list
+    def import_list
       proxy_list_page = "https://www.proxynova.com/proxy-server-list/"
       response = RestClient.get("#{URI.parse(proxy_list_page)}")
       html_page = Nokogiri::HTML(response)
@@ -22,13 +22,26 @@ class Proxy < ApplicationRecord
             else
                 port = row.css("td[2] a").text
             end
-            
-            new_proxy = Proxy.new
-            new_proxy.ip = ip
-            new_proxy.port = port
-            new_proxy.save
+
+            if check_validity(ip,port)
+                new_proxy = Proxy.new
+                new_proxy.ip = ip
+                new_proxy.port = port
+                new_proxy.save
+            end
         end
       end
+    end
+
+    def check_validity(ip,port)
+      proxy = "http://"+ip+":"+port
+      begin
+        RestClient::Request.execute(method: :get, url: 'http://api.ipify.org?format=json',
+                            timeout: 4, proxy: proxy)
+      rescue
+          return false
+      end
+      return true
     end
 
 end
