@@ -18,19 +18,24 @@ class Suppliers::Alibaba
     begin
       search_flight_params = "ffrom=#{origin.upcase}&fto=#{destination.upcase}&datefrom=#{shamsi_date}&adult=1&child=0&infant=0"
       search_url = search_flight_url+search_flight_params
-      #first_response = RestClient.get("#{search_url}")
-      first_response = RestClient::Request.execute(method: :get, url: "#{search_url}", proxy: Proxy.new_proxy)
-      
-    rescue 
-      return false
+      proxy_url = Proxy.new_proxy
+      first_response = RestClient::Request.execute(method: :get, url: "#{search_url}", proxy: proxy_url, timeout:  ENV["SUPPLIER_TIMEOUT"].to_f)
+    rescue => e
+      Proxy.set_status(proxy_url,"deactive")
+      return {status:false,response:"first request: #{e.message}. using proxy: #{proxy_url}"}
     end
 
-    request_id = JSON.parse(first_response)["RequestId"]
-    get_flight_params = "id=#{request_id}&last=0&ffrom=#{origin}&fto=#{destination}&datefrom=#{shamsi_date}&count=1&interval=1&isReturn=false&isNew=true"
-    flight_url = get_flight_url+get_flight_params
-    #second_response = RestClient.get("#{flight_url}")
-    second_response = RestClient::Request.execute(method: :get, url: "#{flight_url}", proxy: Proxy.new_proxy)
-    return {response: second_response}
+    begin
+      request_id = JSON.parse(first_response)["RequestId"]
+      get_flight_params = "id=#{request_id}&last=0&ffrom=#{origin}&fto=#{destination}&datefrom=#{shamsi_date}&count=1&interval=1&isReturn=false&isNew=true"
+      flight_url = get_flight_url+get_flight_params
+      proxy_url = Proxy.new_proxy
+      second_response = RestClient::Request.execute(method: :get, url: "#{flight_url}", proxy: proxy_url, timeout:  ENV["SUPPLIER_TIMEOUT"].to_f)
+      return {status:true,response: second_response}
+    rescue => e
+      Proxy.set_status(proxy_url,"deactive")
+      return {status:false,response:"second request: #{e.message}. using proxy: #{proxy_url}"}
+    end
   end
 
   def import_domestic_flights(response,route_id,origin,destination,date)

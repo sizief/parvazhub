@@ -3,7 +3,6 @@
 <table class="ui celled striped table ">
 	<thead>
 		<tr class="center aligned">
-  			<th><h4>id</h4></th>
   			<th><h4>route</h4></th>
   			<th><h4>Departure Time</h4></th>
   			<th><h4>status</h4></th>
@@ -14,12 +13,10 @@
 	<tbody>
 		<% @sh.each do |item|  %>
 		<tr class="center aligned">
-			<td><%= item.id %></td>
 			<td><%= item.route.origin + " - " + item.route.destination %></td>
 			<td><%= item.departure_time %></td>
-			<% if item.status == 'true' %><td><span class="ui teal label"><%= item.status %></span></td><% end %>
-			<% if item.status == 'false' %><td><span class="ui orange label"><%= item.status %></span></td><% end %>
-			<% if item.status.nil? %><td><span class="ui orange label">waiting</span></td><% end %>
+			<% if item.status == 'true' %><td><span class="ui teal label"><%= item.status %></span></td>
+			<% else %><td><span class="ui orange label"><%= item.status %></span></td><% end %>
 			<td><%= item.supplier_name %></td>
 			<td><%= time_ago_in_words(item.created_at) %></td>
 		</tr>

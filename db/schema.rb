@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170707155752) do
+ActiveRecord::Schema.define(version: 20170710064409) do
 
   create_table "flight_details", force: :cascade do |t|
     t.integer  "route_id"
@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(version: 20170707155752) do
     t.integer  "port"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "status"
   end
 
   create_table "redirects", force: :cascade do |t|

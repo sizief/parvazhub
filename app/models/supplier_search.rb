@@ -39,11 +39,10 @@ class SupplierSearch
 
   	def search_supplier(supplier_name,supplier_class,origin,destination,route_id,date)
       flight_list = supplier_class.constantize.new()
-      search_history = SearchHistory.create(supplier_name:"#{supplier_name}",route_id:route_id,departure_time: date)
+      search_history = SearchHistory.create(supplier_name:"#{supplier_name}",route_id:route_id,departure_time: date,status:"waiting")
       response = flight_list.search(origin,destination,date)
-    
-      if response == false
-        search_history.update(status: "false")
+      if response[:status] == false
+        search_history.update(status: response[:response])
       else
         log(response[:response]) if Rails.env.development?  
         flight_list.import_domestic_flights(response,route_id,origin,destination,date)
