@@ -13,6 +13,15 @@
 					</td>
 				</tr>
 			<% end %>
+			<% if @flight_prices.empty?  %>
+				<tr class="center aligned very basic">
+					<td>
+						<p>پروازی که انتخاب کرده‌اید پر شده است. 
+						<a href="#" onclick="javascript:window.location.reload(true); ">نمایش لیست به روز شده </a>
+						</p>
+					</td>
+				</tr>
+			<% end %>
 		</tbody>		
 	</table>
 	<div class="ui cancel button web-font">بازگشت به لیست پروازها</div>

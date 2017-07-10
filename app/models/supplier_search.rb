@@ -52,7 +52,7 @@ class SupplierSearch
   	end
 
   	def update_flight_best_price(origin,destination,date) 
-	  Flight.update_best_price(origin,destination,date) 
+	    Flight.update_best_price(origin,destination,date) 
     end
 
 	def log(response)

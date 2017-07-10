@@ -88,5 +88,17 @@
   		</div>
   	</div>
 
+	<div class="ui divider"></div>
+
+  	<div class="row" style="padding: 1em">
+  		<div class="ui label">
+  			Proxy all: <%= Proxy.count %>
+		</div>
+
+		<div class="ui label">
+  			Proxy active: <%= Proxy.where(status:"active").count %>
+		</div>
+	</div>
+
 
 </div>
