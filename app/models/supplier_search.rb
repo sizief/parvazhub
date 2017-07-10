@@ -2,7 +2,7 @@ class SupplierSearch
 
 	def search(origin,destination,date)
 	  route = Route.find_by(origin:"#{origin}", destination:"#{destination}")
-    search_suppliers(15,origin,destination,route.id,date) 
+    search_suppliers(20,origin,destination,route.id,date) 
     #update_flight_best_price(origin,destination,date) 
 	end
 
