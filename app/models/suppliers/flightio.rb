@@ -14,8 +14,8 @@ class Suppliers::Flightio
 
     begin
       params = {'DOM_TripMode' => '1', 'DOM_SourceCityCode' => "#{origin.upcase}", 'DOM_SourceCityName' => '', 'DOM_DestinationCityCode'=>"#{destination.upcase}", 'DOM_DestinationCityName'=>'','DOM_DepartDate_Str' => "#{shamsi_date}", 'DOM_ReturnDate_Str' => '', 'DOM_AdultCount' => '1', 'DOM_ChildCount' => '0', 'DOM_InfantCount' => '0'}  
-      RestClient.post("#{URI.parse(get_flight_url)}", params)
-      #RestClient::Request.execute(method: :post, url: "#{URI.parse(get_flight_url)}",headers: {params: params}, timeout:  ENV["SUPPLIER_TIMEOUT"].to_f)
+      #RestClient.post("#{URI.parse(get_flight_url)}", params)
+      RestClient::Request.execute(method: :post, url: "#{URI.parse(get_flight_url)}",headers: {params: params}, timeout:  ENV["SUPPLIER_TIMEOUT"].to_f, proxy: nil)
     rescue RestClient::Exception => ex
       response  = ex.response.headers[:location] #the url redirected to another one
     rescue => e #this is for get socket error, DNS error
@@ -26,8 +26,8 @@ class Suppliers::Flightio
       request_id = response[29..-1]
       search_flight_url = "http://flightio.com/fa/FlightResult/ListTable?FSL_Id="+ request_id
       deep_link = "http://flightio.com/fa/FlightPreview/Detail?FSL_Id=" + request_id + "&CombinationID="
-      second_response = RestClient.get("#{URI.parse(search_flight_url)}")
-      #second_response = RestClient::Request.execute(method: :get, url: "#{URI.parse(search_flight_url)}", timeout:  ENV["SUPPLIER_TIMEOUT"].to_f)
+      #second_response = RestClient.get("#{URI.parse(search_flight_url)}")
+      second_response = RestClient::Request.execute(method: :get, url: "#{URI.parse(search_flight_url)}", timeout:  ENV["SUPPLIER_TIMEOUT"].to_f, proxy: nil)
     rescue
       return {status:false,response:"second request: #{e.message}. using proxy: no"}
     end

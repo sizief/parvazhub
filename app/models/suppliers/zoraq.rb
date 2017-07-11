@@ -11,8 +11,8 @@ class Suppliers::Zoraq
       begin
         url = "http://zoraq.com/Flight/DeepLinkSearch"
   	    params = {'OrginLocationIata' => "#{origin.upcase}", 'DestLocationIata' => "#{destination.upcase}", 'DepartureGo' => "#{date}", 'Passengers[0].Type' =>'ADT', 'Passengers[0].Quantity'=>'1'}
-        response = RestClient.post("#{URI.parse(url)}", params)
-        #response = RestClient::Request.execute(method: :post, url: "#{URI.parse(url)}",headers: {params: params}, timeout:  ((ENV["SUPPLIER_TIMEOUT"].to_f)*2))
+        #response = RestClient.post("#{URI.parse(url)}", params)
+        response = RestClient::Request.execute(method: :post, url: "#{URI.parse(url)}",headers: {params: params}, timeout:  ((ENV["SUPPLIER_TIMEOUT"].to_f)*2), proxy: nil)
       rescue => e
         return {status:false,response:"only request: #{e.message}. using proxy: no"}
       end
