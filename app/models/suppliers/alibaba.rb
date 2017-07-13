@@ -3,9 +3,7 @@ class Suppliers::Alibaba
 
 
 
-  def search(origin,destination,date)
-    #RestClient.proxy = 'http://125.162.26.193:53281'
-    #proxy = '125.162.26.193:53281'
+  def search(origin,destination,date,search_history_id)
     if Rails.env.test?
         response = File.read("test/fixtures/files/domestic-alibaba.log") 
         return {response: response}
@@ -19,10 +17,12 @@ class Suppliers::Alibaba
       search_flight_params = "ffrom=#{origin.upcase}&fto=#{destination.upcase}&datefrom=#{shamsi_date}&adult=1&child=0&infant=0"
       search_url = search_flight_url+search_flight_params
       proxy_url = Proxy.new_proxy
-      first_response = RestClient::Request.execute(method: :get, url: "#{search_url}", proxy: proxy_url, timeout:  ENV["SUPPLIER_TIMEOUT"].to_f)
+      SearchHistory.append_status(search_history_id,"R1(#{Time.now.strftime('%M:%S')})")
+      first_response = RestClient::Request.execute(method: :get, url: "#{search_url}", proxy: proxy_url)
     rescue => e
       Proxy.set_status(proxy_url,"deactive")
-      return {status:false,response:"first request: #{e.message}. using proxy: #{proxy_url}"}
+      SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}"+" Proxy: #{proxy_url}")
+      return {status:false}
     end
 
     begin
@@ -30,17 +30,20 @@ class Suppliers::Alibaba
       get_flight_params = "id=#{request_id}&last=0&ffrom=#{origin}&fto=#{destination}&datefrom=#{shamsi_date}&count=1&interval=1&isReturn=false&isNew=true"
       flight_url = get_flight_url+get_flight_params
       proxy_url = Proxy.new_proxy
-      second_response = RestClient::Request.execute(method: :get, url: "#{flight_url}", proxy: proxy_url, timeout:  ENV["SUPPLIER_TIMEOUT"].to_f)
+      SearchHistory.append_status(search_history_id,"R2(#{Time.now.strftime('%M:%S')})")
+      second_response = RestClient::Request.execute(method: :get, url: "#{flight_url}", proxy: proxy_url)
       return {status:true,response: second_response}
     rescue => e
       Proxy.set_status(proxy_url,"deactive")
-      return {status:false,response:"second request: #{e.message}. using proxy: #{proxy_url}"}
+      SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}"+" Proxy: #{proxy_url}")
+      return {status:false}
     end
   end
 
-  def import_domestic_flights(response,route_id,origin,destination,date)
+  def import_domestic_flights(response,route_id,origin,destination,date,search_history_id)
       flight_prices = Array.new()
       json_response = JSON.parse(response[:response])
+      SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
       json_response["AvailableFlights"].each do |flight|
         next if flight["ClassCount"] == 0 #Alibaba send a soldout seats too. 
         flight_number = airline_code = airplane_type = departure_date_time  = nil
@@ -82,11 +85,13 @@ class Suppliers::Alibaba
         end
       end #end of each loop
       
+      SearchHistory.append_status(search_history_id,"Saving(#{Time.now.strftime('%M:%S')})")
       # first we should remove the old flight price archive 
       FlightPrice.delete_old_flight_prices("alibaba",route_id,date) unless flight_prices.empty?
       # then bulk import enabled by a bulk import gem
       FlightPrice.import flight_prices
       FlightPriceArchive.import flight_prices
+      SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
   end
 
   def airline_code_correction(alibaba_airline_code)

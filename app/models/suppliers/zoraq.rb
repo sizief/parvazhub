@@ -2,7 +2,7 @@ class Suppliers::Zoraq
     require "uri"
     require "rest-client"
     
-    def search(origin,destination,date)
+    def search(origin,destination,date,search_history_id)
       if Rails.env.test?
         response = File.read("test/fixtures/files/domestic-zoraq.log") 
         return {response: response}
@@ -11,17 +11,20 @@ class Suppliers::Zoraq
       begin
         url = "http://zoraq.com/Flight/DeepLinkSearch"
   	    params = {'OrginLocationIata' => "#{origin.upcase}", 'DestLocationIata' => "#{destination.upcase}", 'DepartureGo' => "#{date}", 'Passengers[0].Type' =>'ADT', 'Passengers[0].Quantity'=>'1'}
-        response = RestClient.post("#{URI.parse(url)}", params)
-        #response = RestClient::Request.execute(method: :post, url: "#{URI.parse(url)}",headers: {params: params}, timeout:  ((ENV["SUPPLIER_TIMEOUT"].to_f)*2), proxy: nil)
+        SearchHistory.append_status(search_history_id,"R1(#{Time.now.strftime('%M:%S')})")
+        #response = RestClient.post("#{URI.parse(url)}", params)
+        response = RestClient::Request.execute(method: :post, url: "#{URI.parse(url)}",headers: {params: params}, proxy: nil)
       rescue => e
-        return {status:false,response:"only request: #{e.message}. using proxy: no"}
+        SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
+        return {status:false}
       end
-      return {response: response.body}
+      return {status:true,response: response.body}
     end
 
-    def import_domestic_flights(response,route_id,origin,destination,date)
+    def import_domestic_flights(response,route_id,origin,destination,date,search_history_id)
       flight_prices = Array.new()
       json_response = JSON.parse(response[:response])
+      SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
       json_response["PricedItineraries"].each do |flight|
         flight_number = airline_code = airplane_type = departure_date_time  = nil
         flight_legs = flight["OriginDestinationOptions"][0]["FlightSegments"]
@@ -70,12 +73,14 @@ class Suppliers::Zoraq
         flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"zoraq", flight_date:"#{departure_date}", deep_link:"#{deeplink_url}" )
 
       end #end of each loop
-
+      
+      SearchHistory.append_status(search_history_id,"Saving(#{Time.now.strftime('%M:%S')})")
       # first we should remove the old flight price archive 
       FlightPrice.delete_old_flight_prices("zoraq",route_id,date) unless flight_prices.empty?
       # then bulk import enabled by a bulk import gem
       FlightPrice.import flight_prices 
       FlightPriceArchive.import flight_prices
+      SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
 
   end
 

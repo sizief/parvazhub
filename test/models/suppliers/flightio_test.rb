@@ -7,6 +7,7 @@ class SuppliersFlightioTest < ActiveSupport::TestCase
     @origin = "thr"
     @destination = "mhd"
     @date = "2017-06-20"
+    @search_history_id = 1
 
     Flight.create(route_id: "1", flight_number:"123", departure_time:"#{@date} 05:00:00", airline_code:"W5", airplane_type: "airbus")
     Flight.create(route_id: "1", flight_number:"123", departure_time:"#{@date} 13:00:00", airline_code:"W5", airplane_type: "airbus")
@@ -17,17 +18,16 @@ class SuppliersFlightioTest < ActiveSupport::TestCase
 
     
   test "Flightio search should answered with hash response" do
-    response = @flightio_search.search(@origin,@destination,@date)
+    response = @flightio_search.search(@origin,@destination,@date,@search_history_id)
     assert response.is_a? Hash
     assert_not response[:response].empty?
   end
 
   test "flight prices from Flightio should saved" do
-    
-    response = @flightio_search.search(@origin,@destination,@date)
+    response = @flightio_search.search(@origin,@destination,@date,@search_history_id)
     route = Route.find_by(origin:@origin,destination:@destination)
     assert_difference 'FlightPrice.count', 3 do
-      @flightio_search.import_domestic_flights(response,route.id,@origin,@destination,@date)
+      @flightio_search.import_domestic_flights(response,route.id,@origin,@destination,@date,@search_history_id)
     end
   end
 

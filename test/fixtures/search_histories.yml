@@ -1,9 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  id: 1
   supplier_name: MyString
   route: one
+  status: "-"
 
 two:
+  id: 2
   supplier_name: MyString
   route: two
+  status: "-"
