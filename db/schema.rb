@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170715075930) do
+ActiveRecord::Schema.define(version: 20170715154137) do
 
   create_table "flight_details", force: :cascade do |t|
     t.integer  "route_id"
@@ -78,10 +78,10 @@ ActiveRecord::Schema.define(version: 20170715075930) do
   end
 
   create_table "redirects", force: :cascade do |t|
-    t.integer  "flight_price_id"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-    t.index ["flight_price_id"], name: "index_redirects_on_flight_price_id"
+    t.integer  "flight_price_archive_id"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.index ["flight_price_archive_id"], name: "index_redirects_on_flight_price_archive_id"
   end
 
   create_table "routes", force: :cascade do |t|
