@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170710064409) do
+ActiveRecord::Schema.define(version: 20170715075930) do
 
   create_table "flight_details", force: :cascade do |t|
     t.integer  "route_id"
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 20170710064409) do
     t.datetime "updated_at",  null: false
     t.date     "flight_date"
     t.string   "deep_link"
+    t.index ["flight_id", "flight_date"], name: "index_flight_prices_on_flight_id_and_flight_date"
   end
 
   create_table "flights", force: :cascade do |t|
