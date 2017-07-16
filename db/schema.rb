@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 20170715154137) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "flight_details", force: :cascade do |t|
     t.integer  "route_id"
     t.string   "call_sign"
@@ -42,7 +45,7 @@ ActiveRecord::Schema.define(version: 20170715154137) do
     t.datetime "updated_at",  null: false
     t.date     "flight_date"
     t.string   "deep_link"
-    t.index ["flight_id", "flight_date"], name: "index_flight_prices_on_flight_id_and_flight_date"
+    t.index ["flight_id", "flight_date"], name: "index_flight_prices_on_flight_id_and_flight_date", using: :btree
   end
 
   create_table "flights", force: :cascade do |t|
@@ -55,7 +58,7 @@ ActiveRecord::Schema.define(version: 20170715154137) do
     t.string   "airplane_type"
     t.integer  "best_price"
     t.string   "price_by"
-    t.index ["route_id", "flight_number", "departure_time"], name: "index_flights_on_route_id_and_flight_number_and_departure_time", unique: true
+    t.index ["route_id", "flight_number", "departure_time"], name: "index_flights_on_route_id_and_flight_number_and_departure_time", unique: true, using: :btree
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -66,7 +69,7 @@ ActiveRecord::Schema.define(version: 20170715154137) do
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
     t.boolean  "status"
-    t.index ["route_id"], name: "index_notifications_on_route_id"
+    t.index ["route_id"], name: "index_notifications_on_route_id", using: :btree
   end
 
   create_table "proxies", force: :cascade do |t|
@@ -81,7 +84,7 @@ ActiveRecord::Schema.define(version: 20170715154137) do
     t.integer  "flight_price_archive_id"
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
-    t.index ["flight_price_archive_id"], name: "index_redirects_on_flight_price_archive_id"
+    t.index ["flight_price_archive_id"], name: "index_redirects_on_flight_price_archive_id", using: :btree
   end
 
   create_table "routes", force: :cascade do |t|
@@ -98,7 +101,7 @@ ActiveRecord::Schema.define(version: 20170715154137) do
     t.datetime "updated_at",     null: false
     t.string   "departure_time"
     t.string   "status"
-    t.index ["route_id"], name: "index_search_histories_on_route_id"
+    t.index ["route_id"], name: "index_search_histories_on_route_id", using: :btree
   end
 
   create_table "suppliers", force: :cascade do |t|
@@ -125,12 +128,15 @@ ActiveRecord::Schema.define(version: 20170715154137) do
     t.integer  "sign_in_count",          default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
+    t.inet     "current_sign_in_ip"
+    t.inet     "last_sign_in_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
-    t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
+  add_foreign_key "notifications", "routes"
+  add_foreign_key "redirects", "flight_price_archives"
+  add_foreign_key "search_histories", "routes"
 end

@@ -16,7 +16,8 @@ class BackgroundSearchWorker
     {origin:"tbz",destination:"thr"}
   ]
 
-  def perform(date)
+  def perform(date_offset)
+    date = (Date.today+date_offset.to_f).to_s
   	@@origin_destination.each do |x|
       background_search = SupplierSearch.new()
       background_search.background_search(x[:origin],x[:destination],date)

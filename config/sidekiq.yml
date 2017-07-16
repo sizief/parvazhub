@@ -11,42 +11,42 @@
 :schedule:
   today_route_1:
     cron: '0 0,30 * * * *'
-    args: [<%= Date.today.to_s %>]
+    args: [0]
     class: BackgroundSearchWorker
 
   tomorrow_route_1:
     cron: '0 10 * * * *'
-    args: [<%= (Date.today+1).to_s %>]
+    args: [1]
     class: BackgroundSearchWorker
 
   dayafter_route_1:
     cron: '0 50 0,2,4,6,8,10,12,14,16,18,20,22 * * *'
-    args: [<%= (Date.today+2).to_s %>]
+    args: [2]
     class: BackgroundSearchWorker
 
   restofweek_1_route_1:
     cron: '0 50 1,7,13,19 * * *'
-    args: [<%= (Date.today+3).to_s %>]
+    args: [3]
     class: BackgroundSearchWorker
 
   restofweek_2_route_1:
     cron: '0 50 3,9,15,21 * * *'
-    args: [<%= (Date.today+4).to_s %>]
+    args: [4]
     class: BackgroundSearchWorker
 
   restofweek_3_route_1:
     cron: '0 50 5,11,17,23 * * *'
-    args: [<%= (Date.today+5).to_s %>]
+    args: [5]
     class: BackgroundSearchWorker
 
   restofweek_4_route_1:
     cron: '0 20 1,7,13,19 * * *'
-    args: [<%= (Date.today+6).to_s %>]
+    args: [6]
     class: BackgroundSearchWorker
 
   restofweek_5_route_1:
     cron: '0 20 3,9,15,21 * * *'
-    args: [<%= (Date.today+7).to_s %>]
+    args: [7]
     class: BackgroundSearchWorker
 
 #airport search worker
