@@ -57,7 +57,7 @@ class Suppliers::Zoraq
 
         departure_date = departure_time.strftime("%F")
         price = flight["AirItineraryPricingInfo"]["PTC_FareBreakdowns"][0]["PassengerFare"]["TotalFare"]["Amount"]
-        deeplink_url = "http://zoraq.com"+flight["AirItineraryPricingInfo"]["FareSourceCode"]
+        deeplink_url = get_zoraq_deeplink(origin, destination,date,flight["AirItineraryPricingInfo"]["FareSourceCode"])
         
         #to prevent duplicate flight prices we compare flight prices before insert into database
         flight_price_so_far = flight_prices.select {|flight_price| flight_price.flight_id == flight_id}
@@ -74,13 +74,13 @@ class Suppliers::Zoraq
 
       end #end of each loop
       
-      SearchHistory.append_status(search_history_id,"Deleting(#{Time.now.strftime('%M:%S')})")
+      #SearchHistory.append_status(search_history_id,"Deleting(#{Time.now.strftime('%M:%S')})")
       # first we should remove the old flight price archive 
       FlightPrice.delete_old_flight_prices("zoraq",route_id,date) unless flight_prices.empty?
-      SearchHistory.append_status(search_history_id,"Importing(#{Time.now.strftime('%M:%S')})")
+      #SearchHistory.append_status(search_history_id,"Importing(#{Time.now.strftime('%M:%S')})")
       # then bulk import enabled by a bulk import gem
       FlightPrice.import flight_prices
-      SearchHistory.append_status(search_history_id,"Archive(#{Time.now.strftime('%M:%S')})") 
+      #SearchHistory.append_status(search_history_id,"Archive(#{Time.now.strftime('%M:%S')})") 
       FlightPriceArchive.import flight_prices
       SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
 
@@ -112,5 +112,21 @@ class Suppliers::Zoraq
     end
   end
 
+  def get_zoraq_deeplink(origin,destination,date,fare_source_code)
+    if date == Date.today.to_s
+      deeplink = "http://zoraq.com"+fare_source_code.to_s
+    else
+      country_name = "Iran"
+      destination_city_english = City.list[destination.to_sym][:en].capitalize
+      destination_city_farsi = City.list[destination.to_sym][:fa].capitalize
+      origin_city_farsi = City.list[origin.to_sym][:fa].capitalize
+
+      depart_date = date.tr("-","")[2..-1]
+      return_date = ((date.to_date+1).to_s).tr("-","")[2..-1]
+
+      deep_link = "http://zoraq.com/#{country_name}/#{destination_city_english}/Flights/?Origin=#{origin}%23&Destination=#{destination}%23&DepartDate=#{depart_date}&ReturnDate=#{return_date}&DestinationCity=#{destination_city_farsi}&OriginCity=#{origin_city_farsi}&Adult=1&Child=0&Infant=0&IsDirect=False&IteneryType=Dritect&CabinClass=Y&SearchType=DomesticFlights&UserSubmittedForm=True"
+      #deep_link = "http://zoraq.com/Iran/Mashhad/Flights/?Origin=THR%23&Destination=MHD%23&DepartDate=170717&ReturnDate=170718&DestinationCity=علی&OriginCity=%D8%AA%D9%87%D8%B1%D8%A7%D9%86&Adult=1&Child=0&Infant=0&IsDirect=False&IteneryType=Dritect&CabinClass=Y&SearchType=DomesticFlights&UserSubmittedForm=True"
+    end
+  end
 
 end
