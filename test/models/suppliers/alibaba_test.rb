@@ -19,7 +19,7 @@ class SuppliersAlibabaTest < ActiveSupport::TestCase
   test "flights from alibaba should saved to flights table" do
     response = @alibaba_search.search(@origin,@destination,@date,@search_history_id)
     route = Route.find_by(origin:@origin,destination:@destination)
-    assert_difference 'Flight.count', 17 do
+    assert_difference 'Flight.count', 11 do
       @alibaba_search.import_domestic_flights(response,route.id,@origin,@destination,@date,@search_history_id)
     end
   end
