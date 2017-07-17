@@ -35,7 +35,7 @@ class Airports::Mehrabad < Airports::DomesticAirport
       status = flight.css(".cell-status p").text
       terminal = flight.css(".terminal p").text
       airplane_type = flight.css(".cell-aircraft p").text
-      departure_time = (flight.css(".cell-time p").text+(":00")).to_time
+      departure_time = (flight.css(".cell-time p").text+(":00"))
       day = flight.css(".cell-day p").text
       departure_date_time = get_date_time(day,departure_time)
       #airline = flight.css(".cell-airline p").text

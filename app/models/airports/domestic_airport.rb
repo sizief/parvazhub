@@ -11,17 +11,38 @@ class Airports::DomesticAirport
     today_datetime = (Time.now.to_date).to_s + " #{time}"
     tomorrow_datetime = (Time.now.to_date+1).to_s + " #{time}"
 
-    yesterday_name = (Time.now.to_date-1).to_parsi.strftime '%A'
-    today_name = Time.now.to_date.to_parsi.strftime '%A'
-    tomorrow_name = (Time.now.to_date+1).to_parsi.strftime '%A'
+    yesterday_name = ((Time.now.to_date-1).strftime '%A').downcase
+    today_name = (Time.now.to_date.strftime '%A').downcase
+    tomorrow_name = ((Time.now.to_date+1).strftime '%A').downcase
 
-    if day == yesterday_name
+    if get_english_name(day) == yesterday_name
       return yesterday_datetime.to_datetime
-    elsif day == today_name
+    elsif get_english_name(day) == today_name
       return today_datetime.to_datetime
     else
       return tomorrow_datetime.to_datetime
     end
   end
+
+  def get_english_name day
+    case day
+	  when "شنبه"
+	  	en_day_name = "saturday"
+    when "یکشنبه", "یک شنبه", "یک‌شنبه"
+	  	en_day_name = "sunday"
+    when "دوشنبه", "دو شنبه"
+	  	en_day_name = "monday"
+    when  "سهشنبه", "سه شنبه", "سه‌شنبه"
+	  	en_day_name = "tuesday"
+    when "چهارشنبه", "چهار شنبه"
+	  	en_day_name = "wednesday"
+    when "پنجشنبه", "پنج شنبه", "پنج‌شنبه"
+	  	en_day_name = "thursday"
+    when "جمعه"
+	  	en_day_name = "friday"
+    end
+    return en_day_name
+  end
+  
 
 end

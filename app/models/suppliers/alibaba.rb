@@ -45,7 +45,7 @@ class Suppliers::Alibaba
       json_response = JSON.parse(response[:response])
       SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
       json_response["AvailableFlights"].each do |flight|
-        next if flight["ClassCount"] == 0 #Alibaba send a soldout seats too. 
+        next if flight["ClassCount"] == "0" #Alibaba send a soldout seats too. 
         flight_number = airline_code = airplane_type = departure_date_time  = nil
         corrected_airline_code = airline_code_correction(flight["AirLineEnglish"])
         #to add airline code to flight number for some corrupted flight numbers

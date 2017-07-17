@@ -16,4 +16,9 @@ class AirportsDomesticAirportTest < ActiveSupport::TestCase
     assert @airport.get_date_time("جمعه","05:00").is_a? DateTime
   end
 
+  test "get_english_name should return name day" do
+    day = @airport.get_english_name "یک شنبه"
+    assert day = "sunday"
+  end
+
 end

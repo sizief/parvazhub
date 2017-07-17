@@ -35,4 +35,10 @@ class FlightTest < ActiveSupport::TestCase
     assert flight_list.is_a? Array
   end
 
+  test "get_call_sign should return call sign" do
+    flight_number = "IR213"
+    airline_code = "IR"
+    call_sign = @new_flight.get_call_sign(flight_number,airline_code)
+    assert_equal call_sign,"IRA213"
+  end
 end

@@ -118,13 +118,29 @@ class Flight < ApplicationRecord
     flight_list = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s).where.not(best_price:0)
     flight_list.each do |flight|
        if flight.airplane_type.empty?
-         airline_code = flight.airline_code.upcase
-         call_sign = flight.flight_number.upcase.sub airline_code, airline_call_sign(airline_code)
-         airplane_type = FlightDetail.find_by(call_sign: call_sign)
-         flight.airplane_type = airplane_type.airplane_type unless airplane_type.nil?
+         call_sign = get_call_sign(flight.flight_number,flight.airline_code)
+         flight_detail = FlightDetail.find_by(call_sign: call_sign)
+         flight.airplane_type = flight_detail.airplane_type unless flight_detail.nil?
        end
      end
     flight_list = flight_list.sort_by(&:best_price)
+  end
+
+  def get_call_sign(flight_number,airline_code)
+    call_sign = flight_number.upcase.sub airline_code.upcase, airline_call_sign(airline_code)
+  end
+
+  def calculate_delay (flight_id,date)
+    delay = Array.new
+    flight = Flight.find(flight_id)
+    call_sign = get_call_sign(flight.flight_number,flight.airline_code)
+    flight_details = FlightDetail.where(call_sign: call_sign).where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s)
+    flight_details.each do |flight_detail|
+      unless flight_detail.actual_departure_time.nil?
+        delay << (flight_detail.departure_time - flight_detail.actual_departure_time)
+      end
+    end 
+    return delay
   end
 
 end
