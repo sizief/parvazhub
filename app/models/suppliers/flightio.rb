@@ -31,7 +31,7 @@ class Suppliers::Flightio
       SearchHistory.append_status(search_history_id,"R2(#{Time.now.strftime('%M:%S')})")
       #second_response = RestClient.get("#{URI.parse(search_flight_url)}")
       second_response = RestClient::Request.execute(method: :get, url: "#{URI.parse(search_flight_url)}", proxy: nil)
-    rescue
+    rescue => e
       SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
       return {status:false}
     end
