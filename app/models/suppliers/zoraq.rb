@@ -102,7 +102,7 @@ class Suppliers::Zoraq
       "JI":"@7", #Meraj
       "IV":"@8", #Caspian Airlines
       "NV":"@9", #Iranian Naft Airlines
-      "saha":"@A", #Saha
+      "SE":"@A", #Saha
       "ZV":"@B" #Zagros 
     }
     if airline_codes.key("#{zoraq_airline_code}").nil?

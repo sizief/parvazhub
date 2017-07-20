@@ -102,7 +102,7 @@ class Flight < ApplicationRecord
       "JI"=>"MRJ", 
       "IV"=>"CPN", 
       "NV"=>"IRG", 
-      "saha"=>"IRZ", 
+      "SE"=>"IRZ", 
       "ZV"=>"IZG",
       "HH"=>"TBN",
       "QB"=>"QSM" ,
