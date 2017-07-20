@@ -60,15 +60,19 @@ class Suppliers::Safarme
 
       end #end of each loop
       
-      SearchHistory.append_status(search_history_id,"Deleting(#{Time.now.strftime('%M:%S')})")
-      # first we should remove the old flight price archive 
-      FlightPrice.delete_old_flight_prices("safarme",route_id,date) unless flight_prices.empty?
-      SearchHistory.append_status(search_history_id,"Importing(#{Time.now.strftime('%M:%S')})")
-      # then bulk import enabled by a bulk import gem
-      FlightPrice.import flight_prices
-      SearchHistory.append_status(search_history_id,"Archive(#{Time.now.strftime('%M:%S')})") 
-      FlightPriceArchive.import flight_prices
-      SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
+      unless flight_prices.empty?
+        #SearchHistory.append_status(search_history_id,"Deleting(#{Time.now.strftime('%M:%S')})")
+        #first we should remove the old flight price archive 
+        FlightPrice.delete_old_flight_prices("safarme",route_id,date)
+        #SearchHistory.append_status(search_history_id,"Importing(#{Time.now.strftime('%M:%S')})")
+        #then bulk import enabled by a bulk import gem
+        FlightPrice.import flight_prices
+        #SearchHistory.append_status(search_history_id,"Archive(#{Time.now.strftime('%M:%S')})") 
+        FlightPriceArchive.import flight_prices
+        SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
+      else
+        SearchHistory.append_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
+      end
 
   end
 
