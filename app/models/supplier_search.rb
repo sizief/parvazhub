@@ -59,7 +59,7 @@ class SupplierSearch
     search_history = SearchHistory.create(supplier_name:"#{supplier_name}",route_id:route_id,departure_time: date,status:"#{who_started} Started(#{Time.now.strftime('%M:%S')})")
     response = flight_list.search(origin,destination,date,search_history.id)
     if response[:status] == true
-      log(response[:response]) if Rails.env.development?  
+      log(supplier_name,response[:response]) if Rails.env.development?  
       flight_list.import_domestic_flights(response,route_id,origin,destination,date,search_history.id)
       update_flight_best_price(origin,destination,date) 
     end
@@ -69,8 +69,8 @@ class SupplierSearch
     Flight.update_best_price(origin,destination,date) 
   end
 
-	def log(response)
-	  log_file_path_name = "log/supplier/"+Time.now.to_s+".log"
+	def log(supplier_name,response)
+	  log_file_path_name = "log/supplier/#{supplier_name}"+Time.now.to_s+".log"
 	  log_file = File.new("#{log_file_path_name}", "w")
 	  log_file.puts(response)
 	  log_file.close

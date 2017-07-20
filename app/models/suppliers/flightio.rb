@@ -8,7 +8,7 @@ class Suppliers::Flightio
         return {response: response, deeplink: "http://flightio.com/fa/"}
     end
 
-    get_flight_url = "http://flightio.com/fa/Home/DomesticSearch"
+    get_flight_url = "https://flightio.com/fa/Home/DomesticSearch"
     shamsi_date_object = date.to_date.to_parsi   
     shamsi_date = "#{shamsi_date_object}".tr("-","/") #convert it to 1396/02/26
 
@@ -26,8 +26,8 @@ class Suppliers::Flightio
     
     begin
       request_id = response[29..-1]
-      search_flight_url = "http://flightio.com/fa/FlightResult/ListTable?FSL_Id="+ request_id
-      deep_link = "http://flightio.com/fa/FlightPreview/Detail?FSL_Id=" + request_id + "&CombinationID="
+      search_flight_url = "https://flightio.com/fa/FlightResult/ListTable?FSL_Id="+ request_id
+      deep_link = "https://flightio.com/fa/FlightPreview/Detail?FSL_Id=" + request_id + "&CombinationID="
       SearchHistory.append_status(search_history_id,"R2(#{Time.now.strftime('%M:%S')})")
       #second_response = RestClient.get("#{URI.parse(search_flight_url)}")
       second_response = RestClient::Request.execute(method: :get, url: "#{URI.parse(search_flight_url)}", proxy: nil)
