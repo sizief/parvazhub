@@ -83,6 +83,7 @@
 	  <% end %>
 	</div>
 
+	<% unless @flights.empty? %>
 	<table class="ui teal table unstackable sortable rtl">
 	  	<thead>
 			<tr class="center aligned web-font">
@@ -118,7 +119,22 @@
 			<% end %>
 		</tbody>
 	</table>
+	<% end %>
 
+	<% if @flights.empty? %>
+	  <p style="background:white;padding:2em;margin:2em;direction:rtl">
+	    <i class="teal plane icon big"></i>	
+    	  برای تاریخ مورد نظر شما هیچ پروازی موجود نیست. می‌توانید روزهای قبل و بعد را از بالای صفحه انتخاب کنید.
+		<% unless which_city_page(@search_parameter[:origin],@search_parameter[:destination]).nil? %>	
+			یا از طریق
+			<a href="/city/<%= @cities[which_city_page(@search_parameter[:origin],@search_parameter[:destination]).to_sym][:en] %>">این صفحه</a>
+			حداقل قیمت پروازهای
+			<%= @cities[@search_parameter[:origin].to_sym][:fa] %> به <%= @cities[@search_parameter[:destination].to_sym][:fa] %>
+			را روی تقویم ببینید.
+		<% end %>
+	  </p>
+	<% end %>
+	
 	<% unless which_city_page(@search_parameter[:origin],@search_parameter[:destination]).nil? %>
 	<%= render partial: 'layouts/city_page',  locals: {city_code: which_city_page(@search_parameter[:origin],@search_parameter[:destination])} %>
 	<% end %>
