@@ -11,9 +11,12 @@
 <div class="ui container" id="search-results-container" style="padding-top: 1em">
 	
 	<div class="city-calendar" >
-		<h3><i class="teal plane icon"></i>هزینه پرواز تهران به <%=@city[:fa] %> برای یک نفر</h3>
+		<h3>
+			<i class=" plane icon"></i>
+			<b class="yellow-text">کمترین</b>
+			هزینه پرواز تهران به <%=@city[:fa] %> برای یک نفر</h3>
 		<table class="ui celled table stackable rtl">
-		  	<thead>
+		  	<thead class="not-mobile">
 				<tr class="center aligned web-font">
 		  			<th class="table-header">شنبه</th>
 		  			<th class="table-header">یکشنبه </th>
@@ -50,7 +53,9 @@
 	</div>
 
 	<div class="city-calendar" >
-		<h3><i class="teal plane icon"></i>هزینه پرواز <%=@city[:fa] %> به تهران برای یک نفر</h3>
+		<h3><i class=" plane icon"></i>
+		<b class="yellow-text">کمترین</b>
+		هزینه پرواز <%=@city[:fa] %> به تهران برای یک نفر</h3>
 		<table class="ui celled table stackable rtl">
 		  	<thead>
 				<tr class="center aligned web-font">

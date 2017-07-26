@@ -23,6 +23,9 @@
 .full-width{
   width:100% !important;
 }
+.yellow-text{
+  color:#FBBD08
+}
 
 /* general */
 .field_with_errors{
@@ -223,5 +226,8 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
 #flight-price-table {
      display:none;
+}
+.not-mobile{
+  display: none !important;
 }
 }

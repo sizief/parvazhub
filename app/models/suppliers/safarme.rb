@@ -42,7 +42,7 @@ class Suppliers::Safarme
         departure_time = date + " " + flight["startTime"]
         airplane_type = ""
         price = flight["price"]/10
-        deeplink_url = "http://safarme.com"
+        deeplink_url = get_deep_link(origin,destination,date)
         flight_id = Flight.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
 
         #to prevent duplicate flight prices we compare flight prices before insert into database
@@ -94,6 +94,25 @@ class Suppliers::Safarme
 			"661b0e4a-01c9-49dc-a6ef-532996665532"=>"SR"
 		}
 	airlines[safarme_internal_code].nil? ? safarme_internal_code : airlines[safarme_internal_code]
+  end
+
+  def get_deep_link(origin,destination,date)
+    origin_name = City.list[origin.to_sym][:en].upcase
+    origin_name = city_name_correction origin_name
+
+    destination_name = City.list[destination.to_sym][:en].upcase
+    destination_name = city_name_correction destination_name
+    shamsi_date = date.to_date.to_parsi  
+
+    deeplink= "http://safarme.com/flights/#{origin_name}-to-#{destination_name}/#{shamsi_date}"
+  end
+
+  def city_name_correction(city_name)
+    if city_name == "ISFAHAN"
+      return "Esfahan"
+    else
+      return city_name
+    end
   end
 
 end

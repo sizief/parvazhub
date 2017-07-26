@@ -14,7 +14,7 @@ class CityTest < ActiveSupport::TestCase
   end
 
   test "should return city code" do
-    wrong_persian_name = "اهواز "
+    wrong_persian_name = "بیرجند "
     correct_persian_name = "کیش "
 
     wrong_city_code = City.get_city_code_based_on_name wrong_persian_name

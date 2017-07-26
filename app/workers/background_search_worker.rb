@@ -9,11 +9,15 @@ class BackgroundSearchWorker
   	{origin:"thr",destination:"ifn"},
   	{origin:"thr",destination:"syz"},
     {origin:"thr",destination:"tbz"},
+    {origin:"thr",destination:"abd"},
+    {origin:"thr",destination:"awz"},
     {origin:"mhd",destination:"thr"},
   	{origin:"kih",destination:"thr"},
 	  {origin:"ifn",destination:"thr"},
   	{origin:"syz",destination:"thr"},
-    {origin:"tbz",destination:"thr"}
+    {origin:"tbz",destination:"thr"},
+    {origin:"abd",destination:"thr"},
+    {origin:"awz",destination:"thr"}
   ]
 
   def perform(date_offset)

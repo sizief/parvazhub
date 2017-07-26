@@ -9,7 +9,9 @@
 cities = City.list
 cities.each do |origin_key,origin_value|
 	cities.each do |destination_key,destination_value|
-		Route.create(origin: origin_key, destination: destination_key) unless destination_key == origin_key
+    unless Route.find_by(origin: origin_key, destination: destination_key)
+      Route.create(origin: origin_key, destination: destination_key) unless destination_key == origin_key
+    end
 	end
 end
 
@@ -19,6 +21,6 @@ supplier_list = [
         {class: "Suppliers::Alibaba",name: "alibaba"}
     ]
 
-supplier_list.each do |supplier|
-  Supplier.create(name: supplier[:name],class_name: supplier[:class],status: true)
-end
+#supplier_list.each do |supplier|
+#  Supplier.create(name: supplier[:name],class_name: supplier[:class],status: true)
+#end

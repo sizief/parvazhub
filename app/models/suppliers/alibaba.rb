@@ -69,7 +69,7 @@ class Suppliers::Alibaba
       
         flight_id = Flight.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
 
-        deeplink_url = "https://alibaba.ir/flights/#{origin}-#{destination}/#{date}/1-0-0" #create alibaba based on one search
+        deeplink_url = "https://alibaba.ir/flights/#{origin.upcase}-#{destination.upcase}/#{date}/1-0-0" #create alibaba based on one search
 
         unless price == 0 #Alibaba send a soldout seats. check here to avoid import sold out tickets
           flight_price_so_far = flight_prices.select {|flight_price| flight_price.flight_id == flight_id}

@@ -6,12 +6,14 @@ class City
 	  kih:{fa:"کیش",en:"kish"},
 	  syz:{fa:"شیراز",en:"shiraz"},
 	  ifn:{fa:"اصفهان",en:"isfahan"},
-    tbz:{fa:"تبریز",en:"tabriz"}
+    tbz:{fa:"تبریز",en:"tabriz"},
+    abd:{fa:"آبادان",en:"abadan"},
+    awz:{fa:"اهواز",en:"ahvaz"}
    }
   end
 
   def City.pages
-    city_pages=["kih","mhd","syz","ifn","tbz"]
+    city_pages=["kih","mhd","syz","ifn","tbz","abd","awz"]
   end
 
   def City.default_destination_city
