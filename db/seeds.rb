@@ -18,9 +18,11 @@ end
 supplier_list = [
         {class: "Suppliers::Flightio",name: "flightio"},
         {class: "Suppliers::Zoraq",name: "zoraq"},
-        {class: "Suppliers::Alibaba",name: "alibaba"}
+        {class: "Suppliers::Alibaba",name: "alibaba"},
+        {class: "Suppliers::Safarme",name: "safarme"}
+
     ]
 
-#supplier_list.each do |supplier|
-#  Supplier.create(name: supplier[:name],class_name: supplier[:class],status: true)
-#end
+supplier_list.each do |supplier|
+  Supplier.create(name: supplier[:name],class_name: supplier[:class],status: true)
+end

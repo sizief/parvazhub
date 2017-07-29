@@ -111,7 +111,7 @@
 						<td><%= hour_to_human flight.departure_time.to_datetime.strftime("%H:%M") %></td>
 						<td><%= flight.airplane_type.empty? ? "نامشخص" : airplane_name_for(flight.airplane_type) %></td>
 						<td>
-							<%= link_to number_with_delimiter(flight.best_price)+"   تومان   <i class='yellow arrow right icon'></i>خرید".html_safe, flight_prices_path(flight.id), class: "ui teal label large flight-price", remote: true %>
+							<%= link_to number_with_delimiter(flight.best_price)+"   تومان   <i class='yellow arrow right icon'></i>مشاهده فروشنده".html_safe, flight_prices_path(flight.id), class: "ui teal label large flight-price", remote: true %>
 							<%#= supplier_logo_for(flight.price_by) %>
 						</td>
 					</tr>

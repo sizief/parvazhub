@@ -8,7 +8,7 @@ class SupplierSearch
 
   def background_search(origin,destination,date)
     route = Route.find_by(origin:"#{origin}", destination:"#{destination}")
-    search_suppliers(45,origin,destination,route.id,date) 
+    search_suppliers(80,origin,destination,route.id,date) 
   end
 
   def search_supplier_in_threads(delay,origin,destination,route_id,date)
