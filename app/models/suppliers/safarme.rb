@@ -38,6 +38,7 @@ class Suppliers::Safarme
       
       response[:response].each do |flight|
         airline_code = get_airline_code(flight["AirLineID"])
+        next if airline_code.nil?
         flight_number = airline_code + (flight["TitleFlight"].delete("^0-9"))
         departure_time = date + " " + flight["startTime"]
         airplane_type = ""
@@ -83,7 +84,7 @@ class Suppliers::Safarme
 			"3d26ded2-ce83-4e90-b2a4-827f3c1b4c9e"=>"I3", 
 			"ff971cf7-dd37-49c5-87c9-71597d0fb297"=>"JI", 
 			"2a671594-be4b-4a6c-9ff0-fbca720d7de1"=>"IV", 
-			"ac5f813e-507c-4c75-998d-63fca4aa891d"=>"Nv", 
+			"ac5f813e-507c-4c75-998d-63fca4aa891d"=>"NV", 
 			"403babc0-cd2b-4c50-95bc-fab21a408e6f"=>"SE", 
 			"b76a53dd-661a-4329-adb5-15cd191e698a"=>"ZV",
 			"1784a7b0-d7da-4f57-a33f-69d64d778bcf"=>"HH",
@@ -93,7 +94,7 @@ class Suppliers::Safarme
 			"6ca2226d-6bab-4abb-8039-63155ff26464"=>"IR",
 			"661b0e4a-01c9-49dc-a6ef-532996665532"=>"SR"
 		}
-	airlines[safarme_internal_code].nil? ? safarme_internal_code : airlines[safarme_internal_code]
+	airlines[safarme_internal_code].nil? ? nil : airlines[safarme_internal_code]
   end
 
   def get_deep_link(origin,destination,date)

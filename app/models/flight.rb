@@ -12,7 +12,7 @@ class Flight < ApplicationRecord
         stored_flight = Flight.create(route_id: "#{route_id}", flight_number:"#{flight_number}", departure_time:"#{departure_time}", airline_code:"#{airline_code}", airplane_type: "#{airplane_type}")
         flight_id = stored_flight.id
       rescue
-        flight_id = is_flight_exist.id
+        flight_id = Flight.find_by(flight_number:flight_number,departure_time:departure_time).id
       end
     else
       flight_id = is_flight_exist.id
