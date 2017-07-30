@@ -1,0 +1,39 @@
+<div class="ui basic modal" style="left: initial;text-align: center;" id="contact_us_modal">
+    <div style="text-align: right" class="contact_us_modal_close" onclick="localStorage.setItem('contact_us_modal', 'close');"><i class="close big icon"></i></div>
+    <div style="background:white; padding:2em;line-height:2em;font-size: 1.2em;color: #2d3c3a;direction: rtl;text-align: right;"> 
+        سلام، 
+        <br>
+        ما در ابتدای راه هستیم و مشتاقیم هرچه بیشتر در مورد تجربه‌ی شما از کار با پروازهاب بدانیم. <br>
+        <ul>
+            <li>آیا قیمت‌های بهتری وجود دارد که در پروازهاب نیست؟ </li>
+            <li>آیا کار کردن با سایت سخت است؟ </li>
+            <li>آیا دنبال ويژگی خاصی هستید که در پروازهاب نیست؟ </li>
+        </ul>
+        <div style="text-align:center;padding:1em;">
+            <a href="https://t.me/parvazhub_com">
+                <button class="ui primary button web-font" onclick="localStorage.setItem('contact_us_modal', 'close');">
+                    ارسال نظر و پیشنهاد با تلگرام
+                </button>
+            </a>
+            <button class="ui button web-font contact_us_modal_close" onclick="localStorage.setItem('contact_us_modal', 'close');">
+                بستن این پنجره        
+            </button>
+        </div>
+        به راحتی از طریق تلگرام و در هر ساعتی ما با صحبت کنید تا ما هرچه سریع‌تر به وب‌سایت مورد علاقه شما تبدیل شویم :)
+</div>
+
+</div>
+
+<script>
+jQuery(window).load(function () {
+    if (localStorage.getItem("contact_us_modal")!='close'){
+        setTimeout("show_modal()", 20000);
+    }
+});
+function show_modal(){
+    $('#contact_us_modal')
+        .modal('setting', 'closable', true)
+        .modal('show')
+        .modal('attach events', '.contact_us_modal_close', 'hide')
+}
+</script>
