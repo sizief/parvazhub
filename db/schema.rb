@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170715154137) do
+ActiveRecord::Schema.define(version: 20170731115719) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,17 @@ ActiveRecord::Schema.define(version: 20170715154137) do
     t.string   "status"
     t.integer  "terminal"
     t.datetime "actual_departure_time"
+    t.index ["call_sign", "departure_time"], name: "index_flight_details_on_call_sign_and_departure_time", using: :btree
+  end
+
+  create_table "flight_infos", force: :cascade do |t|
+    t.integer "flight_id"
+    t.string  "call_sign"
+    t.string  "airplane"
+    t.string  "delay"
+    t.string  "canceled"
+    t.string  "weekly_delay"
+    t.index ["flight_id"], name: "index_flight_infos_on_flight_id", using: :btree
   end
 
   create_table "flight_price_archives", force: :cascade do |t|
@@ -128,8 +139,8 @@ ActiveRecord::Schema.define(version: 20170715154137) do
     t.integer  "sign_in_count",          default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string     "current_sign_in_ip"
-    t.string     "last_sign_in_ip"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree

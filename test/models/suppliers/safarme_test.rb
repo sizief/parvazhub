@@ -30,7 +30,7 @@ class SuppliersSafarmeTest < ActiveSupport::TestCase
     unknown_code = @safarme_search.get_airline_code("ali")
     assert_equal mahan_code,"W5"
     assert_equal zagros_code,"ZV"
-    assert_equal unknown_code,"ali"
+    assert_equal unknown_code,nil
   end
 
   test "Save flights to database" do
