@@ -108,7 +108,14 @@
 				        		</div>
 			      			</h5>
 						</td>
-						<td><%= hour_to_human flight.departure_time.to_datetime.strftime("%H:%M") %></td>
+						<td>
+							<div class="content">
+									<%= hour_to_human flight.departure_time.to_datetime.strftime("%H:%M") %>
+				            		<div class="sub header" style="margin-top: 7px;color: gray;font-size: 0.8em;">
+										<%= (delay_to_human flight.delay) %>
+				          			</div>
+				        		</div>
+						</td>
 						<td><%= flight.airplane_type.empty? ? "نامشخص" : airplane_name_for(flight.airplane_type) %></td>
 						<td>
 							<%= link_to number_with_delimiter(flight.best_price)+"   تومان   <i class='yellow arrow right icon'></i>مشاهده فروشنده".html_safe, flight_prices_path(flight.id), class: "ui teal label large flight-price", remote: true %>

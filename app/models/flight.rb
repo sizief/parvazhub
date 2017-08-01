@@ -4,6 +4,9 @@ class Flight < ApplicationRecord
   validates :route_id, presence: true
   belongs_to :route
   has_many :flight_prices
+  has_one :flight_info
+
+  attr_accessor :delay
 
   def self.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
     is_flight_exist = Flight.find_by(flight_number:flight_number,departure_time:departure_time)
@@ -117,10 +120,13 @@ class Flight < ApplicationRecord
   def flight_list(route,date)
     flight_list = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s).where.not(best_price:0)
     flight_list.each do |flight|
-       if flight.airplane_type.empty?
-         call_sign = get_call_sign(flight.flight_number,flight.airline_code)
-         flight_detail = FlightDetail.find_by(call_sign: call_sign)
-         flight.airplane_type = flight_detail.airplane_type unless flight_detail.nil?
+      flight_info = FlightInfo.find_by(flight_id: flight.id) 
+      if flight.airplane_type.empty?
+         #call_sign = get_call_sign(flight.flight_number,flight.airline_code)
+         #flight_detail = FlightDetail.find_by(call_sign: call_sign)
+         
+         flight.airplane_type = flight_info.airplane unless flight_info.nil?
+         flight.delay = flight_info.delay
        end
      end
     flight_list = flight_list.sort_by(&:best_price)
@@ -130,21 +136,6 @@ class Flight < ApplicationRecord
     call_sign = flight_number.upcase.sub airline_code.upcase, airline_call_sign(airline_code)
   end
 
-  def calculate_delay (flight_id)
-    delay = Array.new
-    flight = Flight.find(flight_id)
-    call_sign = get_call_sign(flight.flight_number,flight.airline_code)
-    flight_details = FlightDetail.where(call_sign: call_sign)
-    flight_details.each do |flight_detail|
-      unless flight_detail.actual_departure_time.nil?
-        delay << ((flight_detail.departure_time.to_datetime - flight_detail.actual_departure_time.to_datetime)*24*60).to_i
-      end
-    end 
-    if delay.empty? 
-      return 0 
-    else
-      return (delay.sum.to_f / delay.size) 
-    end
-  end
+  
 
 end
