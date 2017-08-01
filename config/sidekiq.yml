@@ -72,3 +72,8 @@
   flight_price_remover:
     cron: '0 /30 * * * *'
     class: FlightPriceRemoveWorker
+
+#flightinfo worker 
+  flight_info_worker:
+    cron: '0 30 0,12 * * *'
+    class: FlightInfoWorker
