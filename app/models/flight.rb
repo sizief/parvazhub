@@ -126,7 +126,7 @@ class Flight < ApplicationRecord
          #flight_detail = FlightDetail.find_by(call_sign: call_sign)
          
          flight.airplane_type = flight_info.airplane unless flight_info.nil?
-         flight.delay = flight_info.delay
+         flight.delay = flight_info.delay unless flight_info.nil?
        end
      end
     flight_list = flight_list.sort_by(&:best_price)
