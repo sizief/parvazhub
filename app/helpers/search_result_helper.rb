@@ -12,16 +12,18 @@ module SearchResultHelper
 	def delay_to_human(delay)
 		if delay.to_f < 15 or delay.nil?
 			return nil
-	  elsif delay.to_f >= 15 and delay.to_f < 30
+	  elsif delay.to_f >= 15 and delay.to_f < 25
 			number = 20
-		elsif delay.to_f >= 30 and delay.to_f < 45
+		elsif delay.to_f >= 25 and delay.to_f < 35
+			number = 30
+		elsif delay.to_f >= 35 and delay.to_f < 45
 			number = 40
-		elsif delay.to_f >= 45 and delay.to_f < 60
+		elsif delay.to_f >= 45 and delay.to_f < 55
 			number = 50
-		elsif delay.to_f >= 60 
-			number = 90
+		elsif delay.to_f >= 55 
+			number = 60
 		end
-		return "<i class=\"wait yellow icon\"></i> احتمال #{number} دقیقه تاخیر".html_safe
+		return "<i class=\"warning circle yellow icon\"></i> احتمال #{number} دقیقه تاخیر".html_safe
 	end
 
 end

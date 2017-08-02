@@ -6,18 +6,19 @@
 	<div class="ui grid" id="results-message">
   		<div class="two column row">
     		<div class="left floated column">
-				 <%= @cities[@search_parameter[:origin].to_sym][:fa] %>
+				<i class="plane icon"></i> 
+				<%= @cities[@search_parameter[:origin].to_sym][:fa] %>
 				  به 
 				 <%= @cities[@search_parameter[:destination].to_sym][:fa] %>
-				 در 
+				 روز 
 				 <%= @search_parameter[:date].to_date.to_parsi.strftime "%A %d %B %Y"   %>
 				 <br>
 				 <a class="ui primary basic blue" onclick="$('#search-box-inner').transition('slide');" style="cursor:pointer">
-				 <i class="bordered search icon"></i> جستجوی دوباره</a>
+				 <i class="search icon"></i> تغییر مبدا، مقصد یا تاریخ</a>
 		 	</div>
 		 	<div class="left floated column right aligned">
 		  		<button class="ui tiny blue button web-font" onclick="$('#price-alert-register').transition('slide');">
-		  		هر روز به ایمیلم بفرست
+		  		قیمت‌ها را هر روز به ایمیلم بفرست
 		  		</button>
 		  	</div>
 		</div> 	
@@ -118,7 +119,7 @@
 						</td>
 						<td><%= flight.airplane_type.empty? ? "نامشخص" : airplane_name_for(flight.airplane_type) %></td>
 						<td>
-							<%= link_to number_with_delimiter(flight.best_price)+"   تومان   <i class='yellow arrow right icon'></i>مشاهده فروشنده".html_safe, flight_prices_path(flight.id), class: "ui teal label large flight-price", remote: true %>
+							<%= link_to number_with_delimiter(flight.best_price)+" تومان | لیست فروشندگان <i class='yellow arrow right icon'></i>".html_safe, flight_prices_path(flight.id), class: "ui teal label large flight-price", remote: true %>
 							<%#= supplier_logo_for(flight.price_by) %>
 						</td>
 					</tr>
