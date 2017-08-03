@@ -152,6 +152,7 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
 }
 .flight-price{
   cursor:pointer;
+  line-height: 1.4em !important;
 }
 /* datepicker */
 .header-row-cell, .datepicker-plot-area{
@@ -227,7 +228,7 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
 #flight-price-table {
      display:none;
 }
-.not-mobile{
+.not-mobile, .nm{
   display: none !important;
 }
 }

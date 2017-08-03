@@ -119,7 +119,7 @@
 						</td>
 						<td><%= flight.airplane_type.empty? ? "نامشخص" : airplane_name_for(flight.airplane_type) %></td>
 						<td>
-							<%= link_to number_with_delimiter(flight.best_price)+" تومان | لیست فروشندگان <i class='yellow arrow right icon'></i>".html_safe, flight_prices_path(flight.id), class: "ui teal label large flight-price", remote: true %>
+							<%= link_to number_with_delimiter(flight.best_price)+" تومان <span class=\"nm\"> | </span> فروشندگان <i class='yellow arrow right icon'></i>".html_safe, flight_prices_path(flight.id), class: "ui teal label large flight-price", remote: true %>
 							<%#= supplier_logo_for(flight.price_by) %>
 						</td>
 					</tr>

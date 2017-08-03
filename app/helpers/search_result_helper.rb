@@ -23,7 +23,7 @@ module SearchResultHelper
 		elsif delay.to_f >= 55 
 			number = 60
 		end
-		return "<i class=\"warning circle yellow icon\"></i> احتمال #{number} دقیقه تاخیر".html_safe
+		return "<i class=\"warning circle yellow icon\"></i> میانگین #{number} دقیقه تاخیر در گذشته".html_safe
 	end
 
 end
