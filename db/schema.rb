@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170731115719) do
+ActiveRecord::Schema.define(version: 20170804151302) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 20170731115719) do
     t.string   "deep_link"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.index ["flight_id", "flight_date"], name: "index_flight_price_archives_on_flight_id_and_flight_date", using: :btree
   end
 
   create_table "flight_prices", force: :cascade do |t|

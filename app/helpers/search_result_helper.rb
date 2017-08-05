@@ -26,4 +26,18 @@ module SearchResultHelper
 		return "<i class=\"warning circle yellow icon\"></i> میانگین #{number} دقیقه تاخیر در گذشته".html_safe
 	end
 
+	def supplier_to_human(supplier_name)
+		if supplier_name == "zoraq"
+			return "زورق"
+		elsif supplier_name == "alibaba"
+			return "علی‌بابا"
+		elsif supplier_name == "safarme"
+			return "سفرمی"
+		elsif supplier_name == "flightio"
+			return "فلایتیو"
+		else
+			return supplier_name
+		end
+	end
+
 end

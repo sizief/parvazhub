@@ -196,6 +196,11 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
   background: white;
   border-top: 1px #26a1d6 solid;
 }
+.flight-price-logo{
+    border: 1px #dad8d8 solid;
+    padding: 5px;
+    border-radius: 5px;
+}
 
 
 /* city pages */
@@ -228,7 +233,11 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
 #flight-price-table {
      display:none;
 }
+
 .not-mobile, .nm{
   display: none !important;
+}
+#flight-prices{
+  font-size: 0.8em;
 }
 }

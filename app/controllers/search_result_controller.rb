@@ -35,9 +35,17 @@ class SearchResultController < ApplicationController
   end
 
   def flight_prices
+    @dates = Array.new
+    @prices = Array.new
     flight_id = params[:id]
+    flight_date = Flight.find(flight_id).departure_time.to_date.to_s
     @flight_prices = FlightPrice.where(flight_id: params[:id]).order(:price)
-
+    @flight_price_over_time = FlightPriceArchive.flight_price_over_time(flight_id,flight_date)
+    @flight_price_over_time.each do |date,price|
+      @dates <<  date.to_s.to_date.to_parsi.strftime("%A %d %B")
+      @prices << price
+    end
+    
     respond_to do |format|
         format.js 
         format.html
