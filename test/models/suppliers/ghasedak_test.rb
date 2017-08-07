@@ -19,18 +19,18 @@ class SuppliersGhasedakTest < ActiveSupport::TestCase
   end
 
   test "Ghasdak get_airline_code should return airline code" do
-    mahan_code = @ghasedak_search.get_airline_code("2")
-    zagros_code = @ghasedak_search.get_airline_code("9")
+    mahan_code = @ghasedak_search.get_airline_code("W5")
+    caspian_code = @ghasedak_search.get_airline_code("RV")
     unknown_code = @ghasedak_search.get_airline_code("ali")
     assert_equal mahan_code,"W5"
-    assert_equal zagros_code,"ZV"
-    assert_equal unknown_code,nil
+    assert_equal caspian_code,"IV"
+    assert_equal unknown_code,"ali"
   end
 
   test "Save flights to database" do
     response = @ghasedak_search.search(@origin,@destination,@date,@search_history_id)
     route = Route.find_by(origin:@origin, destination: @destination)
-    assert_difference 'Flight.count', 46 do
+    assert_difference 'Flight.count', 22 do
       @ghasedak_search.import_domestic_flights(response,route.id,@origin,@destination,@date,@search_history_id)
     end
   end
@@ -38,7 +38,7 @@ class SuppliersGhasedakTest < ActiveSupport::TestCase
   test "Save flight prices to database" do
     response = @ghasedak_search.search(@origin,@destination,@date,@search_history_id)
     route = Route.find_by(origin:@origin, destination: @destination)
-    assert_difference 'FlightPrice.count', 46 do
+    assert_difference 'FlightPrice.count', 22 do
       @ghasedak_search.import_domestic_flights(response,route.id,@origin,@destination,@date,@search_history_id)
     end
   end

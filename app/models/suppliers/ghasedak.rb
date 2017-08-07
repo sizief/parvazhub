@@ -9,17 +9,18 @@ class Suppliers::Ghasedak
       end
 
       begin
-        url = "https://ghasedak24.com/oob/thirdparty/search"
-        date = date.to_date.to_parsi.to_s.gsub("-","/")  
-        params = {'from' => "#{origin.upcase}", 'to' => "#{destination.upcase}", 'date' => "#{date}", 'number'=>'1','Oauth-Token'=>"89541f96-79d7-11e7-8fc9-000c29ff45b7"}
+
+        url = "https://ghasedak24.com/api/GetAllFlights/?"
+        date = date.to_date.to_s.gsub("-","/")  
+        params = "from=#{origin.upcase}&to=#{destination.upcase}&fromDate=#{date}&toDate=#{date}&userName=sepehr&password=1234&cs=1"
         SearchHistory.append_status(search_history_id,"R1(#{Time.now.strftime('%M:%S')})")
-        response = RestClient::Request.execute(method: :post, url: "#{URI.parse(url)}",headers: {:'Oauth-Token'=> "955db966-79da-11e7-9ac5-000c29ff45b7"}, proxy: nil,payload: params)
+        response = RestClient::Request.execute(method: :get, url: "#{URI.parse(url+params)}", proxy: nil,payload: params)
       rescue => e
         SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
         return {status:false}
       end
       return {status:true,response: response.body}
-    end
+  end
 
 
     def import_domestic_flights(response,route_id,origin,destination,date,search_history_id)
@@ -29,19 +30,18 @@ class Suppliers::Ghasedak
       SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
       
       json_response["data"].each do |flight|
-                
-        airline_code = get_airline_code(flight["airline_id"])
-        next if airline_code.nil?
 
-        flight_number = airline_code+flight["flight_no"]
-        departure_time = Time.at(flight["date"].to_f).to_time #+ ENV["IRAN_ADDITIONAL_TIMEZONE"].to_f.minutes
-        departure_time = departure_time.to_s[0..18]
-        airplane_type = flight["aircraft"]
+        airline_code = get_airline_code(flight["Airline"])
+        flight_number = airline_code+flight["FlightNo"]
+        departure_time = flight["FlightDate"]
+        departure_time = departure_time[0..9]+" "+departure_time[11..-1]
+
+        airplane_type = flight["Airplane"]
 
         flight_id = Flight.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
       
-        price = flight["price"]
-        deeplink_url = "http://ghasedak24.com/flight/"+flight["ticket_id"]
+        price = (flight["Price"].to_f)/10
+        deeplink_url = flight["ReserveLink"]
         
         #to prevent duplicate flight prices we compare flight prices before insert into database
         flight_price_so_far = flight_prices.select {|flight_price| flight_price.flight_id == flight_id}
@@ -50,6 +50,7 @@ class Suppliers::Ghasedak
             next
           else
             flight_price_so_far.first.price = price #new price is cheaper, so update the old price and go to next price
+            flight_price_so_far.first.deep_link = deeplink_url
             next
           end
         end
@@ -75,25 +76,11 @@ class Suppliers::Ghasedak
 
   end
 
-  def get_airline_code(id)
-    airlines ={"2"=>"W5",
-		    "31"=>"AK", 
-			"11"=>"B9", 
-			"10"=>"I3", 
-			"1572"=>"JI", 
-      "1573"=>"IV", 
-      "5"=>"IV", 
-			"34"=>"NV", 
-			"1582"=>"SE", 
-			"9"=>"ZV",
-			"1"=>"HH",
-			"30"=>"QB",
-			"3"=>"Y9",
-			"29"=>"EP",
-			"4"=>"IR",
-			"1583"=>"SR"
+  def get_airline_code(airline_code)
+    airlines ={
+      "RV"=>"IV"
 		}
-	airlines[id].nil? ? nil : airlines[id]
+	airlines[airline_code].nil? ? airline_code : airlines[airline_code]
   end
 
 

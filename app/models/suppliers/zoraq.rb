@@ -66,6 +66,7 @@ class Suppliers::Zoraq
             next
           else
             flight_price_so_far.first.price = price #new price is cheaper, so update the old price and go to next price
+            flight_price_so_far.first.deep_link = deeplink_url
             next
           end
         end
