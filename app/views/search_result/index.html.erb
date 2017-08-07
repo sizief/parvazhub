@@ -1,4 +1,6 @@
+
 <%= render 'layouts/header' %>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
 <% provide(:title,"پروازهاب:‌ پروازهای #{@cities[@search_parameter[:origin].to_sym][:fa]} به #{@cities[@search_parameter[:destination].to_sym][:fa]} برای #{@search_parameter[:date].to_date.to_parsi.strftime '%A %d %B %Y'} ")%>
 <% provide(:description,"لیست پروازهای #{@cities[@search_parameter[:origin].to_sym][:fa]} به #{@cities[@search_parameter[:destination].to_sym][:fa]} در تاریخ #{@search_parameter[:date].to_date.to_parsi.strftime '%A %d %B %Y'}") %>
 
@@ -154,7 +156,7 @@
 <%= render 'contact_us/modal' %>
 
 
-<div class="ui basic modal prices" style="left: initial;text-align: center;">
+<div class="ui basic modal prices">
       <p id="prices-modal-content"></p>
 </div>
 <script type="text/javascript">

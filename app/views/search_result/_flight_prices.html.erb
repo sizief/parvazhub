@@ -34,38 +34,39 @@
 					</td>
 				</tr>
 			<% end %>
+			<% if @prices.count > 1 %>
 				<tr>
 					<td colspan="6">
 						<div style="width:70%; margin:auto" class="nm">
 							<canvas id="myChart"></canvas>
+
+							<script>
+							var labels = <%= raw @dates %>;
+							var data = <%= @prices %>;
+							var ctx = document.getElementById("myChart").getContext('2d');
+							$(document).ready(function(){
+								var myChart = new Chart(ctx, {
+									type: 'line',
+									data: {labels: labels,datasets: [{label: "تغییرات حداقل قیمت بلیط",borderColor: 'rgb(154, 154, 154)',backgroundColor:  'rgb(154, 154, 154)', data: data,fill: false,lineTension: 0}]},
+									options: {
+										showLines: true,
+										scales: {
+											xAxes: [{
+												ticks: {
+													autoSkip: false
+												}
+											}]
+										}
+									}
+								});
+							});
+							</script>
 						</div>
 					</td>
 				</tr>
+			<% end %>
 		</tbody>		
 	</table>
 	
 	<div class="ui cancel button web-font">بازگشت به لیست پروازها</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
-<script>
-		var labels = <%= raw @dates %>;
-		var data = <%= @prices %>;
-		var ctx = document.getElementById("myChart").getContext('2d');
-		var myChart = new Chart(ctx, {
-			type: 'line',
-			data: {
-				labels: labels,
-				datasets: [{
-					label: "تغییرات حداقل قیمت بلیط",
-					borderColor: 'rgb(154, 154, 154)',
-					backgroundColor:  'rgb(154, 154, 154)', //'rgb(0, 181, 173)',
-					data: data,
-					fill: false,
-					lineTension: 0
-				}]
-			},
-			options: {
-				showLines: true, // disable for all datasets
-			}
-		});
-</script>

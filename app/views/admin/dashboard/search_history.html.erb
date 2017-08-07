@@ -18,6 +18,8 @@
 			<td>
 				<% if item.status.include?  'Success' %>
 					<span class="ui teal label"><%= item.status %></span>
+				<% elsif item.status.include?  'empty' %>
+					<span class="ui gray label"><%= item.status %></span>
 				<% else %>
 					<span class="ui orange label"><%= item.status %></span>
 				<% end %>

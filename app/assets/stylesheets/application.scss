@@ -197,9 +197,7 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
   border-top: 1px #26a1d6 solid;
 }
 .flight-price-logo{
-    border: 1px #dad8d8 solid;
-    padding: 5px;
-    border-radius: 5px;
+   
 }
 
 
@@ -226,6 +224,12 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
 .menu-links{
     color: white;
     font-size: 0.7em;
+}
+.modal.prices{
+  top:10% !important;
+  left: initial;
+  text-align: center;
+  margin-top:0 !important
 }
 
 
