@@ -37,6 +37,8 @@ module SearchResultHelper
 			return "فلایتیو"
 		elsif supplier_name == "ghasedak24"
 			return "قاصدک۲۴"
+		elsif supplier_name == "respina"
+			return "رسپینا۲۴"
 		else
 			return supplier_name
 		end

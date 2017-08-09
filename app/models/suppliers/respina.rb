@@ -1,20 +1,20 @@
-class Suppliers::Ghasedak
+class Suppliers::Respina
     require "uri"
     require "rest-client"
 
   def search(origin,destination,date,search_history_id)
       if Rails.env.test?
-        response = File.read("test/fixtures/files/domestic-ghasedak.log") 
+        response = File.read("test/fixtures/files/domestic-respina.log") 
         return {response: response}
       end
 
       begin
 
-        url = "https://ghasedak24.com/api/GetAllFlights/?"
+        url = "http://respina24.net/flight/getFlightAjax?"
         date = date.to_date.to_s.gsub("-","/")  
-        params = "from=#{origin.upcase}&to=#{destination.upcase}&fromDate=#{date}&toDate=#{date}&userName=sepehr&password=1234&cs=1"
+        params = "source[]=#{origin.upcase}&destination[]=#{destination.upcase}&DepartureGo=#{date}"
         SearchHistory.append_status(search_history_id,"R1(#{Time.now.strftime('%M:%S')})")
-        response = RestClient::Request.execute(method: :get, url: "#{URI.parse(url+params)}", proxy: nil,payload: params)
+        response = RestClient::Request.execute(method: :get, url: "#{URI.parse(url+params)}", proxy: nil)
       rescue => e
         SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
         return {status:false}
@@ -31,17 +31,17 @@ class Suppliers::Ghasedak
       
       json_response["data"].each do |flight|
 
-        airline_code = get_airline_code(flight["Airline"])
-        flight_number = airline_code+flight["FlightNo"]
-        departure_time = flight["FlightDate"]
-        departure_time = departure_time[0..9]+" "+departure_time[11..-1]
+        airline_code = get_airline_code(flight["airlineCode"].to_s)
+        next if airline_code.nil?
+        flight_number = airline_code+flight["flightNumber"]
+        departure_time = date+" "+flight["takeoffTime"]+":00"
 
-        airplane_type = flight["Airplane"]
+        airplane_type = nil
 
         flight_id = Flight.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
       
-        price = (flight["Price"].to_f)/10
-        deeplink_url = flight["ReserveLink"]
+        price = (flight["adultPrice"].to_f)/10
+        deeplink_url = "http://respina24.net/flight"
         
         #to prevent duplicate flight prices we compare flight prices before insert into database
         flight_price_so_far = flight_prices.select {|flight_price| flight_price.flight_id == flight_id}
@@ -55,14 +55,14 @@ class Suppliers::Ghasedak
           end
         end
 
-        flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"ghasedak24", flight_date:"#{date}", deep_link:"#{deeplink_url}" )
+        flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"respina", flight_date:"#{date}", deep_link:"#{deeplink_url}" )
 
       end #end of each loop
       
       unless flight_prices.empty?
         SearchHistory.append_status(search_history_id,"Deleting(#{Time.now.strftime('%M:%S')})")
         #first we should remove the old flight price archive 
-        FlightPrice.delete_old_flight_prices("ghasedak24",route_id,date) 
+        FlightPrice.delete_old_flight_prices("respina",route_id,date) 
         SearchHistory.append_status(search_history_id,"Importing(#{Time.now.strftime('%M:%S')})")
         #then bulk import enabled by a bulk import gem
         FlightPrice.import flight_prices
@@ -77,11 +77,22 @@ class Suppliers::Ghasedak
   end
 
   def get_airline_code(airline_code)
-    airlines ={
-      "RV"=>"IV",
-      "ZZ"=>"SE"
+    airlines ={"2"=>"W5",
+		"9"=>"AK", 
+			"4"=>"B9", 
+			"8"=>"I3", 
+			"7"=>"JI", 
+			"12"=>"IV", 
+			"15"=>"SE", 
+			"6"=>"ZV",
+			"10"=>"HH",
+			"11"=>"QB",
+			"1"=>"Y9",
+			"5"=>"EP",
+			"3"=>"IR",
+			"14"=>"SR"
 		}
-	airlines[airline_code].nil? ? airline_code : airlines[airline_code]
+	airlines[airline_code].nil? ? nil : airlines[airline_code]
   end
 
 
