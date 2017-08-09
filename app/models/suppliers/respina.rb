@@ -41,7 +41,7 @@ class Suppliers::Respina
         flight_id = Flight.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
       
         price = (flight["adultPrice"].to_f)/10
-        deeplink_url = "http://respina24.net/flight"
+        deeplink_url = "http://respina24.net/"
         
         #to prevent duplicate flight prices we compare flight prices before insert into database
         flight_price_so_far = flight_prices.select {|flight_price| flight_price.flight_id == flight_id}
