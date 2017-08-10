@@ -1,6 +1,6 @@
 default: &default
   encoding: unicode
-  pool: 50
+  pool: <%= ENV["DB_POOL"] %>
   timeout: 5000
   
 
@@ -9,7 +9,7 @@ development:
   host: db #localhost 
   adapter: postgresql
   database: db/development
-  port: <%= ENV["DB_PORT"] %> 
+  port: <%= ENV["DB_PORT"] %>
   username: <%= ENV["DB_USERNAME"] %> #<%= ENV["LOCAL_DB_USERNAME"] %>
   password: <%= ENV["DB_PASSWORD"] %> #<%= ENV["LOCAL_DB_PASSWORD"] %> #
 
