@@ -9,7 +9,7 @@ development:
   host: db #localhost 
   adapter: postgresql
   database: db/development
-  port: 5432
+  port: <%= ENV["DB_PORT"] %> 
   username: <%= ENV["DB_USERNAME"] %> #<%= ENV["LOCAL_DB_USERNAME"] %>
   password: <%= ENV["DB_PASSWORD"] %> #<%= ENV["LOCAL_DB_PASSWORD"] %> #
 
@@ -28,6 +28,6 @@ production:
   host: <%= ENV["DB_HOST"] %> 
   adapter: postgresql
   database: production
-  port: 5432
+  port: <%= ENV["DB_PORT"] %> 
   username: <%= ENV["DB_USERNAME"] %> 
   password: <%= ENV["DB_PASSWORD"] %>
