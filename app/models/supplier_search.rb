@@ -15,6 +15,7 @@ class SupplierSearch
     threads = []
     supplier_list = Supplier.where(status:true)
     begin 
+      
       Timeout.timeout(delay) do
         supplier_list.each do |supplier|
           threads << Thread.new do
@@ -55,18 +56,26 @@ class SupplierSearch
   end
 
   def search_supplier(supplier_name,supplier_class,origin,destination,route_id,date,who_started)
-    flight_list = supplier_class.constantize.new()
-    search_history = SearchHistory.create(supplier_name:"#{supplier_name}",route_id:route_id,departure_time: date,status:"#{who_started} Started(#{Time.now.strftime('%M:%S')})")
-    response = flight_list.search(origin,destination,date,search_history.id)
-    if response[:status] == true
-      log(supplier_name,response[:response]) if Rails.env.development?  
-      flight_list.import_domestic_flights(response,route_id,origin,destination,date,search_history.id)
-      update_flight_best_price(origin,destination,date) 
-    end
+      search_history = nil
+      flight_list = supplier_class.constantize.new()
+      
+      ActiveRecord::Base.connection_pool.with_connection do        
+        search_history = SearchHistory.create(supplier_name:"#{supplier_name}",route_id:route_id,departure_time: date,status:"#{who_started} Started(#{Time.now.strftime('%M:%S')})")
+      end
+      
+      response = flight_list.search(origin,destination,date,search_history.id)
+
+      if response[:status] == true
+        log(supplier_name,response[:response]) if Rails.env.development?  
+        flight_list.import_domestic_flights(response,route_id,origin,destination,date,search_history.id)
+        update_flight_best_price(origin,destination,date) 
+      end
   end
 
   def update_flight_best_price(origin,destination,date) 
-    Flight.update_best_price(origin,destination,date) 
+    ActiveRecord::Base.connection_pool.with_connection do   
+      Flight.update_best_price(origin,destination,date) 
+    end
   end
 
 	def log(supplier_name,response)

@@ -13,10 +13,14 @@ class Suppliers::Ghasedak
         url = "https://ghasedak24.com/api/GetAllFlights/?"
         date = date.to_date.to_s.gsub("-","/")  
         params = "from=#{origin.upcase}&to=#{destination.upcase}&fromDate=#{date}&toDate=#{date}&userName=sepehr&password=1234&cs=1"
-        SearchHistory.append_status(search_history_id,"R1(#{Time.now.strftime('%M:%S')})")
+        ActiveRecord::Base.connection_pool.with_connection do
+          SearchHistory.append_status(search_history_id,"R1(#{Time.now.strftime('%M:%S')})")
+        end
         response = RestClient::Request.execute(method: :get, url: "#{URI.parse(url+params)}", proxy: nil,payload: params)
       rescue => e
-        SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
+        ActiveRecord::Base.connection_pool.with_connection do
+          SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
+        end
         return {status:false}
       end
       return {status:true,response: response.body}
@@ -24,10 +28,12 @@ class Suppliers::Ghasedak
 
 
     def import_domestic_flights(response,route_id,origin,destination,date,search_history_id)
-      
+      flight_id =nil
       flight_prices = Array.new()
       json_response = JSON.parse(response[:response])
-      SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
+      ActiveRecord::Base.connection_pool.with_connection do
+        SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
+      end
       
       json_response["data"].each do |flight|
 
@@ -37,8 +43,9 @@ class Suppliers::Ghasedak
         departure_time = departure_time[0..9]+" "+departure_time[11..-1]
 
         airplane_type = flight["Airplane"]
-
-        flight_id = Flight.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
+        ActiveRecord::Base.connection_pool.with_connection do
+          flight_id = Flight.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
+        end
       
         price = (flight["Price"].to_f)/10
         deeplink_url = flight["ReserveLink"]
@@ -55,22 +62,28 @@ class Suppliers::Ghasedak
           end
         end
 
-        flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"ghasedak24", flight_date:"#{date}", deep_link:"#{deeplink_url}" )
+        ActiveRecord::Base.connection_pool.with_connection do
+          flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"ghasedak24", flight_date:"#{date}", deep_link:"#{deeplink_url}" )
+        end
 
       end #end of each loop
       
       unless flight_prices.empty?
-        SearchHistory.append_status(search_history_id,"Deleting(#{Time.now.strftime('%M:%S')})")
-        #first we should remove the old flight price archive 
-        FlightPrice.delete_old_flight_prices("ghasedak24",route_id,date) 
-        SearchHistory.append_status(search_history_id,"Importing(#{Time.now.strftime('%M:%S')})")
-        #then bulk import enabled by a bulk import gem
-        FlightPrice.import flight_prices
-        SearchHistory.append_status(search_history_id,"Archive(#{Time.now.strftime('%M:%S')})") 
-        FlightPriceArchive.import flight_prices
-        SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
+        ActiveRecord::Base.connection_pool.with_connection do
+          SearchHistory.append_status(search_history_id,"Deleting(#{Time.now.strftime('%M:%S')})")
+          #first we should remove the old flight price archive 
+          FlightPrice.delete_old_flight_prices("ghasedak24",route_id,date) 
+          #SearchHistory.append_status(search_history_id,"Importing(#{Time.now.strftime('%M:%S')})")
+          #then bulk import enabled by a bulk import gem
+          FlightPrice.import flight_prices
+          #SearchHistory.append_status(search_history_id,"Archive(#{Time.now.strftime('%M:%S')})") 
+          FlightPriceArchive.import flight_prices
+          SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
+        end
       else
-        SearchHistory.append_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
+        ActiveRecord::Base.connection_pool.with_connection do
+          SearchHistory.append_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
+        end
       end
 
 

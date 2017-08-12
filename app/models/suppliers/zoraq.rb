@@ -11,12 +11,16 @@ class Suppliers::Zoraq
       begin
         url = "http://zoraq.com/Flight/DeepLinkSearch"
   	    params = {'OrginLocationIata' => "#{origin.upcase}", 'DestLocationIata' => "#{destination.upcase}", 'DepartureGo' => "#{date}", 'Passengers[0].Type' =>'ADT', 'Passengers[0].Quantity'=>'1'}
-        SearchHistory.append_status(search_history_id,"R1(#{Time.now.strftime('%M:%S')})")
+        ActiveRecord::Base.connection_pool.with_connection do        
+          SearchHistory.append_status(search_history_id,"R1(#{Time.now.strftime('%M:%S')})")
+        end
         #response = RestClient.post("#{URI.parse(url)}", params)
         response = RestClient::Request.execute(method: :post, url: "#{URI.parse(url)}",headers: {params: params}, proxy: nil)
       rescue => e
-        SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
-        return {status:false}
+        ActiveRecord::Base.connection_pool.with_connection do        
+          SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
+        end
+          return {status:false}
       end
       return {status:true,response: response.body}
     end
@@ -24,9 +28,11 @@ class Suppliers::Zoraq
     def import_domestic_flights(response,route_id,origin,destination,date,search_history_id)
       flight_prices = Array.new()
       json_response = JSON.parse(response[:response])
-      SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
+      ActiveRecord::Base.connection_pool.with_connection do        
+        SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
+      end
       json_response["PricedItineraries"].each do |flight|
-        flight_number = airline_code = airplane_type = departure_date_time  = nil
+        flight_number = airline_code = airplane_type = departure_date_time = flight_id = nil
         flight_legs = flight["OriginDestinationOptions"][0]["FlightSegments"]
       
         flight_legs.each do |leg|
@@ -53,7 +59,9 @@ class Suppliers::Zoraq
         departure_time = parse_date(departure_date_time).utc.to_datetime
         departure_time = departure_time + ENV["IRAN_ADDITIONAL_TIMEZONE"].to_f.minutes # add 4:30 hours because zoraq date time is in iran time zone #.strftime("%H:%M")
 
-        flight_id = Flight.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
+        ActiveRecord::Base.connection_pool.with_connection do        
+          flight_id = Flight.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
+        end
 
         departure_date = departure_time.strftime("%F")
         price = flight["AirItineraryPricingInfo"]["PTC_FareBreakdowns"][0]["PassengerFare"]["TotalFare"]["Amount"]
@@ -71,22 +79,28 @@ class Suppliers::Zoraq
           end
         end
 
-        flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"zoraq", flight_date:"#{departure_date}", deep_link:"#{deeplink_url}" )
+        ActiveRecord::Base.connection_pool.with_connection do        
+          flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"zoraq", flight_date:"#{departure_date}", deep_link:"#{deeplink_url}" )
+        end
 
       end #end of each loop
       
       unless flight_prices.empty?
-        #SearchHistory.append_status(search_history_id,"Deleting(#{Time.now.strftime('%M:%S')})")
-        #first we should remove the old flight price archive 
-        FlightPrice.delete_old_flight_prices("zoraq",route_id,date) 
-        #SearchHistory.append_status(search_history_id,"Importing(#{Time.now.strftime('%M:%S')})")
-        #then bulk import enabled by a bulk import gem
-        FlightPrice.import flight_prices
-        #SearchHistory.append_status(search_history_id,"Archive(#{Time.now.strftime('%M:%S')})") 
-        FlightPriceArchive.import flight_prices
-        SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
+        ActiveRecord::Base.connection_pool.with_connection do        
+          #SearchHistory.append_status(search_history_id,"Deleting(#{Time.now.strftime('%M:%S')})")
+          #first we should remove the old flight price archive 
+          FlightPrice.delete_old_flight_prices("zoraq",route_id,date) 
+          #SearchHistory.append_status(search_history_id,"Importing(#{Time.now.strftime('%M:%S')})")
+          #then bulk import enabled by a bulk import gem
+          FlightPrice.import flight_prices
+          #SearchHistory.append_status(search_history_id,"Archive(#{Time.now.strftime('%M:%S')})") 
+          FlightPriceArchive.import flight_prices
+          SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
+        end
       else
-        SearchHistory.append_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
+        ActiveRecord::Base.connection_pool.with_connection do        
+          SearchHistory.append_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
+        end
       end
 
 

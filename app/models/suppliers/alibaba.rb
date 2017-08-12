@@ -4,6 +4,7 @@ class Suppliers::Alibaba
 
 
   def search(origin,destination,date,search_history_id)
+    proxy_url = nil
     if Rails.env.test?
         response = File.read("test/fixtures/files/domestic-alibaba.log") 
         return {response: response}
@@ -16,12 +17,16 @@ class Suppliers::Alibaba
     begin
       search_flight_params = "ffrom=#{origin.upcase}&fto=#{destination.upcase}&datefrom=#{shamsi_date}&adult=1&child=0&infant=0"
       search_url = search_flight_url+search_flight_params
-      proxy_url = Proxy.new_proxy
-      SearchHistory.append_status(search_history_id,"R1(#{Time.now.strftime('%M:%S')})")
+      ActiveRecord::Base.connection_pool.with_connection do 
+        proxy_url = Proxy.new_proxy
+        SearchHistory.append_status(search_history_id,"R1(#{Time.now.strftime('%M:%S')})")
+      end
       first_response = RestClient::Request.execute(method: :get, url: "#{search_url}", proxy: proxy_url)
     rescue => e
-      Proxy.set_status(proxy_url,"deactive")
-      SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}"+" Proxy: #{proxy_url}")
+      ActiveRecord::Base.connection_pool.with_connection do 
+        Proxy.set_status(proxy_url,"deactive")
+        SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}"+" Proxy: #{proxy_url}")
+      end
       return {status:false}
     end
 
@@ -29,21 +34,28 @@ class Suppliers::Alibaba
       request_id = JSON.parse(first_response)["RequestId"]
       get_flight_params = "id=#{request_id}&last=0&ffrom=#{origin}&fto=#{destination}&datefrom=#{shamsi_date}&count=1&interval=1&isReturn=false&isNew=true"
       flight_url = get_flight_url+get_flight_params
-      proxy_url = Proxy.new_proxy
-      SearchHistory.append_status(search_history_id,"R2(#{Time.now.strftime('%M:%S')})")
+      ActiveRecord::Base.connection_pool.with_connection do 
+        proxy_url = Proxy.new_proxy
+        SearchHistory.append_status(search_history_id,"R2(#{Time.now.strftime('%M:%S')})")
+      end
       second_response = RestClient::Request.execute(method: :get, url: "#{flight_url}", proxy: proxy_url)
       return {status:true,response: second_response}
     rescue => e
-      Proxy.set_status(proxy_url,"deactive")
-      SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}"+" Proxy: #{proxy_url}")
+      ActiveRecord::Base.connection_pool.with_connection do 
+        Proxy.set_status(proxy_url,"deactive")
+        SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}"+" Proxy: #{proxy_url}")
+      end
       return {status:false}
     end
   end
 
   def import_domestic_flights(response,route_id,origin,destination,date,search_history_id)
+      flight_id = nil
       flight_prices = Array.new()
       json_response = JSON.parse(response[:response])
-      SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
+      ActiveRecord::Base.connection_pool.with_connection do 
+        SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
+      end
       json_response["AvailableFlights"].each do |flight|
         next if flight["ClassCount"] == "0" #Alibaba send a soldout seats too. 
         flight_number = airline_code = airplane_type = departure_date_time  = nil
@@ -67,7 +79,9 @@ class Suppliers::Alibaba
         departure_time = departure_date_time.to_datetime
         price = flight["price"].to_i/10
       
-        flight_id = Flight.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
+        ActiveRecord::Base.connection_pool.with_connection do 
+          flight_id = Flight.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
+        end
 
         deeplink_url = "https://alibaba.ir/flights/#{origin.upcase}-#{destination.upcase}/#{date}/1-0-0" #create alibaba based on one search
 
@@ -81,22 +95,29 @@ class Suppliers::Alibaba
               next
             end
           end
-          flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"alibaba", flight_date:"#{departure_date}", deep_link:"#{deeplink_url}")
+          
+          ActiveRecord::Base.connection_pool.with_connection do 
+            flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"alibaba", flight_date:"#{departure_date}", deep_link:"#{deeplink_url}")
+          end
         end
       end #end of each loop
       
       unless flight_prices.empty?
-        #SearchHistory.append_status(search_history_id,"Deleting(#{Time.now.strftime('%M:%S')})")
-        #first we should remove the old flight price archive 
-        FlightPrice.delete_old_flight_prices("alibaba",route_id,date) unless flight_prices.empty?
-        #SearchHistory.append_status(search_history_id,"Importing(#{Time.now.strftime('%M:%S')})")
-        # then bulk import enabled by a bulk import gem
-        FlightPrice.import flight_prices
-        #SearchHistory.append_status(search_history_id,"Archive(#{Time.now.strftime('%M:%S')})")
-        FlightPriceArchive.import flight_prices
-        SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
+        ActiveRecord::Base.connection_pool.with_connection do 
+          #SearchHistory.append_status(search_history_id,"Deleting(#{Time.now.strftime('%M:%S')})")
+          #first we should remove the old flight price archive 
+          FlightPrice.delete_old_flight_prices("alibaba",route_id,date) unless flight_prices.empty?
+          #SearchHistory.append_status(search_history_id,"Importing(#{Time.now.strftime('%M:%S')})")
+          # then bulk import enabled by a bulk import gem
+          FlightPrice.import flight_prices
+          #SearchHistory.append_status(search_history_id,"Archive(#{Time.now.strftime('%M:%S')})")
+          FlightPriceArchive.import flight_prices
+          SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
+        end
       else
-        SearchHistory.append_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
+        ActiveRecord::Base.connection_pool.with_connection do 
+          SearchHistory.append_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
+        end
       end
   end
 
