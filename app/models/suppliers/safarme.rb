@@ -8,7 +8,9 @@ class Suppliers::Safarme
       begin
         params = "ApiSiteId=18F1FBCA-32F6-48B6-AF76-7243C6013668&SourceAbbrivation=#{origin.upcase}&DestinationAbbrivation=#{destination.upcase}&flightdate=#{safarme_template_date}&count=1&AdultCount=1&InfantCount=0&FlightType=#{flight_type}"
         search_url = @@search_url+params
-        SearchHistory.append_status(search_history_id,"R#{flight_type}(#{Time.now.strftime('%M:%S')})")
+        ActiveRecord::Base.connection_pool.with_connection do
+          SearchHistory.append_status(search_history_id,"R#{flight_type}(#{Time.now.strftime('%M:%S')})")
+        end
         
         if Rails.env.test?
           response = File.read("test/fixtures/files/domestic-safarme.log")
@@ -17,7 +19,9 @@ class Suppliers::Safarme
           response = response.body
         end
       rescue => e
-        SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
+        ActiveRecord::Base.connection_pool.with_connection do
+          SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
+        end
         return {status:false}
       end
       return response
@@ -32,9 +36,11 @@ class Suppliers::Safarme
     end
 
     def import_domestic_flights(response,route_id,origin,destination,date,search_history_id)
-      
+      flight_id = nil
       flight_prices = Array.new()
-      SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
+      ActiveRecord::Base.connection_pool.with_connection do
+        SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
+      end
       
       response[:response].each do |flight|
         airline_code = get_airline_code(flight["AirLineID"])
@@ -44,7 +50,9 @@ class Suppliers::Safarme
         airplane_type = ""
         price = flight["price"]/10
         deeplink_url = get_deep_link(origin,destination,date)
-        flight_id = Flight.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
+        ActiveRecord::Base.connection_pool.with_connection do
+          flight_id = Flight.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
+        end
 
         #to prevent duplicate flight prices we compare flight prices before insert into database
         flight_price_so_far = flight_prices.select {|flight_price| flight_price.flight_id == flight_id}
@@ -57,22 +65,28 @@ class Suppliers::Safarme
           end
         end
 
-        flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"safarme", flight_date:"#{date}", deep_link:"#{deeplink_url}" )
+        ActiveRecord::Base.connection_pool.with_connection do
+          flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"safarme", flight_date:"#{date}", deep_link:"#{deeplink_url}" )
+        end
 
       end #end of each loop
       
       unless flight_prices.empty?
-        #SearchHistory.append_status(search_history_id,"Deleting(#{Time.now.strftime('%M:%S')})")
-        #first we should remove the old flight price archive 
-        FlightPrice.delete_old_flight_prices("safarme",route_id,date)
-        #SearchHistory.append_status(search_history_id,"Importing(#{Time.now.strftime('%M:%S')})")
-        #then bulk import enabled by a bulk import gem
-        FlightPrice.import flight_prices
-        #SearchHistory.append_status(search_history_id,"Archive(#{Time.now.strftime('%M:%S')})") 
-        FlightPriceArchive.import flight_prices
-        SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
+        ActiveRecord::Base.connection_pool.with_connection do
+          #SearchHistory.append_status(search_history_id,"Deleting(#{Time.now.strftime('%M:%S')})")
+          #first we should remove the old flight price archive 
+          FlightPrice.delete_old_flight_prices("safarme",route_id,date)
+          #SearchHistory.append_status(search_history_id,"Importing(#{Time.now.strftime('%M:%S')})")
+          #then bulk import enabled by a bulk import gem
+          FlightPrice.import flight_prices
+          #SearchHistory.append_status(search_history_id,"Archive(#{Time.now.strftime('%M:%S')})") 
+          FlightPriceArchive.import flight_prices
+          SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
+        end
       else
-        SearchHistory.append_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
+        ActiveRecord::Base.connection_pool.with_connection do
+          SearchHistory.append_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
+        end
       end
 
   end

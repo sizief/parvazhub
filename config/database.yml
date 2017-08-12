@@ -2,6 +2,7 @@ default: &default
   encoding: unicode
   pool: <%= ENV["DB_POOL"] %>
   timeout: 5000
+  reaping_frequency: 1
   
 
 development:
