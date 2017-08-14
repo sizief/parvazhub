@@ -66,7 +66,8 @@ class Suppliers::Trip
         airline_code = get_airline_code(flight["legs"][0]["operatorCode"])
         next if airline_code.nil?
         flight_number = airline_code + flight_number_correction(flight["legs"][0]["flightNo"],airline_code)
-        departure_time = flight["legs"][0]["departureTime"] + ":00"
+        departure_time = flight["legs"][0]["departureTime"]
+        departure_time += ":00" if departure_time.size == 16 
         airplane_type = ""
         price = flight["fares"]["total"]["price"]
         deeplink_url = get_deep_link(origin,destination,date)
@@ -123,7 +124,8 @@ class Suppliers::Trip
   def get_airline_code(airline_code)
     airlines ={
       "RV"=>"IV",
-      "SA"=>"SE"
+      "SA"=>"SE",
+      "ATR"=>"AK"
 		}
 	airlines[airline_code].nil? ? airline_code : airlines[airline_code]
   end

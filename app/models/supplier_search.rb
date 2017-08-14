@@ -7,8 +7,10 @@ class SupplierSearch
 	end
 
   def background_search(origin,destination,date)
-    route = Route.find_by(origin:"#{origin}", destination:"#{destination}")
-    search_suppliers(80,origin,destination,route.id,date) 
+    ActiveRecord::Base.connection_pool.with_connection do   
+      route = Route.find_by(origin:"#{origin}", destination:"#{destination}")
+      search_suppliers(60,origin,destination,route.id,date) 
+    end
   end
 
   def search_supplier_in_threads(delay,origin,destination,route_id,date)
@@ -33,7 +35,10 @@ class SupplierSearch
 
 	def search_suppliers(delay,origin,destination,route_id,date)
     job_ids = Hash.new
-    supplier_list = Supplier.where(status:true)
+    supplier_list = nil
+    ActiveRecord::Base.connection_pool.with_connection do   
+      supplier_list = Supplier.where(status:true)
+    end
 
     supplier_list.each do |x|
       job_ids[x[:name].to_sym] = SupplierSearchWorker.perform_async(x[:name],x[:class_name],origin,destination,route_id,date,"bg")
