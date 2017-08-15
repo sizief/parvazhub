@@ -41,6 +41,8 @@ module SearchResultHelper
 			return "رسپینا۲۴"
 		elsif supplier_name == "trip"
 			return "تریپ"
+		elsif supplier_name == "travelchi"
+			return "تراولچی"
 		else
 			return supplier_name
 		end

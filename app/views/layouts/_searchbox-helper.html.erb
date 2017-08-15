@@ -6,6 +6,8 @@
       var today_timestamp = Math.round((new Date()).getTime() / 1000);
        $("#date-picker").pDatepicker({
             maxDate: new persianDate().subtract('day', 1).valueOf(),
+            dayPicker: {scrollEnabled: false},
+            monthPicker: {scrollEnabled: false},
             persianDigit: true,
             format : "YYYY-MM-DD dddd",
             /* format : "YYYY - MM - DD", */
