@@ -3,6 +3,7 @@ class Suppliers::Travelchi
   require "rest-client"
 
   def search(origin,destination,date,search_history_id)
+      proxy_url = nil
       if Rails.env.test?
         response = File.read("test/fixtures/files/domestic-travelchi.log") 
         return {response: response}
@@ -14,10 +15,12 @@ class Suppliers::Travelchi
         body = {"flight_date":date.to_time.to_i,"source":"#{origin.upcase}","destination":"#{destination.upcase}","provider_code":"FOROUD","scope":"local","adults":1,"childs":0,"infant":0}
         ActiveRecord::Base.connection_pool.with_connection do        
           SearchHistory.append_status(search_history_id,"R1(#{Time.now.strftime('%M:%S')})")
+          proxy_url = Proxy.new_proxy
         end
-        response = RestClient::Request.execute(method: :post, url: "#{URI.parse(url)}", payload: body.to_json, headers: {:'Authorization'=> "JWT #{get_auth_key}",:'Content-Type'=> "application/json"}, proxy: nil)
+        response = RestClient::Request.execute(method: :post, url: "#{URI.parse(url)}", payload: body.to_json, headers: {:'Authorization'=> "JWT #{get_auth_key}",:'Content-Type'=> "application/json"}, proxy: proxy_url)
       rescue => e
-        ActiveRecord::Base.connection_pool.with_connection do        
+        ActiveRecord::Base.connection_pool.with_connection do 
+          Proxy.set_status(proxy_url,"deactive")       
           SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
         end
           return {status:false, response: e.message}
