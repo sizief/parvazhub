@@ -125,7 +125,8 @@ class Suppliers::Trip
     airlines ={
       "RV"=>"IV",
       "SA"=>"SE",
-      "ATR"=>"AK"
+      "ATR"=>"AK",
+      "RZ"=>"SE"
 		}
 	airlines[airline_code].nil? ? airline_code : airlines[airline_code]
   end

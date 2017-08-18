@@ -105,7 +105,8 @@ class Suppliers::Travelchi
   def get_airline_code(airline_code)
     airlines ={
       "SA"=>"SE",
-      "ATR"=>"AK"
+      "ATR"=>"AK",
+      "RZ"=>"SE"
 		}
 	airlines[airline_code].nil? ? airline_code : airlines[airline_code]
   end

@@ -92,7 +92,8 @@ class Suppliers::Ghasedak
   def get_airline_code(airline_code)
     airlines ={
       "RV"=>"IV",
-      "ZZ"=>"SE"
+      "ZZ"=>"SE",
+      "RZ"=>"SE"
 		}
 	airlines[airline_code].nil? ? airline_code : airlines[airline_code]
   end
