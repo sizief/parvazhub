@@ -35,7 +35,7 @@
 						<td class="center aligned <%='disable' if price.keys[0].to_s.to_date<Date.today %>">
 							<div class="">
 								<div style="font-size: 1.5em">
-									<%= link_to(number_with_delimiter(price.values[0]), search_link_builder("thr",@city_code,price.keys[0].to_s.to_date),class:"showmodal") %>
+									<%= link_to(number_with_delimiter(price.values[0]), search_link_builder("tehran",City.list[@city_code.to_sym][:en],price.keys[0].to_s.to_date),class:"showmodal") %>
 								</div>
 			               		<div style="font-size: 0.7em;color: gray;">
 									<%=price.keys[0].to_s.to_date.to_parsi.strftime "%d %B"  %>
@@ -76,7 +76,7 @@
 						<td class="center aligned <%='disable' if price.keys[0].to_s.to_date<Date.today %>">
 							<div class="">
 								<div style="font-size: 1.5em">
-									<%= link_to(number_with_delimiter(price.values[0]), search_link_builder(@city_code,"thr",price.keys[0].to_s.to_date),class:"showmodal") %>
+									<%= link_to(number_with_delimiter(price.values[0]), search_link_builder(City.list[@city_code.to_sym][:en],"tehran",price.keys[0].to_s.to_date),class:"showmodal") %>
 								</div>
 			               		<div style="font-size: 0.7em;color: gray;">
 									<%=price.keys[0].to_s.to_date.to_parsi.strftime "%d %B"  %>

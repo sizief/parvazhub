@@ -17,7 +17,7 @@ class City
   end
 
   def City.default_destination_city
-	"kih"
+	"kish"
   end
 
   def City.get_city_code_based_on_name persian_name

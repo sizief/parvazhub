@@ -1,17 +1,17 @@
 
 <%= render 'layouts/header' %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
-<% provide(:title,"پروازهاب:‌ پروازهای #{@cities[@search_parameter[:origin].to_sym][:fa]} به #{@cities[@search_parameter[:destination].to_sym][:fa]} برای #{@search_parameter[:date].to_date.to_parsi.strftime '%A %d %B %Y'} ")%>
-<% provide(:description,"لیست پروازهای #{@cities[@search_parameter[:origin].to_sym][:fa]} به #{@cities[@search_parameter[:destination].to_sym][:fa]} در تاریخ #{@search_parameter[:date].to_date.to_parsi.strftime '%A %d %B %Y'}") %>
+<% provide(:title,"پروازهاب:‌ پروازهای #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]} برای #{@search_parameter[:date].to_date.to_parsi.strftime '%A %d %B %Y'} ")%>
+<% provide(:description,"لیست پروازهای #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]} در تاریخ #{@search_parameter[:date].to_date.to_parsi.strftime '%A %d %B %Y'}") %>
 
 <div class="ui container" id="search-results-container">
 	<div class="ui grid" id="results-message">
   		<div class="two column row">
     		<div class="left floated column">
 				<i class="plane icon"></i> 
-				<%= @cities[@search_parameter[:origin].to_sym][:fa] %>
+				<%= @cities[@search_parameter[:origin_code].to_sym][:fa] %>
 				  به 
-				 <%= @cities[@search_parameter[:destination].to_sym][:fa] %>
+				 <%= @cities[@search_parameter[:destination_code].to_sym][:fa] %>
 				 روز 
 				 <%= @search_parameter[:date].to_date.to_parsi.strftime "%A %d %B %Y"   %>
 				 <br>
@@ -48,14 +48,14 @@
 	</div>
 
 	<div class="ui" id="search-box-inner">
-		<%= form_for(:search, url: flights_path, method: :get) do |f| %>
+		<%= form_for(:search, url: flight_search_path, method: :get) do |f| %>
 			<div class="ui form">
 				<div class="four fields">
 					<div class="field">
-						<%= f.select :origin, @cities.map{ |key,value| [value[:fa],key]}, {:selected => @search_parameter[:origin]},{:class =>'ui dropdown'} %>
+						<%= f.select :origin, @cities.map{ |key,value| [value[:fa],value[:en]]}, {:selected => @search_parameter[:origin_name]},{:class =>'ui dropdown'} %>
 					</div>
 					<div class="field">
-						<%= f.select :destination, @cities.map{ |key,value| [value[:fa],key]}, {:selected => @search_parameter[:destination]},{:class =>'ui dropdown'} %>
+						<%= f.select :destination, @cities.map{ |key,value| [value[:fa],value[:en]]}, {:selected => @search_parameter[:destination_name]},{:class =>'ui dropdown'} %>
 					</div>
 					<div class="field ui calendar">
 						<div class="ui input left icon">
@@ -72,7 +72,7 @@
 		<%end%>
 	</div>
 
-	<% flight_list = Flight.new.get_lowest_price_time_table(@search_parameter[:origin],@search_parameter[:destination],@search_parameter[:date]) %>
+	<% flight_list = Flight.new.get_lowest_price_time_table(@search_parameter[:origin_code],@search_parameter[:destination_code],@search_parameter[:date]) %>
 	<div class="ui mini five statistics" id="flight-price-table" >
 	  <% flight_list.each do |key,value|%>
 	  	<div class=" grey statistic">
@@ -80,7 +80,7 @@
 		  	<%= value.nil? ? "<i class='plane icon'></i>".html_safe : number_with_delimiter(value.best_price)  %>
 		  </div>
 		  <div class="label web-font">
-		  	<%= link_to(key.to_s.to_date.to_parsi.strftime("%A %d %B "), search_link_builder(@search_parameter[:origin],@search_parameter[:destination],key.to_s.to_date),{class:"showmodal"})   %>
+		  	<%= link_to(key.to_s.to_date.to_parsi.strftime("%A %d %B "), search_link_builder(@search_parameter[:origin_name],@search_parameter[:destination_name],key.to_s.to_date),{class:"showmodal"})   %>
 		  </div>
 	   	</div>
 	  <% end %>
@@ -145,8 +145,8 @@
 	  </p>
 	<% end %>
 	
-	<% unless which_city_page(@search_parameter[:origin],@search_parameter[:destination]).nil? %>
-	<%= render partial: 'layouts/city_page',  locals: {city_code: which_city_page(@search_parameter[:origin],@search_parameter[:destination])} %>
+	<% unless which_city_page(@search_parameter[:origin_code],@search_parameter[:destination_code]).nil? %>
+	<%= render partial: 'layouts/city_page',  locals: {city_code: which_city_page(@search_parameter[:origin_code],@search_parameter[:destination_code])} %>
 	<% end %>
  
 </div>

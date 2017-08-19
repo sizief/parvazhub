@@ -27,8 +27,8 @@ module SearchHelper
        	time + " " + phrase
 	end
 
-	def search_link_builder(origin,destination,date)
-		link = "/flights?utf8=✓&search%5Borigin%5D=#{origin}&search%5Bdestination%5D=#{destination}&search%5Bdate%5D=#{date}"
+	def search_link_builder(origin_name,destination_name,date)
+		link = "/flights/#{origin_name}/#{destination_name}/#{date}"
 	end
 
 	def day_name_to_human (day)

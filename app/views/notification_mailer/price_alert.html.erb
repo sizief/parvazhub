@@ -41,7 +41,7 @@
                 <%= hour_to_human flight.departure_time.to_datetime.strftime("%H:%M") %>
               </td>
               <td style="width: 150px">
-                <%= link_to number_with_delimiter(flight.best_price)+" تومان", "http://parvazhub.com"+search_link_builder(@search_parameter[:origin],@search_parameter[:destination],@search_parameter[:date]), class: "ui teal label large flight-price", target: "blank" %>
+                <%= link_to number_with_delimiter(flight.best_price)+" تومان", "http://parvazhub.com"+search_link_builder(@search_parameter[:origin_name],@search_parameter[:destination_code],@search_parameter[:date]), class: "ui teal label large flight-price", target: "blank" %>
               </td>
             </tr>
           <% end %> 

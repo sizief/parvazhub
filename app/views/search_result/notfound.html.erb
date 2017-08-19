@@ -4,15 +4,15 @@
 <div class="ui container" id="search-results-container" >
 <p style="    text-align: center;margin: 2em;direction: rtl;font-weight: bold;">مسیر مورد نظر شما در سرویس ما موجود نیست. لطفا مسیر جدیدی انتخاب کنید.</p>
 	<div class="ui" id="search-box-inner" style="display: block !important">
-		<%= form_for(:search, url: flights_path, method: :get) do |f| %>
+		<%= form_for(:search, url: flight_search_path, method: :get) do |f| %>
 			<div class="ui form">
 				<div class="four fields">
 					<div class="field">
 						
-						<%= f.select :origin, @cities.map{ |key,value| [value[:fa],key]}, {:class =>'ui dropdown'} %>
+						<%= f.select :origin, @cities.map{ |key,value| [value[:fa],value[:en]]}, {:class =>'ui dropdown'} %>
 					</div>
 					<div class="field">
-						<%= f.select :destination, @cities.map{ |key,value| [value[:fa],key]}, {:selected => @default_destination_city},{:class =>'ui dropdown'} %>
+						<%= f.select :destination, @cities.map{ |key,value| [value[:fa],value[:en]]}, {:selected => @default_destination_city},{:class =>'ui dropdown'} %>
 					</div>
 					<div class="field ui calendar">
 						<div class="ui input left icon">

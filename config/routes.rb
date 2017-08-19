@@ -18,9 +18,9 @@ Rails.application.routes.draw do
 
 	get '/about_us', to:'static_pages#about_us'
 
-	get '/flights', to:'search_result#search', as: 'flights'
+	get '/flight_search', to:'search_result#flight_search', as: 'flight_search'
 
-	#get '/f/:search[:origin]/:search[:destination]/:search[:date]', to:'search_result#search'
+	get '/flights/:origin_name/:destination_name/:date', to:'search_result#search'
 
 	get '/flight-prices/:id', to: 'search_result#flight_prices', as: 'flight-prices' #, :defaults => { :format => 'js' }
 
