@@ -48,7 +48,7 @@
 	</div>
 
 	<div class="ui" id="search-box-inner">
-		<%= form_for(:search, url: flight_search_path, method: :get) do |f| %>
+		<%= form_for(:search, url: flight_search_path, method: :get, html: {id:"flight_search"}) do |f| %>
 			<div class="ui form">
 				<div class="four fields">
 					<div class="field">
@@ -65,7 +65,7 @@
 						</div>
 					</div>
 					<div class="field center aligned">
-						<%= f.submit "جستجوی مجدد", class: "ui submit web-font yellow button  fluid showmodal" %>
+						<%= f.submit "جستجوی مجدد", class: "ui submit web-font yellow button  fluid waiting-modal" %>
 					</div>
 				</div>
 			</div>
@@ -80,7 +80,7 @@
 		  	<%= value.nil? ? "<i class='plane icon'></i>".html_safe : number_with_delimiter(value.best_price)  %>
 		  </div>
 		  <div class="label web-font">
-		  	<%= link_to(key.to_s.to_date.to_parsi.strftime("%A %d %B "), search_link_builder(@search_parameter[:origin_name],@search_parameter[:destination_name],key.to_s.to_date),{class:"showmodal"})   %>
+		  	<%= link_to(key.to_s.to_date.to_parsi.strftime("%A %d %B "), search_link_builder(@search_parameter[:origin_name],@search_parameter[:destination_name],key.to_s.to_date))   %>
 		  </div>
 	   	</div>
 	  <% end %>
@@ -151,10 +151,6 @@
  
 </div>
 
-<%= render 'layouts/searchbox-helper' %>
-<%= render 'layouts/waiting_modal' %>
-
-
 <div class="ui basic modal prices">
       <p id="prices-modal-content"></p>
 </div>
@@ -162,4 +158,5 @@
 	$('table').tablesort()
 </script>
 
+<%= render 'layouts/searchbox-helper' %>
 <%= render 'layouts/footer' %>

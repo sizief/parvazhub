@@ -1,0 +1,135 @@
+<%= render 'layouts/header' %>
+<% provide(:title,"پروازهاب: جستجو و مقایسه پروازهای  #{@origin[:fa]} به #{@destination[:fa]} ") %>
+<% provide(:description,"جستجو و مقایسه قیمت پروازهای #{@origin[:fa]} به #{@destination[:fa]}") %>
+
+<div class="ui stackable one column grid centered" id="wide-search-box">
+<h1 class="city-header">
+	جستجو و مقایسه قیمت پروازهای <%= "#{@origin[:fa]} به #{@destination[:fa]}" %>
+</h1>
+   		<%= form_for(:search, url: flight_search_path, method: :get, html: {id:"flight_search"}) do |f| %>
+    		<div class="ui huge form" >
+     			<div class="two fields">
+      				<div class="field">
+	   					<%= f.select :origin, @cities.map{ |key,value| [("از "+"#{value[:fa]}"),value[:en]]}, {:selected => @origin[:en]},{:class =>'ui dropdown'} %>
+      				</div>
+      				<div class="field">
+	   					<%= f.select :destination, @cities.map{ |key,value| [("به "+"#{value[:fa]}"),value[:en]]}, {:selected => @destination[:en]},{:class =>'ui dropdown'} %>
+      				</div> 
+  				</div>
+  				<div class="field ui calendar">
+						<div class="ui input left icon">
+							<i class="calendar icon"></i>
+							<%= f.text_field :date_shamsi, {id: 'date-picker', class:'form-control web-font', readonly: 'readonly', autocomplete: 'false'} %>
+							<%= f.text_field :date, {id: 'date-picker-field'} %>
+						</div>
+					</div>
+  				<div class="ui center aligned basic segment">
+  					<button class="ui submit massive yellow web-font fluid right labeled  icon button waiting-modal" type="submit">
+							<i class="right arrow icon"></i>
+							نمایش پروازها
+					</button>
+  				</div>
+			</div>
+		<%end%>
+	</div>
+
+<div class="ui container" id="search-results-container" style="padding-top: 1em">
+	
+	<div class="city-calendar" >
+		<h3>
+			<i class=" plane icon"></i>
+			<b class="yellow-text">کمترین</b>
+            هزینه پرواز <%= "#{@origin[:fa]} به #{@destination[:fa]}" %> برای یک نفر
+        </h3>
+		<table class="ui celled table stackable rtl">
+		  	<thead class="not-mobile">
+				<tr class="center aligned web-font">
+		  			<th class="table-header">شنبه</th>
+		  			<th class="table-header">یکشنبه </th>
+		  			<th class="table-header">دوشنبه</th>
+		  			<th class="table-header">سه‌شنبه</th>
+		  			<th class="table-header">چهارشنبه</th>
+		  			<th class="table-header">پنج‌شنبه</th>
+		  			<th class="table-header">جمعه</th>
+		  		</tr>
+		  	</thead>
+			<tbody>
+				<% @prices[:to].each_with_index do |price,index|%>
+					<% if index%7 == 0 %>
+						<tr class="center aligned very basic">
+					<% end %>	
+						<td class="center aligned <%='disable' if price.keys[0].to_s.to_date<Date.today %>">
+							<a href="<%= search_link_builder(@origin[:en],@destination[:en],price.keys[0].to_s.to_date) %>" >
+								<div>
+									<div style="font-size: 1.5em">
+										<%= " پروازهای" if number_with_delimiter(price.values[0]) == "-" %>
+										<%= number_with_delimiter(price.values[0]) unless number_with_delimiter(price.values[0]) == "-" %>
+									</div>
+									<div style="font-size: 0.7em;color: gray;">
+										<%=price.keys[0].to_s.to_date.to_parsi.strftime "%d %B"  %>
+									</div>
+								</div>
+							</a>	
+						</td>
+					
+					<% if ((index%7 == 6) || (index == 34)) %>
+						</tr>
+					<% end %>	
+							
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="city-calendar" >
+        <h3>
+            <i class=" plane icon"></i>
+		    <b class="yellow-text">کمترین</b>
+            هزینه پرواز <%= "#{@origin[:fa]} به #{@destination[:fa]}" %> برای یک نفر
+        </h3>
+		<table class="ui celled table stackable rtl">
+		  	<thead class="not-mobile">
+				<tr class="center aligned web-font">
+		  			<th class="table-header">شنبه</th>
+		  			<th class="table-header">یکشنبه </th>
+		  			<th class="table-header">دوشنبه</th>
+		  			<th class="table-header">سه‌شنبه</th>
+		  			<th class="table-header">چهارشنبه</th>
+		  			<th class="table-header">پنج‌شنبه</th>
+		  			<th class="table-header">جمعه</th>
+		  		</tr>
+		  	</thead>
+			<tbody>
+				<% @prices[:from].each_with_index do |price,index|%>
+					<% if index%7 == 0 %>
+						<tr class="center aligned very basic">
+					<% end %>	
+						<td class="center aligned <%='disable' if price.keys[0].to_s.to_date<Date.today %>">
+							<a href="<%= search_link_builder(@destination[:en],@origin[:en],price.keys[0].to_s.to_date) %>" >
+								<div class="">
+									<div style="font-size: 1.5em">
+										<%= " پروازهای" if number_with_delimiter(price.values[0]) == "-" %>	
+										<%= number_with_delimiter(price.values[0]) unless number_with_delimiter(price.values[0]) == "-" %>
+									</div>
+									<div style="font-size: 0.7em;color: gray;">
+										<%=price.keys[0].to_s.to_date.to_parsi.strftime "%d %B"  %>
+									</div>
+								</div>
+							</a>	
+						</td>
+					
+					<% if ((index%7 == 6) || (index == 34)) %>
+						</tr>
+					<% end %>	
+							
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+
+
+
+</div>
+
+<%= render 'layouts/searchbox-helper' %>
+<%= render 'layouts/footer' %>

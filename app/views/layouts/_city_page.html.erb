@@ -1,5 +1,5 @@
 <% cities = City.list %>
-<a href="/city/<%= cities[city_code.to_sym][:en] %>">
+<a href="<%= city_page_path(city_name:  cities[city_code.to_sym][:en])  %>">
     <div class="web-font city-header-image" style=" background-image: url(/assets/cities/<%= cities[city_code.to_sym][:en] %>-big.jpg);background-size: cover; ">
     	<h1 style="background: url(/assets/opacity-backgrounds/black50p.png); " class="city-page-title web-font">
       بهترین زمان سفر به  

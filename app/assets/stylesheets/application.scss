@@ -1,3 +1,10 @@
+/*
+ * This is a manifest file that'll automatically include all the stylesheets available in this directory
+ * and any sub-directories. You're free to add application-wide styles to this file and they'll appear at
+ * the top of the compiled file, but it's generally better to create a new file per style scope.
+ *= require_self
+ *= require_tree . 
+ */ 
 @import "semantic-ui";
 @import "semantic-ui/collections/menu";
 @import "rtlcss";
@@ -131,117 +138,95 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
 
 
 /* Search Results */
-#search-results-container{
-  width: 70%;
-  margin-top: 1em;
-}
-.airline-logo{
-  width:2.5em;
-  margin-bottom:7px;
-}
-.best-price{
-  color:green;
-  font-weight:bold;
-}
-.table-header{
-  font-weight: normal !important;
-  font-family: samim !important;
-}
-.supplier-logo{
-  display:inline !important;
-}
-.flight-price{
-  cursor:pointer;
-  line-height: 1.4em !important;
-}
-/* datepicker */
-.header-row-cell, .datepicker-plot-area{
-  font-family:samim !important;
-}
-.datepicker-plot-area{
-  box-shadow:none !important;
-}
-
-.price-box-text{
-  padding-top: 8px;
-  padding-bottom: 8px;
-  color:black;
-  direction:rtl;
-}
-.price-box-price{
-  color:green;
-  font-weight:bold;
-}
-.price-box-image{
-}
-#results-message{
- direction: rtl;
- padding: 0;
- background: aliceblue;
- margin-left: 0 !important;
- margin-right: 0 !important;
- margin-bottom: 1px;
-}
-
-#flight-price-table {
-  direction: rtl;
-  background: aliceblue;
-  padding-top: 1em;
-  border-top: 1px solid #eee;
-  }
-#price-alert-register{
-  display:none;
-  padding: 1em;
-  direction: rtl;
-  background: white;
-  border-top: 1px #26a1d6 solid;
-}
-.flight-price-logo{
-   
-}
 
 
-/* city pages */
-.city-header-image{
-  direction: rtl;
+/* loader */
+.sk-folding-cube {
+  margin: 20px auto;
+  width: 40px;
+  height: 40px;
+  position: relative;
+  -webkit-transform: rotateZ(45deg);
+          transform: rotateZ(45deg);
+}
+
+.sk-folding-cube .sk-cube {
+  float: left;
+  width: 50%;
+  height: 50%;
+  position: relative;
+  -webkit-transform: scale(1.1);
+      -ms-transform: scale(1.1);
+          transform: scale(1.1); 
+}
+.sk-folding-cube .sk-cube:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  background-position: center center;
-  padding-top: 12%;
-  padding-bottom: 11%;
-  background-color:#eee;
-  text-align:center;
+  height: 100%;
+  background-color: #29aae1;
+  -webkit-animation: sk-foldCubeAngle 2.4s infinite linear both;
+          animation: sk-foldCubeAngle 2.4s infinite linear both;
+  -webkit-transform-origin: 100% 100%;
+      -ms-transform-origin: 100% 100%;
+          transform-origin: 100% 100%;
 }
-.city-calendar{
-  direction:rtl;
-  margin-bottom:2em;
+.sk-folding-cube .sk-cube2 {
+  -webkit-transform: scale(1.1) rotateZ(90deg);
+          transform: scale(1.1) rotateZ(90deg);
 }
-.city-page-title{
-  display: inline-block;
-  color: white;
+.sk-folding-cube .sk-cube3 {
+  -webkit-transform: scale(1.1) rotateZ(180deg);
+          transform: scale(1.1) rotateZ(180deg);
+}
+.sk-folding-cube .sk-cube4 {
+  -webkit-transform: scale(1.1) rotateZ(270deg);
+          transform: scale(1.1) rotateZ(270deg);
+}
+.sk-folding-cube .sk-cube2:before {
+  -webkit-animation-delay: 0.3s;
+          animation-delay: 0.3s;
+}
+.sk-folding-cube .sk-cube3:before {
+  -webkit-animation-delay: 0.6s;
+          animation-delay: 0.6s; 
+}
+.sk-folding-cube .sk-cube4:before {
+  -webkit-animation-delay: 0.9s;
+          animation-delay: 0.9s;
+}
+@-webkit-keyframes sk-foldCubeAngle {
+  0%, 10% {
+    -webkit-transform: perspective(140px) rotateX(-180deg);
+            transform: perspective(140px) rotateX(-180deg);
+    opacity: 0; 
+  } 25%, 75% {
+    -webkit-transform: perspective(140px) rotateX(0deg);
+            transform: perspective(140px) rotateX(0deg);
+    opacity: 1; 
+  } 90%, 100% {
+    -webkit-transform: perspective(140px) rotateY(180deg);
+            transform: perspective(140px) rotateY(180deg);
+    opacity: 0; 
+  } 
 }
 
-/* menu links */
-.menu-links{
-    color: white;
-    font-size: 0.7em;
-}
-.modal.prices{
-  top:10% !important;
-  left: initial;
-  text-align: center;
-  margin-top:0 !important
-}
-
-
-@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
-#flight-price-table {
-     display:none;
+@keyframes sk-foldCubeAngle {
+  0%, 10% {
+    -webkit-transform: perspective(140px) rotateX(-180deg);
+            transform: perspective(140px) rotateX(-180deg);
+    opacity: 0; 
+  } 25%, 75% {
+    -webkit-transform: perspective(140px) rotateX(0deg);
+            transform: perspective(140px) rotateX(0deg);
+    opacity: 1; 
+  } 90%, 100% {
+    -webkit-transform: perspective(140px) rotateY(180deg);
+            transform: perspective(140px) rotateY(180deg);
+    opacity: 0; 
+  }
 }
 
-.not-mobile, .nm{
-  display: none !important;
-}
-#flight-prices{
-  font-size: 0.8em;
-}
-}
+

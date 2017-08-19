@@ -9,7 +9,7 @@
             dayPicker: {scrollEnabled: false},
             monthPicker: {scrollEnabled: false},
             persianDigit: true,
-            format : "YYYY-MM-DD dddd",
+            format : "dddd - DD MMMM",
             /* format : "YYYY - MM - DD", */
             altFieldFormatter : function(unix){
                 if (!unix) return '';
@@ -29,11 +29,14 @@
                     btnPrevText: "<"
                 }
             },
-            autoClose: true
+            autoClose: true,
+            inline: false
         }); 
      }
     
 
-    $('.ui.dropdown').dropdown('refresh');     
+    $('.ui.dropdown').dropdown('refresh');  
+    // fix for turbolink does not show waiting modal after first time of form submit
+    $("#flight_search").submit(function( event ) {$('.ui.basic.modal.waiting').modal('show');});
     }); 
 </script>

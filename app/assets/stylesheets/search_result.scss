@@ -1,0 +1,79 @@
+#search-results-container{
+  width: 70%;
+  margin-top: 1em;
+}
+.airline-logo{
+  width:2.5em;
+  margin-bottom:7px;
+}
+.best-price{
+  color:green;
+  font-weight:bold;
+}
+.table-header{
+  font-weight: normal !important;
+  font-family: samim !important;
+}
+.supplier-logo{
+  display:inline !important;
+}
+.flight-price{
+  cursor:pointer;
+  line-height: 1.4em !important;
+}
+/* datepicker */
+.header-row-cell, .datepicker-plot-area{
+  font-family:samim !important;
+}
+.datepicker-plot-area{
+  box-shadow:none !important;
+}
+
+.price-box-text{
+  padding-top: 8px;
+  padding-bottom: 8px;
+  color:black;
+  direction:rtl;
+}
+.price-box-price{
+  color:green;
+  font-weight:bold;
+}
+.price-box-image{
+}
+#results-message{
+ direction: rtl;
+ padding: 0;
+ background: aliceblue;
+ margin-left: 0 !important;
+ margin-right: 0 !important;
+ margin-bottom: 1px;
+}
+
+#flight-price-table {
+  direction: rtl;
+  background: aliceblue;
+  padding-top: 1em;
+  border-top: 1px solid #eee;
+  }
+#price-alert-register{
+  display:none;
+  padding: 1em;
+  direction: rtl;
+  background: white;
+  border-top: 1px #26a1d6 solid;
+}
+.flight-price-logo{}
+
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+#flight-price-table {
+     display:none;
+}
+
+.not-mobile, .nm{
+  display: none !important;
+}
+#flight-prices{
+  font-size: 0.8em;
+}
+}

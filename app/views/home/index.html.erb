@@ -41,7 +41,7 @@
 	</div>
 
 	<div class="ui stackable one column grid centered" style="margin-top: 1em">
-   		<%= form_for(:search, url: flight_search_path, method: :get) do |f| %>
+   		<%= form_for(:search, url: flight_search_path, method: :get, html: {id:"flight_search"}) do |f| %>
     		<div class="ui huge form" >
      			<div class="two fields">
       				<div class="field">
@@ -55,7 +55,7 @@
 						<%= f.text_field :date, {id: 'date-picker-field'} %>
       			</div>
   				<div class="ui center aligned basic segment" style="margin-top: 50px;">
-  					<button class="ui submit massive yellow web-font fluid right labeled  icon button showmodal" type="submit">
+  					<button class="ui submit massive yellow web-font fluid right labeled waiting-modal icon button" type="submit">
 							<i class="right arrow icon"></i>
 							نمایش پروازها
 					</button>
@@ -74,7 +74,7 @@
 			<%= link_to "تبریز", city_page_path(city_name:  "tabriz"),class:"city-page-link" %>،
 			<%= link_to "آبادان", city_page_path(city_name:  "abadan"),class:"city-page-link" %>،
 			<%= link_to "اصفهان", city_page_path(city_name:  "isfahan"),class:"city-page-link" %>،
-			<%= link_to "شیراز", city_page_path(city_name:  "shiraz"), class:"city-page-link" %>
+			<%= link_to "شیراز", city_page_path(city_name:  "shiraz"), class:"city-page-link" %>،
 			<%= link_to "اهواز", city_page_path(city_name:  "ahvaz"), class:"city-page-link" %>
 		</h4>
 	</div>
@@ -108,7 +108,5 @@
 	<% end %>   
 </div>
 
-
 <%= render 'layouts/searchbox-helper' %>
-<%= render 'layouts/waiting_modal' %>
 <%= render 'layouts/footer' %>

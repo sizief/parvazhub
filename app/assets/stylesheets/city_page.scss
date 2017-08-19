@@ -1,3 +1,40 @@
-// Place all the styles related to the CityPage controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+.city-header-image{
+  direction: rtl;
+  width: 100%;
+  background-position: center center;
+  padding-top: 12%;
+  padding-bottom: 11%;
+  background-color:#eee;
+  text-align:center;
+}
+.city-calendar{
+  direction:rtl;
+  margin-bottom:2em;
+}
+.city-page-title{
+  display: inline-block;
+  color: white;
+}
+
+/* menu links */
+.menu-links{
+    color: white;
+    font-size: 0.7em;
+}
+.modal.prices{
+  top:10% !important;
+  left: initial;
+  text-align: center;
+  margin-top:0 !important
+}
+#wide-search-box{
+	direction:rtl;
+	padding: 2em;
+    background: #29aae1;
+    margin-top: 1em;
+}
+.city-header{
+	width: 100%;
+    color: white;
+    line-height: 1.5em;
+}
