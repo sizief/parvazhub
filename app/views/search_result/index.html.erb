@@ -1,8 +1,8 @@
 
 <%= render 'layouts/header' %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
-<% provide(:title,"پروازهاب:‌ پروازهای #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]} برای #{@search_parameter[:date].to_date.to_parsi.strftime '%A %d %B %Y'} ")%>
-<% provide(:description,"لیست پروازهای #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]} در تاریخ #{@search_parameter[:date].to_date.to_parsi.strftime '%A %d %B %Y'}") %>
+<% provide(:title,"پروازهاب:‌ پروازهای #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]}  #{@search_parameter[:date_in_human]} ")%>
+<% provide(:description,"لیست پروازهای #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]}  #{@search_parameter[:date_in_human]}") %>
 
 <div class="ui container" id="search-results-container">
 	<div class="ui grid" id="results-message">
@@ -11,9 +11,8 @@
 				<i class="plane icon"></i> 
 				<%= @cities[@search_parameter[:origin_code].to_sym][:fa] %>
 				  به 
-				 <%= @cities[@search_parameter[:destination_code].to_sym][:fa] %>
-				 روز 
-				 <%= @search_parameter[:date].to_date.to_parsi.strftime "%A %d %B %Y"   %>
+				 <%= @cities[@search_parameter[:destination_code].to_sym][:fa] %> 
+				 <%= @search_parameter[:date].to_date.to_parsi.strftime "%A %d %B"   %>
 				 <br>
 				 <a class="ui primary basic blue" onclick="$('#search-box-inner').transition('slide');" style="cursor:pointer">
 				 <i class="search icon"></i> تغییر مبدا، مقصد یا تاریخ</a>
@@ -121,7 +120,7 @@
 						</td>
 						<td><%= flight.airplane_type.empty? ? "نامشخص" : airplane_name_for(flight.airplane_type) %></td>
 						<td>
-							<%= link_to number_with_delimiter(flight.best_price)+" تومان <span class=\"nm\"> |  فروشندگان </span><i class='yellow arrow right icon'></i>".html_safe, flight_prices_path(flight.id), class: "ui teal label large flight-price", remote: true %>
+							<%= link_to number_with_delimiter(flight.best_price)+" تومان <span class=\"nm\"> | مقایسه و خرید </span><i class='yellow arrow right icon'></i>".html_safe, flight_prices_path(flight.id), class: "ui teal label large flight-price", remote: true %>
 							<%#= supplier_logo_for(flight.price_by) %>
 						</td>
 					</tr>
