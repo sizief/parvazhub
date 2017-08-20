@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     
 	get '/flights/:city_name/', to: 'city_page#city', as: 'city_page'
 	get '/flights/:origin_name/:destination_name/', to: 'city_page#route', as: 'route_page'
-	get '/flights/:origin_name/:destination_name/:date', to:'search_result#search'
+	get '/flights/:origin_name/:destination_name/:date', to:'search_result#search', as: 'flight_result'
 	
 	get '/flight-prices/:id', to: 'search_result#flight_prices', as: 'flight-prices' #, :defaults => { :format => 'js' }
 	get 'redirect/:flight_price_id', to: 'redirect#redirect', as: 'redirect'

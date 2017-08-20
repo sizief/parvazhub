@@ -34,13 +34,78 @@
 	</div>
 
 <div class="ui container" id="search-results-container" style="padding-top: 1em">
-	
+	<% unless @today_statistic[:count] == 0 %>
+		<div class="city-calendar" >
+			<h4>
+				برنامه پروازی
+				<b class="yellow-text"> امروز</b>
+				<%= "#{@origin[:fa]} به #{@destination[:fa]}" %> 
+			</h4>
+			<p>
+				امروز
+				<%= @today_statistic[:date].to_date.to_parsi.strftime "%A %d %B"   %>
+				<%= @today_statistic[:count] %>
+				پرواز  در مسیر 
+				<%= "#{@origin[:fa]} به #{@destination[:fa]}" %> 
+				پرواز می‌کنند. اولین پرواز امروز ساعت
+				<%= @today_statistic[:first_flight_time] %> 
+				است. آخرین پرواز امروز ساعت
+				<%= @today_statistic[:last_flight_time] %> 
+				خواهد بود.
+			</p>
+		</div>
+	<% end %>
+
+	<% unless @tomorrow_statistic[:count] == 0 %>	
+		<div class="city-calendar" >
+			<h4>
+				برنامه پروازی
+				<b class="yellow-text"> فردا</b>
+				<%= "#{@origin[:fa]} به #{@destination[:fa]}" %> 
+			</h4>
+			<p>
+				فردا
+				<%= @tomorrow_statistic[:date].to_date.to_parsi.strftime "%A %d %B"   %>
+				<%= @tomorrow_statistic[:count] %>
+				پرواز  در مسیر 
+				<%= "#{@origin[:fa]} به #{@destination[:fa]}" %> 
+				پرواز می‌کنند. اولین پرواز فردا ساعت
+				<%= @tomorrow_statistic[:first_flight_time] %> 
+				است. آخرین پرواز فردا ساعت
+				<%= @tomorrow_statistic[:last_flight_time] %> 
+				خواهد بود.
+			</p>
+		</div>
+	<% end %>
+
+	<% unless @day_after_statistic[:count] == 0 %>
+		<div class="city-calendar" >
+			<h4>
+				برنامه پروازی
+				<b class="yellow-text"> پس‌فردا</b>
+				<%= "#{@origin[:fa]} به #{@destination[:fa]}" %> 
+			</h4>
+			<p>
+				پس‌فردا
+				<%= @day_after_statistic[:date].to_date.to_parsi.strftime "%A %d %B"   %>
+				<%= @day_after_statistic[:count] %>
+				پرواز  در مسیر 
+				<%= "#{@origin[:fa]} به #{@destination[:fa]}" %> 
+				پرواز می‌کنند. اولین پرواز پس‌فردا ساعت
+				<%= @day_after_statistic[:first_flight_time] %> 
+				است. آخرین پرواز پس‌فردا ساعت
+				<%= @day_after_statistic[:last_flight_time] %> 
+				خواهد بود.
+			</p>
+		</div>
+	<% end %>
+
+
 	<div class="city-calendar" >
-		<h3>
-			<i class=" plane icon"></i>
+		<h4>
 			<b class="yellow-text">کمترین</b>
             هزینه پرواز <%= "#{@origin[:fa]} به #{@destination[:fa]}" %> برای یک نفر
-        </h3>
+        </h4>
 		<table class="ui celled table stackable rtl">
 		  	<thead class="not-mobile">
 				<tr class="center aligned web-font">
@@ -82,11 +147,10 @@
 	</div>
 
 	<div class="city-calendar" >
-        <h3>
-            <i class=" plane icon"></i>
+        <h4>
 		    <b class="yellow-text">کمترین</b>
             هزینه پرواز <%= "#{@origin[:fa]} به #{@destination[:fa]}" %> برای یک نفر
-        </h3>
+        </h4>
 		<table class="ui celled table stackable rtl">
 		  	<thead class="not-mobile">
 				<tr class="center aligned web-font">

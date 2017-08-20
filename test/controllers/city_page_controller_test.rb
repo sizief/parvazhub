@@ -6,4 +6,14 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "route statistic" do
+    origin_code = "thr"
+    destination_code = "kih"
+    date = Date.today.to_s
+    stats = CityPageController.new
+    response = stats.route_statistic(origin_code,destination_code,date)  
+
+    assert response[:date] == date
+  end
+
 end
