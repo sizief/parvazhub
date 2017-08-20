@@ -126,7 +126,8 @@ class Suppliers::Trip
       "RV"=>"IV",
       "SA"=>"SE",
       "ATR"=>"AK",
-      "RZ"=>"SE"
+      "RZ"=>"SE",
+      "IRZ"=>"SE"
 		}
 	airlines[airline_code].nil? ? airline_code : airlines[airline_code]
   end

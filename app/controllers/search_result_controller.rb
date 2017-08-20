@@ -3,16 +3,21 @@ class SearchResultController < ApplicationController
   def flight_search
     origin = params[:search][:origin].downcase
     destination = params[:search][:destination].downcase
-    date = Date.parse params[:search][:date]
+    date = params[:search][:date]
+
     redirect_to  action: 'search', origin_name: origin, destination_name: destination, date: date
   end
 
   def search
     origin_name = params[:origin_name].downcase
     destination_name = params[:destination_name].downcase
-    date = Date.parse params[:date]
-    #TODO: what the following line do? its already string
-    date = date.to_s
+    if params[:date] == "today"
+      date = Date.today.to_s
+    elsif params[:date] == "tomorrow"
+      date = (Date.today+1).to_s
+    else
+      date = params[:date]
+    end
 
     origin_code = City.get_city_code_based_on_english_name origin_name
     destination_code = City.get_city_code_based_on_english_name destination_name
