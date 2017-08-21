@@ -1,8 +1,8 @@
 require 'test_helper'
 
-class HomeControllerTest < ActionDispatch::IntegrationTest
-  test "should get index" do
-    get city_page_path(city_name:  "kish")
+class CityPageControllerTest < ActionDispatch::IntegrationTest
+  test "should get route page" do
+    get route_page_path(origin_name:  "tehran",destination_name: "shiraz")
     assert_response :success
   end
 

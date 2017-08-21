@@ -1,26 +1,5 @@
 class CityPageController < ApplicationController
   include CityPageHelper
-  
-  def city
-    @prices = Hash.new
-    @cities = City.list
-   
-	  @city_code = City.get_city_code_based_on_english_name params[:city_name]
-	  not_found unless @city_code 
-
-    @city = City.list[@city_code.to_sym]
-    if @city_code == "thr"
-      @destination = City.list[:mhd] 
-      @prices[:to] = Flight.new.get_lowest_price_for_month("mhd",@city_code)
-      @prices[:from] = Flight.new.get_lowest_price_for_month(@city_code,"mhd")
-    else
-      @destination = City.list[:thr] 
-      @prices[:to] = Flight.new.get_lowest_price_for_month("thr",@city_code)
-      @prices[:from] = Flight.new.get_lowest_price_for_month(@city_code,"thr")
-    end
-    
-    @prices = prepare_for_calendar_view @prices
-  end
 
   def not_found
   	raise ActionController::RoutingError.new('Not Found')
@@ -48,6 +27,12 @@ class CityPageController < ApplicationController
 
     @prices = prepare_for_calendar_view @prices
   end
+
+  def flight
+    @cities = City.list
+    @default_destination_city = City.default_destination_city
+  end
+
 
   def route_statistic(origin_code,destination_code,date)
     response = Hash.new

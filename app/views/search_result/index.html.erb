@@ -144,9 +144,7 @@
 	  </p>
 	<% end %>
 	
-	<% unless which_city_page(@search_parameter[:origin_code],@search_parameter[:destination_code]).nil? %>
-	<%= render partial: 'layouts/city_page',  locals: {city_code: which_city_page(@search_parameter[:origin_code],@search_parameter[:destination_code])} %>
-	<% end %>
+	
  
 </div>
 

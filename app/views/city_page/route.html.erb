@@ -126,12 +126,15 @@
 						<td class="center aligned <%='disable' if price.keys[0].to_s.to_date<Date.today %>">
 							<a href="<%= search_link_builder(@origin[:en],@destination[:en],price.keys[0].to_s.to_date) %>" >
 								<div>
-									<div style="font-size: 1.5em">
-										<%= " پروازهای" if number_with_delimiter(price.values[0]) == "-" %>
-										<%= number_with_delimiter(price.values[0]) unless number_with_delimiter(price.values[0]) == "-" %>
+									<div style="font-size: 1.1em">
+										<%=price.keys[0].to_s.to_date.to_parsi.strftime "%d %B"  %>	
 									</div>
-									<div style="font-size: 0.7em;color: gray;">
-										<%=price.keys[0].to_s.to_date.to_parsi.strftime "%d %B"  %>
+									<div style="font-size: 0.8em;color: #4e4e4e;">
+									<% if number_with_delimiter(price.values[0]) == "-" %>
+										جستجو
+									<% else %>
+										<%= "#{number_with_delimiter(price.values[0])} تومان"  %>	
+									<% end %>
 									</div>
 								</div>
 							</a>	
@@ -149,7 +152,7 @@
 	<div class="city-calendar" >
         <h4>
 		    <b class="yellow-text">کمترین</b>
-            هزینه پرواز <%= "#{@origin[:fa]} به #{@destination[:fa]}" %> برای یک نفر
+            هزینه پرواز <%= "#{@destination[:fa]} به #{@origin[:fa]}" %> برای یک نفر
         </h4>
 		<table class="ui celled table stackable rtl">
 		  	<thead class="not-mobile">
@@ -170,13 +173,16 @@
 					<% end %>	
 						<td class="center aligned <%='disable' if price.keys[0].to_s.to_date<Date.today %>">
 							<a href="<%= search_link_builder(@destination[:en],@origin[:en],price.keys[0].to_s.to_date) %>" >
-								<div class="">
-									<div style="font-size: 1.5em">
-										<%= " پروازهای" if number_with_delimiter(price.values[0]) == "-" %>	
-										<%= number_with_delimiter(price.values[0]) unless number_with_delimiter(price.values[0]) == "-" %>
+								<div>
+									<div style="font-size: 1.1em">
+										<%=price.keys[0].to_s.to_date.to_parsi.strftime "%d %B"  %>	
 									</div>
-									<div style="font-size: 0.7em;color: gray;">
-										<%=price.keys[0].to_s.to_date.to_parsi.strftime "%d %B"  %>
+									<div style="font-size: 0.8em;color: #4e4e4e;">
+									<% if number_with_delimiter(price.values[0]) == "-" %>
+										جستجو
+									<% else %>
+										<%= "#{number_with_delimiter(price.values[0])} تومان"  %>	
+									<% end %>
 									</div>
 								</div>
 							</a>	

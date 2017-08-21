@@ -24,7 +24,7 @@ class Suppliers::Alibaba
       first_response = RestClient::Request.execute(method: :get, url: "#{search_url}", proxy: proxy_url)
     rescue => e
       ActiveRecord::Base.connection_pool.with_connection do 
-        Proxy.set_status(proxy_url,"deactive")
+        Proxy.set_status(proxy_url,"deactive") unless proxy_url.nil?
         SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}"+" Proxy: #{proxy_url}")
       end
       return {status:false}

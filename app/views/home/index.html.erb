@@ -64,31 +64,18 @@
 		<%end%>
 	</div>
 	<div>
-		<h4 style="text-align: center;
-    color: white;
-    margin-top: 2em;">
+		<h4 class="home-calendar-title">
 		<i class="checked calendar icon"></i>
 			تاریخی برای سفرتان ندارید؟ ارزان‌ترین قیمت‌ها را روی تقویم ببینید:<br><br>
-			<%= link_to "کیش", city_page_path(city_name:  "kish"),class:"city-page-link" %>،
-			<%= link_to "مشهد", city_page_path(city_name:  "mashhad"),class:"city-page-link" %>،
-			<%= link_to "تبریز", city_page_path(city_name:  "tabriz"),class:"city-page-link" %>،
-			<%= link_to "آبادان", city_page_path(city_name:  "abadan"),class:"city-page-link" %>،
-			<%= link_to "اصفهان", city_page_path(city_name:  "isfahan"),class:"city-page-link" %>،
-			<%= link_to "شیراز", city_page_path(city_name:  "shiraz"), class:"city-page-link" %>،
-			<%= link_to "اهواز", city_page_path(city_name:  "ahvaz"), class:"city-page-link" %>
+			<%= link_to "تهران به کیش", route_page_path(origin_name:  "tehran",destination_name: "kish"),class:"city-page-link" %>،
+			<%= link_to "تهران به مشهد", route_page_path(origin_name:  "tehran",destination_name: "mashhad"),class:"city-page-link" %>،
+			<%= link_to "تهران به شیراز", route_page_path(origin_name:  "tehran",destination_name: "shiraz"),class:"city-page-link" %>
+			
 		</h4>
 	</div>
 	
 </div>
-<style>
-.home-title{
-	display:block;
-	text-align:center;
-	font-weight:bold;
-	font-size: 1.8em;
-    color: #29aae1;
-    padding-bottom: 0.5em;
-}</style>
+
 <div style="width:100%;padding: 2.5em 0 4.5em 0;">      
 	<div class="ui five column grid centered stackable">
 		<div class="row">

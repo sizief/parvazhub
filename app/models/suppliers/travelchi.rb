@@ -17,10 +17,10 @@ class Suppliers::Travelchi
           SearchHistory.append_status(search_history_id,"R1(#{Time.now.strftime('%M:%S')})")
           proxy_url = Proxy.new_proxy
         end
-        response = RestClient::Request.execute(method: :post, url: "#{URI.parse(url)}", payload: body.to_json, headers: {:'Authorization'=> "JWT #{get_auth_key}",:'Content-Type'=> "application/json"}, proxy: proxy_url)
+        response = RestClient::Request.execute(method: :post, url: "#{URI.parse(url)}", payload: body.to_json, headers: {:'Authorization'=> "JWT #{get_auth_key}",:'Content-Type'=> "application/json",:'Connection'=>"keep-alive",:'User-Agent'=>"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36"},proxy: proxy_url)
       rescue => e
         ActiveRecord::Base.connection_pool.with_connection do 
-          Proxy.set_status(proxy_url,"deactive")       
+          Proxy.set_status(proxy_url,"deactive") unless proxy_url.nil?
           SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
         end
           return {status:false, response: e.message}

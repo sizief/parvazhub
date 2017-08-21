@@ -28,7 +28,7 @@ module SearchHelper
 	end
 
 	def search_link_builder(origin_name,destination_name,date)
-		link = "/flights/#{origin_name}/#{destination_name}/#{date}"
+		link = "/flights/#{origin_name}-#{destination_name}/#{date}"
 	end
 
 	def day_name_to_human (day)

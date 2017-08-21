@@ -1,0 +1,107 @@
+<%= render 'layouts/header' %>
+<% provide(:title,"پروازهاب: جستجو و مقایسه پرواز") %>
+<% provide(:description,"جستجو و مقایسه قیمت پرواز") %>
+
+<div class="ui stackable one column grid centered" id="wide-search-box">
+    <h1 class="city-header">
+        جستجو و مقایسه قیمت پرواز
+    </h1>
+    <%= form_for(:search, url: flight_search_path, method: :get, html: {id:"flight_search"}) do |f| %>
+        <div class="ui huge form" >
+            <div class="two fields">
+                <div class="field">
+                    <%= f.select :origin, @cities.map{ |key,value| [("از "+"#{value[:fa]}"),value[:en]]},{:selected => "theran"},{:class =>'ui dropdown'} %>
+                </div>
+                <div class="field">
+                    <%= f.select :destination, @cities.map{ |key,value| [("به "+"#{value[:fa]}"),value[:en]]},{:selected => @default_destination_city},{:class =>'ui dropdown'} %>
+                </div> 
+            </div>
+            <div class="field ui calendar">
+                <div class="ui input left icon">
+                    <i class="calendar icon"></i>
+                    <%= f.text_field :date_shamsi, {id: 'date-picker', class:'form-control web-font', readonly: 'readonly', autocomplete: 'false'} %>
+                    <%= f.text_field :date, {id: 'date-picker-field'} %>
+                </div>
+            </div>
+            <div class="ui center aligned basic segment">
+                <button class="ui submit massive yellow web-font fluid right labeled  icon button waiting-modal" type="submit">
+                        <i class="right arrow icon"></i>
+                        نمایش پروازها
+                </button>
+            </div>
+        </div>
+    <%end%>
+</div>
+
+<div class="ui container" id="search-results-container" style="padding-top: 1em">
+	<% @cities.each do |origin_key,origin_value|  %>
+		<div class="city-calendar" >
+			<h4>
+				پروازهای
+				<b class="yellow-text"> 
+                    <%= "#{origin_value[:fa]}" %>
+                </b> 
+			</h4>
+            <p>
+                <% @cities.each do |destination_key,destination_value|  %>
+                    <% unless origin_key == destination_key %>
+                        <%= link_to "پرواز #{origin_value[:fa]} به  #{destination_value[:fa]}", route_page_path(origin_name: "#{origin_value[:en]}",destination_name: "#{destination_value[:en]}") %>
+                         | 
+                        <%= link_to "پرواز #{destination_value[:fa]} به #{origin_value[:fa]} ", route_page_path(origin_name: "#{destination_value[:en]}",destination_name: "#{origin_value[:en]}") %> 
+                         | 
+                    <% end %>
+                <% end %>
+			</p>
+		</div>
+	<% end %>
+</div>
+
+
+<div class="ui container" id="search-results-container" style="padding-top: 1em">
+    <div class="city-calendar" >
+        <h4>
+            پروازهای
+            <b class="yellow-text"> 
+                امروز
+            </b> 
+        </h4>
+        <p>
+            <% @cities.each do |origin_key,origin_value|  %>
+                <% @cities.each do |destination_key,destination_value|  %>
+                    <% unless origin_key == destination_key %>
+                        <%= link_to "پرواز #{origin_value[:fa]} به  #{destination_value[:fa]} امروز", flight_result_path(origin_name: "#{origin_value[:en]}",destination_name: "#{destination_value[:en]}",date:"today") %>
+                            | 
+                        <%= link_to "پرواز#{destination_value[:fa]} به #{origin_value[:fa]} امروز", flight_result_path(origin_name: "#{destination_value[:en]}",destination_name: "#{origin_value[:en]}",date:"today") %> 
+                            | 
+                    <% end %>
+                <% end %>
+            <% end %>
+        </p>
+    </div>
+</div>
+
+<div class="ui container" id="search-results-container" style="padding-top: 1em">
+    <div class="city-calendar" >
+        <h4>
+            پروازهای
+            <b class="yellow-text"> 
+                فردا
+            </b> 
+        </h4>
+        <p>
+            <% @cities.each do |origin_key,origin_value|  %>
+                <% @cities.each do |destination_key,destination_value|  %>
+                    <% unless origin_key == destination_key %>
+                        <%= link_to "پرواز #{origin_value[:fa]} به  #{destination_value[:fa]} فردا", flight_result_path(origin_name: "#{origin_value[:en]}",destination_name: "#{destination_value[:en]}",date:"tomorrow") %>
+                            | 
+                        <%= link_to "پرواز#{destination_value[:fa]} به #{origin_value[:fa]} فردا", flight_result_path(origin_name: "#{destination_value[:en]}",destination_name: "#{origin_value[:en]}",date:"tomorrow") %> 
+                            | 
+                    <% end %>
+                <% end %>
+            <% end %>
+        </p>
+    </div>
+</div>
+
+<%= render 'layouts/searchbox-helper' %>
+<%= render 'layouts/footer' %>
