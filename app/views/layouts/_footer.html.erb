@@ -9,45 +9,27 @@
     </p>
   </div>
   <div class="ui inverted vertical footer segment" >
-      <div class="ui six column grid centered stackable">
+      <div class="ui four column grid centered stackable">
         
         <div class="row">
           
           <div class="column center aligned">			
-            <%= link_to "پروازهای مشهد به تهران فردا", flight_result_path(origin_name: "mashhad",destination_name: "tehran",date:"tomorrow"),class:"footer-link" %>
-            <%= link_to "پروازهای اصفهان به تهران فردا", flight_result_path(origin_name: "isfahan",destination_name: "tehran",date:"tomorrow"),class:"footer-link" %>
-            <%= link_to "پروازهای شیراز به تهران فردا", flight_result_path(origin_name: "shiraz",destination_name: "tehran",date:"tomorrow"),class:"footer-link" %>
-            <%= link_to "پروازهای کیش به تهران فردا", flight_result_path(origin_name: "kish",destination_name: "tehran",date:"tomorrow"),class:"footer-link" %>
-            <%= link_to "پروازهای تبریز به تهران فردا" , flight_result_path(origin_name: "tabriz",destination_name: "tehran",date:"tomorrow"),class:"footer-link" %>
-            <%= link_to "پروازهای اهواز به تهران فردا", flight_result_path(origin_name: "ahvaz",destination_name: "tehran",date:"tomorrow"),class:"footer-link" %>
-            <%= link_to "پروازهای آبادان به تهران فردا", flight_result_path(origin_name: "abadan",destination_name: "tehran",date:"tomorrow"),class:"footer-link" %>
+            <%= link_to "پروازهای مشهد به تهران امروز", flight_result_path(origin_name: "mashhad",destination_name: "tehran",date:Date.today.to_s),class:"footer-link" %>
+            <%= link_to "پروازهای اصفهان به تهران امروز", flight_result_path(origin_name: "isfahan",destination_name: "tehran",date:Date.today.to_s),class:"footer-link" %>
+            <%= link_to "پروازهای شیراز به تهران امروز", flight_result_path(origin_name: "shiraz",destination_name: "tehran",date:Date.today.to_s),class:"footer-link" %>
+            <%= link_to "پروازهای کیش به تهران امروز", flight_result_path(origin_name: "kish",destination_name: "tehran",date:Date.today.to_s),class:"footer-link" %>
+            <%= link_to "پروازهای تبریز به تهران امروز" , flight_result_path(origin_name: "tabriz",destination_name: "tehran",date:Date.today.to_s),class:"footer-link" %>
+            <%= link_to "پروازهای اهواز به تهران امروز", flight_result_path(origin_name: "ahvaz",destination_name: "tehran",date:Date.today.to_s),class:"footer-link" %>
+            <%= link_to "پروازهای آبادان به تهران امروز", flight_result_path(origin_name: "abadan",destination_name: "tehran",date:Date.today.to_s),class:"footer-link" %>
           </div>
           <div class="column center aligned">			
-            <%= link_to "پروازهای تهران به مشهد فردا", flight_result_path(origin_name: "tehran",destination_name: "mashhad",date:"tomorrow"),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به اصفهان فردا", flight_result_path(origin_name: "tehran",destination_name: "isfahan",date:"tomorrow"),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به شیراز فردا", flight_result_path(origin_name: "tehran",destination_name: "shiraz",date:"tomorrow"),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به کیش فردا", flight_result_path(origin_name: "tehran",destination_name: "kish",date:"tomorrow"),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به تبریز فردا" , flight_result_path(origin_name: "tehran",destination_name: "tabriz",date:"tomorrow"),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به اهواز فردا", flight_result_path(origin_name: "tehran",destination_name: "ahvaz",date:"tomorrow"),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به آبادان فردا", flight_result_path(origin_name: "tehran",destination_name: "abadan",date:"tomorrow"),class:"footer-link" %>
-          </div>
-          <div class="column center aligned">			
-            <%= link_to "پروازهای مشهد به تهران امروز", flight_result_path(origin_name: "mashhad",destination_name: "tehran",date:"today"),class:"footer-link" %>
-            <%= link_to "پروازهای اصفهان به تهران امروز", flight_result_path(origin_name: "isfahan",destination_name: "tehran",date:"today"),class:"footer-link" %>
-            <%= link_to "پروازهای شیراز به تهران امروز", flight_result_path(origin_name: "shiraz",destination_name: "tehran",date:"today"),class:"footer-link" %>
-            <%= link_to "پروازهای کیش به تهران امروز", flight_result_path(origin_name: "kish",destination_name: "tehran",date:"today"),class:"footer-link" %>
-            <%= link_to "پروازهای تبریز به تهران امروز" , flight_result_path(origin_name: "tabriz",destination_name: "tehran",date:"today"),class:"footer-link" %>
-            <%= link_to "پروازهای اهواز به تهران امروز", flight_result_path(origin_name: "ahvaz",destination_name: "tehran",date:"today"),class:"footer-link" %>
-            <%= link_to "پروازهای آبادان به تهران امروز", flight_result_path(origin_name: "abadan",destination_name: "tehran",date:"today"),class:"footer-link" %>
-          </div>
-          <div class="column center aligned">			
-            <%= link_to "پروازهای تهران به مشهد امروز", flight_result_path(origin_name: "tehran",destination_name: "mashhad",date:"today"),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به اصفهان امروز", flight_result_path(origin_name: "tehran",destination_name: "isfahan",date:"today"),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به شیراز امروز", flight_result_path(origin_name: "tehran",destination_name: "shiraz",date:"today"),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به کیش امروز", flight_result_path(origin_name: "tehran",destination_name: "kish",date:"today"),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به تبریز امروز" , flight_result_path(origin_name: "tehran",destination_name: "tabriz",date:"today"),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به اهواز امروز", flight_result_path(origin_name: "tehran",destination_name: "ahvaz",date:"today"),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به آبادان امروز", flight_result_path(origin_name: "tehran",destination_name: "abadan",date:"today"),class:"footer-link" %>
+            <%= link_to "پروازهای تهران به مشهد امروز", flight_result_path(origin_name: "tehran",destination_name: "mashhad",date:Date.today.to_s),class:"footer-link" %>
+            <%= link_to "پروازهای تهران به اصفهان امروز", flight_result_path(origin_name: "tehran",destination_name: "isfahan",date:Date.today.to_s),class:"footer-link" %>
+            <%= link_to "پروازهای تهران به شیراز امروز", flight_result_path(origin_name: "tehran",destination_name: "shiraz",date:Date.today.to_s),class:"footer-link" %>
+            <%= link_to "پروازهای تهران به کیش امروز", flight_result_path(origin_name: "tehran",destination_name: "kish",date:Date.today.to_s),class:"footer-link" %>
+            <%= link_to "پروازهای تهران به تبریز امروز" , flight_result_path(origin_name: "tehran",destination_name: "tabriz",date:Date.today.to_s),class:"footer-link" %>
+            <%= link_to "پروازهای تهران به اهواز امروز", flight_result_path(origin_name: "tehran",destination_name: "ahvaz",date:Date.today.to_s),class:"footer-link" %>
+            <%= link_to "پروازهای تهران به آبادان امروز", flight_result_path(origin_name: "tehran",destination_name: "abadan",date:Date.today.to_s),class:"footer-link" %>
           </div>
           <div class="column center aligned">			
             <%= link_to "پروازهای مشهد به تهران ", route_page_path(origin_name: "mashhad",destination_name: "tehran"),class:"footer-link" %>
@@ -69,7 +51,7 @@
           </div>
         </div>
 
-        <div class="six column row center aligned">
+        <div class="four column row center aligned">
               <p style="line-height: 2em;border-top: 1px #404040 solid;width: 80%;padding: 1em;">
                 <a href="https://t.me/parvazhub_com">تماس مستقیم با ما</a>
                 <a href="https://www.linkedin.com/company/parvazhub"><i class="linkedin square icon"></i></a>

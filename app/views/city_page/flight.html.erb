@@ -69,9 +69,9 @@
             <% @cities.each do |origin_key,origin_value|  %>
                 <% @cities.each do |destination_key,destination_value|  %>
                     <% unless origin_key == destination_key %>
-                        <%= link_to "پرواز #{origin_value[:fa]} به  #{destination_value[:fa]} امروز", flight_result_path(origin_name: "#{origin_value[:en]}",destination_name: "#{destination_value[:en]}",date:"today") %>
+                        <%= link_to "پرواز #{origin_value[:fa]} به  #{destination_value[:fa]} امروز", flight_result_path(origin_name: "#{origin_value[:en]}",destination_name: "#{destination_value[:en]}",date:(Date.today).to_s) %>
                             | 
-                        <%= link_to "پرواز#{destination_value[:fa]} به #{origin_value[:fa]} امروز", flight_result_path(origin_name: "#{destination_value[:en]}",destination_name: "#{origin_value[:en]}",date:"today") %> 
+                        <%= link_to "پرواز#{destination_value[:fa]} به #{origin_value[:fa]} امروز", flight_result_path(origin_name: "#{destination_value[:en]}",destination_name: "#{origin_value[:en]}",date:(Date.today).to_s) %> 
                             | 
                     <% end %>
                 <% end %>
@@ -92,9 +92,9 @@
             <% @cities.each do |origin_key,origin_value|  %>
                 <% @cities.each do |destination_key,destination_value|  %>
                     <% unless origin_key == destination_key %>
-                        <%= link_to "پرواز #{origin_value[:fa]} به  #{destination_value[:fa]} فردا", flight_result_path(origin_name: "#{origin_value[:en]}",destination_name: "#{destination_value[:en]}",date:"tomorrow") %>
+                        <%= link_to "پرواز #{origin_value[:fa]} به  #{destination_value[:fa]} فردا", flight_result_path(origin_name: "#{origin_value[:en]}",destination_name: "#{destination_value[:en]}",date:(Date.today+1).to_s) %>
                             | 
-                        <%= link_to "پرواز#{destination_value[:fa]} به #{origin_value[:fa]} فردا", flight_result_path(origin_name: "#{destination_value[:en]}",destination_name: "#{origin_value[:en]}",date:"tomorrow") %> 
+                        <%= link_to "پرواز#{destination_value[:fa]} به #{origin_value[:fa]} فردا", flight_result_path(origin_name: "#{destination_value[:en]}",destination_name: "#{origin_value[:en]}",date:(Date.today+1).to_s) %> 
                             | 
                     <% end %>
                 <% end %>

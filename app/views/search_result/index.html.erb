@@ -1,6 +1,8 @@
 
 <%= render 'layouts/header' %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+<% provide(:canonical,"<link rel=\"canonical\" href=\"http://parvazhub.com/flights/#{@search_parameter[:origin_name]}-#{@search_parameter[:destination_name]}\"/> ".html_safe)%>
+
 <% provide(:title,"پروازهاب:‌ پروازهای #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]}  #{@search_parameter[:date_in_human]} ")%>
 <% provide(:description,"لیست پروازهای #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]}  #{@search_parameter[:date_in_human]}") %>
 

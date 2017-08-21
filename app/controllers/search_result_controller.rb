@@ -41,13 +41,8 @@ class SearchResultController < ApplicationController
 
   def index(route,origin_name,origin_code,destination_name,destination_code,date)
      @flights = Flight.new.flight_list(route,date)
-     if date == Date.today.to_s
-       date_in_human = "امروز"
-     elsif date == (Date.today+1).to_s
-        date_in_human = "فردا"
-     else
-        date_in_human = date.to_date.to_parsi.strftime '%A %d %B'
-     end
+
+     date_in_human = date.to_date.to_parsi.strftime '%A %d %B'     
      @search_parameter ={origin_name: origin_name, origin_code: origin_code, destination_code: destination_code, destination_name: destination_name,date: date, date_in_human: date_in_human}
      @cities = City.list 
 
