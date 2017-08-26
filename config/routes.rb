@@ -30,6 +30,7 @@ Rails.application.routes.draw do
 	post 'notification/price_alert_register', to: 'notification#price_alert_register', as: 'price_alert_register'
 	
 	get '/about_us', to:'static_pages#about_us'
+	get '/cheap-flights', to:'static_pages#cheap_flights'
 	get 'static_pages/about_us'
 	 
 	root 'home#index'

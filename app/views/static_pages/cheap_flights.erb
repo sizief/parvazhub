@@ -1,0 +1,103 @@
+<%= render 'layouts/header' %>
+<% provide(:title,"پروازهاب: جستجو و مقایسه بلیط ارزان پرواز") %>
+<% provide(:description,"پروازهاب: جستجو و مقایسه بلیط ارزان‌  پرواز") %>
+
+<div class="ui stackable one column grid centered" id="wide-search-box">
+    <h1 class="city-header">
+        جستجوی بلیط ارزان پرواز
+    </h1>
+    <%= form_for(:search, url: flight_search_path, method: :get, html: {id:"flight_search"}) do |f| %>
+        <div class="ui huge form" >
+            <div class="two fields">
+                <div class="field">
+                    <%= f.select :origin, @cities.map{ |key,value| [("از "+"#{value[:fa]}"),value[:en]]},{:selected => "theran"},{:class =>'ui dropdown'} %>
+                </div>
+                <div class="field">
+                    <%= f.select :destination, @cities.map{ |key,value| [("به "+"#{value[:fa]}"),value[:en]]},{:selected => @default_destination_city},{:class =>'ui dropdown'} %>
+                </div> 
+            </div>
+            <div class="field ui calendar">
+                <div class="ui input left icon">
+                    <i class="calendar icon"></i>
+                    <%= f.text_field :date_shamsi, {id: 'date-picker', class:'form-control web-font', readonly: 'readonly', autocomplete: 'false'} %>
+                    <%= f.text_field :date, {id: 'date-picker-field'} %>
+                </div>
+            </div>
+            <div class="ui center aligned basic segment">
+                <button class="ui submit massive yellow web-font fluid right labeled  icon button waiting-modal" type="submit">
+                        <i class="right arrow icon"></i>
+                        نمایش پروازها
+                </button>
+            </div>
+        </div>
+    <%end%>
+</div>
+
+<div class="ui container" id="search-results-container" style="padding-top: 1em">
+    <div class="city-calendar" >
+        <h4>
+            چطور
+            <b class="yellow-text"> 
+                بلیط ارزان هواپیما
+            </b> 
+            پیدا کنیم؟
+        </h4>
+        <p>
+            برای پیدا کردن ارزان‌ترین بلیط حتما این دو نکته را رعایت کنید:<br/> 
+            <ul>
+            <li>زمان خرید بلیط</li>
+            <li>فروشنده بلیط</li>
+            </ul>
+
+        <b>زمان خرید بلیط</b><br/>
+        بهترین زمان خرید بلیط داخل ایران معمولا یک تا دو هفته مانده به تاریخ پرواز است. در این بازه‌ی زمانی معمولا قیمت به پایین‌ترین حد خود می‌رسد. تا جای ممکن سعی کنید از سفر در تعطیلات حذر کنید. قوانین خرید و فروش بلیط و قیمت‌گذاری‌ها در ایام تعطیل عوض می‌شوند و معمولا قیمت‌ها قابل پیش بینی نیست.<br/><br/>
+
+        <b>فروشنده بلیط</b><br/>
+        قیمت‌های پروازهای سیستمی طبق قوانین هواپیمایی کشوری باید ثابت و یکسان در همه جا عرضه شود. این قانون ممکن است توسط بعضی آژانس‌ها یا سایت‌های فروش آنلاین نقض شود که خلاف قوانین است. پروازهای چارتری ولی قانون ثابتی برای فروش ندارند و تقریبا هر فروشنده‌ای می‌تواند با هر قیمتی بلیط را عرضه کند. بنابراین هنگام خرید بلیط، بخصوص بلیط‌های چارتری حتما قیمت فروشندگان مختلف را باید مقایسه کنید.<br/>
+
+        </p>
+    </div>
+</div>
+
+<div class="ui container" id="search-results-container" style="padding-top: 1em">
+    <div class="city-calendar" >
+        <h4>
+            مقایسه قیمت و پیدا کردن  
+            <b class="yellow-text"> 
+                ارزان‌ترین بلیط
+            </b> 
+            در پروازهاب
+        </h4>
+        <p>
+            ما در پروازهاب تمامی فروشندگان معتبر پرواز را جستجو می‌کنیم و یکجا قیمت‌ها را برای مقایسه عرضه می‌کنیم. به این ترتیب با استفاده از پروازهاب احتیاجی به مقایسه ده‌ها سایت برای پیدا کرن بلیط ارزان‌ ندارید. کافی‌ست برای مقصد و تاریخ موردنظرتان در پروازهاب جستجو کنید و ما لیست پروازها را به صورت ارزان‌ترین به گران‌ترین پرواز به شما نشان می‌دهیم.
+        </p>
+    </div>
+</div>
+
+<div class="ui container" id="search-results-container" style="padding-top: 1em">
+	<% @cities.each do |origin_key,origin_value|  %>
+		<div class="city-calendar" >
+			<h4>
+				ارزان‌ترین پروازهای
+				<b class="yellow-text"> 
+                    <%= "#{origin_value[:fa]}" %>
+                </b> 
+			</h4>
+            <p>
+                <% @cities.each do |destination_key,destination_value|  %>
+                    <% unless origin_key == destination_key %>
+                        <%= link_to "پرواز #{origin_value[:fa]} به  #{destination_value[:fa]}", route_page_path(origin_name: "#{origin_value[:en]}",destination_name: "#{destination_value[:en]}") %>
+                         | 
+                        <%= link_to "پرواز #{destination_value[:fa]} به #{origin_value[:fa]} ", route_page_path(origin_name: "#{destination_value[:en]}",destination_name: "#{origin_value[:en]}") %> 
+                         | 
+                    <% end %>
+                <% end %>
+			</p>
+		</div>
+	<% end %>
+</div>
+
+
+
+<%= render 'layouts/searchbox-helper' %>
+<%= render 'layouts/footer' %>
