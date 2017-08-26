@@ -17,7 +17,7 @@ class Suppliers::Travelchi
           SearchHistory.append_status(search_history_id,"R1(#{Time.now.strftime('%M:%S')})")
           proxy_url = Proxy.new_proxy
         end
-        response = RestClient::Request.execute(method: :post, url: "#{URI.parse(url)}", payload: body.to_json, headers: {:'Authorization'=> "JWT #{get_auth_key}",:'Content-Type'=> "application/json",:'Connection'=>"keep-alive",:'User-Agent'=>"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36"},proxy: proxy_url)
+        response = RestClient::Request.execute(method: :post, url: "#{URI.parse(url)}", payload: body.to_json, headers: {:'Authorization'=> "JWT #{get_auth_key}",:'Content-Type'=> "application/json",:'Connection'=>"keep-alive",:'User-Agent'=>"okhttp/3.3.1"},proxy: proxy_url)
       rescue => e
         ActiveRecord::Base.connection_pool.with_connection do 
           Proxy.set_status(proxy_url,"deactive") unless proxy_url.nil?
@@ -87,14 +87,22 @@ class Suppliers::Travelchi
   end
   
   def get_auth_key
-    keys =[
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYyI6IiIsImMiOiJJUlIiLCJyb2xlIjoiR1VFU1QiLCJhZCI6MTcsImV4cCI6MTUwNTMwNzA1NiwiaWF0IjoxNTAyNzE1MDU2LCJuYmYiOjE1MDI3MTUwNTYsImlkIjoyNn0.Y9yKGBagCK8UFKK739J-vD9XE-lYroEXMzxVLUq6T7Q",
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYyI6IiIsImMiOiJJUlIiLCJyb2xlIjoiR1VFU1QiLCJhZCI6MTcsImV4cCI6MTUwNTMwMjk3OCwiaWF0IjoxNTAyNzEwOTc4LCJuYmYiOjE1MDI3MTA5NzgsImlkIjoyNn0.EKiD0K_3KRvBSJ_58BDuNrkMjW4YJVF6-3-YG0dIas4",
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYyI6IiIsImMiOiJJUlIiLCJyb2xlIjoiR1VFU1QiLCJhZCI6MTcsImV4cCI6MTUwNTMwNzE3NCwiaWF0IjoxNTAyNzE1MTc0LCJuYmYiOjE1MDI3MTUxNzQsImlkIjoyNn0.pp1kR-wwCkW4Py4CwVj22Mt-XvLPEf6xEHd-obrGa64",
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYyI6IiIsImMiOiJJUlIiLCJyb2xlIjoiR1VFU1QiLCJhZCI6MTcsImV4cCI6MTUwNTMwNzIxNiwiaWF0IjoxNTAyNzE1MjE2LCJuYmYiOjE1MDI3MTUyMTYsImlkIjoyNn0.Ds9Cxk7hJ8wMJ3d-m_-VgvGk2y0GB5AUIVfZ-coAxxU",
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYyI6IiIsImMiOiJJUlIiLCJyb2xlIjoiR1VFU1QiLCJhZCI6MTcsImV4cCI6MTUwNTMwNzI2NywiaWF0IjoxNTAyNzE1MjY3LCJuYmYiOjE1MDI3MTUyNjcsImlkIjoyNn0.fHhXQWo0Zp-QRyReEfWQUtza9a3SkJExoWp9NNrjBAI"
-        ]
-    return keys[rand(0..4)]
+    proxy_url = nil
+    begin
+      url = "http://api.chartex.ir/api/v1/auth"
+      body = {"username":"travelchi_guest","password":"guest"}
+      ActiveRecord::Base.connection_pool.with_connection do        
+        proxy_url = Proxy.new_proxy
+      end
+        response = RestClient::Request.execute(method: :post, url: "#{URI.parse(url)}", payload: body.to_json, headers: {:'Content-Type'=> "application/json",:'Connection'=>"keep-alive",:'User-Agent'=>"okhttp/3.3.1",:'provider_code'=>"FOROUD"},proxy: proxy_url)
+    rescue => e
+      ActiveRecord::Base.connection_pool.with_connection do 
+        Proxy.set_status(proxy_url,"deactive") unless proxy_url.nil?
+      end
+      return nil
+    end
+      response = JSON.parse(response)
+      return response["access_token"]
   end
   
   def flight_number_correction(flight_number,airline_code)
