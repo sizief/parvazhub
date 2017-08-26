@@ -1,6 +1,6 @@
 <%= render 'layouts/header' %>
-<% provide(:title,"پروازهاب: جستجو و مقایسه بلیط ارزان پرواز") %>
-<% provide(:description,"پروازهاب: جستجو و مقایسه بلیط ارزان‌  پرواز") %>
+<% provide(:title,"پروازهاب: بلیط ارزان پرواز") %>
+<% provide(:description,"پروازهاب: جستجو و مقایسه بلیط ارزان‌ پرواز") %>
 
 <div class="ui stackable one column grid centered" id="wide-search-box">
     <h1 class="city-header">
@@ -73,30 +73,6 @@
         </p>
     </div>
 </div>
-
-<div class="ui container" id="search-results-container" style="padding-top: 1em">
-	<% @cities.each do |origin_key,origin_value|  %>
-		<div class="city-calendar" >
-			<h4>
-				ارزان‌ترین پروازهای
-				<b class="yellow-text"> 
-                    <%= "#{origin_value[:fa]}" %>
-                </b> 
-			</h4>
-            <p>
-                <% @cities.each do |destination_key,destination_value|  %>
-                    <% unless origin_key == destination_key %>
-                        <%= link_to "پرواز #{origin_value[:fa]} به  #{destination_value[:fa]}", route_page_path(origin_name: "#{origin_value[:en]}",destination_name: "#{destination_value[:en]}") %>
-                         | 
-                        <%= link_to "پرواز #{destination_value[:fa]} به #{origin_value[:fa]} ", route_page_path(origin_name: "#{destination_value[:en]}",destination_name: "#{origin_value[:en]}") %> 
-                         | 
-                    <% end %>
-                <% end %>
-			</p>
-		</div>
-	<% end %>
-</div>
-
 
 
 <%= render 'layouts/searchbox-helper' %>
