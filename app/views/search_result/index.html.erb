@@ -36,8 +36,8 @@
 				</div>
 				<div class="field">
 					<%= text_field_tag :email %>
-					<%= hidden_field_tag(:origin, @search_parameter[:origin]) %>
-					<%= hidden_field_tag(:destination, @search_parameter[:destination]) %>
+					<%= hidden_field_tag(:origin, @search_parameter[:origin_code]) %>
+					<%= hidden_field_tag(:destination, @search_parameter[:destination_code]) %>
 					<%= hidden_field_tag(:date, @search_parameter[:date]) %>
 				</div>
 				<div class="field center aligned">
