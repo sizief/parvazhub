@@ -13,7 +13,7 @@
       <br>
       <br>
       <span style="display: inline-block; text-align: right;font-family: tahoma; border-top: 1px solid white;padding-top: 20px;">لیست پروازهای 
-        <%= @cities[@search_parameter[:origin].to_sym][:fa]%> 
+        <%= @cities[@search_parameter[:origin_code].to_sym][:fa]%> 
         به 
         <%= @cities[@search_parameter[:destination].to_sym][:fa]%> 
         برای
@@ -41,7 +41,7 @@
                 <%= hour_to_human flight.departure_time.to_datetime.strftime("%H:%M") %>
               </td>
               <td style="width: 150px">
-                <%= link_to number_with_delimiter(flight.best_price)+" تومان", "http://parvazhub.com"+search_link_builder(@search_parameter[:origin_name],@search_parameter[:destination_code],@search_parameter[:date]), class: "ui teal label large flight-price", target: "blank" %>
+                <%= link_to number_with_delimiter(flight.best_price)+" تومان", "http://parvazhub.com"+search_link_builder(@cities[@search_parameter[:origin_code].to_sym][:en],@cities[@search_parameter[:destination_code].to_sym][:en],@search_parameter[:date]), class: "ui teal label large flight-price", target: "blank" %>
               </td>
             </tr>
           <% end %> 
