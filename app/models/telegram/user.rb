@@ -1,7 +1,8 @@
-class Telegram::User < ActiveRecord
-    set_table_name "telegram_users"
+class Telegram::User < ApplicationRecord
+    self.table_name = "telegram_users"
     belongs_to :telegram_user,
-           :class_name => 'Telegram::User'
+            :class_name => 'Telegram::User',
+            :foreign_key => 'telegram_users_id'
 
   	
 end
