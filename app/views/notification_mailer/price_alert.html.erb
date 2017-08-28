@@ -15,7 +15,7 @@
       <span style="display: inline-block; text-align: right;font-family: tahoma; border-top: 1px solid white;padding-top: 20px;">لیست پروازهای 
         <%= @cities[@search_parameter[:origin_code].to_sym][:fa]%> 
         به 
-        <%= @cities[@search_parameter[:destination].to_sym][:fa]%> 
+        <%= @cities[@search_parameter[:destination_code].to_sym][:fa]%> 
         برای
         <%= @search_parameter[:date].to_date.to_parsi.strftime "%A %d %B %Y" %> 
         </span>
