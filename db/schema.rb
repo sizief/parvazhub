@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170804151302) do
+ActiveRecord::Schema.define(version: 20170827141520) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -122,6 +122,14 @@ ActiveRecord::Schema.define(version: 20170804151302) do
     t.boolean  "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "telegram_users", force: :cascade do |t|
+    t.string "telegram_id"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "username"
+    t.index ["telegram_id"], name: "index_telegram_users_on_telegram_id", unique: true, using: :btree
   end
 
   create_table "user_search_histories", force: :cascade do |t|
