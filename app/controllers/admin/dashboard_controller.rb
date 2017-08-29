@@ -30,11 +30,10 @@ class Admin::DashboardController < ApplicationController
       
   def redirect
     all = Hash.new
+    today = Hash.new
     this_week = Hash.new
     week_before = Hash.new
     week_before_that = Hash.new
-    
-
     
     Redirect.all.each do |redirect|
       flight_price_archive = FlightPriceArchive.find(redirect.flight_price_archive_id)
@@ -42,6 +41,13 @@ class Admin::DashboardController < ApplicationController
       all[flight_price_archive.supplier.to_sym] = all[flight_price_archive.supplier.to_sym] + 1
     end
     all = Hash[ all.sort_by { |key, val| key } ]  
+    
+    Redirect.where('created_at > ?',Date.today).each do |redirect|
+      flight_price_archive = FlightPriceArchive.find(redirect.flight_price_archive_id)
+      today[flight_price_archive.supplier.to_sym] = 0 if today[flight_price_archive.supplier.to_sym].nil?
+      today[flight_price_archive.supplier.to_sym] = today[flight_price_archive.supplier.to_sym] + 1
+    end
+    today = Hash[ today.sort_by { |key, val| key } ]  
    
     Redirect.where('created_at > ?',Date.today-7).each do |redirect|
       flight_price_archive = FlightPriceArchive.find(redirect.flight_price_archive_id)
@@ -64,7 +70,7 @@ class Admin::DashboardController < ApplicationController
     end
     week_before_that = Hash[ week_before_that.sort_by { |key, val| key } ]
     
-    @results = {all:all,this_week:this_week,week_before:week_before,week_before_that:week_before_that}
+    @results = {today:today,all:all,this_week:this_week,week_before:week_before,week_before_that:week_before_that}
     
   end
   
