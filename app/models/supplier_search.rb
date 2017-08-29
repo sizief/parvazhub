@@ -9,7 +9,9 @@ class SupplierSearch
   def background_search(origin,destination,date)
     ActiveRecord::Base.connection_pool.with_connection do   
       route = Route.find_by(origin:"#{origin}", destination:"#{destination}")
-      search_suppliers(60,origin,destination,route.id,date) 
+      #search_suppliers(60,origin,destination,route.id,date) 
+      search_supplier_in_threads(40,origin,destination,route.id,date) 
+      
     end
   end
 

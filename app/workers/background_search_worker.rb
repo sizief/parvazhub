@@ -25,6 +25,7 @@ class BackgroundSearchWorker
   	@@origin_destination.each do |x|
       background_search = SupplierSearch.new()
       background_search.background_search(x[:origin],x[:destination],date)
+      #sleep 8
       break if Rails.env.test? 
     end
   end

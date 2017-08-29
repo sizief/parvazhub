@@ -9,43 +9,43 @@
   - low
 :concurrency: 50
 :schedule:
-  today_flight_search: #every 20 minutes
-    cron: '0 0,20,40 * * * *'
+  today_flight_search: #every 10 minutes
+    cron: '0 0,10,20,30,40,50 * * * *'
     args: [0]
     class: BackgroundSearchWorker
 
-  tomorrow_flight_search: #every 60 minutes
-    cron: '0 10 * * * *'
+  tomorrow_flight_search: #every 20 minutes
+    cron: '0 5,25,45 * * * *'
     args: [1]
     class: BackgroundSearchWorker
 
   dayafter_flight_search: #every 120 minutes
-    cron: '0 50 0,2,4,6,8,10,12,14,16,18,20,22 * * *'
+    cron: '0 15 0,2,4,6,8,10,12,14,16,18,20,22 * * *'
     args: [2]
     class: BackgroundSearchWorker
 
   restofweek_1_flight_search: #every 360 minutes
-    cron: '0 50 1,7,13,19 * * *'
+    cron: '0 15 1,7,13,19 * * *'
     args: [3]
     class: BackgroundSearchWorker
 
   restofweek_2_flight_search: #every 360 minutes
-    cron: '0 50 3,9,15,21 * * *'
+    cron: '0 15 3,9,15,21 * * *'
     args: [4]
     class: BackgroundSearchWorker
 
   restofweek_3_flight_search: #every 360 minutes
-    cron: '0 50 5,11,17,23 * * *'
+    cron: '0 15 5,11,17,23 * * *'
     args: [5]
     class: BackgroundSearchWorker
 
   restofweek_4_flight_search: #every 360 minutes
-    cron: '0 30 1,7,13,19 * * *'
+    cron: '0 35 1,7,13,19 * * *'
     args: [6]
     class: BackgroundSearchWorker
 
   restofweek_5_flight_search: #every 360 minutes
-    cron: '0 30 3,9,15,21 * * *'
+    cron: '0 35 3,9,15,21 * * *'
     args: [7]
     class: BackgroundSearchWorker
 
@@ -61,11 +61,11 @@
 
 #proxy
   proxy_update:
-    cron: '0 /10 * * * *'
+    cron: '0 /60 * * * *'
     class: ProxyUpdateWorker
 
   proxy_checker:
-    cron: '0 /10 * * * *'
+    cron: '0 /61 * * * *'
     class: ProxyCheckAllWorker
 
 #flightPrice remover 
@@ -75,5 +75,5 @@
 
 #flightinfo worker 
   flight_info_worker:
-    cron: '0 30 0,12 * * *'
+    cron: '0 45 0,12 * * *'
     class: FlightInfoWorker
