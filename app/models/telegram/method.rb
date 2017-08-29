@@ -28,17 +28,41 @@ class Telegram::Method
   def select_answer(text,chat_id)
     chat = Telegram::SearchQuery.find_by(chat_id: chat_id)
     
+    #Step 0
     if text =="/start"
-      answer="سلام. من می‌تونم ارزون‌ترین پروازها را برات پیدا کنم."
-    elsif chat.origin.nil?
-      answer="لطفا شهر مبدا سفرت رو انتخاب کن"
-    elsif chat.destination.nil?
-      answer="لطفا شهر مقصد سفرت رو انتخاب کن"
-    elsif chat.date.nil?
+      answer="از کجا قصد سفر داری؟"
+      chat.origin = nil
+      chat.destination = nil
+      chat.date = nil
+      chat.save
+      return {text: answer, chat_id: chat.chat_id}
+    end 
+    
+    #Step 1
+    if (chat.origin.nil? and chat.destination.nil?)
+      chat.origin = text
+      chat.save
+      answer="لطفا شهر مقصد سفر رو انتخاب کن"
+      return {text: answer, chat_id: chat.chat_id}
+    end  
+    
+    #Step 2
+    if (!chat.origin.nil? and chat.destination.nil?)
+      chat.destination = text      
+      chat.save
       answer="لطفا تاریخ سفرت رو انتخاب کن"
+      return {text: answer, chat_id: chat.chat_id}
     end
     
-    return {text: answer, chat_id: chat.chat_id}
+    #Step 3
+    if (!chat.origin.nil? and !chat.destination.nil?)
+      chat.date = text
+      chat.save
+      answer="لطفا چند لحظه صبر کنید در حال جستجو"
+      return {text: answer, chat_id: chat.chat_id}
+    end
+    
+    
   end
 
   def send(text,chat_id)

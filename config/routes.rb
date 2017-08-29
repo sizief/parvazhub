@@ -32,6 +32,8 @@ Rails.application.routes.draw do
 	get '/about_us', to:'static_pages#about_us'
 	get '/cheap-flights', to:'static_pages#cheap_flights'
 	get 'static_pages/about_us'
+
+	get '/beta/telegram/update', to: 'telegram#update'
 	 
 	root 'home#index'
 end
