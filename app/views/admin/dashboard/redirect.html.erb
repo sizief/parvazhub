@@ -1,0 +1,30 @@
+<% provide(:title,"Admin dashboard") %>
+<div class="ui container" style="margin-top: 2em">
+  
+
+<% @results.each do |name,period| %>
+  	<div class="row" style="padding: 1em">
+  		<div class="ui label">
+          <%= name.to_s %>
+		</div>
+	</div>
+	<div class="row" style="direction: rtl">
+		<div class="ui small nine statistics" >
+  			<% period.each do |supplier,count| %>
+	  			<div class=" green statistic" >
+		  			<div class="value ">
+	  					<%= count %>
+	  				</div>
+		  			<div class="label web-font">
+	  					<%= supplier  %>
+	  				</div>
+	  			</div>
+  			<% end %>
+  		</div>
+  	</div>
+    <div class="ui divider"></div>
+      
+ <% end %> 	
+
+
+</div>
