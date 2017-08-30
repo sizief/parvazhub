@@ -24,7 +24,7 @@ class BackgroundSearchWorker
     date = (Date.today+date_offset.to_f).to_s
   	@@origin_destination.each do |x|
       background_search = SupplierSearch.new()
-      background_search.background_search(x[:origin],x[:destination],date)
+      background_search.search(x[:origin],x[:destination],date,40,"bg")
       #sleep 8
       break if Rails.env.test? 
     end

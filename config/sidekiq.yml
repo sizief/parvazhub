@@ -19,34 +19,29 @@
     args: [1]
     class: BackgroundSearchWorker
 
-  dayafter_flight_search: #every 120 minutes
-    cron: '0 15 0,2,4,6,8,10,12,14,16,18,20,22 * * *'
+  dayafter_flight_search: #every 60 minutes
+    cron: '0 15 * * * *'
     args: [2]
     class: BackgroundSearchWorker
 
-  restofweek_1_flight_search: #every 360 minutes
-    cron: '0 15 1,7,13,19 * * *'
+  restofweek_1_flight_search: #every 120 minutes
+    cron: '0 35 1,3,5,7,9,11,13,15,17,19,21,23 * * *'
     args: [3]
     class: BackgroundSearchWorker
 
-  restofweek_2_flight_search: #every 360 minutes
-    cron: '0 15 3,9,15,21 * * *'
+  restofweek_2_flight_search: #every 120 minutes
+    cron: '0 55 1,3,5,7,9,11,13,15,17,19,21,23 * * *'
     args: [4]
     class: BackgroundSearchWorker
 
-  restofweek_3_flight_search: #every 360 minutes
-    cron: '0 15 5,11,17,23 * * *'
+  restofweek_3_flight_search: #every 120 minutes
+    cron: '0 35 0,2,4,6,8,10,12,14,16,18,20,22 * * *'
     args: [5]
     class: BackgroundSearchWorker
 
-  restofweek_4_flight_search: #every 360 minutes
-    cron: '0 35 1,7,13,19 * * *'
+  restofweek_4_flight_search: #every 120 minutes
+    cron: '0 55 0,2,4,6,8,10,12,14,16,18,20,22 * * *'
     args: [6]
-    class: BackgroundSearchWorker
-
-  restofweek_5_flight_search: #every 360 minutes
-    cron: '0 35 3,9,15,21 * * *'
-    args: [7]
     class: BackgroundSearchWorker
 
 #airport search worker
