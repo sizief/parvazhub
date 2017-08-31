@@ -25,53 +25,115 @@ class Telegram::Method
     end
   end
   
+  def answer_step_0(chat,text)
+    answer="از کجا قصد سفر داری؟"
+    chat.origin = nil
+    chat.destination = nil
+    chat.date = nil
+    chat.save
+    keyboard = get_city_list
+    return {text: answer, chat_id: chat.chat_id, keyboard: keyboard}  
+  end
+
+  def answer_step_1(chat,text)
+    chat.origin = text
+    chat.save
+    answer="لطفا شهر مقصد سفر رو انتخاب کن"
+    keyboard= get_city_list(chat.origin)
+    return {text: answer, chat_id: chat.chat_id, keyboard: keyboard}      
+  end
+
+  def answer_step_2(chat,text)
+    chat.destination = text      
+    chat.save
+    answer="لطفا تاریخ سفرت رو انتخاب کن"
+    keyboard= get_dates
+    return {text: answer, chat_id: chat.chat_id, keyboard: keyboard}    
+  end
+
+  def answer_step_3(chat,text)
+    chat.date = text
+    chat.save
+    answer="لطفا چند لحظه صبر کنید در حال جستجو"
+    return {text: answer, chat_id: chat.chat_id}    
+  end
+  
+  
   def select_answer(text,chat_id)
     chat = Telegram::SearchQuery.find_by(chat_id: chat_id)
-    
+  
     #Step 0
-    if text =="/start"
-      answer="از کجا قصد سفر داری؟"
-      chat.origin = nil
-      chat.destination = nil
-      chat.date = nil
-      chat.save
-      return {text: answer, chat_id: chat.chat_id}
+    if text =="/start" or text =="جستجوی مجدد"
+      return answer_step_0(chat,text)
     end 
     
     #Step 1
     if (chat.origin.nil? and chat.destination.nil?)
-      chat.origin = text
-      chat.save
-      answer="لطفا شهر مقصد سفر رو انتخاب کن"
-      return {text: answer, chat_id: chat.chat_id}
+      if is_city_valid(text)
+        #apologize(chat.id)
+        return answer_step_1(chat,text)
+      else
+        return answer_step_0(chat,text)
+      end
     end  
     
     #Step 2
     if (!chat.origin.nil? and chat.destination.nil?)
-      chat.destination = text      
-      chat.save
-      answer="لطفا تاریخ سفرت رو انتخاب کن"
-      return {text: answer, chat_id: chat.chat_id}
+      return answer_step_2(chat,text)
     end
     
     #Step 3
     if (!chat.origin.nil? and !chat.destination.nil?)
-      chat.date = text
-      chat.save
-      answer="لطفا چند لحظه صبر کنید در حال جستجو"
-      return {text: answer, chat_id: chat.chat_id}
+      return answer_step_3(chat,text)
     end
-    
-    
   end
 
-  def send(text,chat_id)
-    send_url = "https://api.telegram.org/#{@@token}/sendMessage"
-    body = {"chat_id":chat_id,"text":"#{text}"}
-    response = RestClient::Request.execute(method: :post, payload: body.to_json, headers: {:'Content-Type'=> "application/json"}, url: "#{URI.parse(send_url)}")
- #   ,"reply_markup": 
-#{"keyboard":[["مشهد", "تهران"]]}
+  def is_city_valid(city)
+    cities = get_city_list
+    cities.include? city
   end
+
+  def apologize(chat_id)
+    text = "متوجه نشدم. لطفا یکی از موارد  پایین را انتخاب کنید"
+    send(text,chat_id)    
+  end
+
+  def get_city_list(selected_city=nil)
+    cities = Array.new
+    City.list.each do |city|
+      cities.push(city.last[:fa]) unless city.last[:fa] == selected_city
+    end
+    return cities
+  end
+
+  def get_dates
+    dates = Array.new
+    for offset in 0..6 do
+      dates.push((Date.today+offset.to_f).to_parsi.strftime "%A %d %B"  )
+    end
+    return dates
+  end
+
+  def send(text,chat_id,keyboard=nil)
+    send_url = "https://api.telegram.org/#{@@token}/sendMessage"
+    if keyboard.nil? 
+      reply_markup = ""
+    else
+      reply_markup= {"keyboard":[keyboard,["جستجوی مجدد"]],"one_time_keyboard":true}
+    end
+    body = {"chat_id":chat_id,"text":"#{text}","reply_markup":reply_markup}
+    response = RestClient::Request.execute(method: :post, payload: body.to_json, headers: {:'Content-Type'=> "application/json"}, url: "#{URI.parse(send_url)}")
+  end
+
+  def search(route,origin_name,origin_code,destination_name,destination_code,date)
+    @flights = Flight.new.flight_list(route,date)
+
+    date_in_human = date.to_date.to_parsi.strftime '%A %d %B'     
+    @search_parameter ={origin_name: origin_name, origin_code: origin_code, destination_code: destination_code, destination_name: destination_name,date: date, date_in_human: date_in_human}
+    @cities = City.list 
+
+    render :index
+ end
 
   def update
     response = get_updates
@@ -92,7 +154,7 @@ class Telegram::Method
       register_search_query(telegram_id, chat_id)
 
       answer = select_answer(text,chat_id)
-      send(answer[:text],answer[:chat_id])
+      send(answer[:text],answer[:chat_id],answer[:keyboard])
     end   
   end
 
