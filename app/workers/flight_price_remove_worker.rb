@@ -10,8 +10,7 @@ class FlightPriceRemoveWorker
     {date:(Date.today+3).to_s,outdate_minutes:370},
     {date:(Date.today+4).to_s,outdate_minutes:370},
     {date:(Date.today+5).to_s,outdate_minutes:370},
-    {date:(Date.today+6).to_s,outdate_minutes:370},
-    {date:(Date.today+7).to_s,outdate_minutes:370}
+    {date:(Date.today+6).to_s,outdate_minutes:370}
  ]
 
   def perform
