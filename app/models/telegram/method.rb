@@ -1,6 +1,8 @@
 class Telegram::Method 
   include SearchHelper
+  include SearchResultHelper
   include ActionView::Helpers::NumberHelper
+
   @@token = "bot360102838:AAHhtt5II-agroRJDLS-PuX-NcJ4G0kh0eg"
 
   def get_updates
@@ -67,6 +69,13 @@ class Telegram::Method
     answer="لطفا چند لحظه صبر کنید در حال جستجو"
     return {text: answer, chat_id: chat.chat_id}    
   end
+
+  def answer_step_4(chat,text,answer_valid)
+    if answer_valid
+      chat.flight_price = text
+      chat.save
+    end
+  end
   
   
   def select_answer(text,chat_id)
@@ -97,7 +106,7 @@ class Telegram::Method
     
     
     #Step 3
-    elsif (!chat.origin.nil? and !chat.destination.nil?)
+    elsif (!chat.origin.nil? and !chat.destination.nil? and !(text.include? "/"))
       if is_date_valid(text)
         send answer_step_3(chat,text,true)
         send_search_result(chat.origin,chat.destination,chat.date,chat.chat_id)
@@ -105,7 +114,26 @@ class Telegram::Method
         send({text:"تاریخی که درخواست کردی برای من مفهوم نیست. از لیست پایین یکی را انتخاب کن 👇",chat_id:chat.chat_id})         
         send answer_step_2(chat,text,false)
       end
+    
+
+    #Step 4
+    elsif(text.include? "/flight")
+      answer_step_4(chat,text.tr("/flight",""),true)  
+      send_suppliers(text.tr("/flight",""),chat)
     end
+        
+  end
+
+  def send_suppliers(flight_id,chat)
+    flight = Flight.find(flight_id)
+    text = "<b>پرواز شماره #{flight.flight_number} از #{chat.origin} به #{chat.destination} #{hour_to_human(flight.departure_time.to_datetime.strftime("%H:%M"))}  </b>\n\n"
+    flight_prices = FlightPrice.where(flight_id: flight_id).order(:price)
+    flight_prices.each do |flight_price|
+      text += "🚀 <a href=\"https://parvazhub.com/redirect/telegram/#{flight_price.id}\">لینک خرید از سایت #{supplier_to_human(flight_price.supplier)} به قیمت #{number_with_delimiter(flight_price.price)} تومان </a>  \n"
+    end
+    text += "\n"
+    send({text:text,chat_id:chat.chat_id})
+    
   end
 
   def format_date(flight_date)
@@ -118,24 +146,18 @@ class Telegram::Method
   end
 
   def send_search_result(origin_name,destination_name,date,chat_id)
-    text = "پروازهای #{origin_name} به #{destination_name} در #{date}
-    "
+    text = "<b>پروازهای #{origin_name} به #{destination_name} #{date}</b> \n\n"
     origin_code = City.get_city_code_based_on_name origin_name
     destination_code = City.get_city_code_based_on_name destination_name
     date = format_date date
     
     route = Route.find_by(origin:"#{origin_code}",destination:"#{destination_code}")
-    SearchResultController.new.search_suppliers(route,date)
+    SearchResultController.new.search_suppliers(route,date,"telegram")
     flights = Flight.new.flight_list(route,date)
-
-    #send({text:"#{origin_code}, #{destination_code}, #{date}",chat_id:chat_id})  
     
     flights.each do |flight|
-      text = text + "#{flight.id}  #{airline_name_for(flight.airline_code)}
-      #{hour_to_human(flight.departure_time.to_datetime.strftime("%H:%M"))}
-      <b>#{number_with_delimiter(flight.best_price)} تومان</b>
-      
-      "
+      text += "#{airline_name_for(flight.airline_code)} | #{hour_to_human(flight.departure_time.to_datetime.strftime("%H:%M"))} | <b>#{number_with_delimiter(flight.best_price)} تومان</b>
+       👉 /flight#{flight.id} \n\n"
     end
     send({text:text,chat_id:chat_id})
     
@@ -156,8 +178,12 @@ class Telegram::Method
     response = RestClient::Request.execute(method: :post, payload: body.to_json, headers: {:'Content-Type'=> "application/json"}, url: "#{URI.parse(send_url)}")
   end
 
-  def update
-    response = get_updates
+  def update(webhook_request=false)
+    if webhook_request
+      response = webhook_request
+    else
+      response = get_updates
+    end
     response = JSON.parse(response)
 
     response["result"].each do |message|

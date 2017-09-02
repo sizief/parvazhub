@@ -26,13 +26,13 @@ class SearchResultController < ApplicationController
     if route.nil?
       notfound
     else
-      search_suppliers(route,date)
+      search_suppliers(route,date,"website")
       index(route,origin_name,origin_code,destination_name,destination_code,date)
     end
   end
 
-  def search_suppliers(route,date)
-    UserSearchHistory.create(route_id:route.id,departure_time:"#{date}") #save user search to show in admin panel
+  def search_suppliers(route,date,channel)
+    UserSearchHistory.create(route_id:route.id,departure_time:"#{date}",channel:channel) #save user search to show in admin panel
     response_available = SearchHistory.where(route_id:route.id,departure_time:"#{date}").where('created_at >= ?', ENV["SEARCH_RESULT_VALIDITY_TIME"].to_f.minutes.ago).count
     SupplierSearch.new.search(route.origin,route.destination,date) if response_available == 0
   end
