@@ -11,7 +11,6 @@ then
 
 elif [ "$ENTRYPOINT" = "background_job" ]
 then
-  #exec bundle exec puma -C config/containers/puma.rb; 
   exec bundle exec sidekiq #-r app/workers/search_worker.rb #-L log/sidekiq.log
 
 fi

@@ -26,13 +26,16 @@ Rails.application.routes.draw do
 	get '/flights/:origin_name-:destination_name/:date', to:'search_result#search', as: 'flight_result'
 	
 	get '/flight-prices/:id', to: 'search_result#flight_prices', as: 'flight-prices' #, :defaults => { :format => 'js' }
-	get 'redirect/:flight_price_id', to: 'redirect#redirect', as: 'redirect'
+	get 'redirect/:channel/:flight_price_id', to: 'redirect#redirect', as: 'redirect'
 
 	post 'notification/price_alert_register', to: 'notification#price_alert_register', as: 'price_alert_register'
 	
 	get '/about_us', to:'static_pages#about_us'
 	get '/cheap-flights', to:'static_pages#cheap_flights'
 	get 'static_pages/about_us'
+
+	get '/beta/telegram/update', to: 'telegram#update'
+	post '/beta/telegram/webhook', to: 'telegram#webhook'
 	 
 	root 'home#index'
 end

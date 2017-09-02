@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170804151302) do
+ActiveRecord::Schema.define(version: 20170902203534) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -96,6 +96,7 @@ ActiveRecord::Schema.define(version: 20170804151302) do
     t.integer  "flight_price_archive_id"
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.string   "channel"
     t.index ["flight_price_archive_id"], name: "index_redirects_on_flight_price_archive_id", using: :btree
   end
 
@@ -124,11 +125,34 @@ ActiveRecord::Schema.define(version: 20170804151302) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "telegram_search_queries", force: :cascade do |t|
+    t.integer "telegram_user_id"
+    t.string  "origin"
+    t.string  "destination"
+    t.string  "date"
+    t.string  "flight_price"
+    t.string  "chat_id"
+    t.index ["telegram_user_id"], name: "index_telegram_search_queries_on_telegram_user_id", using: :btree
+  end
+
+  create_table "telegram_update_ids", force: :cascade do |t|
+    t.string "update_id"
+  end
+
+  create_table "telegram_users", force: :cascade do |t|
+    t.string "telegram_id"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "username"
+    t.index ["telegram_id"], name: "index_telegram_users_on_telegram_id", unique: true, using: :btree
+  end
+
   create_table "user_search_histories", force: :cascade do |t|
     t.integer  "route_id"
     t.string   "departure_time"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.string   "channel"
   end
 
   create_table "users", force: :cascade do |t|
@@ -151,4 +175,5 @@ ActiveRecord::Schema.define(version: 20170804151302) do
   add_foreign_key "notifications", "routes"
   add_foreign_key "redirects", "flight_price_archives"
   add_foreign_key "search_histories", "routes"
+  add_foreign_key "telegram_search_queries", "telegram_users"
 end
