@@ -186,7 +186,7 @@ class Telegram::Method
     end
     response = JSON.parse(response)
 
-    response["result"].each do |message|
+    response.each do |message|
       telegram_id = message["message"]["from"]["id"]
       first_name = message["message"]["from"]["first_name"]
       last_name = message["message"]["from"]["last_name"]
