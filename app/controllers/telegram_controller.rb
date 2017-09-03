@@ -8,6 +8,11 @@ class TelegramController < ApplicationController
 
     def webhook
         response = request.body.read
-        Telegram::Method.new.update_by_webhook(response)
+        status = Telegram::Method.new.update_by_webhook(response)
+        if status
+            render json: {
+            status: 200
+          }.to_json
+        end
     end
 end    

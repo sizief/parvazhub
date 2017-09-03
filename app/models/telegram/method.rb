@@ -3,10 +3,12 @@ class Telegram::Method
   include SearchResultHelper
   include ActionView::Helpers::NumberHelper
 
-  @@token = "bot360102838:AAHhtt5II-agroRJDLS-PuX-NcJ4G0kh0eg"
+  #@@token = "bot360102838:AAHhtt5II-agroRJDLS-PuX-NcJ4G0kh0eg"
+  #test token
+  @@token = "bot442162833:AAHubbvrXvdEfL8gXrVYJbwkh2DbjjyN5VU"
 
   def get_updates
-    last_update_id = Telegram::UpdateId.last.nil? ? 34279410 : Telegram::UpdateId.last[:update_id]
+    last_update_id = Telegram::UpdateId.last.nil? ? 457549612 : Telegram::UpdateId.last[:update_id]
     get_update_url = "https://api.telegram.org/#{@@token}/getupdates?offset=#{last_update_id.to_i+1}"
     response = RestClient::Request.execute(method: :get, url: "#{URI.parse(get_update_url)}")
     return response.body
@@ -37,7 +39,7 @@ class Telegram::Method
       chat.save
     end
     answer="از کجا قصد سفر داری؟"    
-    keyboard = get_city_list
+    keyboard = get_city_list()
     return {text: answer, chat_id: chat.chat_id, keyboard: keyboard}  
   end
 
@@ -126,24 +128,27 @@ class Telegram::Method
 
   def send_suppliers(flight_id,chat)
     flight = Flight.find(flight_id)
-    text = "<b>پرواز شماره #{flight.flight_number} از #{chat.origin} به #{chat.destination} #{hour_to_human(flight.departure_time.to_datetime.strftime("%H:%M"))}  </b>\n\n"
+    origin_code = City.get_city_code_based_on_name chat.origin
+    origin_name = City.list[origin_code.to_sym][:en]    
+    destination_code = City.get_city_code_based_on_name chat.destination
+    destination_name = City.list[destination_code.to_sym][:en]    
+    date = format_date chat.date
+
+    text = "<b>پرواز شماره #{flight.flight_number} از #{chat.origin} به #{chat.destination} #{hour_to_human(flight.departure_time.to_datetime.strftime("%H:%M"))}  </b>"
+    text += "<a href=\"https://parvazhub.com/flights/#{origin_name}-#{destination_name}/#{date}\" >پروازهاب</a>\n" 
     flight_prices = FlightPrice.where(flight_id: flight_id).order(:price)
-    flight_prices.each do |flight_price|
-      text += "🚀 <a href=\"https://parvazhub.com/redirect/telegram/#{flight_price.id}\">لینک خرید از سایت #{supplier_to_human(flight_price.supplier)} به قیمت #{number_with_delimiter(flight_price.price)} تومان </a>  \n"
+    if flight_prices.empty?
+      text += "به نظر می‌رسد این پرواز پر شده باشد. لطفا پرواز دیگری انتخاب کنید"
+    else
+      flight_prices.each do |flight_price|
+        text += "🚀 <a href=\"https://parvazhub.com/redirect/telegram/#{flight_price.id}\">لینک خرید از سایت #{supplier_to_human(flight_price.supplier)} به قیمت #{number_with_delimiter(flight_price.price)} تومان </a>  \n\n"
+      end
     end
-    text += "\n"
     send({text:text,chat_id:chat.chat_id})
     
   end
 
-  def format_date(flight_date)
-    hash_dates = Hash.new
-    persian_dates = get_dates 
-    persian_dates.each_with_index do |date,offset|
-      hash_dates[date.to_sym] = (Date.today+offset.to_f).to_s
-    end
-    return hash_dates[flight_date.to_sym]
-  end
+  
 
   def send_search_result(origin_name,destination_name,date,chat_id)
     text = "<b>پروازهای #{origin_name} به #{destination_name} #{date}</b> \n\n"
@@ -155,9 +160,13 @@ class Telegram::Method
     SearchResultController.new.search_suppliers(route,date,"telegram")
     flights = Flight.new.flight_list(route,date)
     
-    flights.each do |flight|
-      text += "#{airline_name_for(flight.airline_code)} | #{hour_to_human(flight.departure_time.to_datetime.strftime("%H:%M"))} | <b>#{number_with_delimiter(flight.best_price)} تومان</b>
-       👉 /flight#{flight.id} \n\n"
+    if flights.empty?
+      text += "برای این مسیر در این تاریخ متاسفانه پروازی پیدا نکردم. از صفحه کلید پایین صفحه می‌تونی روزهای دیگر را درخواست کنی و یا مسیر دیگری را جستجو کنی: /start"
+    else  
+      flights.each do |flight|
+        text += "#{airline_name_for(flight.airline_code)} | #{hour_to_human(flight.departure_time.to_datetime.strftime("%H:%M"))} | <b>#{number_with_delimiter(flight.best_price)} تومان</b>
+        👉 /flight#{flight.id} \n\n"
+      end
     end
     send({text:text,chat_id:chat_id})
     
@@ -182,42 +191,43 @@ class Telegram::Method
     response = get_updates
     response = JSON.parse(response)
 
-    response.each do |message|
-      telegram_id = message["message"]["from"]["id"]
-      first_name = message["message"]["from"]["first_name"]
-      last_name = message["message"]["from"]["last_name"]
-      username= message["message"]["from"]["username"]
-
-      chat_id= message["message"]["chat"]["id"]
-      text = message["message"]["text"]
-      update_id = message["update_id"]
-
-      Telegram::UpdateId.create(update_id: update_id)
-      register_user(telegram_id,first_name,last_name,username)
-      register_search_query(telegram_id, chat_id)
-
-      select_answer(text,chat_id)
-    end   
+    response["result"].each do |message|
+      update(message)      
+    end  
+    return true
   end
 
   def update_by_webhook(response)
     response = JSON.parse(response)
+    update(response)
+    return true        
+  end
 
-      telegram_id = response["message"]["from"]["id"]
-      first_name = response["message"]["from"]["first_name"]
-      last_name = response["message"]["from"]["last_name"]
-      username= response["message"]["from"]["username"]
+  def update (response)
+    telegram_id = response["message"]["from"]["id"]
+    first_name = response["message"]["from"]["first_name"]
+    last_name = response["message"]["from"]["last_name"]
+    username= response["message"]["from"]["username"]
 
-      chat_id= response["message"]["chat"]["id"]
-      text = response["message"]["text"]
-      update_id = response["update_id"]
+    chat_id= response["message"]["chat"]["id"]
+    text = response["message"]["text"]
+    update_id = response["update_id"]
 
-      Telegram::UpdateId.create(update_id: update_id)
+    is_new_message = Telegram::UpdateId.create(update_id: update_id)
+    if is_new_message.save
       register_user(telegram_id,first_name,last_name,username)
       register_search_query(telegram_id, chat_id)
-
       select_answer(text,chat_id)
-       
+    end
+  end
+
+  def format_date(flight_date)
+    hash_dates = Hash.new
+    persian_dates = get_dates 
+    persian_dates.each_with_index do |date,offset|
+      hash_dates[date.to_sym] = (Date.today+offset.to_f).to_s
+    end
+    return hash_dates[flight_date.to_sym]
   end
 
   def get_city_list(selected_city=nil)
