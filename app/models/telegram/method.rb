@@ -178,12 +178,8 @@ class Telegram::Method
     response = RestClient::Request.execute(method: :post, payload: body.to_json, headers: {:'Content-Type'=> "application/json"}, url: "#{URI.parse(send_url)}")
   end
 
-  def update(webhook_request=false)
-    if webhook_request
-      response = webhook_request
-    else
-      response = get_updates
-    end
+  def update_by_pull
+    response = get_updates
     response = JSON.parse(response)
 
     response.each do |message|
@@ -202,6 +198,26 @@ class Telegram::Method
 
       select_answer(text,chat_id)
     end   
+  end
+
+  def update_by_webhook(response)
+    response = JSON.parse(response)
+
+      telegram_id = response["message"]["from"]["id"]
+      first_name = response["message"]["from"]["first_name"]
+      last_name = response["message"]["from"]["last_name"]
+      username= response["message"]["from"]["username"]
+
+      chat_id= response["message"]["chat"]["id"]
+      text = response["message"]["text"]
+      update_id = response["update_id"]
+
+      Telegram::UpdateId.create(update_id: update_id)
+      register_user(telegram_id,first_name,last_name,username)
+      register_search_query(telegram_id, chat_id)
+
+      select_answer(text,chat_id)
+       
   end
 
   def get_city_list(selected_city=nil)

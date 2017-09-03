@@ -3,11 +3,11 @@ class TelegramController < ApplicationController
     
     def update
         x=Telegram::Method.new
-        @errors = x.update
+        @errors = x.update_by_pull
     end
 
     def webhook
         response = request.body.read
-        Telegram::Method.new.update(response)
+        Telegram::Method.new.update_by_webhook(response)
     end
 end    
