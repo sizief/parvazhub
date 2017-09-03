@@ -135,7 +135,7 @@ class Telegram::Method
     date = format_date chat.date
 
     text = "<b>پرواز شماره #{flight.flight_number} از #{chat.origin} به #{chat.destination} #{hour_to_human(flight.departure_time.to_datetime.strftime("%H:%M"))}  </b>"
-    text += "<a href=\"https://parvazhub.com/flights/#{origin_name}-#{destination_name}/#{date}\" >پروازهاب</a>\n" 
+    text += "<a href=\"https://parvazhub.com/flights/#{origin_name}-#{destination_name}/#{date}\" > | پروازهاب</a>\n\n" 
     flight_prices = FlightPrice.where(flight_id: flight_id).order(:price)
     if flight_prices.empty?
       text += "به نظر می‌رسد این پرواز پر شده باشد. لطفا پرواز دیگری انتخاب کنید"
