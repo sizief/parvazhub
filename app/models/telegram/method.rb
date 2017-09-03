@@ -3,9 +3,9 @@ class Telegram::Method
   include SearchResultHelper
   include ActionView::Helpers::NumberHelper
 
-  #@@token = "bot360102838:AAHhtt5II-agroRJDLS-PuX-NcJ4G0kh0eg"
+  @@token = "bot360102838:AAHhtt5II-agroRJDLS-PuX-NcJ4G0kh0eg"
   #test token
-  @@token = "bot442162833:AAHubbvrXvdEfL8gXrVYJbwkh2DbjjyN5VU"
+  #@@token = "bot442162833:AAHubbvrXvdEfL8gXrVYJbwkh2DbjjyN5VU"
 
   def get_updates
     last_update_id = Telegram::UpdateId.last.nil? ? 457549612 : Telegram::UpdateId.last[:update_id]
