@@ -36,6 +36,8 @@ module SearchResultHelper
 			return "تراولچی"
 		elsif supplier_name == "iranhrc"
 			return "HRC"
+		elsif supplier_name == "sepehr"
+			return "سپهرسیر"
 		else
 			return supplier_name
 		end

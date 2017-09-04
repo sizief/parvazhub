@@ -38,7 +38,7 @@ class Telegram::Method
       chat.date = nil
       chat.save
     end
-    answer="از کجا قصد سفر داری؟"    
+    answer="مبدا سفر کجاست؟"    
     keyboard = get_city_list()
     return {text: answer, chat_id: chat.chat_id, keyboard: keyboard}  
   end
@@ -48,7 +48,7 @@ class Telegram::Method
       chat.origin = text
       chat.save
     end
-    answer=" شهر مقصد سفر رو انتخاب کن"
+    answer=" شهر مقصد را انتخاب کن"
     keyboard= get_city_list(chat.origin)
     return {text: answer, chat_id: chat.chat_id, keyboard: keyboard}      
   end
@@ -58,7 +58,7 @@ class Telegram::Method
       chat.destination = text      
       chat.save
     end
-    answer=" تاریخ سفرت رو انتخاب کن"
+    answer=" تاریخ سفرت را انتخاب کن"
     keyboard= get_dates
     return {text: answer, chat_id: chat.chat_id, keyboard: keyboard}    
   end
@@ -68,7 +68,7 @@ class Telegram::Method
       chat.date = text
       chat.save
     end
-    answer="لطفا چند لحظه صبر کنید در حال جستجو"
+    answer="لطفا چند لحظه صبر کن. در حال جستجوی سایت‌های فروش پرواز هستم."
     return {text: answer, chat_id: chat.chat_id}    
   end
 
@@ -138,7 +138,7 @@ class Telegram::Method
     text += "<a href=\"https://parvazhub.com/flights/#{origin_name}-#{destination_name}/#{date}\" > | پروازهاب</a>\n\n" 
     flight_prices = FlightPrice.where(flight_id: flight_id).order(:price)
     if flight_prices.empty?
-      text += "به نظر می‌رسد این پرواز پر شده باشد. لطفا پرواز دیگری انتخاب کنید"
+      text += "به نظر می‌رسد این پرواز پر شده. لطفا پرواز دیگری انتخاب کن"
     else
       flight_prices.each do |flight_price|
         text += "🚀 <a href=\"https://parvazhub.com/redirect/telegram/#{flight_price.id}\">لینک خرید از سایت #{supplier_to_human(flight_price.supplier)} به قیمت #{number_with_delimiter(flight_price.price)} تومان </a>  \n\n"
@@ -151,7 +151,7 @@ class Telegram::Method
   
 
   def send_search_result(origin_name,destination_name,date,chat_id)
-    text = "<b>پروازهای #{origin_name} به #{destination_name} #{date}</b> \n\n"
+    text = "<b> 📣 پروازهای #{origin_name} به #{destination_name} #{date}</b> \n"
     origin_code = City.get_city_code_based_on_name origin_name
     destination_code = City.get_city_code_based_on_name destination_name
     date = format_date date
@@ -162,7 +162,8 @@ class Telegram::Method
     
     if flights.empty?
       text += "برای این مسیر در این تاریخ متاسفانه پروازی پیدا نکردم. از صفحه کلید پایین صفحه می‌تونی روزهای دیگر را درخواست کنی و یا مسیر دیگری را جستجو کنی: /start"
-    else  
+    else 
+      text += "📣 به ترتیب از ارزان‌ترین به گران‌ترین \n\n"      
       flights.each do |flight|
         text += "#{airline_name_for(flight.airline_code)} | #{hour_to_human(flight.departure_time.to_datetime.strftime("%H:%M"))} | <b>#{number_with_delimiter(flight.best_price)} تومان</b>
         👉 /flight#{flight.id} \n\n"
@@ -241,7 +242,8 @@ class Telegram::Method
   def get_dates
     dates = Array.new
     for offset in 0..6 do
-      dates.push((Date.today+offset.to_f).to_parsi.strftime "%A %d %B"  )
+      date = (Date.today+offset.to_f).to_parsi.strftime "%A %d-%m-%y"
+      dates.push(date)
     end
     return dates
   end
