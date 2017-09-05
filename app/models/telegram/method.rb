@@ -3,6 +3,7 @@ class Telegram::Method
   include SearchResultHelper
   include ActionView::Helpers::NumberHelper
 
+  @@number_of_result = 45
   @@token = "bot360102838:AAHhtt5II-agroRJDLS-PuX-NcJ4G0kh0eg"
   #test token
   #@@token = "bot442162833:AAHubbvrXvdEfL8gXrVYJbwkh2DbjjyN5VU"
@@ -111,7 +112,7 @@ class Telegram::Method
     elsif (!chat.origin.nil? and !chat.destination.nil? and !(text.include? "/"))
       if is_date_valid(text)
         send answer_step_3(chat,text,true)
-        send_search_result(chat.origin,chat.destination,chat.date,chat.chat_id)
+        send_search_result(chat)
       else
         send({text:"تاریخی که درخواست کردی برای من مفهوم نیست. از لیست پایین یکی را انتخاب کن 👇",chat_id:chat.chat_id})         
         send answer_step_2(chat,text,false)
@@ -150,11 +151,11 @@ class Telegram::Method
 
   
 
-  def send_search_result(origin_name,destination_name,date,chat_id)
-    text = "<b> 📣 پروازهای #{origin_name} به #{destination_name} #{date}</b> \n"
-    origin_code = City.get_city_code_based_on_name origin_name
-    destination_code = City.get_city_code_based_on_name destination_name
-    date = format_date date
+  def send_search_result(chat)
+    text = "<b> 📣 پروازهای #{chat.origin} به #{chat.destination} #{chat.date}</b> \n"
+    origin_code = City.get_city_code_based_on_name chat.origin
+    destination_code = City.get_city_code_based_on_name chat.destination
+    date = format_date chat.date
     
     route = Route.find_by(origin:"#{origin_code}",destination:"#{destination_code}")
     SearchResultController.new.search_suppliers(route,date,"telegram")
@@ -164,12 +165,13 @@ class Telegram::Method
       text += "برای این مسیر در این تاریخ متاسفانه پروازی پیدا نکردم. از صفحه کلید پایین صفحه می‌تونی روزهای دیگر را درخواست کنی و یا مسیر دیگری را جستجو کنی: /start"
     else 
       text += "📣 به ترتیب از ارزان‌ترین به گران‌ترین \n\n"      
-      flights.each do |flight|
+      flights.each_with_index do |flight,index|
+        next if index > @@number_of_result
         text += "#{airline_name_for(flight.airline_code)} | #{hour_to_human(flight.departure_time.to_datetime.strftime("%H:%M"))} | <b>#{number_with_delimiter(flight.best_price)} تومان</b>
         👉 /flight#{flight.id} \n\n"
       end
     end
-    send({text:text,chat_id:chat_id})
+    send({text:text,chat_id:chat.chat_id,chat:chat})
     
   end
 
@@ -185,7 +187,15 @@ class Telegram::Method
       reply_markup= {"keyboard":prepare_for_telegram(keyboard),"one_time_keyboard":true}
     end
     body = {"chat_id":chat_id,"text":"#{text}","reply_markup":reply_markup,"parse_mode":"HTML"}
-    response = RestClient::Request.execute(method: :post, payload: body.to_json, headers: {:'Content-Type'=> "application/json"}, url: "#{URI.parse(send_url)}")
+    begin
+      RestClient::Request.execute(method: :post, payload: body.to_json, headers: {:'Content-Type'=> "application/json"}, url: "#{URI.parse(send_url)}")
+    rescue
+      body = {"chat_id":chat_id,"text":"متاسفانه مشکلی پیش آمده. تا رفع مشکل تاریخ‌های دیگری را می‌توانید جستجو کنید. سعی می‌کنیم مشکل را زود برطرف کنیم","reply_markup":reply_markup,"parse_mode":"HTML"}      
+      RestClient::Request.execute(method: :post, payload: body.to_json, headers: {:'Content-Type'=> "application/json"}, url: "#{URI.parse(send_url)}")      
+      #inform_support
+      send({text:"ERROR: #{answer[:chat].origin}, #{answer[:chat].destination},#{answer[:chat].date}",chat_id:55584068})
+
+    end
   end
 
   def update_by_pull
