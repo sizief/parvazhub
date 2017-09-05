@@ -1,65 +1,58 @@
 <% provide(:title,"Admin dashboard") %>
 <div class="ui container" style="margin-top: 2em">
-  	
-  	<div class="row" style="padding: 1em">
-  		<div class="ui label">
-  			User Search all: <%= user_search_history_all %>
+	<div class="row" style="padding: 1em">
+		<div class="ui label">
+			User Search all: <%= user_search_history_all %>
+		</div>
+		</div>
+		<div class="row" style="direction: rtl">
+		<div class="ui small seven statistics" >
+			<% 0.upto(6).each do |x| %>
+				<div class=" green statistic" >
+					<div class="value ">
+						<%= user_search_history(Date.today-x) %>
+					</div>
+					<div class="label web-font">
+						<%= (Date.today-x).to_parsi.strftime "%A %d "  %>
+					</div>
+				</div>
+			<% end %>
+		</div>
+	</div>
+
+	<div class="row" style="padding: 1em">
+		<div class="ui label">
+			User Search website: <%= user_search_history_all("website") %>
 		</div>
 	</div>
 	<div class="row" style="direction: rtl">
-		<div class="ui small seven statistics" >
-  			<% 0.upto(6).each do |x| %>
-	  			<div class=" green statistic" >
-		  			<div class="value ">
-	  					<%= user_search_history(Date.today-x) %>
-	  				</div>
-		  			<div class="label web-font">
-	  					<%= (Date.today-x).to_parsi.strftime "%A %d "  %>
-	  				</div>
-	  			</div>
-  			<% end %>
-  		</div>
-	  </div>
-	  
-	  <div class="row" style="padding: 1em">
-	  <div class="ui label">
-		  User Search website: <%= user_search_history_all("website") %>
-	</div>
-</div>
-<div class="row" style="direction: rtl">
-	<div class="ui small seven statistics" >
-		  <% 0.upto(6).each do |x| %>
-			  <div class=" green statistic" >
-				  <div class="value ">
-					  <%= user_search_history(Date.today-x,"website") %>
-				  </div>
-				  <div class="label web-font">
-					  <%= (Date.today-x).to_parsi.strftime "%A %d "  %>
-				  </div>
-			  </div>
-		  <% end %>
-	  </div>
-  </div>
+		<div class="ui mini seven statistics" >
+			<% 0.upto(6).each do |x| %>
+				<div class=" grey statistic" >
+					<div class="value ">
+						<%= user_search_history(Date.today-x,"website") %>
+					</div>
+				</div>
+			<% end %>
+		</div>
+  	</div>
 
-  <div class="row" style="padding: 1em">
-  <div class="ui label">
-	  User Search telegram: <%= user_search_history_all("telegram") %>
-</div>
-</div>
-<div class="row" style="direction: rtl">
-<div class="ui small seven statistics" >
-	  <% 0.upto(6).each do |x| %>
-		  <div class=" green statistic" >
-			  <div class="value ">
-				  <%= user_search_history(Date.today-x,"telegram") %>
-			  </div>
-			  <div class="label web-font">
-				  <%= (Date.today-x).to_parsi.strftime "%A %d "  %>
-			  </div>
-		  </div>
-	  <% end %>
-  </div>
-</div>
+	<div class="row" style="padding: 1em">
+		<div class="ui label">
+		User Search telegram: <%= user_search_history_all("telegram") %>
+		</div>
+	</div>
+	<div class="row" style="direction: rtl">
+		<div class="ui mini seven statistics" >
+		<% 0.upto(6).each do |x| %>
+			<div class=" grey statistic" >
+				<div class="value ">
+					<%= user_search_history(Date.today-x,"telegram") %>
+				</div>
+			</div>
+		<% end %>
+		</div>
+	</div>
 
   	<div class="ui divider"></div>
 
@@ -89,14 +82,11 @@
 		</div>
 	</div>
 	<div class="row" style="direction: rtl">
-		<div class="ui small seven statistics" >
+		<div class="ui mini seven statistics" >
 			<% 0.upto(6).each do |x| %>
-				<div class=" teal statistic" >
+				<div class=" grey statistic" >
 					<div class="value ">
 						<%= redirect(Date.today-x,"website") %>
-					</div>
-					<div class="label web-font">
-						<%= (Date.today-x).to_parsi.strftime "%A %d "  %>
 					</div>
 				</div>
 			<% end %>
@@ -109,20 +99,16 @@
 		</div>
 	</div>
 	<div class="row" style="direction: rtl">
-		<div class="ui small seven statistics" >
+		<div class="ui mini seven statistics" >
 			<% 0.upto(6).each do |x| %>
-				<div class=" teal statistic" >
+				<div class=" grey statistic" >
 					<div class="value ">
 						<%= redirect(Date.today-x,"telegram") %>
-					</div>
-					<div class="label web-font">
-						<%= (Date.today-x).to_parsi.strftime "%A %d "  %>
 					</div>
 				</div>
 			<% end %>
 		</div>
 	</div>
-
 
 
   	<div class="ui divider"></div>
