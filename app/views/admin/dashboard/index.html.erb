@@ -165,6 +165,10 @@
 		<div class="ui label">
   			Proxy active: <%= Proxy.where(status:"active").count %>
 		</div>
+
+		<div class="ui label">
+			Telegram User: <%= Telegram::User.count %>
+  		</div>
 	</div>
 
 

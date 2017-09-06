@@ -146,6 +146,28 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
   font-size: 0.8em;
 }
 
+/* telegram */
+.telegram-icon{
+  width: 30px;
+  height: 30px;
+}
+.telegram-announce{
+  vertical-align: text-top;
+}
+.telegram-container{
+  padding: 2.5em 0 2.5em 0;
+  border-top: 1px solid #eee;
+  width: 80%;
+  margin: auto;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 2em;
+}
+.telegram-button{
+  display: block !important;
+  margin: auto !important;
+  margin-top: 1.5em !important;
+}
+
 
 /* loader */
 .sk-folding-cube {
