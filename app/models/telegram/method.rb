@@ -252,7 +252,7 @@ class Telegram::Method
   def get_dates
     dates = Array.new
     for offset in 0..6 do
-      date = (Date.today+offset.to_f).to_parsi.strftime "%A %d-%m-%y"
+      date = (Date.today+offset.to_f).to_parsi.strftime "%d-%m-%y"
       dates.push(date)
     end
     return dates
