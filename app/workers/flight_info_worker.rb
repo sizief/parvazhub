@@ -4,8 +4,10 @@ class FlightInfoWorker
   include Sidekiq::Worker
 
   def perform
-    x = FlightInfo.new
-    x.calculate_info
+    Timeout.timeout(240) do
+      x = FlightInfo.new
+      x.calculate_info
+    end
   end
 
 end
