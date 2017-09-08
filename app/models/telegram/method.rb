@@ -4,9 +4,12 @@ class Telegram::Method
   include ActionView::Helpers::NumberHelper
 
   @@number_of_result = 45
-  @@token = "bot360102838:AAHhtt5II-agroRJDLS-PuX-NcJ4G0kh0eg"
-  #test token
-  #@@token = "bot442162833:AAHubbvrXvdEfL8gXrVYJbwkh2DbjjyN5VU"
+  if Rails.env.production?
+    @@token = "bot360102838:AAHhtt5II-agroRJDLS-PuX-NcJ4G0kh0eg"
+  else
+    #test token
+    @@token = "bot442162833:AAHubbvrXvdEfL8gXrVYJbwkh2DbjjyN5VU"
+  end
 
   def get_updates
     last_update_id = Telegram::UpdateId.last.nil? ? 457549612 : Telegram::UpdateId.last[:update_id]
@@ -41,7 +44,7 @@ class Telegram::Method
     end
     answer="مبدا سفر کجاست؟"    
     keyboard = get_city_list()
-    return {text: answer, chat_id: chat.chat_id, keyboard: keyboard}  
+    return {text: answer, chat_id: chat.chat_id, keyboard: keyboard, number_of_word_in_line: 3}  
   end
 
   def answer_step_1(chat,text,answer_valid)
@@ -51,7 +54,7 @@ class Telegram::Method
     end
     answer=" شهر مقصد را انتخاب کن"
     keyboard= get_city_list(chat.origin)
-    return {text: answer, chat_id: chat.chat_id, keyboard: keyboard}      
+    return {text: answer, chat_id: chat.chat_id, keyboard: keyboard, number_of_word_in_line: 3}      
   end
 
   def answer_step_2(chat,text,answer_valid)
@@ -61,7 +64,7 @@ class Telegram::Method
     end
     answer=" تاریخ سفرت را انتخاب کن"
     keyboard= get_dates
-    return {text: answer, chat_id: chat.chat_id, keyboard: keyboard}    
+    return {text: answer, chat_id: chat.chat_id, keyboard: keyboard, number_of_word_in_line: 1}    
   end
 
   def answer_step_3(chat,text,answer_valid)
@@ -179,12 +182,13 @@ class Telegram::Method
     text = answer[:text]
     chat_id = answer[:chat_id]
     keyboard = answer[:keyboard]
+    number_of_word_in_line = answer[:number_of_word_in_line]
     send_url = "https://api.telegram.org/#{@@token}/sendMessage"
 
     if keyboard.nil? 
       reply_markup = ""
     else
-      reply_markup= {"keyboard":prepare_for_telegram(keyboard),"one_time_keyboard":true}
+      reply_markup= {"keyboard":prepare_for_telegram(keyboard,number_of_word_in_line),"one_time_keyboard":true}
     end
     body = {"chat_id":chat_id,"text":"#{text}","reply_markup":reply_markup,"parse_mode":"HTML"}
     begin
@@ -252,7 +256,7 @@ class Telegram::Method
   def get_dates
     dates = Array.new
     for offset in 0..6 do
-      date = (Date.today+offset.to_f).to_parsi.strftime "%y-%m-%d"
+      date = (Date.today+offset.to_f).to_parsi.strftime "%A %d %B"
       dates.push(date)
     end
     return dates
@@ -268,13 +272,13 @@ class Telegram::Method
     dates.include? date
   end
 
-  def prepare_for_telegram(keyboard)
+  def prepare_for_telegram(keyboard,number_of_word_in_line)
     keyboard_lines = Array.new
     telegram_line_index = -1
 
     keyboard.each_with_index do |word,index|
-      if ((index % 3 == 0) or (index == 0))
-        telegram_line_index = telegram_line_index + 1 
+      if ((index % number_of_word_in_line.to_f == 0) or (index == 0))
+        telegram_line_index += 1 
         keyboard_lines[telegram_line_index] = Array.new
       end
       keyboard_lines[telegram_line_index].push(word)
