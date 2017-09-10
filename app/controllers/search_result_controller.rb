@@ -8,8 +8,7 @@ class SearchResultController < ApplicationController
     redirect_to  action: 'search', origin_name: origin, destination_name: destination, date: date
   end
 
-  def search
-   
+  def search 
     origin_name = params[:origin_name].downcase
     destination_name = params[:destination_name].downcase
     if params[:date] == "today"
@@ -27,15 +26,15 @@ class SearchResultController < ApplicationController
     if route.nil?
       notfound
     else
-      search_suppliers(route,date,"website")
+      search_suppliers(route,date,"website",request.user_agent)
       index(route,origin_name,origin_code,destination_name,destination_code,date)
     end 
   end
 
-  def search_suppliers(route,date,channel)
-   unless request.user_agent.include? "Googlebot"
-      telegram = Telegram::Method.new
-      telegram.send({text:"#{route.id}, #{date} \n #{request.user_agent}",chat_id:55584068})
+  def search_suppliers(route,date,channel,request)
+   unless request.include? "Googlebot"
+      telegram = Telegram::Monitoring.new
+      telegram.send({text:"👊 #{route.id}, #{date} \n #{request}"})
       UserSearchHistory.create(route_id:route.id,departure_time:"#{date}",channel:channel) #save user search to show in admin panel      
    end
     response_available = SearchHistory.where(route_id:route.id,departure_time:"#{date}").where('created_at >= ?', ENV["SEARCH_RESULT_VALIDITY_TIME"].to_f.minutes.ago).count

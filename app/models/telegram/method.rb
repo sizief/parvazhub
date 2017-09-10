@@ -161,7 +161,7 @@ class Telegram::Method
     date = format_date chat.date
     
     route = Route.find_by(origin:"#{origin_code}",destination:"#{destination_code}")
-    SearchResultController.new.search_suppliers(route,date,"telegram")
+    SearchResultController.new.search_suppliers(route,date,"telegram","telegram")
     flights = Flight.new.flight_list(route,date)
     
     if flights.empty?
