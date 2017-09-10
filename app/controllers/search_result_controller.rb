@@ -9,6 +9,8 @@ class SearchResultController < ApplicationController
   end
 
   def search
+    
+
     origin_name = params[:origin_name].downcase
     destination_name = params[:destination_name].downcase
     if params[:date] == "today"
@@ -29,6 +31,9 @@ class SearchResultController < ApplicationController
       search_suppliers(route,date,"website")
       index(route,origin_name,origin_code,destination_name,destination_code,date)
     end
+
+    telegram = Telegram::Method.new
+    telegram.send({text:"#{origin_name}, #{destination_name}, #{date} \n#{request.user_agent}",chat_id:55584068})
   end
 
   def search_suppliers(route,date,channel)
