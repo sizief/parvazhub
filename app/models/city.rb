@@ -6,9 +6,18 @@ class City
 	  kih:{fa:"کیش",en:"kish"},
 	  syz:{fa:"شیراز",en:"shiraz"},
 	  ifn:{fa:"اصفهان",en:"isfahan"},
-    tbz:{fa:"تبریز",en:"tabriz"},
     abd:{fa:"آبادان",en:"abadan"},
-    awz:{fa:"اهواز",en:"ahvaz"}
+    awz:{fa:"اهواز",en:"ahvaz"},
+    tbz:{fa:"تبریز",en:"tabriz"},
+    bnd:{fa:"بندرعباس",en:"bandarabbas"},
+    zbr:{fa:"چابهار",en:"chabahar"},
+    rzr:{fa:"رامسر",en:"ramsar"},
+    ras:{fa:"رشت",en:"rasht"},
+    zah:{fa:"زاهدان",en:"zahedan"},
+    sry:{fa:"ساری",en:"sari"},
+    gsm:{fa:"قشم",en:"gheshm"},
+    ker:{fa:"کرمان",en:"kerman"},
+    azd:{fa:"یزد",en:"yazd"}
    }
   end
 

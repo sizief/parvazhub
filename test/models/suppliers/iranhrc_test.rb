@@ -33,6 +33,11 @@ class SuppliersIranhrcTest < ActiveSupport::TestCase
     assert_equal unknown_code,nil
   end
 
+  test "city correction" do
+    corrected_city = @iranhrc_search.city_name_correction("BANDARABBAS")
+    assert_equal "Bandar%20%60Abbas",corrected_city
+  end
+
   test "Save flights to database" do
     response = @iranhrc_search.search(@origin,@destination,@date,@search_history_id)
     route = Route.find_by(origin:@origin, destination: @destination)
