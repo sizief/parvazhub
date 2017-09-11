@@ -93,7 +93,7 @@
 			<tr class="center aligned web-font">
 	  			<th class="table-header">ایرلاین</th>
 	  			<th class="table-header">ساعت </th>
-	  			<th class="table-header">هواپیما</th>
+	  			<th class="table-header nm">هواپیما</th>
 	  			<th class="table-header sorted ascending">قیمت</th>
 	  		</tr>
 	  	</thead>
@@ -120,10 +120,10 @@
 				          			</div>
 				        		</div>
 						</td>
-						<td><%= flight.airplane_type.empty? ? "نامشخص" : airplane_name_for(flight.airplane_type) %></td>
+						<td class="nm"><%= flight.airplane_type.empty? ? "نامشخص" : airplane_name_for(flight.airplane_type) %></td>
 						<td>
-							<%= link_to number_with_delimiter(flight.best_price)+" تومان <span class=\"nm\"> | مقایسه و خرید </span><i class='yellow arrow right icon'></i>".html_safe, flight_prices_path(flight.id), class: "ui teal label large flight-price", remote: true %>
-							<%#= supplier_logo_for(flight.price_by) %>
+							<%= "<b>".html_safe+number_with_delimiter(flight.best_price) +" تومان  </b>".html_safe %>
+							<%= link_to "نمایش قیمت‌ها", flight_prices_path(flight.id), class: "ui orange label large flight-price", remote: true %>
 						</td>
 					</tr>
 				<% end %>	
