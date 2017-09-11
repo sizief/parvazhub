@@ -32,13 +32,34 @@ class SearchResultController < ApplicationController
   end
 
   def search_suppliers(route,date,channel,request)
-   unless ((request.include? "Googlebot") or (request.include? "yandex"))
+    unless (["Googlebot","yandex","MJ12bot","Baiduspider"].any? {|word| request.include? word})
       telegram = Telegram::Monitoring.new
       telegram.send({text:"👊 [#{Rails.env}] #{route.id}, #{date} \n #{request}"})
       UserSearchHistory.create(route_id:route.id,departure_time:"#{date}",channel:channel) #save user search to show in admin panel      
    end
-    response_available = SearchHistory.where(route_id:route.id,departure_time:"#{date}").where('created_at >= ?', ENV["SEARCH_RESULT_VALIDITY_TIME"].to_f.minutes.ago).count
+    response_available = SearchHistory.where(route_id:route.id,departure_time:"#{date}").where('created_at >= ?', allow_response_time(date).to_f.minutes.ago).count
     SupplierSearch.new.search(route.origin,route.destination,date,20,"user") if response_available == 0
+  end
+
+  def allow_response_time(date)
+    if date == Date.today.to_s #today
+      allow_time = 10
+    elsif date == (Date.today+1).to_s #tomorrow
+      allow_time = 20
+    elsif date == (Date.today+2).to_s #day after
+      allow_time = 60
+    elsif date == (Date.today+3).to_s #rest 1
+      allow_time = 120
+    elsif date == (Date.today+4).to_s #rest 2
+      allow_time = 120
+    elsif date == (Date.today+5).to_s #rest 3
+      allow_time = 120
+    elsif date == (Date.today+6).to_s #rest 4
+      allow_time = 120
+    else
+      allow_time = 1440
+    end
+    return allow_time
   end
 
   def notfound
@@ -49,7 +70,6 @@ class SearchResultController < ApplicationController
 
   def index(route,origin_name,origin_code,destination_name,destination_code,date)
      @flights = Flight.new.flight_list(route,date)
-
      date_in_human = date.to_date.to_parsi.strftime '%A %d %B'     
      @search_parameter ={origin_name: origin_name, origin_code: origin_code, destination_code: destination_code, destination_name: destination_name,date: date, date_in_human: date_in_human}
      @cities = City.list 
