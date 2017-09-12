@@ -6,6 +6,7 @@ class CityPageController < ApplicationController
   end
 
   def route
+    @link_count = 0
     @prices = Hash.new
     @cities = City.list
    

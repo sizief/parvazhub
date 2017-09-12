@@ -132,11 +132,18 @@
 	<% end %>
 
 	<% if @flights.empty? %>
-	  <div class="standard-text" style="background:white;padding:2em;margin:2em;direction:rtl">
+	  <div class="standard-text" style="background:white;padding-top:2em;margin:2em;direction:rtl">
 	    <i class="teal warning circle icon big"></i>	
-		   پروازی در روز 
+		   <% if @search_parameter[:date].to_date < Date.today %>
+				تاریخی که درخواست کرده‌اید گذشته است. امروز 
+				<%= Date.today.to_date.to_parsi.strftime "%A %d %B"   %> 
+				است.
+			<% else %>
+			پروازی در روز 
 		   <%= @search_parameter[:date].to_date.to_parsi.strftime "%A %d %B"   %> 
-		   موجود نیست. پرواز برای تاریخ‌های زیر را چک کنید:		
+		   موجود نیست.
+		   <% end %>
+		   پرواز برای تاریخ‌های زیر را چک کنید:		
 			<ul>
 				<% @flight_dates.each do |key,value|%>
 					<% unless key.to_s == @search_parameter[:date].to_s %>
@@ -148,8 +155,8 @@
 					<% end %>
 				<% end %>
 			</ul>
-			اگر همچنان موفق به پیدا کردن پرواز مورد نظرتان نشدید، صفحه‌ی پروازهای 
-		   <%= link_to "#{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]}", route_page_path(origin_name:  @search_parameter[:origin_name],destination_name: @search_parameter[:destination_name]),class:"city-page-link" %> روی تقویم را ببینید.
+			اگر همچنان موفق به پیدا کردن پرواز مورد نظرتان نشدید، صفحه‌ی  
+		   <%= link_to "پروازهای #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]}", route_page_path(origin_name:  @search_parameter[:origin_name],destination_name: @search_parameter[:destination_name], :anchor => "city-calendar"),class:"city-page-link" %> روی تقویم را ببینید.
 	  </div>
 	<% end %>
 	

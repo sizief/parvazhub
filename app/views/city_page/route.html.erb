@@ -2,11 +2,11 @@
 <% provide(:title,"پروازهاب: جستجو و مقایسه پروازهای  #{@origin[:fa]} به #{@destination[:fa]} ") %>
 <% provide(:description,"جستجو و مقایسه قیمت پروازهای #{@origin[:fa]} به #{@destination[:fa]}") %>
 
-<div class="ui stackable one column grid centered" id="wide-search-box">
+<div class="ui stackable one column grid centered wide-search-box"  id="city-page-search-box">
 <h1 class="city-header">
 	جستجو و مقایسه قیمت پروازهای <%= "#{@origin[:fa]} به #{@destination[:fa]}" %>
 </h1>
-   		<%= form_for(:search, url: flight_search_path, method: :get, html: {id:"flight_search"}) do |f| %>
+   		<%= form_for(:search, url: flight_search_path, method: :get, html: {id:"flight_search",class:"city-page-search-form"}) do |f| %>
     		<div class="ui huge form" >
      			<div class="two fields">
       				<div class="field">
@@ -28,15 +28,43 @@
 							<i class="right arrow icon"></i>
 							نمایش پروازها
 					</button>
-  				</div>
+				</div>
 			</div>
 		<%end%>
+		<div class="city-page-toggle-box">
+		برگشت
+		</div>
+	</div>
+
+
+	<div class="ui stackable one column grid centered wide-search-box"  id="link-dates">
+		<h1 class="city-header">
+			جستجوی پروازهای <%= "#{@origin[:fa]} به #{@destination[:fa]}" %> برای روزهای آينده
+		</h1>
+		<% @prices[:to].each_with_index do |price,index| %>
+			<% next if ((@link_count > 3) or (price.keys[0].to_s.to_date<Date.today)) %>
+			<div  class="page-button-links" >
+				<a href="<%= search_link_builder(@origin[:en],@destination[:en],price.keys[0].to_s.to_date) %>">
+					<button class="ui submit big yellow web-font fluid right labeled  icon button waiting-modal link-dates-button" style="padding-left: 2.5em !important" >	
+						لیست پروازهای 
+						<%= "#{@origin[:fa]} به #{@destination[:fa]}" %>
+						<%=price.keys[0].to_s.to_date.to_parsi.strftime "%A %d %B"  %>	
+						<%= "#{number_with_delimiter(price.values[0])} تومان" unless price.values[0] =="-" %>		
+					<i class="right arrow icon"></i>
+					</button>
+				</a>
+			</div>	
+			<% @link_count+=1 %>				
+		<% end %>
+		<div class="city-page-toggle-box">
+			برای تاریخ دیگری قصد جستجو دارید؟ اینجا کلیک کنید
+		</div>
 	</div>
 
 <div class="ui container" id="search-results-container" style="padding-top: 1em">
 	
 
-	<div class="city-calendar" >
+	<div class="city-calendar" id="city-calendar" >
 		<h4>
 			<b class="yellow-text">کمترین</b>
             هزینه پرواز <%= "#{@origin[:fa]} به #{@destination[:fa]}" %> برای یک نفر
@@ -58,7 +86,10 @@
 					<% if index%7 == 0 %>
 						<tr class="center aligned very basic">
 					<% end %>	
-						<td class="center aligned <%='disable' if price.keys[0].to_s.to_date<Date.today %>">
+					<%if price.keys[0].to_s.to_date<Date.today #date is in the past %> 
+						<td class="center aligned disable"></td>
+					<%else%>	
+						<td class="center aligned">
 							<a href="<%= search_link_builder(@origin[:en],@destination[:en],price.keys[0].to_s.to_date) %>" >
 								<div>
 									<div style="font-size: 1.1em">
@@ -74,7 +105,8 @@
 								</div>
 							</a>	
 						</td>
-					
+						<% end %>	
+
 					<% if ((index%7 == 6) || (index == 34)) %>
 						</tr>
 					<% end %>	

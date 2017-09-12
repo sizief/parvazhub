@@ -32,13 +32,15 @@ class SearchResultController < ApplicationController
   end
 
   def search_suppliers(route,date,channel,request)
-    unless (["Googlebot","yandex","MJ12bot","Baiduspider"].any? {|word| request.include? word})
+    unless (["Googlebot","yandex","MJ12bot","Baiduspider","bingbot"].any? {|word| request.include? word})
       telegram = Telegram::Monitoring.new
       telegram.send({text:"👊 [#{Rails.env}] #{route.id}, #{date} \n #{request}"})
       UserSearchHistory.create(route_id:route.id,departure_time:"#{date}",channel:channel) #save user search to show in admin panel      
    end
     response_available = SearchHistory.where(route_id:route.id,departure_time:"#{date}").where('created_at >= ?', allow_response_time(date).to_f.minutes.ago).count
-    SupplierSearch.new.search(route.origin,route.destination,date,20,"user") if response_available == 0
+    if ((response_available == 0) and (date >= Date.today.to_s))
+      SupplierSearch.new.search(route.origin,route.destination,date,20,"user") 
+    end
   end
 
   def allow_response_time(date)

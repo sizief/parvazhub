@@ -90,6 +90,10 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
   padding: 0.6em;
   border-top: 1px solid #19759c;
   padding-bottom: 0 !important;
+  width:100%
+}
+header{
+  background: #29aae1
 }
 
 /* first page */
@@ -261,5 +265,7 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
     opacity: 0; 
   }
 }
+
+
 
 

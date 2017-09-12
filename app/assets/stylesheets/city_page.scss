@@ -27,14 +27,51 @@
   text-align: center;
   margin-top:0 !important
 }
-#wide-search-box{
+.wide-search-box{
 	direction:rtl;
 	padding: 2em;
-    background: #29aae1;
-    margin-top: 1em;
+  background: #29aae1;
+  margin-top: 1em;
 }
 .city-header{
 	width: 100%;
     color: white;
     line-height: 1.5em;
 }
+
+/* button links */
+.page-button-links{
+  margin: 0.5em !important;
+  font-size: 1em !important;
+  width: 50% !important;
+  line-height: 2em !important;
+}
+#city-page-search-box{
+  display: none;
+}
+
+.city-page-search-form{
+  width: 50%;
+  margin: auto;
+  padding-top: 1em;
+}
+.city-page-toggle-box{
+  color:white; 
+  text-decoration:underline; 
+  display:block; 
+  width:100%; 
+  margin:1em;
+  cursor:pointer
+}
+.link-dates-button{
+  line-height: 2em !important;
+}
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+  .city-page-search-form{
+    width: 90%;
+  }
+  .page-button-links{
+    width: 90% !important;
+  }
+}
+  
