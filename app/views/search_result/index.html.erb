@@ -73,9 +73,8 @@
 		<%end%>
 	</div>
 
-	<% flight_list = Flight.new.get_lowest_price_time_table(@search_parameter[:origin_code],@search_parameter[:destination_code],@search_parameter[:date]) %>
 	<div class="ui mini five statistics" id="flight-price-table" >
-	  <% flight_list.each do |key,value|%>
+	  <% @flight_dates.each do |key,value|%>
 	  	<div class=" grey statistic">
 		  <div class="value ">
 		  	<%= value.nil? ? "<i class='plane icon'></i>".html_safe : number_with_delimiter(value.best_price)  %>
@@ -100,7 +99,7 @@
 		<tbody>
 			<% @flights.each do |flight|  %>
 				<% unless flight.best_price == 0 %>
-					<tr class="center aligned very basic">
+					<tr class="center aligned very basic" >
 						<td class="left aligned">
 							<h5 class="ui image header web-font">
 				          		<%= airline_logo_for flight.airline_code %> 
@@ -133,12 +132,25 @@
 	<% end %>
 
 	<% if @flights.empty? %>
-	  <p style="background:white;padding:2em;margin:2em;direction:rtl">
-	    <i class="teal plane icon big"></i>	
-		   برای تاریخ مورد نظر شما هیچ پروازی موجود نیست. می‌توانید روزهای قبل و بعد را از بالای صفحه انتخاب کنید و یا پروازهای
-		<%= link_to "#{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]}", route_page_path(origin_name:  @search_parameter[:origin_name],destination_name: @search_parameter[:destination_name]),class:"city-page-link" %>
-		را روی تقویم ببینید.
-	  </p>
+	  <div class="standard-text" style="background:white;padding:2em;margin:2em;direction:rtl">
+	    <i class="teal warning circle icon big"></i>	
+		   پروازی در روز 
+		   <%= @search_parameter[:date].to_date.to_parsi.strftime "%A %d %B"   %> 
+		   موجود نیست. پرواز برای تاریخ‌های زیر را چک کنید:		
+			<ul>
+				<% @flight_dates.each do |key,value|%>
+					<% unless key.to_s == @search_parameter[:date].to_s %>
+					
+					<li>
+						<% link_text = "پروازهای #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]} "+key.to_s.to_date.to_parsi.strftime("%A %d %B ") %>
+						<%= link_to(link_text, search_link_builder(@search_parameter[:origin_name],@search_parameter[:destination_name],key.to_s.to_date))   %>
+					</li>
+					<% end %>
+				<% end %>
+			</ul>
+			اگر همچنان موفق به پیدا کردن پرواز مورد نظرتان نشدید، صفحه‌ی پروازهای 
+		   <%= link_to "#{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]}", route_page_path(origin_name:  @search_parameter[:origin_name],destination_name: @search_parameter[:destination_name]),class:"city-page-link" %> روی تقویم را ببینید.
+	  </div>
 	<% end %>
 	
 	

@@ -73,6 +73,11 @@ class SearchResultController < ApplicationController
      date_in_human = date.to_date.to_parsi.strftime '%A %d %B'     
      @search_parameter ={origin_name: origin_name, origin_code: origin_code, destination_code: destination_code, destination_name: destination_name,date: date, date_in_human: date_in_human}
      @cities = City.list 
+     if date <= Date.today.to_s
+       @flight_dates = Flight.new.get_lowest_price_time_table(origin_code,destination_code,Date.today.to_s)
+     else
+       @flight_dates = Flight.new.get_lowest_price_time_table(origin_code,destination_code,date)
+     end      
 
      render :index
   end
