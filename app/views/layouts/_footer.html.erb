@@ -1,64 +1,48 @@
 <div style="margin-top:2em">
   <div>
-    <p id="what-we-do" class="web-font" style="    background: #eee;direction: rtl;border-top: 1px solid #eee;padding: 1em 4em 1em 4em;line-height: 2em;">
-      پروازهاب یک موتور جستجو و مقایسه پرواز است. ما پروازهای سیستمی و چارتری را از سایت‌های معتبر فروش بلیط جمع‌آوری می‌کنیم و در اختیار شما می‌گذاریم. از طریق پروازهاب می‌توانید مناسب‌ترین زمان پرواز یا ارزان‌ترین بلیط هواپیما را به سادگی پیدا کنید. همچنین ما سعی می‌کنیم هرگونه اطلاعاتی که به سفر راحت شما کمک کند را در اینجا فراهم کنیم. اطلاعاتی از قبیل میزان تاخیر پرواز و یا قیمت پروازهای در روزهای قبل و بعد از تاریخ جستجو. 
-      مسئولیت اطلاعات فراهم شده در اینجا به عهده‌ی سایت‌ فروشنده است و پروازهاب هیچ مسئولیتی در قبال خرید از هیچ‌کدام از سایت‌ها ندارد. با این‌حال ما سعی‌مان را می‌کنیم که اطلاعات نادرست را به محض مشاهده حذف کنیم.
-      ممنونیم که از پروازهاب استفاده می‌کنید. بسیار خوشحال خواهیم شد اگر نظر یا پیشنهادات‌تان را با ما مطرح کنید. از طریق ایمیل salam@parvazhub.com و 
-        <a href="https://t.me/parvazhub_com"> تلگرام </a>
-      همیشه در دسترس هستیم. 
-    </p>
+  <p id="what-we-do" class="web-font"  style="    background: #fafafa;direction: rtl;border-top: 1px solid #eee;padding: 1em 4em 1em 4em;line-height: 2em; font-size:0.8em">
+  پروازهاب موتور جستجو و مقایسه پرواز است. ما پروازهای سیستمی و چارتری را از سایت‌های معتبر فروش بلیط جمع‌آوری می‌کنیم و در اختیار شما می‌گذاریم. از طریق پروازهاب می‌توانید مناسب‌ترین زمان پرواز یا ارزان‌ترین بلیط هواپیما را به سادگی پیدا کنید. مسئولیت اطلاعات فراهم شده در اینجا به عهده‌ی سایت‌ فروشنده است و پروازهاب هیچ مسئولیتی در قبال خرید از هیچ‌کدام از سایت‌ها ندارد.<br/> ممنونیم که از پروازهاب استفاده می‌کنید. از طریق ایمیل salam@parvazhub.com و 
+    <a href="https://t.me/parvazhub_com"> تلگرام </a>
+  همیشه در دسترس هستیم. 
+</p>
   </div>
-  <div class="ui inverted vertical footer segment" >
-      <div class="ui four column grid centered stackable">
+  <div class="ui inverted vertical footer segment" style="background:#efefef" >
+      <div class="ui five column grid centered stackable">
         
         <div class="row">
-          
-          <div class="column center aligned">			
-            <%= link_to "پروازهای مشهد به تهران امروز", flight_result_path(origin_name: "mashhad",destination_name: "tehran",date:Date.today.to_s),class:"footer-link" %>
-            <%= link_to "پروازهای اصفهان به تهران امروز", flight_result_path(origin_name: "isfahan",destination_name: "tehran",date:Date.today.to_s),class:"footer-link" %>
-            <%= link_to "پروازهای شیراز به تهران امروز", flight_result_path(origin_name: "shiraz",destination_name: "tehran",date:Date.today.to_s),class:"footer-link" %>
-            <%= link_to "پروازهای کیش به تهران امروز", flight_result_path(origin_name: "kish",destination_name: "tehran",date:Date.today.to_s),class:"footer-link" %>
-            <%= link_to "پروازهای تبریز به تهران امروز" , flight_result_path(origin_name: "tabriz",destination_name: "tehran",date:Date.today.to_s),class:"footer-link" %>
-            <%= link_to "پروازهای اهواز به تهران امروز", flight_result_path(origin_name: "ahvaz",destination_name: "tehran",date:Date.today.to_s),class:"footer-link" %>
-            <%= link_to "پروازهای آبادان به تهران امروز", flight_result_path(origin_name: "abadan",destination_name: "tehran",date:Date.today.to_s),class:"footer-link" %>
-          </div>
+         
           <div class="column center aligned">			
             <%= link_to "پروازهای تهران به مشهد امروز", flight_result_path(origin_name: "tehran",destination_name: "mashhad",date:Date.today.to_s),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به اصفهان امروز", flight_result_path(origin_name: "tehran",destination_name: "isfahan",date:Date.today.to_s),class:"footer-link" %>
             <%= link_to "پروازهای تهران به شیراز امروز", flight_result_path(origin_name: "tehran",destination_name: "shiraz",date:Date.today.to_s),class:"footer-link" %>
             <%= link_to "پروازهای تهران به کیش امروز", flight_result_path(origin_name: "tehran",destination_name: "kish",date:Date.today.to_s),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به تبریز امروز" , flight_result_path(origin_name: "tehran",destination_name: "tabriz",date:Date.today.to_s),class:"footer-link" %>
             <%= link_to "پروازهای تهران به اهواز امروز", flight_result_path(origin_name: "tehran",destination_name: "ahvaz",date:Date.today.to_s),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به آبادان امروز", flight_result_path(origin_name: "tehran",destination_name: "abadan",date:Date.today.to_s),class:"footer-link" %>
+            <%= link_to "تمام پروازها", flight_page_path,class:"footer-link" %>
+            
           </div>
+          
           <div class="column center aligned">			
             <%= link_to "پروازهای مشهد به تهران ", route_page_path(origin_name: "mashhad",destination_name: "tehran"),class:"footer-link" %>
-            <%= link_to "پروازهای اصفهان به تهران ", route_page_path(origin_name: "isfahan",destination_name: "tehran"),class:"footer-link" %>
             <%= link_to "پروازهای شیراز به تهران ", route_page_path(origin_name: "shiraz",destination_name: "tehran"),class:"footer-link" %>
             <%= link_to "پروازهای کیش به تهران ", route_page_path(origin_name: "kish",destination_name: "tehran"),class:"footer-link" %>
             <%= link_to "پروازهای تبریز به تهران " , route_page_path(origin_name: "tabriz",destination_name: "tehran"),class:"footer-link" %>
             <%= link_to "پروازهای اهواز به تهران ", route_page_path(origin_name: "ahvaz",destination_name: "tehran"),class:"footer-link" %>
-            <%= link_to "پروازهای آبادان به تهران ", route_page_path(origin_name: "abadan",destination_name: "tehran"),class:"footer-link" %>
           </div>
-          <div class="column center aligned">			
-            <%= link_to "پروازهای تهران به مشهد ", route_page_path(origin_name: "tehran",destination_name: "mashhad"),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به اصفهان ", route_page_path(origin_name: "tehran",destination_name: "isfahan"),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به شیراز ", route_page_path(origin_name: "tehran",destination_name: "shiraz"),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به کیش ", route_page_path(origin_name: "tehran",destination_name: "kish"),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به تبریز " , route_page_path(origin_name: "tehran",destination_name: "tabriz"),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به اهواز ", route_page_path(origin_name: "tehran",destination_name: "ahvaz"),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به آبادان ", route_page_path(origin_name: "tehran",destination_name: "abadan"),class:"footer-link" %>
+          <div class="three column center aligned" style="text-align: right;line-height: 2em;color: #403f3f;direction:rtl">	
+            <div>
+            در شبکه‌های اجتماعی همراه شما هستیم، آخرین به‌روزرسانی‌های پروازهاب را دنبال کنید.
+            </div>
+            <div style="color:white; width:100%; margin:auto;padding: 1em;text-align:center">
+              <a href="https://www.linkedin.com/company/parvazhub"><i class="linkedin square icon big"></i></a>
+              <a href="https://twitter.com/Parvazhub_com"><i class="twitter icon big"></i></a>  
+              <a href="https://www.facebook.com/parvazhub/"><i class="facebook icon big"></i></a>  
+            </div>
           </div>
+
         </div>
 
-        <div class="four column row center aligned">
-              <p style="line-height: 2em;border-top: 1px #404040 solid;width: 80%;padding: 1em;">
-                <a href="https://t.me/parvazhub_com">تماس مستقیم با ما</a>
-                <a href="https://www.linkedin.com/company/parvazhub"><i class="linkedin square icon"></i></a>
-                <a href="https://twitter.com/Parvazhub_com"><i class="twitter icon"></i></a>  
-                <a href="https://www.facebook.com/parvazhub/"><i class="facebook icon"></i></a>  
-                <br/>
-                All rights reserved for Parvazhub - 2017 - v.1.2.2 | salam [at] parvazhub [dot] com
+        <div class="five column row center aligned">
+              <p style="line-height: 2em;border-top: 1px #cccccc solid;width: 80%;padding: 1em;color:#403f3f">
+                تمام حقوق مادی و معنوی برای پروازهاب محفوظ است | salam [at] parvazhub [dot] com
               </p>
         </div>
 
