@@ -31,16 +31,19 @@ class SearchResultController < ApplicationController
     end 
   end
 
-  def search_suppliers(route,date,channel,request)
-    unless (["Googlebot","yandex","MJ12bot","Baiduspider","bingbot"].any? {|word| request.include? word})
-      telegram = Telegram::Monitoring.new
-      telegram.send({text:"👊 [#{Rails.env}] #{route.id}, #{date} \n #{request}"})
-      UserSearchHistory.create(route_id:route.id,departure_time:"#{date}",channel:channel) #save user search to show in admin panel      
-   end
+  def search_suppliers(route,date,channel,request_user_agent)
+    unless is_it_bot(request_user_agent)
+      text = "☝️ [#{Rails.env}] #{route.id}, #{date} \n #{request_user_agent}"
+      UserSearchHistoryWorker.perform_async(text,route.id,date,channel)
+    end
     response_available = SearchHistory.where(route_id:route.id,departure_time:"#{date}").where('created_at >= ?', allow_response_time(date).to_f.minutes.ago).count
     if ((response_available == 0) and (date >= Date.today.to_s))
       SupplierSearch.new.search(route.origin,route.destination,date,20,"user") 
     end
+  end
+
+  def is_it_bot(request_user_agent)
+    return ["Googlebot","yandex","MJ12bot","Baiduspider","bingbot"].any? {|word| request_user_agent.include? word}
   end
 
   def allow_response_time(date)
@@ -89,17 +92,26 @@ class SearchResultController < ApplicationController
     @prices = Array.new
     flight_id = params[:id]
     flight_date = Flight.find(flight_id).departure_time.to_date.to_s
-    @flight_prices = FlightPrice.where(flight_id: params[:id]).order(:price)
+    @flight_prices = get_flight_price("website",params[:id],request.user_agent)
     @flight_price_over_time = FlightPriceArchive.flight_price_over_time(flight_id,flight_date)
     @flight_price_over_time.each do |date,price|
       @dates <<  date.to_s.to_date.to_parsi.strftime("%A %d %B")
       @prices << price
     end
-    
+
     respond_to do |format|
         format.js 
         format.html
+    end    
+  end
+
+  def get_flight_price(channel,flight_id,request_user_agent)
+    unless is_it_bot(request_user_agent)
+      text = "✌️ [#{Rails.env}] #{flight_id} \n #{request_user_agent}"
+      UserFlightPriceHistoryWorker.perform_async(channel,text,flight_id)
     end
+    results = FlightPrice.where(flight_id: flight_id).order(:price)
+    return results
   end
 
 end

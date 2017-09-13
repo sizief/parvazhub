@@ -1,0 +1,5 @@
+class UserFlightPriceHistory < ApplicationRecord
+    
+end
+  
+  

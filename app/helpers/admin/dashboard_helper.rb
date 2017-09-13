@@ -17,6 +17,24 @@ module Admin::DashboardHelper
 	  user_search.count
 	end
 
+	def user_flight_price_history(date, channel=nil)
+		if channel.nil?
+			user_flight_price = UserFlightPriceHistory.where(created_at: date.to_datetime.beginning_of_day..date.to_datetime.end_of_day)
+		else
+			user_flight_price = UserFlightPriceHistory.where(created_at: date.to_datetime.beginning_of_day..date.to_datetime.end_of_day).where(channel: channel)
+		end				
+		user_flight_price.count	
+	end
+
+	def user_flight_price_history_all(channel=nil)
+		if channel.nil?
+			user_flight_price = UserFlightPriceHistory.all
+		else
+			user_flight_price = UserFlightPriceHistory.where(channel: channel)
+		end			
+		user_flight_price.count
+	end
+
 	def redirect(date, channel=nil)
 			if channel.nil?
 				redirect = Redirect.where(created_at: date.to_datetime.beginning_of_day..date.to_datetime.end_of_day)
