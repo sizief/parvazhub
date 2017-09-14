@@ -3,11 +3,10 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 
-$(document).ready ->
+document.addEventListener 'turbolinks:load', ->
   $('.city-page-toggle-box').click ->
     $('#link-dates').slideToggle ->
       $('#city-page-search-box').slideToggle()
-      return
     return
   return
-
+return
