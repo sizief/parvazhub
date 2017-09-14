@@ -3,7 +3,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
 <% provide(:canonical,"<link rel=\"canonical\" href=\"http://parvazhub.com/flights/#{@search_parameter[:origin_name]}-#{@search_parameter[:destination_name]}\"/> ".html_safe)%>
 
-<% provide(:title,"پروازهاب:‌ پروازهای #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]}  #{@search_parameter[:date_in_human]} ")%>
+<% provide(:title,"پروازهاب:‌ پرواز #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]}  #{@search_parameter[:date_in_human]} ")%>
 <% provide(:description,"لیست پروازهای #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]}  #{@search_parameter[:date_in_human]}") %>
 
 <div class="ui container" id="search-results-container">
@@ -135,21 +135,22 @@
 	  <div class="standard-text" style="background:white;padding-top:2em;margin:2em;direction:rtl">
 	    <i class="teal warning circle icon big"></i>	
 		   <% if @search_parameter[:date].to_date < Date.today %>
-				تاریخی که درخواست کرده‌اید گذشته است. امروز 
+				امروز 
 				<%= Date.today.to_date.to_parsi.strftime "%A %d %B"   %> 
-				است.
+				است. تاریخ پرواز را از لینک‌های پایین انتخاب کنید:
 			<% else %>
 			پروازی در روز 
 		   <%= @search_parameter[:date].to_date.to_parsi.strftime "%A %d %B"   %> 
-		   موجود نیست.
+		   موجود نیست. و یا ظرفیت پرواز پر شده است.
+		   پرواز برای تاریخ‌های زیر را چک کنید:	
 		   <% end %>
-		   پرواز برای تاریخ‌های زیر را چک کنید:		
+		  	
 			<ul>
 				<% @flight_dates.each do |key,value|%>
 					<% unless key.to_s == @search_parameter[:date].to_s %>
 					
 					<li>
-						<% link_text = "پروازهای #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]} "+key.to_s.to_date.to_parsi.strftime("%A %d %B ") %>
+						<% link_text = "پرواز #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]} "+key.to_s.to_date.to_parsi.strftime("%A %d %B ") %>
 						<%= link_to(link_text, search_link_builder(@search_parameter[:origin_name],@search_parameter[:destination_name],key.to_s.to_date))   %>
 					</li>
 					<% end %>
