@@ -43,7 +43,7 @@ class SearchResultController < ApplicationController
   end
 
   def is_it_bot(request_user_agent)
-    return ["Googlebot","yandex","MJ12bot","Baiduspider","bingbot","Yahoo!","spbot"].any? {|word| request_user_agent.include? word}
+    return ["Googlebot","yandex","MJ12bot","Baiduspider","bingbot","Yahoo!","spbot","parsijoo"].any? {|word| request_user_agent.include? word}
   end
 
   def allow_response_time(date)
@@ -92,21 +92,31 @@ class SearchResultController < ApplicationController
   end
 
   def flight_prices
+    origin_name = params[:origin_name].downcase
+    destination_name = params[:destination_name].downcase
+    date = params[:date]
+    flight_id = params[:id]
+    @cities = City.list   
     @dates = Array.new
     @prices = Array.new
-    flight_id = params[:id]
-    flight_date = Flight.find(flight_id).departure_time.to_date.to_s
+
+    origin_code = City.get_city_code_based_on_english_name origin_name
+    destination_code = City.get_city_code_based_on_english_name destination_name
+    date_in_human = date.to_date.to_parsi.strftime '%A %d %B'   
+    @flight = Flight.find(flight_id)
+    @search_parameter ={origin_name: origin_name, origin_code: origin_code, destination_code: destination_code, destination_name: destination_name,date: date, date_in_human: date_in_human}
     @flight_prices = get_flight_price("website",params[:id],request.user_agent)
-    @flight_price_over_time = FlightPriceArchive.flight_price_over_time(flight_id,flight_date)
+    @flight_price_over_time = FlightPriceArchive.flight_price_over_time(flight_id,date)
     @flight_price_over_time.each do |date,price|
       @dates <<  date.to_s.to_date.to_parsi.strftime("%A %d %B")
       @prices << price
     end
 
-    respond_to do |format|
-        format.js 
-        format.html
-    end    
+    #respond_to do |format|
+    #    format.js 
+    #    format.html
+    #end    
+    render :flight_price
   end
 
   def get_flight_price(channel,flight_id,request_user_agent)

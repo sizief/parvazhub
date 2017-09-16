@@ -119,12 +119,12 @@
 				          			</div>
 				        		</div>
 						</td>
-						<td class="nm"><%= flight.airplane_type.empty? ? "نامشخص" : airplane_name_for(flight.airplane_type) %></td>
+						<td class="nm"><%= flight.airplane_type.empty? ? "-" : airplane_name_for(flight.airplane_type) %></td>
 						<td>
 							<div class="suppliers-count">	
 								<b>حداقل قیمت‌ از <%= flight.suppliers_count %> سایت </b>
 							</div>
-							<a href="<%= flight_prices_path(flight.id) %>" data-remote="true">	
+							<a href="<%= flight_prices_path(@search_parameter[:origin_name],@search_parameter[:destination_name],@search_parameter[:date],flight.id) %>" data-remote="false">	
 								<button class="ui submit yellow web-font fluid right labeled icon button flight-price-button" style="padding-right: 0 !important;">
 									<i class="right arrow icon"></i>
 									<%= "#{number_with_delimiter(flight.best_price)} تومان " %>
