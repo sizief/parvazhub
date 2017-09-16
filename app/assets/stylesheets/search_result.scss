@@ -63,17 +63,30 @@
   background: white;
   border-top: 1px #26a1d6 solid;
 }
-.flight-price-logo{}
+.flight-price-button{
+  width:65% !important;
+  margin:auto !important;    
+  padding-right: 0 !important;
+  font-size: 1em !important;
+}
+.suppliers-count{
+  width:100%; 
+  padding:0.5em; 
+  font-weight:bold;
+}
 
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
-#flight-price-table {
-     display:none;
-}
+  #flight-price-table {
+      display:none;
+  }
 
-.not-mobile, .nm{
-  display: none !important;
-}
-#flight-prices{
-  font-size: 0.8em;
-}
+  .not-mobile, .nm{
+    display: none !important;
+  }
+  #flight-prices{
+    font-size: 0.8em;
+  }
+  .flight-price-button{
+    width:100% !important;
+  }
 }

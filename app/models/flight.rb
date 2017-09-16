@@ -7,6 +7,7 @@ class Flight < ApplicationRecord
   has_one :flight_info
 
   attr_accessor :delay
+  attr_accessor :suppliers_count
 
   def self.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
     is_flight_exist = Flight.find_by(flight_number:flight_number,departure_time:departure_time)
@@ -120,11 +121,9 @@ class Flight < ApplicationRecord
   def flight_list(route,date)
     flight_list = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s).where.not(best_price:0)
     flight_list.each do |flight|
+      flight.suppliers_count = flight.flight_prices.count
       flight_info = FlightInfo.find_by(flight_id: flight.id) 
       if flight.airplane_type.empty?
-         #call_sign = get_call_sign(flight.flight_number,flight.airline_code)
-         #flight_detail = FlightDetail.find_by(call_sign: call_sign)
-         
          flight.airplane_type = flight_info.airplane unless flight_info.nil?
          flight.delay = flight_info.delay unless flight_info.nil?
        end

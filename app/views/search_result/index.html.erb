@@ -98,7 +98,7 @@
 	  	</thead>
 		<tbody>
 			<% @flights.each do |flight|  %>
-				<% unless flight.best_price == 0 %>
+				<% unless ((flight.best_price == 0) or (flight.suppliers_count == 0))  %>
 					<tr class="center aligned very basic" >
 						<td class="left aligned">
 							<h5 class="ui image header web-font">
@@ -121,8 +121,16 @@
 						</td>
 						<td class="nm"><%= flight.airplane_type.empty? ? "نامشخص" : airplane_name_for(flight.airplane_type) %></td>
 						<td>
-							<%= "<b>".html_safe+number_with_delimiter(flight.best_price) +" تومان  </b>".html_safe %>
-							<%= link_to "نمایش قیمت‌ها", flight_prices_path(flight.id), class: "ui orange label large flight-price", remote: true %>
+							<div class="suppliers-count">	
+								<b>حداقل قیمت‌ از <%= flight.suppliers_count %> سایت </b>
+							</div>
+							<a href="<%= flight_prices_path(flight.id) %>" data-remote="true">	
+								<button class="ui submit yellow web-font fluid right labeled icon button flight-price-button" style="padding-right: 0 !important;">
+									<i class="right arrow icon"></i>
+									<%= "#{number_with_delimiter(flight.best_price)} تومان " %>
+									
+								</button>
+							</a>
 						</td>
 					</tr>
 				<% end %>	
