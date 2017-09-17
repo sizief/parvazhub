@@ -76,6 +76,8 @@ class Admin::DashboardController < ApplicationController
 
   def user_search_stat
     user_search_histories = UserSearchHistory.where("created_at >?","2017-09-11")
+
+    @user_search_histories_all = user_search_histories.count
     
     routes_count = user_search_histories.group(:route_id).order('count_id desc').count('id')
     @routes_count_hash = Hash.new

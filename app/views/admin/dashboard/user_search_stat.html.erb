@@ -4,7 +4,8 @@
 	<thead>
 		<tr class="center aligned">
   			<th><h4>route</h4></th>
-  			<th><h4>count</h4></th>
+			  <th><h4>count</h4></th>
+			  <th><h4>percentage</h4></th>
   		</tr>
   	</thead>
 	<tbody>
@@ -12,6 +13,7 @@
 		<tr class="center aligned">
 			<td><%= item[0] %></td>
 			<td><%= item[1] %></td>
+			<td><%= (item[1]*100/@user_search_histories_all) %></td>
 		</tr>
 		<% end %>
 	</tbody>
@@ -21,14 +23,16 @@
 <thead>
     <tr class="center aligned">
           <th><h4>days to flight</h4></th>
-          <th><h4>count</h4></th>
+		  <th><h4>count</h4></th>
+		  <th><h4>percentage</h4></th>		  
       </tr>
   </thead>
 <tbody>
     <% @dates_count.each do |item|  %>
     <tr class="center aligned">
         <td><%= item[0] %></td>
-        <td><%= item[1] %></td>
+		<td><%= item[1] %></td>
+		<td><%= (item[1]*100/@user_search_histories_all) %></td>
     </tr>
     <% end %>
 </tbody>
