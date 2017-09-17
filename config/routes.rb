@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 	namespace :admin do
 		get 'dashboard', to:'dashboard#index'
 		get 'dashboard/user_search_history'
+		get 'dashboard/user_search_stat'
 		get 'dashboard/search_history'
 		get 'dashboard/supplier_control'
 		get 'dashboard/price_alert'

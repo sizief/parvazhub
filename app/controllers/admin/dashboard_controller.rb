@@ -73,5 +73,29 @@ class Admin::DashboardController < ApplicationController
     @results = {today:today,all:all,this_week:this_week,week_before:week_before,week_before_that:week_before_that}
     
   end
+
+  def user_search_stat
+    user_search_histories = UserSearchHistory.where("created_at >?","2017-09-11")
+    
+    routes_count = user_search_histories.group(:route_id).order('count_id desc').count('id')
+    @routes_count_hash = Hash.new
+    routes_count.each do |route|
+      route_id = route[0]
+      route_codes = Route.find(route_id)
+      hash_key = route_codes.origin+"-"+route_codes.destination
+      @routes_count_hash[hash_key.to_sym] = route[1]
+    end
+
+    @dates_count = Hash.new
+    user_search_histories.each do |user_search_history|
+      hash_key = (user_search_history.departure_time.to_date - user_search_history.created_at.to_date).to_i
+      if @dates_count[hash_key] 
+        @dates_count[hash_key] +=1
+      else
+        @dates_count[hash_key] = 1
+      end
+    end
+    @dates_count = Hash[@dates_count.sort_by{|k, v| v}.reverse]
+  end
   
 end
