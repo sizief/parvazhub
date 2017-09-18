@@ -2,14 +2,13 @@ require 'test_helper'
 
 class AirportsMehrabadTest < ActiveSupport::TestCase
   def setup
-    @airport = Airports::Mehrabad.new
+    @airport = Airports::Mehrabad.new   
   end
     
   test "airport data should saved to flight details" do
-    #the provided sample file has 154 record
-    assert_difference 'FlightDetail.count',232 do
-      @results = @airport.search
-      @airport.import_domestic_flights @results
+    assert_difference 'FlightDetail.count',279 do
+      @results = @airport.search("mehrabad")
+      @airport.import_domestic_flights(@results,"thr")
     end   
   end
 end

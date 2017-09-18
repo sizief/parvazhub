@@ -90,7 +90,13 @@ class Admin::DashboardController < ApplicationController
 
     @dates_count = Hash.new
     user_search_histories.each do |user_search_history|
-      hash_key = (user_search_history.departure_time.to_date - user_search_history.created_at.to_date).to_i
+      
+      begin 
+        hash_key = (user_search_history.departure_time.to_date - user_search_history.created_at.to_date).to_i
+      rescue
+        next
+      end
+
       if @dates_count[hash_key] 
         @dates_count[hash_key] +=1
       else

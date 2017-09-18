@@ -16,10 +16,10 @@ class SuppliersTravelchiTest < ActiveSupport::TestCase
     assert_not response[:response].empty?
   end
 
-  test "get random key" do
-    key = @travelchi_search.get_auth_key
-    assert key.size == 216
-  end
+  #test "get random key" do
+  #  key = @travelchi_search.get_auth_key
+  #  assert key.size == 216
+  #end
 
   test "get price should return the number" do
     prices = [{"discounts"=>0.0, "fee"=>3000000.0, "flight_class"=>"Y", "remain"=>1, "status"=>"A"}]

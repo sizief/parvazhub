@@ -2,24 +2,9 @@ class Airports::Mehrabad < Airports::DomesticAirport
   require "open-uri"
   require "uri"
 
-  def search
-    get_flight_url = "https://mehrabad.airport.ir/flight-info"
-  
-    begin
-      if Rails.env.test?
-        response = File.read("test/fixtures/files/mehrabad.log") 
-      else
-        response = RestClient.get("#{URI.parse(get_flight_url)}")
-    end
-    rescue
-      return false
-    end
-    return response
-  end
-
-  def import_domestic_flights(response)
+  def import_domestic_flights(response,city_code)
     flight_details = Array.new()
-    origin = "thr"
+    origin = city_code
     doc = Nokogiri::HTML(response)
     doc = doc.xpath('//*[@id="dep-flights-info"]/tbody/tr')
 
