@@ -137,8 +137,11 @@
 				<% @prices[:from].each_with_index do |price,index|%>
 					<% if index%7 == 0 %>
 						<tr class="center aligned very basic">
-					<% end %>	
-						<td class="center aligned <%='disable' if price.keys[0].to_s.to_date<Date.today %>">
+					<% end %>
+					<%if price.keys[0].to_s.to_date<Date.today #date is in the past %> 
+						<td class="center aligned disable"></td>
+					<%else%>	
+						<td class="center aligned">
 							<a href="<%= search_link_builder(@destination[:en],@origin[:en],price.keys[0].to_s.to_date) %>" >
 								<div>
 									<div style="font-size: 1.1em">
@@ -154,6 +157,8 @@
 								</div>
 							</a>	
 						</td>
+					
+					<% end %>
 					
 					<% if ((index%7 == 6) || (index == 34)) %>
 						</tr>

@@ -101,15 +101,17 @@
 				<% unless ((flight.best_price == 0) or (flight.suppliers_count == 0))  %>
 					<tr class="center aligned very basic" >
 						<td class="left aligned">
+						<a href="<%= flight_prices_path(@search_parameter[:origin_name],@search_parameter[:destination_name],@search_parameter[:date],flight.id) %>" data-remote="false">														
 							<h5 class="ui image header web-font">
-				          		<%= airline_logo_for flight.airline_code %> 
-				          		<div class="content">
-				            		<%= airline_name_for flight.airline_code %>
-				            		<div class="sub header" style="margin-top: 7px">
-				            			<%= flight.flight_number %>
-				          			</div>
-				        		</div>
-			      			</h5>
+								<%= airline_logo_for flight.airline_code %> 
+								<div class="content">
+									<%= airline_name_for flight.airline_code %>
+									<div class="sub header" style="margin-top: 7px">
+									<%= flight.flight_number %>
+									</div>
+								</div>
+							</h5>
+						</a>
 						</td>
 						<td>
 							<div class="content">

@@ -34,21 +34,18 @@
                                 <span class="ui red tiny label"><i class="checkmark icon"></i>ارزان‌ترین</span>
                             <% end %>
                         </td>
-                        <td>	
-                            <%= supplier_logo_for flight_price.supplier %>
-                            وب‌سایت <%= supplier_to_human flight_price.supplier %> 
-                        </td>
-                        <!--<td>	
-                            <a href="/redirect/website/<%= flight_price.id%>"  target= "_blank">
-                                <b><%= number_with_delimiter(flight_price.price) %></b> تومان
+                        <td>
+                            <a href="<%= redirect_path(channel: "website",flight_price_id: flight_price.id) %>"  target= "_blank" rel="nofollow">                    
+                                <%= supplier_logo_for flight_price.supplier %>
+                                وب‌سایت <%= supplier_to_human flight_price.supplier %> 
                             </a>
-                        </td>-->
+                        </td>
                         <td>
                             <div class="suppliers-count">	
                                 <b><%= number_with_delimiter(flight_price.price) %></b> تومان
                             </div>
                         
-                            <a href="/redirect/website/<%= flight_price.id%>" class="ui green label  flight-price"  target= "_blank" rel="nofollow">
+                            <a href="<%= redirect_path(channel: "website",flight_price_id: flight_price.id) %>" class="ui green label  flight-price"  target= "_blank" rel="nofollow">
                                 <i class="external icon"></i> خرید از سایت <%= supplier_to_human flight_price.supplier %>  
                             </a>
                             <!--<span style="font-size:x-small"><%=  time_ago_in_words(flight_price.created_at) %> ago</span>-->

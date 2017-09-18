@@ -197,6 +197,8 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
+    rollbar (2.15.2)
+      multi_json
     ruby-progressbar (1.8.1)
     rufus-scheduler (3.4.0)
       et-orbi (~> 1.0)
@@ -287,6 +289,7 @@ DEPENDENCIES
   rails-controller-testing (= 0.1.1)
   redis-rails
   rest-client
+  rollbar
   sass-rails (= 5.0.6)
   scout_apm
   semantic-ui-sass (~> 2.2, >= 2.2.1.1)
@@ -303,4 +306,4 @@ DEPENDENCIES
   web-console (= 3.1.1)
 
 BUNDLED WITH
-   1.15.1
+   1.15.4

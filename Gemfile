@@ -21,6 +21,8 @@ gem 'sidekiq-scheduler'
 gem 'scout_apm'
 gem 'sidekiq-status'
 gem 'devise'
+gem 'rollbar'
+
 
 
 group :development do
