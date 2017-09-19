@@ -37,6 +37,9 @@
 .yellow-text{
   color:#FBBD08
 }
+.mobile-only{
+  display: none;
+}
 
 /* general */
 .field_with_errors{
@@ -174,6 +177,12 @@ header{
   display: block !important;
   margin: auto !important;
   margin-top: 1.5em !important;
+}
+
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+  .mobile-only{
+    display: inline-block;
+  }
 }
 
 

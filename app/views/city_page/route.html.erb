@@ -46,7 +46,7 @@
 			<div  class="page-button-links" >
 				<a href="<%= search_link_builder(@origin[:en],@destination[:en],price.keys[0].to_s.to_date) %>">
 					<button class="ui submit big yellow web-font fluid right labeled  icon button waiting-modal link-dates-button" style="padding-left: 2.5em !important; font-size:0.9em !important;" >	
-						 پروازهای 
+						 پرواز 
 						<%= "#{@origin[:fa]} به #{@destination[:fa]}" %>
 						<%=price.keys[0].to_s.to_date.to_parsi.strftime "%A %d %B"  %>	
 						<%= "از #{number_with_delimiter(price.values[0])} تومان" unless price.values[0] =="-" %>		
@@ -91,16 +91,22 @@
 					<%else%>	
 						<td class="center aligned">
 							<a href="<%= search_link_builder(@origin[:en],@destination[:en],price.keys[0].to_s.to_date) %>" >
-								<div>
-									<div style="font-size: 1.1em">
+								<div class="route-calendar-box">
+									<div class="route-calendar-date">
+									پرواز
+										<span class="mobile-only">
+										<%= "#{@origin[:fa]} به #{@destination[:fa]}" %>
+										</span>
 										<%=price.keys[0].to_s.to_date.to_parsi.strftime "%d %B"  %>	
 									</div>
-									<div style="font-size: 0.8em;color: #4e4e4e;">
-									<% if number_with_delimiter(price.values[0]) == "-" %>
-										جستجو
-									<% else %>
-										<%= "#{number_with_delimiter(price.values[0])} تومان"  %>	
-									<% end %>
+									<div class="route-calendar-price">
+										<% if number_with_delimiter(price.values[0]) == "-" %>
+											جستجو
+										<% else %>
+											<%= "از #{number_with_delimiter(price.values[0])} تومان"  %>	
+										<% end %>
+										<i class="right arrow icon yellow"></i>
+										
 									</div>
 								</div>
 							</a>	
@@ -143,16 +149,21 @@
 					<%else%>	
 						<td class="center aligned">
 							<a href="<%= search_link_builder(@destination[:en],@origin[:en],price.keys[0].to_s.to_date) %>" >
-								<div>
-									<div style="font-size: 1.1em">
+							<div class="route-calendar-box">
+								<div class="route-calendar-date">
+									پرواز
+									<span class="mobile-only">
+									<%= "#{@origin[:fa]} به #{@destination[:fa]}" %>
+									</span>
 										<%=price.keys[0].to_s.to_date.to_parsi.strftime "%d %B"  %>	
 									</div>
-									<div style="font-size: 0.8em;color: #4e4e4e;">
+									<div class="route-calendar-price">
 									<% if number_with_delimiter(price.values[0]) == "-" %>
 										جستجو
 									<% else %>
 										<%= "#{number_with_delimiter(price.values[0])} تومان"  %>	
 									<% end %>
+									<i class="right arrow icon yellow"></i>
 									</div>
 								</div>
 							</a>	
