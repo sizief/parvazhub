@@ -43,7 +43,7 @@ class SearchResultController < ApplicationController
   end
 
   def is_it_bot(request_user_agent)
-    return ["Googlebot","yandex","MJ12bot","Baiduspider","bingbot","Yahoo!","spbot","parsijoo","CloudFlare","SafeDNSBot"].any? {|word| request_user_agent.include? word}
+    return ["Googlebot","yandex","MJ12bot","Baiduspider","bingbot","Yahoo!","spbot","parsijoo","CloudFlare","SafeDNSBot","Dataprovider"].any? {|word| request_user_agent.include? word}
   end
 
   def allow_response_time(date)
