@@ -50,9 +50,9 @@
     class: AirportSearchWorker
 
 #notification 
-  price_alert:
-    cron: '0 0 8 * * *'
-    class: NotificationMailerWorker
+#  price_alert:
+#    cron: '0 0 8 * * *'
+#    class: NotificationMailerWorker
 
 #proxy
 #  proxy_update:

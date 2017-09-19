@@ -27,7 +27,6 @@ Rails.application.routes.draw do
 	get '/flights/:origin_name-:destination_name/:date', to:'search_result#search', as: 'flight_result'
 	get '/flights/:origin_name-:destination_name/:date/:id', to: 'search_result#flight_prices', as: 'flight-prices'
 	
-	get '/flight-prices/:id', to: 'search_result#flight_prices', as: 'flight-prices-ajax' #, :defaults => { :format => 'js' }
 	get 'redirect/:channel/:flight_price_id', to: 'redirect#redirect', as: 'redirect'
 
 	post 'notification/price_alert_register', to: 'notification#price_alert_register', as: 'price_alert_register'
@@ -39,5 +38,7 @@ Rails.application.routes.draw do
 	get '/beta/telegram/update', to: 'telegram#update'
 	post '/beta/telegram/webhook', to: 'telegram#webhook'
 	 
+	get '/flight-prices/:id', to: redirect('/', status: 302) #, to: 'search_result#flight_prices', as: 'flight-prices-ajax' #, :defaults => { :format => 'js' }
+	
 	root 'home#index'
 end
