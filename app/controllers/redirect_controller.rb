@@ -17,6 +17,12 @@ class RedirectController < ApplicationController
     telegram = Telegram::Monitoring.new
     telegram.send({text:"👊 [#{Rails.env}] #{request.user_agent} #{request.remote_ip} \n #{@flight_price.supplier}"})
 
-    redirect_to @flight_price.deep_link
+    
+    if @flight_price.deep_link.include? "?"
+      redirect_link = @flight_price.deep_link + "&"
+    else 
+      redirect_link = @flight_price.deep_link + "?"
+    end
+    redirect_to(redirect_link + "utm_source=parvazhub_com&utm_medium=meta_search&utm_campaign=parvazhub_com")
   end
 end
