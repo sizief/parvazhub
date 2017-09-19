@@ -119,7 +119,7 @@ class Suppliers::Safarme
     destination_name = city_name_correction destination_name
     shamsi_date = date.to_date.to_parsi  
 
-    if destination_name == "RASHT" 
+    if ((destination_name == "RASHT" ) or (destination_name == "ARDABIL" ))
       deeplink= "http://safarme.com/flights/#{origin_name}-to-#{destination_name}"
     else
       deeplink= "http://safarme.com/flights/#{origin_name}-to-#{destination_name}/#{shamsi_date}"
@@ -132,6 +132,8 @@ class Suppliers::Safarme
       return "Bandar%20%60Abbas"
     elsif city_name == "ISFAHAN"
         return "Esfahan"
+    elsif city_name == "BUSHEHR"
+        return "Bandar-e Bushehr"
     else
       return city_name
     end

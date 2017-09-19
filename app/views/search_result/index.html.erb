@@ -8,8 +8,8 @@
 
 <div class="ui container" id="search-results-container">
 	<div class="ui grid" id="results-message">
-  		<div class="two column row">
-    		<div class="left floated column">
+  		<div class="one column row">
+    		<div class="column">
 				<i class="plane icon"></i> 
 				<%= @cities[@search_parameter[:origin_code].to_sym][:fa] %>
 				  به 
@@ -19,15 +19,15 @@
 				 <a class="ui primary basic blue" onclick="$('#search-box-inner').transition('slide');" style="cursor:pointer">
 				 <i class="search icon"></i> تغییر مبدا، مقصد یا تاریخ</a>
 		 	</div>
-		 	<div class="left floated column right aligned">
+		 	<!--<div class="left floated column right aligned">
 		  		<button class="ui tiny blue button web-font" onclick="$('#price-alert-register').transition('slide');">
 		  		قیمت‌ها را هر روز به ایمیلم بفرست
 		  		</button>
-		  	</div>
+		  	</div>-->
 		</div> 	
 	</div>
 
-	<div class="ui" id="price-alert-register">
+	<!--<div class="ui" id="price-alert-register">
 	<%= form_tag(price_alert_register_path, method: :post, class: "ui form", remote: true) do %>			<div class="ui form">
 			<div class="three fields">
 				<div class="field text-right">
@@ -46,7 +46,7 @@
 			</div>
 		</div>
 	<%end%>
-	</div>
+	</div>-->
 
 	<div class="ui" id="search-box-inner">
 		<%= form_for(:search, url: flight_search_path, method: :get, html: {id:"flight_search"}) do |f| %>

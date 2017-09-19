@@ -118,11 +118,11 @@ class Suppliers::Iranhrc
     destination_name = City.list[destination.to_sym][:en].upcase
     destination_name = city_name_correction destination_name
     shamsi_date = date.to_date.to_parsi  
-
-    if destination_name == "RASHT" 
-      deeplink= "http://iranhrc.ir/flights/#{origin_name}-to-#{destination_name}"
+     
+    if ((destination_name == "RASHT" ) or (destination_name == "ARDABIL" ))
+      deeplink= "http://iranhrc.ir/tickets/flights/#{origin_name}-to-#{destination_name}"
     else
-      deeplink= "http://iranhrc.ir/flights/#{origin_name}-to-#{destination_name}/#{shamsi_date}"
+      deeplink= "http://iranhrc.ir/tickets/flights/#{origin_name}-to-#{destination_name}/#{shamsi_date}"
     end
   end
 
@@ -132,6 +132,8 @@ class Suppliers::Iranhrc
       return "Bandar%20%60Abbas"
     elsif city_name == "ISFAHAN"
         return "Esfahan"
+    elsif city_name == "BUSHEHR"
+        return "Bandar-e Bushehr"
     else
       return city_name
     end

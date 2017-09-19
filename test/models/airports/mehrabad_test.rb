@@ -6,7 +6,7 @@ class AirportsMehrabadTest < ActiveSupport::TestCase
   end
     
   test "airport data should saved to flight details" do
-    assert_difference 'FlightDetail.count',279 do
+    assert_difference 'FlightDetail.count',314 do
       @results = @airport.search("mehrabad")
       @airport.import_domestic_flights(@results,"thr")
     end   

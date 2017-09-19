@@ -23,10 +23,10 @@ module FlightSearch
     #sparkpost config
     config.action_mailer.smtp_settings = { 
     	address: 'smtp.sparkpostmail.com', 
-    	port: 587, #2525 
+    	port: 2525, #587 
     	domain: "parvazhub.com",
     	user_name: "SMTP_Injection", 
-    	password: "5c6101a8cc2208e3e3681d8f0dccbbfa4303901c", 
+    	password: "80c4a6006c5554233095c9fb9ad6ee1a47983b1d",#"5c6101a8cc2208e3e3681d8f0dccbbfa4303901c", 
     	authentication: 'LOGIN',
     	enable_starttls_auto: true}
 

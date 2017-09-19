@@ -55,13 +55,13 @@
     class: NotificationMailerWorker
 
 #proxy
-  proxy_update:
-    cron: '0 /60 * * * *'
-    class: ProxyUpdateWorker
+#  proxy_update:
+#    cron: '0 /60 * * * *'
+#    class: ProxyUpdateWorker
 
-  proxy_checker:
-    cron: '0 /61 * * * *'
-    class: ProxyCheckAllWorker
+#  proxy_checker:
+#    cron: '0 /61 * * * *'
+#    class: ProxyCheckAllWorker
 
 #flightPrice remover 
   flight_price_remover:

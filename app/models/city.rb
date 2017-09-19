@@ -8,6 +8,8 @@ class City
 	  ifn:{fa:"اصفهان",en:"isfahan"},
     abd:{fa:"آبادان",en:"abadan"},
     awz:{fa:"اهواز",en:"ahvaz"},
+    adu:{fa:"اردبیل",en:"ardabil"}, 
+    buz:{fa:"بوشهر",en:"bushehr"}, 
     tbz:{fa:"تبریز",en:"tabriz"},
     bnd:{fa:"بندرعباس",en:"bandarabbas"},
     zbr:{fa:"چابهار",en:"chabahar"},
@@ -17,6 +19,8 @@ class City
     sry:{fa:"ساری",en:"sari"},
     gsm:{fa:"قشم",en:"gheshm"},
     ker:{fa:"کرمان",en:"kerman"},
+    ksh:{fa:"کرمانشاه",en:"kermanshah"},
+    gbt:{fa:"گرگان",en:"gorgan"},  
     azd:{fa:"یزد",en:"yazd"}
    }
   end
