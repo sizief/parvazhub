@@ -3,7 +3,23 @@ class Airports::DomesticAirport
   
    
   def self.airports
-    [["mashhad","mhd",139],["tabriz","tbz",34],["shiraz","syz",81],["ahwaz","awz",42],["isfahan","ifn",50],["kerman","ker",11],["sari","sry",4],["rasht","ras",9]]
+    [
+      ["mashhad","mhd",139],
+      ["tabriz","tbz",34],
+      ["shiraz","syz",81],
+      ["ahwaz","awz",42],
+      ["isfahan","ifn",50],
+      ["kerman","ker",11],
+      ["sari","sry",4],
+      ["rasht","ras",9],
+      ["yazd","azd",19],
+      ["kermanshah","ksh",9],
+      ["bandarabbas","bnd",13],
+      ["zahedan","zah",12],
+      ["bushehr","buz",13],
+      ["gorgan","gbt",10],
+      ["ardabil","adu",7]
+    ]
   end
   
   def self.unnormal_airport 
