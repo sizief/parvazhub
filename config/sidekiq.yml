@@ -72,3 +72,8 @@
   flight_info_worker:
     cron: '0 45 0,12 * * *'
     class: FlightInfoWorker
+
+#route day worker
+  route_day_worker:
+    cron: '0 55 0,12 * * *'
+    class: RouteDayWorker
