@@ -32,7 +32,7 @@ class SearchResultController < ApplicationController
   end
 
   def search_suppliers(route,date,channel,request_user_agent)
-    unless is_it_bot(request_user_agent)
+    unless is_bot(request_user_agent)
       text = "☝️ [#{Rails.env}] #{route.id}, #{date} \n #{request_user_agent}"
       UserSearchHistoryWorker.perform_async(text,route.id,date,channel)
     end
@@ -40,10 +40,6 @@ class SearchResultController < ApplicationController
     if ((response_available == 0) and (date >= Date.today.to_s))
       SupplierSearch.new.search(route.origin,route.destination,date,20,"user") 
     end
-  end
-
-  def is_it_bot(request_user_agent)
-    return ["Googlebot","yandex","MJ12bot","Baiduspider","bingbot","Yahoo!","spbot","parsijoo","CloudFlare","SafeDNSBot","Dataprovider"].any? {|word| request_user_agent.include? word}
   end
 
   def allow_response_time(date)
@@ -120,7 +116,7 @@ class SearchResultController < ApplicationController
   end
 
   def get_flight_price(channel,flight_id,request_user_agent)
-    unless is_it_bot(request_user_agent)
+    unless is_bot(request_user_agent)
       text = "✌️ [#{Rails.env}] #{flight_id} \n #{request_user_agent}"
       UserFlightPriceHistoryWorker.perform_async(channel,text,flight_id)
     end

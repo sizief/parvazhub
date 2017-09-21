@@ -7,4 +7,13 @@ class ApplicationController < ActionController::Base
       redirect_to 'https://parvazhub.com' + request.fullpath, :status => 301
     end
   end
+
+  def is_bot(request_user_agent)
+    if request_user_agent.nil?
+      return false 
+    else
+      return ["Googlebot","yandex","MJ12bot","Baiduspider","bingbot","Yahoo!","spbot","parsijoo","CloudFlare","SafeDNSBot","Dataprovider","beambot"].any? {|word| request_user_agent.include? word}
+    end
+  end
+
 end

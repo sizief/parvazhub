@@ -18,7 +18,10 @@ class SupplierSearch
       Timeout.timeout(delay) do
         supplier_list.each do |supplier|
           threads << Thread.new do
-            search_supplier(supplier[:name],supplier[:class_name],origin,destination,route_id,date,who_started)
+            begin
+              search_supplier(supplier[:name],supplier[:class_name],origin,destination,route_id,date,who_started)
+            rescue
+            end
           end
         end
         # Join on the child processes to allow them to finish

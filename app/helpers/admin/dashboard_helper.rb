@@ -36,13 +36,17 @@ module Admin::DashboardHelper
 	end
 
 	def redirect(date, channel=nil)
-			if channel.nil?
-				redirect = Redirect.where(created_at: date.to_datetime.beginning_of_day..date.to_datetime.end_of_day)
-			else
-				redirect = Redirect.where(created_at: date.to_datetime.beginning_of_day..date.to_datetime.end_of_day).where(channel: channel)
-			end	
-		redirect.count
-		
+		count = 0
+		application = ApplicationController.new
+		if channel.nil?
+			redirects = Redirect.where(created_at: date.to_datetime.beginning_of_day..date.to_datetime.end_of_day)
+		else
+			redirects = Redirect.where(created_at: date.to_datetime.beginning_of_day..date.to_datetime.end_of_day).where(channel: channel)
+		end	
+		redirects.each do |redirect|
+			count +=1 unless application.is_bot(redirect.user_agent)
+		end
+		return count
 	end
 
 	def redirect_all(channel=nil)
