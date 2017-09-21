@@ -18,6 +18,8 @@ class CityPageController < ApplicationController
 
     @origin = City.list[@origin_code.to_sym]
     @destination = City.list[@destination_code.to_sym]
+
+    @route_days = RouteDay.week_days(@origin_code,@destination_code)
     
     @prices[:to] = Flight.new.get_lowest_price_for_month(@origin_code,@destination_code)
     @prices[:from] = Flight.new.get_lowest_price_for_month(@destination_code,@origin_code)
