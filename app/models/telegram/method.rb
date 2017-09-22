@@ -148,7 +148,7 @@ class Telegram::Method
       flight_prices.each do |flight_price|
         text += "🚀 <a href=\"https://parvazhub.com/redirect/telegram/#{flight_price.id}\">لینک خرید از سایت #{supplier_to_human(flight_price.supplier)} به قیمت #{number_with_delimiter(flight_price.price)} تومان </a>  \n\n"
       end
-      text += "\n\n 📣جستجوی مسیر یا تاریخ جدید: /start"      
+      text += "\n\n 📣جستجوی مسیر یا تاریخ جدید: \n/start"      
     end
     send({text:text,chat_id:chat.chat_id})
     
@@ -175,7 +175,7 @@ class Telegram::Method
         text += "#{airline_name_for(flight.airline_code)} | #{hour_to_human(flight.departure_time.to_datetime.strftime("%H:%M"))} | <b>#{number_with_delimiter(flight.best_price)} تومان</b>
         👉 /flight#{flight.id} \n\n"
       end
-      text += "\n\n 📣 جستجوی مسیر یا تاریخ جدید: /start"
+      text += "\n\n 📣 جستجوی مسیر یا تاریخ جدید:\n /start"
       
     end
     send({text:text,chat_id:chat.chat_id,chat:chat})
