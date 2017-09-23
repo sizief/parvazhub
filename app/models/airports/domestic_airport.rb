@@ -34,7 +34,9 @@ class Airports::DomesticAirport
       if Rails.env.test?
         response = File.read("test/fixtures/files/#{city_name}.log") 
       else
-        response = RestClient.get("#{URI.parse(get_flight_url)}")
+        #response = RestClient.get("#{URI.parse(get_flight_url)}")
+        response = RestClient::Request.execute(:url => "#{URI.parse(get_flight_url)}", :method => :get, :verify_ssl => false)
+        
     end
     rescue
       return false

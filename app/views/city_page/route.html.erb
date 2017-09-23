@@ -93,8 +93,8 @@
 							<a href="<%= search_link_builder(@origin[:en],@destination[:en],price.keys[0].to_s.to_date) %>" >
 								<div class="route-calendar-box">
 									<div class="route-calendar-date">
-									پرواز
-										<span class="mobile-only">
+									
+										<span class="mobile-only">پرواز 
 										<%= "#{@origin[:fa]} به #{@destination[:fa]}" %>
 										</span>
 										<%=price.keys[0].to_s.to_date.to_parsi.strftime "%d %B"  %>	
@@ -151,8 +151,8 @@
 							<a href="<%= search_link_builder(@destination[:en],@origin[:en],price.keys[0].to_s.to_date) %>" >
 							<div class="route-calendar-box">
 								<div class="route-calendar-date">
-									پرواز
-									<span class="mobile-only">
+									
+									<span class="mobile-only">پرواز 
 									<%= "#{@origin[:fa]} به #{@destination[:fa]}" %>
 									</span>
 										<%=price.keys[0].to_s.to_date.to_parsi.strftime "%d %B"  %>	
@@ -257,7 +257,7 @@
 		<% @route_days.each do |day|   %>
 			<%= week_day_to_human_persian day  %>
 		<% end %>
-		</p>
+		</p>.  در حال تکمیل
 	</div>
 <% end %>
 

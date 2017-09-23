@@ -64,7 +64,7 @@
 			تاریخی برای سفرتان ندارید؟ ارزان‌ترین قیمت‌ها را روی تقویم ببینید:<br><br>
 			<%= link_to "تهران به کیش", route_page_path(origin_name:  "tehran",destination_name: "kish"),class:"city-page-link" %>،
 			<%= link_to "تهران به مشهد", route_page_path(origin_name:  "tehran",destination_name: "mashhad"),class:"city-page-link" %>،
-			<%= link_to "تهران به شیراز", route_page_path(origin_name:  "tehran",destination_name: "shiraz"),class:"city-page-link" %>
+			<%= link_to "تهران به اهواز", route_page_path(origin_name:  "tehran",destination_name: "ahvaz"),class:"city-page-link" %>
 			
 		</h4>
 	</div>
@@ -120,13 +120,14 @@
 			    <div class="content">
 			    	<% flight_list.each do |day,flight| %>
 						<% unless flight.nil? %>
-					    	<div class="date price-box-text">
-					    		پرواز تهران به 
-					    		<%= @cities[city.to_sym][:fa] %>
-					    		<b><%= day_name_to_human day %></b>
-								<span class="price-box-price">
-									<%= link_to number_with_delimiter(flight.best_price), search_link_builder("tehran","#{City.list[city.to_sym][:en]}",(flight.departure_time).to_date.to_s) %>
-								</span>تومان
+							<div class="date price-box-text">
+								<a href="<%= search_link_builder('tehran',City.list[city.to_sym][:en],(flight.departure_time).to_date.to_s) %>" >
+									پرواز تهران به 
+									<%= @cities[city.to_sym][:fa] %>
+									<%= day_name_to_human day %>
+									<b><%= number_with_delimiter(flight.best_price) %></b>
+									تومان
+								</a>
 					    	</div>
 				    	<% end %>
 				 	<% end %>  
