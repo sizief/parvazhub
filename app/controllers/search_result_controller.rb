@@ -75,7 +75,7 @@ class SearchResultController < ApplicationController
      else
       @flights = Array.new
      end
-     date_in_human = date.to_date.to_parsi.strftime '%A %d %B'     
+     date_in_human = date.to_date.to_parsi.strftime '%A %-d %B'     
      @search_parameter ={origin_name: origin_name, origin_code: origin_code, destination_code: destination_code, destination_name: destination_name,date: date, date_in_human: date_in_human}
      @cities = City.list 
      if date <= Date.today.to_s

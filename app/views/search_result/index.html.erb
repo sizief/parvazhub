@@ -14,7 +14,7 @@
 				<%= @cities[@search_parameter[:origin_code].to_sym][:fa] %>
 				  به 
 				 <%= @cities[@search_parameter[:destination_code].to_sym][:fa] %> 
-				 <%= @search_parameter[:date].to_date.to_parsi.strftime "%A %d %B"   %>
+				 <%= @search_parameter[:date].to_date.to_parsi.strftime "%A %-d %B"   %>
 				 <br>
 				 <a class="ui primary basic blue" onclick="$('#search-box-inner').transition('slide');" style="cursor:pointer">
 				 <i class="search icon"></i> تغییر مبدا، مقصد یا تاریخ</a>
@@ -77,10 +77,11 @@
 	  <% @flight_dates.each do |key,value|%>
 	  	<div class=" grey statistic">
 		  <div class="value ">
-		  	<%= value.nil? ? "<i class='plane icon'></i>".html_safe : number_with_delimiter(value.best_price)  %>
+			  <%= link_to((value.nil? ? "<i class='plane icon'></i>".html_safe : number_with_delimiter(value.best_price)), search_link_builder(@search_parameter[:origin_name],@search_parameter[:destination_name],key.to_s.to_date))   %>
+			  
 		  </div>
 		  <div class="label web-font">
-		  	<%= link_to(key.to_s.to_date.to_parsi.strftime("%A %d %B "), search_link_builder(@search_parameter[:origin_name],@search_parameter[:destination_name],key.to_s.to_date))   %>
+		  	<%= link_to(key.to_s.to_date.to_parsi.strftime("%A %-d %B "), search_link_builder(@search_parameter[:origin_name],@search_parameter[:destination_name],key.to_s.to_date))   %>
 		  </div>
 	   	</div>
 	  <% end %>
@@ -124,7 +125,11 @@
 						<td class="nm"><%= flight.airplane_type.empty? ? "-" : airplane_name_for(flight.airplane_type) %></td>
 						<td>
 							<div class="suppliers-count">	
-								<b>ارزان‌ترین قیمت‌ از بین <%= flight.suppliers_count %> سایت </b>
+								<b>
+									<a href="<%= flight_prices_path(@search_parameter[:origin_name],@search_parameter[:destination_name],@search_parameter[:date],flight.id) %>" data-remote="false" style="color:black">	
+										مشاهده‌ ارزان‌ترین قیمت <%= flight.suppliers_count %> سایت 
+									</a>
+								</b>
 							</div>
 							<a href="<%= flight_prices_path(@search_parameter[:origin_name],@search_parameter[:destination_name],@search_parameter[:date],flight.id) %>" data-remote="false">	
 								<button class="ui submit yellow web-font fluid right labeled icon button flight-price-button" style="padding-right: 0 !important;">
@@ -146,11 +151,11 @@
 	    <i class="teal warning circle icon big"></i>	
 		   <% if @search_parameter[:date].to_date < Date.today %>
 				امروز 
-				<%= Date.today.to_date.to_parsi.strftime "%A %d %B"   %> 
+				<%= Date.today.to_date.to_parsi.strftime "%A %-d %B"   %> 
 				است. تاریخ پرواز را از لینک‌های پایین انتخاب کنید:
 			<% else %>
 			پروازی در روز 
-		   <%= @search_parameter[:date].to_date.to_parsi.strftime "%A %d %B"   %> 
+		   <%= @search_parameter[:date].to_date.to_parsi.strftime "%A %-d %B"   %> 
 		   موجود نیست. و یا ظرفیت پرواز پر شده است.
 		   پرواز برای تاریخ‌های زیر را چک کنید:	
 		   <% end %>
@@ -160,7 +165,7 @@
 					<% unless key.to_s == @search_parameter[:date].to_s %>
 					
 					<li>
-						<% link_text = "پرواز #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]} "+key.to_s.to_date.to_parsi.strftime("%A %d %B ") %>
+						<% link_text = "جستجوی پرواز #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]} "+key.to_s.to_date.to_parsi.strftime("%A %-d %B ") %>
 						<%= link_to(link_text, search_link_builder(@search_parameter[:origin_name],@search_parameter[:destination_name],key.to_s.to_date))   %>
 					</li>
 					<% end %>

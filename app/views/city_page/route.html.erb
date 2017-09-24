@@ -48,7 +48,7 @@
 					<button class="ui submit big yellow web-font fluid right labeled  icon button waiting-modal link-dates-button" style="padding-left: 2.5em !important; font-size:0.9em !important;" >	
 						 پرواز 
 						<%= "#{@origin[:fa]} به #{@destination[:fa]}" %>
-						<%=price.keys[0].to_s.to_date.to_parsi.strftime "%A %d %B"  %>	
+						<%=price.keys[0].to_s.to_date.to_parsi.strftime "%A %-d %B"  %>	
 						<%= "از #{number_with_delimiter(price.values[0])} تومان" unless price.values[0] =="-" %>		
 					<i class="right arrow icon"></i>
 					</button>
@@ -97,7 +97,7 @@
 										<span class="mobile-only">پرواز 
 										<%= "#{@origin[:fa]} به #{@destination[:fa]}" %>
 										</span>
-										<%=price.keys[0].to_s.to_date.to_parsi.strftime "%d %B"  %>	
+										<%=price.keys[0].to_s.to_date.to_parsi.strftime "%-d %B"  %>	
 									</div>
 									<div class="route-calendar-price">
 										<% if number_with_delimiter(price.values[0]) == "-" %>
@@ -155,7 +155,7 @@
 									<span class="mobile-only">پرواز 
 									<%= "#{@origin[:fa]} به #{@destination[:fa]}" %>
 									</span>
-										<%=price.keys[0].to_s.to_date.to_parsi.strftime "%d %B"  %>	
+										<%=price.keys[0].to_s.to_date.to_parsi.strftime "%-d %B"  %>	
 									</div>
 									<div class="route-calendar-price">
 									<% if number_with_delimiter(price.values[0]) == "-" %>
@@ -189,7 +189,7 @@
 			</h4>
 			<p>
 				امروز
-				<%= @today_statistic[:date].to_date.to_parsi.strftime "%A %d %B"   %>
+				<%= @today_statistic[:date].to_date.to_parsi.strftime "%A %-d %B"   %>
 				<%= @today_statistic[:count] %>
 				پرواز  در مسیر 
 				<%= "#{@origin[:fa]} به #{@destination[:fa]}" %> 
@@ -211,7 +211,7 @@
 			</h4>
 			<p>
 				فردا
-				<%= @tomorrow_statistic[:date].to_date.to_parsi.strftime "%A %d %B"   %>
+				<%= @tomorrow_statistic[:date].to_date.to_parsi.strftime "%A %-d %B"   %>
 				<%= @tomorrow_statistic[:count] %>
 				پرواز  در مسیر 
 				<%= "#{@origin[:fa]} به #{@destination[:fa]}" %> 
@@ -233,7 +233,7 @@
 			</h4>
 			<p>
 				پس‌فردا
-				<%= @day_after_statistic[:date].to_date.to_parsi.strftime "%A %d %B"   %>
+				<%= @day_after_statistic[:date].to_date.to_parsi.strftime "%A %-d %B"   %>
 				<%= @day_after_statistic[:count] %>
 				پرواز  در مسیر 
 				<%= "#{@origin[:fa]} به #{@destination[:fa]}" %> 
