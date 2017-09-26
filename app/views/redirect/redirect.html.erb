@@ -33,7 +33,7 @@
         <% if @method == "GET" %>
             اگر به طور خودکار به سایت فروشنده منتقل نشدید روی لینک زیر کلیک کنید:
             <br/>
-                <a href="<%= @action_link %>"> انتقال به سایت فروشنده </a>
+                <a href="<%= @action_link %>" rel="nofollow"> انتقال به سایت فروشنده </a>
                 <script>
                 setTimeout(function(){
                     window.location.href = "<%= @action_link.html_safe %>";
