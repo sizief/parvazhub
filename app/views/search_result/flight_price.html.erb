@@ -35,7 +35,7 @@
                             <% end %>
                         </td>
                         <td>
-                            <a href="<%= redirect_path(channel: "website",flight_price_id: flight_price.id) %>"  target= "_blank" rel="nofollow">                    
+                            <a href="<%= redirect_path(@search_parameter[:origin_name],@search_parameter[:destination_name],@search_parameter[:date],@flight.id,flight_price.id,'website') %>"  target= "_blank" rel="nofollow">                    
                                 <%= supplier_logo_for flight_price.supplier %>
                                 وب‌سایت <%= supplier_to_human flight_price.supplier %> 
                             </a>
@@ -45,7 +45,7 @@
                                 <b><%= number_with_delimiter(flight_price.price) %></b> تومان
                             </div>
                         
-                            <a href="<%= redirect_path(channel: "website",flight_price_id: flight_price.id) %>" class="ui green label  flight-price"  target= "_blank" rel="nofollow">
+                            <a href="<%= redirect_path(origin_name: @search_parameter[:origin_name],destination_name: @search_parameter[:destination_name], date: @search_parameter[:date],flight_id: @flight.id,flight_price_id: flight_price.id,channel: 'website') %>" class="ui green label  flight-price"  target= "_blank" rel="nofollow">
                                 <i class="external icon"></i> خرید از سایت <%= supplier_to_human flight_price.supplier %>  
                             </a>
                             <!--<span style="font-size:x-small"><%=  time_ago_in_words(flight_price.created_at) %> ago</span>-->

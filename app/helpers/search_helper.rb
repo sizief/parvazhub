@@ -8,9 +8,10 @@ module SearchHelper
 		end
 	end
 
-	def supplier_logo_for (supplier)
+	def supplier_logo_for (supplier,size=nil)
+		size ||= "tiny"
 		image_url = "suppliers/" + supplier + "-logo.png"
-		image_tag image_url , class: "image ui supplier-logo tiny flight-price-logo"
+		image_tag image_url , class: "image ui supplier-logo #{size} flight-price-logo"
 	end
 
 	def hour_to_human (time)

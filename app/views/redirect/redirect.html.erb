@@ -2,7 +2,45 @@
 <% provide(:title,"پروازهاب: انتقال به سایت فروشنده") %>
 <% provide(:description,"مقایسه قیمت سایت‌های فروش بلیط") %>
 
-<h1>در حال انتقال به سایت <%= @flight_price.supplier %></h1>
+<% if @flight_price.nil? %>
+    <h1 style="text-align: center;padding: 3em;direction: rtl;">
+    متاسفانه قیمت مورد نظر تغییر کرده و یا دیگر موجود نیست.
+    <br><br>
+    <a href="<%= @flight_price_link  %>">
+    بازگشت به صفحه قبل
+    </a>
+    </h1>
+<% else %>
+    <h1 style="text-align: center;padding: 2em;direction: rtl;">
+        در حال انتقال از پروازهاب به
+        <br><br>
+            <%= supplier_logo_for(@supplier,"small") %>
+    </h1>
 
-<%= render 'layouts/waiting_modal' %>
-<%= render 'layouts/footer' %>
+    <div style="text-align: center;padding: 2em;direction: rtl;line-height: 1.8em;">
+        
+        <% if @method == "POST" %>
+            <form method="post" action="<%= @action_link %>">
+                <% @parameters.each do |parameter| %>
+                    <input type="hidden" name="<%= parameter[0] %>" value="<%= parameter[1] %>">
+                <% end %>
+                اگر به طور خودکار به سایت فروشنده منتقل نشدید روی لینک زیر کلیک کنید:
+                <br/><br/>
+                <input type="submit" value="انتقال به سایت فروشنده" />
+            </form>
+        <% end %>
+
+        <% if @method == "GET" %>
+            اگر به طور خودکار به سایت فروشنده منتقل نشدید روی لینک زیر کلیک کنید:
+            <br/>
+                <a href="<%= @action_link %>"> انتقال به سایت فروشنده </a>
+                <script>
+                setTimeout(function(){
+                    window.location.href = "<%= @action_link.html_safe %>";
+                }, 2000);
+                </script>
+        <% end %>
+
+    </div>
+<% end %>
+

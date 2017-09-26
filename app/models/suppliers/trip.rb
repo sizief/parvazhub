@@ -70,7 +70,10 @@ class Suppliers::Trip
         departure_time += ":00" if departure_time.size == 16 
         airplane_type = ""
         price = flight["fares"]["total"]["price"]
-        deeplink_url = get_deep_link(origin,destination,date)
+        uuid = flight["uuid"]
+
+        deeplink_url = get_deep_link(uuid)
+        #deeplink_url = get_deep_link(origin,destination,date)
         ActiveRecord::Base.connection_pool.with_connection do
           flight_id = Flight.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
         end
@@ -112,8 +115,9 @@ class Suppliers::Trip
 
   end
 
-  def get_deep_link(origin,destination,date)
-    link = "http://www.trip.ir/flightSearch?src=#{origin.upcase}&isCityCodeSrc=true&dst=#{destination.upcase}&isCityCodeDst=true&class=e&depDate=#{date.upcase}&retDate=&adt=1&chd=0&inf=0"
+  def get_deep_link(uuid)
+    #link = "http://www.trip.ir/flightSearch?src=#{origin.upcase}&isCityCodeSrc=true&dst=#{destination.upcase}&isCityCodeDst=true&class=e&depDate=#{date.upcase}&retDate=&adt=1&chd=0&inf=0"
+    link = "http://www.trip.ir/order/passengerUUID?depUUID=#{uuid}&channel=parvazhub"
   end
 
   def flight_number_correction(flight_number,airline_code)

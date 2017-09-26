@@ -25,9 +25,9 @@ Rails.application.routes.draw do
 	get '/flights/', to: 'city_page#flight', as: 'flight_page'
 	get '/flights/:origin_name-:destination_name/', to: 'city_page#route', as: 'route_page'
 	get '/flights/:origin_name-:destination_name/:date', to:'search_result#search', as: 'flight_result'
-	get '/flights/:origin_name-:destination_name/:date/:id', to: 'search_result#flight_prices', as: 'flight-prices'
+	get '/flights/:origin_name-:destination_name/:date/:id', to: 'search_result#flight_prices', as: 'flight_prices'
 	
-	get 'redirect/:channel/:flight_price_id', to: 'redirect#redirect', as: 'redirect'
+	get 'redirect/:origin_name-:destination_name/:date/:flight_id/:flight_price_id/:channel', to: 'redirect#redirect', as: 'redirect'
 
 	post 'notification/price_alert_register', to: 'notification#price_alert_register', as: 'price_alert_register'
 	
