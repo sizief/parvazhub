@@ -220,7 +220,7 @@ class Telegram::Method
 
   def update_by_webhook(response)
     response = JSON.parse(response)
-    if response["channel_post"]
+    if ((response["channel_post"]) or (response["edited_channel_post"]))
       return true
     end
     update(response)
