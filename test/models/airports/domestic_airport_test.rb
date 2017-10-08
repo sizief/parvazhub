@@ -25,8 +25,7 @@ class AirportsDomesticAirportTest < ActiveSupport::TestCase
   test "Airports data should saved to flight details" do
     Airports::DomesticAirport.airports.each do |airport|
       assert_difference 'FlightDetail.count',airport[2] do
-        @results = @airport.search(airport[0])
-        @airport.import_domestic_flights(@results,airport[1])
+        @airport.import(airport[0],airport[1])
       end
     end   
   end
