@@ -120,11 +120,11 @@
 									</a>
 								</div>
 								<div class="field">
-								<a href="<%= property_page_path(Airline.find_by(code: flight.airline_code).english_name) %>" target="_blank">
-								<button class="mini ui basic button web-font">نظر مسافران</button>										
-							</a>	
-								
-									
+									<% unless @airline_english_list[flight.airline_code.to_sym].nil? %>
+										<a href="<%= property_page_path(Airline.find_by(code: flight.airline_code).english_name) %>" target="_blank">
+											<button class="mini ui basic button web-font">نظر مسافران</button>										
+										</a>
+									<% end %>		
 								</div>
 							</div>	
 						</td>

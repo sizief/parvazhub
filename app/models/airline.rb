@@ -1,7 +1,15 @@
 class Airline < ApplicationRecord
   validates :code, :uniqueness => true
 
-  def self.hash_list 
+  def self.persian_hash_list 
+    airline_list = Hash.new
+    Airline.all.each do |airline|
+        airline_list[airline.code.to_sym] = airline.persian_name
+    end
+    return airline_list
+  end
+
+  def self.english_hash_list 
     airline_list = Hash.new
     Airline.all.each do |airline|
         airline_list[airline.code.to_sym] = airline.persian_name

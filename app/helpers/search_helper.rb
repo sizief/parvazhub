@@ -41,7 +41,7 @@ module SearchHelper
 	end
 
     def airline_name_for(airline_code)
-	  airlines = Airline.hash_list 
+	  airlines = Airline.persian_hash_list 
 	  airlines[airline_code.to_sym].nil? ? airline_code : airlines[airline_code.to_sym]
 	end
 
