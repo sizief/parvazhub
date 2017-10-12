@@ -124,4 +124,5 @@ class SearchResultController < ApplicationController
     return results
   end
 
+  
 end

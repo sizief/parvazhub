@@ -1,0 +1,45 @@
+// Place all the styles related to the review controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.review-author{
+    display: block;
+}
+
+.review-date{
+    display: block;
+    color: gray;
+    font-size: 0.8em;
+}
+
+.review-rate{
+    display: block;
+}
+
+.review-section{
+    border-bottom: 1px #eee solid;
+}
+
+#review-register-form{
+    padding-top: 2em;
+}
+
+.review-header{
+    padding: 3em !important;
+    text-align: right;
+}
+
+.review-button{
+    margin-top: 1em !important;
+}
+
+.review-rate-section{
+    padding: 1em !important;
+    text-align: center;
+}
+.rate-total-count{
+    font-size: 0.7em;
+    color: grey;
+    padding: 0.4em;
+    width: 100%;
+    display: block;
+}

@@ -14,7 +14,7 @@ module SearchResultHelper
 		elsif delay.to_f >= 55 
 			number = 60
 		end
-		return "<i class=\"warning circle yellow icon\"></i>  #{number} دقیقه سابقه تاخیر".html_safe
+		return "<i class=\"warning circle yellow icon\"></i>احتمال  #{number} دقیقه تاخیر".html_safe
 	end
 
 	def supplier_to_human(supplier_name)

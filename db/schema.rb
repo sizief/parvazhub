@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170920102144) do
+ActiveRecord::Schema.define(version: 20171012080839) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "airlines", force: :cascade do |t|
+    t.string   "english_name"
+    t.string   "persian_name"
+    t.string   "code"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "rate_count"
+    t.integer  "rate_average"
+  end
 
   create_table "flight_details", force: :cascade do |t|
     t.integer  "route_id"
@@ -100,6 +110,17 @@ ActiveRecord::Schema.define(version: 20170920102144) do
     t.string   "user_agent"
     t.string   "remote_ip"
     t.index ["flight_price_archive_id"], name: "index_redirects_on_flight_price_archive_id", using: :btree
+  end
+
+  create_table "reviews", force: :cascade do |t|
+    t.string   "author"
+    t.string   "page"
+    t.text     "text"
+    t.integer  "rate"
+    t.string   "status"
+    t.integer  "reply_to"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "route_days", force: :cascade do |t|

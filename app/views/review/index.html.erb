@@ -1,0 +1,25 @@
+<%= render 'layouts/header' %>
+<% provide(:title," پروازهاب: لیست ایرلاین‌ها و نظرات کاربران") %>
+<% provide(:description," پروازهاب: لیست ایرلاین‌ها و نظرات کاربران") %>
+
+
+<div class="ui container" id="search-results-container" style="padding-top: 1em">
+    <ul>
+    <% Airline.all.each do |airline|  %>
+		<div class="city-calendar" >
+            <a href="<%= property_page_path airline.english_name  %>" >
+                <li>    
+                    <h4>
+                    خط هوایی
+                    
+                        <%=  airline.persian_name  %>
+                    </h4>
+                </li>
+            </a>   
+		</div>
+    <% end %>
+    </ul>
+</div>
+
+<%= render 'layouts/searchbox-helper' %>
+<%= render 'layouts/footer' %>

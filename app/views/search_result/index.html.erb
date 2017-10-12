@@ -102,17 +102,31 @@
 				<% unless ((flight.best_price == 0) or (flight.suppliers_count == 0))  %>
 					<tr class="center aligned very basic" >
 						<td class="left aligned">
-						<a href="<%= flight_prices_path(@search_parameter[:origin_name],@search_parameter[:destination_name],@search_parameter[:date],flight.id) %>" data-remote="false">														
-							<h5 class="ui image header web-font">
-								<%= airline_logo_for flight.airline_code %> 
-								<div class="content">
-									<%= airline_name_for flight.airline_code %>
-									<div class="sub header" style="margin-top: 7px">
-									<%= flight.flight_number %>
-									</div>
+							<div class="two fields">
+								<div class="field">
+									<a href="<%= flight_prices_path(@search_parameter[:origin_name],@search_parameter[:destination_name],@search_parameter[:date],flight.id) %>" data-remote="false">														
+										<h5 class="ui image header web-font">
+											<%= airline_logo_for flight.airline_code %> 
+											<div class="content">
+												<%= airline_name_for flight.airline_code %>
+												<div class="ui tiny rating">
+												<%= get_star_icon(5,get_airline_rate(flight.airline_code),"green","small").html_safe %>
+											</div>
+												<div class="sub header" style="margin-top: 7px">
+													<%= flight.flight_number %>
+												</div>
+											</div>
+										</h5>
+									</a>
 								</div>
-							</h5>
-						</a>
+								<div class="field">
+								<a href="<%= property_page_path(Airline.find_by(code: flight.airline_code).english_name) %>" target="_blank">
+								<button class="mini ui basic button web-font">نظر مسافران</button>										
+							</a>	
+								
+									
+								</div>
+							</div>	
 						</td>
 						<td>
 							<div class="content">
@@ -127,13 +141,13 @@
 							<div class="suppliers-count">	
 								<b>
 									<a href="<%= flight_prices_path(@search_parameter[:origin_name],@search_parameter[:destination_name],@search_parameter[:date],flight.id) %>" data-remote="false" style="color:black">	
-										مشاهده‌ ارزان‌ترین قیمت <%= flight.suppliers_count %> سایت 
+										مشاهده‌ ارزان‌ترین قیمت از <%= flight.suppliers_count %> سایت 
 									</a>
 								</b>
 							</div>
 							<a href="<%= flight_prices_path(@search_parameter[:origin_name],@search_parameter[:destination_name],@search_parameter[:date],flight.id) %>" data-remote="false">	
 								<button class="ui submit yellow web-font fluid right labeled icon button flight-price-button" style="padding-right: 0 !important;">
-									<i class="right arrow icon"></i>
+									<i class="right arrow icon"></i> از
 									<%= "#{number_with_delimiter(flight.best_price)} تومان " %>
 									
 								</button>
@@ -184,7 +198,7 @@
       <p id="prices-modal-content"></p>
 </div>
 <script type="text/javascript">
-	$('table').tablesort()
+	$('table').tablesort();
 </script>
 
 <%= render 'layouts/searchbox-helper' %>

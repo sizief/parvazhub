@@ -77,3 +77,8 @@
   route_day_worker:
     cron: '0 55 0,12 * * *'
     class: RouteDayWorker
+
+#airline routes worker
+  airline_rate_worker:
+    cron: '0 /15 * * * *'
+    class: AirlineRateWorker

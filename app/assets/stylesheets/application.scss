@@ -40,8 +40,24 @@
 .mobile-only{
   display: none;
 }
+.inline-block{
+  display: inline-block !important;
+}
+.block{
+  display: block !important;
+}
 
 /* general */
+.alert{
+  direction: rtl;
+  padding: 1em;
+  border-radius: 5px;
+}
+
+.success{
+  background: #d0dcd0;  
+}
+
 .field_with_errors{
   width: 100%;
     border: 1px solid red;
@@ -178,6 +194,7 @@ header{
   margin: auto !important;
   margin-top: 1.5em !important;
 }
+
 
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
   .mobile-only{

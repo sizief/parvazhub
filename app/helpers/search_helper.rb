@@ -1,11 +1,14 @@
 module SearchHelper
-	def airline_logo_for (airline_code,size=nil)
+	def airline_logo_for (airline_code,size=nil,is_block=true)
 		image_url = "airline-logos/" + airline_code[0..1] + "@2x.png"
+		block = is_block ? " " : "inline-block"
 		if size == nil
-			image_tag image_url , class: "airline-logo image ui "
+			image_tag(image_url , class: "airline-logo image ui #{block}")
 		else
-			image_tag(image_url , class: "airline-logo image ui ", style: "width:#{size}")
+			image_tag(image_url , class: "airline-logo image ui #{block}", style: "width:#{size}")
 		end
+
+
 	end
 
 	def supplier_logo_for (supplier,size=nil)
@@ -38,25 +41,8 @@ module SearchHelper
 	end
 
     def airline_name_for(airline_code)
-	  airlines ={"W5"=>"ماهان",
-		"AK"=>"اترک", 
-			"B9"=>"ایران‌ایر‌تور", 
-			"sepahan"=>"سپاهان", 
-			"hesa"=>"هسا",  
-			"I3"=>"آتا", 
-			"JI"=>"معراج", 
-			"IV"=>"کاسپین", 
-			"NV"=>"نفت", 
-			"SE"=>"ساها", 
-			"ZV"=>"زاگرس",
-			"HH"=>"تابان",
-			"QB"=>"قشم‌ایر" ,
-			"Y9"=>"کیش‌ایر",
-			"EP"=>"آسمان",
-			"IR"=>"ایران‌ایر",
-			"SR"=>"سپهران"
-		}
-	airlines[airline_code].nil? ? airline_code : airlines[airline_code]
+	  airlines = Airline.hash_list 
+	  airlines[airline_code.to_sym].nil? ? airline_code : airlines[airline_code.to_sym]
 	end
 
 	def airplane_name_for airplane_type
