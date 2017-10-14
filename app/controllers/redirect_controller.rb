@@ -26,7 +26,9 @@ require 'uri'
       redirect.channel = channel
       redirect.user_agent = request.user_agent
       redirect.remote_ip = request.remote_ip
-      redirect.save
+      unless is_bot(request.user_agent)
+        redirect.save
+      end
 
       text="👊 [#{Rails.env}] #{request.user_agent} #{request.remote_ip} \n #{@flight_price.supplier}"
       TelegramMonitoringWorker.perform_async(text)

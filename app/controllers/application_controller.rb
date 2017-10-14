@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
     if request_user_agent.nil?
       return false 
     else
-      return ["Googlebot","yandex","MJ12bot","Baiduspider","bingbot","Yahoo!","spbot","parsijoo","CloudFlare","SafeDNSBot","Dataprovider","beambot","BLEXBot","panscient","bot","netEstate","crawler"].any? {|word| request_user_agent.include? word}
+      return ["Googlebot","yandex","MJ12bot","Baiduspider","bingbot","Yahoo!","spbot","parsijoo","CloudFlare","SafeDNSBot","Dataprovider","beambot","BLEXBot","panscient","bot","netEstate","crawler","Crawler"].any? {|word| request_user_agent.include? word}
     end
   end
 
