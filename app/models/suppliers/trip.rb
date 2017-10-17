@@ -72,8 +72,8 @@ class Suppliers::Trip
         price = flight["fares"]["total"]["price"]
         uuid = flight["uuid"]
 
-        deeplink_url = get_deep_link(uuid)
-        #deeplink_url = get_deep_link(origin,destination,date)
+        #deeplink_url = get_deep_link(uuid)
+        deeplink_url = get_deep_link(origin,destination,date,uuid)
         ActiveRecord::Base.connection_pool.with_connection do
           flight_id = Flight.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
         end
@@ -85,7 +85,7 @@ class Suppliers::Trip
             next
           else
             flight_price_so_far.first.price = price #new price is cheaper, so update the old price and go to next price
-            flight_price_so_far.first.deep_link = deep_link
+            flight_price_so_far.first.deep_link = deeplink_url
             next
           end
         end
@@ -116,9 +116,12 @@ class Suppliers::Trip
 
   end
 
-  def get_deep_link(uuid)
-    #link = "http://www.trip.ir/flightSearch?src=#{origin.upcase}&isCityCodeSrc=true&dst=#{destination.upcase}&isCityCodeDst=true&class=e&depDate=#{date.upcase}&retDate=&adt=1&chd=0&inf=0"
-    link = "http://www.trip.ir/order/passengerUUID?depUUID=#{uuid}&channel=parvazhub"
+  def get_deep_link(origin,destination,date,uuid)
+    if ((date == Date.today.to_s) or (date == (Date.today+1).to_s)) 
+      deep_link = "http://www.trip.ir/order/passengerUUID?depUUID=#{uuid}&channel=parvazhub"
+    else
+      deep_link = "http://www.trip.ir/flightSearch?src=#{origin.upcase}&isCityCodeSrc=true&dst=#{destination.upcase}&isCityCodeDst=true&class=e&depDate=#{date.upcase}&retDate=&adt=1&chd=0&inf=0"
+    end
   end
 
   def flight_number_correction(flight_number,airline_code)
