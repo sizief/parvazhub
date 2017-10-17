@@ -85,6 +85,7 @@ class Suppliers::Trip
             next
           else
             flight_price_so_far.first.price = price #new price is cheaper, so update the old price and go to next price
+            flight_price_so_far.first.deep_link = deep_link
             next
           end
         end
