@@ -1,4 +1,6 @@
 class FlightPriceArchive < ApplicationRecord
+  has_many :redirect,
+  :dependent => :restrict_with_exception
 
   def self.flight_price_over_time(flight_id,flight_date)
     price_time = Hash.new
