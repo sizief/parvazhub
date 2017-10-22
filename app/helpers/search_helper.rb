@@ -63,7 +63,7 @@ module SearchHelper
 	  	ariplane_name = "بویینگ ۷۲۷"
 	  when "B737","737","737-500","B737-400","737-300","737-600","737-300","737-700","737-100"
 	  	ariplane_name = "بویینگ ۷۳۷"
-	  when "FOKKER 100","F100"
+	  when "FOKKER 100","F100", "100"
 	  	ariplane_name = "فوکر ۱۰۰"
 	  when "747"
 	  	ariplane_name = "بویینگ ۷۴۷"
