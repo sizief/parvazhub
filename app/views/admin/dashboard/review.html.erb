@@ -1,0 +1,19 @@
+<% provide(:title,"Reviews") %>
+<div class="ui container" style="margin-top: 2em">
+<table class="ui celled striped table ">
+	
+	<tbody>
+		<% @reviews.each do |review|  %>
+		<tr class="center aligned">
+			<td><%= review.id %></td>
+			<td><%= review.author %></td>
+			<td><%= review.page %></td>
+            <td><%= review.text %></td>
+            <td><%= review.rate %></td>
+            <td><%= review.status %></td>
+			<td><%= time_ago_in_words(review.created_at) %></td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
+</div>

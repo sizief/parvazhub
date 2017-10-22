@@ -57,7 +57,7 @@ module SearchHelper
 		  ariplane_name = "ایرباس ۳۱۰"
 	  when "A321","AIRBUS A321"
 			ariplane_name = "ایرباس ۳۲۱"
-	  when "A320","AIRBUS A320"
+	  when "A320","AIRBUS A320","320"
 	  	ariplane_name = "ایرباس ۳۲۰"
 	  when "BOEING 727-200","727","727-200","B727","B.727"
 	  	ariplane_name = "بویینگ ۷۲۷"

@@ -25,6 +25,10 @@ class Admin::DashboardController < ApplicationController
     @subscribers = Notification.all
   end
 
+  def review
+    @reviews = Review.all
+  end
+
   def index
   end
       
