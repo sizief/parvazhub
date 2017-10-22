@@ -190,16 +190,21 @@
 			اگر همچنان موفق به پیدا کردن پرواز مورد نظرتان نشدید، صفحه‌ی  
 			<%= link_to "پروازهای #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]}", route_page_path(origin_name:  @search_parameter[:origin_name],destination_name: @search_parameter[:destination_name], :anchor => "city-calendar"),class:"city-page-link" %> روی تقویم را ببینید.
 
-		<h5 class="web-font">
-			<i class="teal warning circle icon big"></i>
-			چه روزهایی
-			<%= " #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به  #{@cities[@search_parameter[:destination_code].to_sym][:fa]}" %> 
-			پرواز دارد؟
-		</h5>
-		
-			<% @route_days.each do |day|   %>
-				<%= week_day_to_human_persian day  %>
+			<h5 class="web-font">
+				<i class="teal warning circle icon big"></i>
+				چه روزهایی
+				<%= " #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به  #{@cities[@search_parameter[:destination_code].to_sym][:fa]}" %> 
+				پرواز دارد؟
+			</h5>
+			<% unless @route_days.empty? %>
+				<% @route_days.each do |day|   %>
+					<%= week_day_to_human_persian day  %>
+				<% end %>
+			<% else %>
+				برای هیچ روزی در هفته پروازی در این مسیر وجود ندارد.
 			<% end %>
+			
+
 		
 		</div>	
 	<% end %>
