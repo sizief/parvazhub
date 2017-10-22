@@ -113,7 +113,8 @@
 												<%= get_star_icon(5,get_airline_rate(flight.airline_code),"green","small").html_safe %>
 											</div>
 												<div class="sub header" style="margin-top: 7px">
-													<%= flight.flight_number %>
+													<span class="nm"><%= flight.flight_number %></span>
+													<span class="mobile-only"><%= flight.airplane_type.empty? ? "" : airplane_name_for(flight.airplane_type) %></span>													
 												</div>
 											</div>
 										</h5>
@@ -122,7 +123,7 @@
 								<div class="field">
 									<% unless @airline_english_list[flight.airline_code.to_sym].nil? %>
 										<a href="<%= property_page_path(Airline.find_by(code: flight.airline_code).english_name) %>" target="_blank">
-											<button class="mini ui basic button web-font">نظر مسافران</button>										
+											<button class="mini ui basic button web-font">امتیاز دهید</button>										
 										</a>
 									<% end %>		
 								</div>

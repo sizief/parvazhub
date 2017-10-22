@@ -10,6 +10,15 @@ class SuppliersZoraqTest < ActiveSupport::TestCase
     @search_history_id = 1
   end
     
+  test "Zoraq code should retrun with correct one" do
+    atrak = @zoraq_search.airline_code_correction("@1")
+    mahan =  @zoraq_search.airline_code_correction("w5")
+
+    assert_equal(atrak,"AK")
+    assert_equal(mahan,"W5")
+
+  end
+  
   test "Zoraq search should answered with hash response" do
     response = @zoraq_search.search(@origin,@destination,@date,@search_history_id)
     assert response.is_a? Hash

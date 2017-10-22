@@ -112,24 +112,22 @@ class Suppliers::Zoraq
   end
 
 
-  def airline_code_correction(zoraq_airline_code)
-    airline_codes = {
-      "AK":"@1", #Atrak Airlines
-      "B9":"@2", #Iran Airtour
-      "sepahan":"@3", #Sepahan Airlines
-      "hesa":"@4", #Hesa 
-      "I3":"@5", #ATA Airlines
-      "JI":"@7", #Meraj
-      "IV":"@8", #Caspian Airlines
-      "NV":"@9", #Iranian Naft Airlines
-      "SE":"@A", #Saha
-      "ZV":"@B" #Zagros 
-    }
-    if airline_codes.key("#{zoraq_airline_code}").nil?
-      return zoraq_airline_code.upcase
-    else
-      return airline_codes.key("#{zoraq_airline_code}").to_s.upcase
-    end
+  def airline_code_correction(airline_code)
+    airlines ={
+      "@1"=>"AK",
+      "@2"=>"B9",
+      "@3"=>"SEPAHAN",
+      "@4"=>"hesa",
+      "@5"=>"I3",
+      "@7"=>"JI",
+      "@8"=>"IV",
+      "@9"=>"NV",
+      "@A"=>"SE",
+      "@B"=>"ZV",
+      "ZZ"=>"SE",
+      "SA"=>"SE"
+		}
+	  airlines[airline_code].nil? ? airline_code.upcase : airlines[airline_code]
   end
 
   def get_zoraq_deeplink(origin,destination,date,fare_source_code)
