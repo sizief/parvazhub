@@ -18,14 +18,18 @@ require 'uri'
     end
 
     if @flight_price
-      flight_price_archive = FlightPriceArchive.find_by(flight_id: @flight_price.flight_id,
-                                                        flight_date: @flight_price.flight_date,
-                                                       supplier: @flight_price.supplier)
+      #flight_price_archive = FlightPriceArchive.find_by(flight_id: @flight_price.flight_id,
+                                                       # flight_date: @flight_price.flight_date,
+                                                     #  supplier: @flight_price.supplier)
       redirect = Redirect.new                                                       
-      redirect.flight_price_archive_id = flight_price_archive.id
+      #redirect.flight_price_archive_id = flight_price_archive.id
       redirect.channel = channel
       redirect.user_agent = request.user_agent
       redirect.remote_ip = request.remote_ip
+      redirect.flight_id = @flight_price.flight_id
+      redirect.price = @flight_price.price
+      redirect.supplier = @flight_price.supplier
+      redirect.deep_link = @flight_price.deep_link
       unless is_bot(request.user_agent)
         redirect.save
       end

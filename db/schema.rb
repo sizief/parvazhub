@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171012080839) do
+ActiveRecord::Schema.define(version: 20171024083841) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -109,6 +109,10 @@ ActiveRecord::Schema.define(version: 20171012080839) do
     t.string   "channel"
     t.string   "user_agent"
     t.string   "remote_ip"
+    t.integer  "flight_id"
+    t.integer  "price"
+    t.string   "supplier"
+    t.string   "deep_link"
     t.index ["flight_price_archive_id"], name: "index_redirects_on_flight_price_archive_id", using: :btree
   end
 
