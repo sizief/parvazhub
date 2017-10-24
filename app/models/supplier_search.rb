@@ -4,10 +4,12 @@ class SupplierSearch
     ActiveRecord::Base.connection_pool.with_connection do  
       route = Route.find_by(origin:"#{origin}", destination:"#{destination}")
       search_supplier_in_threads(timeout,origin,destination,route.id,date,who_started) 
+      #search_supplier_in_series(timeout,origin,destination,route.id,date,who_started) 
+      
     end
 	end
 
-  def search_supplier_in_threads(delay,origin,destination,route_id,date,who_started)
+  def search_supplier_in_threads(delay,origin,destination,route_id,date,who_started)    
     threads = []
     supplier_list = nil
     ActiveRecord::Base.connection_pool.with_connection do  
@@ -30,6 +32,23 @@ class SupplierSearch
         end
       end
     rescue Timeout::Error
+    end
+  end
+
+  def search_supplier_in_series(delay,origin,destination,route_id,date,who_started)  
+    supplier_list = nil
+    ActiveRecord::Base.connection_pool.with_connection do  
+      supplier_list = Supplier.where(status:true)
+    end
+    begin 
+      
+        supplier_list.each do |supplier|
+            begin
+              search_supplier(supplier[:name],supplier[:class_name],origin,destination,route_id,date,who_started)
+            rescue
+            end
+        end
+    rescue 
     end
   end
 

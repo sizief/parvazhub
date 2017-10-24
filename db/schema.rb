@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171024083841) do
+ActiveRecord::Schema.define(version: 20171024124416) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -103,9 +103,8 @@ ActiveRecord::Schema.define(version: 20171024083841) do
   end
 
   create_table "redirects", force: :cascade do |t|
-    t.integer  "flight_price_archive_id"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string   "channel"
     t.string   "user_agent"
     t.string   "remote_ip"
@@ -113,7 +112,6 @@ ActiveRecord::Schema.define(version: 20171024083841) do
     t.integer  "price"
     t.string   "supplier"
     t.string   "deep_link"
-    t.index ["flight_price_archive_id"], name: "index_redirects_on_flight_price_archive_id", using: :btree
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -215,7 +213,6 @@ ActiveRecord::Schema.define(version: 20171024083841) do
   end
 
   add_foreign_key "notifications", "routes"
-  add_foreign_key "redirects", "flight_price_archives"
   add_foreign_key "route_days", "routes"
   add_foreign_key "search_histories", "routes"
   add_foreign_key "telegram_search_queries", "telegram_users"

@@ -71,13 +71,9 @@ class Suppliers::Ghasedak
       unless flight_prices.empty?
         ActiveRecord::Base.connection_pool.with_connection do
           SearchHistory.append_status(search_history_id,"Deleting(#{Time.now.strftime('%M:%S')})")
-          #first we should remove the old flight price archive 
           FlightPrice.delete_old_flight_prices("ghasedak24",route_id,date) 
-          #SearchHistory.append_status(search_history_id,"Importing(#{Time.now.strftime('%M:%S')})")
-          #then bulk import enabled by a bulk import gem
           FlightPrice.import flight_prices
-          #SearchHistory.append_status(search_history_id,"Archive(#{Time.now.strftime('%M:%S')})") 
-          FlightPriceArchive.import flight_prices
+          FlightPriceArchive.archive flight_prices
           SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
         end
       else

@@ -65,4 +65,6 @@ Rails.application.configure do
 
    #config.action_controller.asset_host = "localhost"
    config.action_mailer.asset_host = "http://parvazhub.com"
+
+   #config.active_record.default_timezone = "Asia/Tehran"
 end
