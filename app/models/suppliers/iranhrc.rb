@@ -115,9 +115,9 @@ class Suppliers::Iranhrc
     shamsi_date = date.to_date.to_parsi  
      
     if ((destination_name == "RASHT" ) or (destination_name == "ARDABIL" ))
-      deeplink= "http://iranhrc.ir/tickets/flights/#{origin_name}-to-#{destination_name}"
+      deeplink= "http://iranhrc.ir/flights/#{origin_name}-to-#{destination_name}"
     else
-      deeplink= "http://iranhrc.ir/tickets/flights/#{origin_name}-to-#{destination_name}/#{shamsi_date}"
+      deeplink= "http://iranhrc.ir/flights/#{origin_name}-to-#{destination_name}/#{shamsi_date}"
     end
   end
 
