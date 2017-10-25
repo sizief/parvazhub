@@ -114,11 +114,12 @@ class Suppliers::Iranhrc
     destination_name = city_name_correction destination_name
     shamsi_date = date.to_date.to_parsi  
      
-    if ((destination_name == "RASHT" ) or (destination_name == "ARDABIL" ))
-      deeplink= "http://iranhrc.ir/flights/#{origin_name}-to-#{destination_name}"
-    else
-      deeplink= "http://iranhrc.ir/flights/#{origin_name}-to-#{destination_name}/#{shamsi_date}"
-    end
+    #if ((destination_name == "RASHT" ) or (destination_name == "ARDABIL" ))
+    #  deeplink= "http://iranhrc.ir/flights/#{origin_name}-to-#{destination_name}"
+    #else
+    #  deeplink= "http://iranhrc.ir/flights/#{origin_name}-to-#{destination_name}/#{shamsi_date}"
+    #end
+    deeplink = "http://iranhrc.ir/"
   end
 
   def city_name_correction(city_name)
