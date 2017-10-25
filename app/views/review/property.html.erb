@@ -3,6 +3,7 @@
 <% provide(:description,"نظر مسافران  #{@airline_name}")  %>
 
 <div class="ui container" id="search-results-container" style="direction:rtl">
+<div id="review-register-alert"></div>
 
     <div class="ui stackable grid review-header">    
         <div class="six wide column right floated">    
@@ -29,7 +30,7 @@
     
         <% @reviews.each do |review| %>
             <div class="ui grid review-section" id="<%= review.id %>">
-                <div class="two wide column">
+                <div class="five wide column">
                     <div class="review-author">
                         <% if review.author.empty? %>
                             ناشناس
@@ -42,7 +43,7 @@
                         <div class="review-rate"><%= get_star_icon(5,review.rate,"yellow","small").html_safe %></div>
                     <% end %>
                 </div>
-                <div class="fourteen wide column">
+                <div class="eleven wide column">
                     <%= review.text %>
                 </div>
             </div>

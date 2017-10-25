@@ -1,1 +1,3 @@
-$("#review-register-form").html("<%= escape_javascript(render partial: 'register') %>");
+$("#review-register-alert").html("<%= escape_javascript(render partial: 'register') %>");
+$('html, body').animate({ scrollTop: $("#review-register-alert").offset().top}, 1000);   
+

@@ -121,63 +121,7 @@
 		</table>
 	</div>
 
-	<div class="city-calendar" >
-        <h4>
-		    <b class="yellow-text">کمترین</b>
-            هزینه پرواز <%= "#{@destination[:fa]} به #{@origin[:fa]}" %> برای یک نفر
-        </h4>
-		<table class="ui celled table stackable rtl">
-		  	<thead class="not-mobile">
-				<tr class="center aligned web-font">
-		  			<th class="table-header">شنبه</th>
-		  			<th class="table-header">یکشنبه </th>
-		  			<th class="table-header">دوشنبه</th>
-		  			<th class="table-header">سه‌شنبه</th>
-		  			<th class="table-header">چهارشنبه</th>
-		  			<th class="table-header">پنج‌شنبه</th>
-		  			<th class="table-header">جمعه</th>
-		  		</tr>
-		  	</thead>
-			<tbody>
-				<% @prices[:from].each_with_index do |price,index|%>
-					<% if index%7 == 0 %>
-						<tr class="center aligned very basic">
-					<% end %>
-					<%if price.keys[0].to_s.to_date<Date.today #date is in the past %> 
-						<td class="center aligned disable"></td>
-					<%else%>	
-						<td class="center aligned">
-							<a href="<%= search_link_builder(@destination[:en],@origin[:en],price.keys[0].to_s.to_date) %>" >
-								<div class="route-calendar-box">
-									<div class="route-calendar-date">	
-										<span class="mobile-only">پرواز 
-											<%= "#{@origin[:fa]} به #{@destination[:fa]}" %>
-											<%= price.keys[0].to_s.to_date.to_parsi.strftime "%A"  %>
-										</span>	
-										<%= price.keys[0].to_s.to_date.to_parsi.strftime "%-d %B"  %>	
-									</div>
-									<div class="route-calendar-price">
-										<% if number_with_delimiter(price.values[0]) == "-" %>
-											جستجو
-										<% else %>
-											<%= "#{number_with_delimiter(price.values[0])} تومان"  %>	
-										<% end %>
-										<i class="right arrow icon yellow"></i>
-									</div>
-								</div>
-							</a>	
-						</td>
-					
-					<% end %>
-					
-					<% if ((index%7 == 6) || (index == 34)) %>
-						</tr>
-					<% end %>	
-							
-				<% end %>
-			</tbody>
-		</table>
-	</div>
+	
 
 	<% unless @today_statistic[:count] == 0 %>
 		<div class="city-calendar" >

@@ -22,7 +22,7 @@ class CityPageController < ApplicationController
     @route_days = RouteDay.week_days(@origin_code,@destination_code)
     
     @prices[:to] = Flight.new.get_lowest_price_for_month(@origin_code,@destination_code)
-    @prices[:from] = Flight.new.get_lowest_price_for_month(@destination_code,@origin_code)
+    #@prices[:from] = Flight.new.get_lowest_price_for_month(@destination_code,@origin_code)
 
     @today_statistic = route_statistic(@origin_code,@destination_code,Date.today.to_s)
     @tomorrow_statistic = route_statistic(@origin_code,@destination_code,(Date.today+1).to_s)
