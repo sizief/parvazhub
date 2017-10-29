@@ -121,7 +121,7 @@
 								</div>
 								<div class="field">
 									<% unless @airline_english_list[flight.airline_code.to_sym].nil? %>
-										<a href="<%= property_page_path(Airline.find_by(code: flight.airline_code).english_name) %>" target="_blank">
+										<a href="<%= property_page_path(Airline.find_by(code: flight.airline_code).english_name) %>" >
 										
 										<button class="mini ui basic button web-font" style="font-size: 0.9em;">
 											<%= get_star_icon(5,get_airline_rate(flight.airline_code),"green","small").html_safe %>

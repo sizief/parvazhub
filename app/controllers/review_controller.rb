@@ -1,6 +1,6 @@
 class ReviewController < ApplicationController
 
-  def property
+  def property_reviews
     airline = Airline.find_by(english_name: params[:property_name])
     not_found if airline.nil?
 

@@ -40,7 +40,7 @@ Rails.application.routes.draw do
 	post '/beta/telegram/webhook', to: 'telegram#webhook'
 
 	get '/review/', to: 'review#index', as: 'review_index_page'	
-	get '/review/:property_name', to: 'review#property', as: 'property_page'
+	get '/review/:property_name', to: 'review#property_reviews', as: 'property_page'
 	post '/review', to: 'review#register', as: 'register_review'
 	
 	 
