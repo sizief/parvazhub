@@ -41,12 +41,12 @@
     		<div class="ui huge form" >
      			<div class="two fields">
       				<div class="field">
-						   <%= f.text_field :originـfield,{:class =>'dir-rtl origin-field ui dropdown city-suggestion web-font',placeholder: "از مبدا (شهر یا فرودگاه)"} %>
+						   <%= f.text_field :originـfield,{:class =>'dir-rtl origin-field ui dropdown city-suggestion typeahead web-font',placeholder: "از مبدا (شهر یا فرودگاه)"} %>
 						   <%= f.hidden_field :origin,{:id =>'origin'} %>
 						   
       				</div>
       				<div class="field">
-					  <%= f.text_field :destination_field,{:class =>'dir-rtl destination-field ui dropdown city-suggestion web-font',placeholder: "به مقصد (شهر یا فرودگاه)"} %>
+					  <%= f.text_field :destination_field,{:class =>'dir-rtl destination-field ui dropdown city-suggestion typeahead web-font',placeholder: "به مقصد (شهر یا فرودگاه)"} %>
 					  <%= f.hidden_field :destination,{:id =>'destination'} %>
       				</div> 
   				</div>
