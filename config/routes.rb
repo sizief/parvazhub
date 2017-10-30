@@ -42,8 +42,9 @@ Rails.application.routes.draw do
 	get '/review/', to: 'review#index', as: 'review_index_page'	
 	get '/review/:property_name', to: 'review#property_reviews', as: 'property_page'
 	post '/review', to: 'review#register', as: 'register_review'
+
+	get '/api/airports', to: 'api#airports', as: 'api_airports'
 	
-	 
 	get '/flight-prices/:id', to: redirect('/', status: 302) #, to: 'search_result#flight_prices', as: 'flight-prices-ajax' #, :defaults => { :format => 'js' }
 	
 	root 'home#index'

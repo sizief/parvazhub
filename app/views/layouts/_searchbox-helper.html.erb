@@ -1,5 +1,51 @@
 <script type="text/javascript">
   $(document).ready(function(){ 
+    //scroll to to top
+    $( ".city-suggestion" ).click(function() {
+        $('html, body').animate({
+            scrollTop: $(this).offset().top
+        }, 1000);   
+    });
+    
+
+     //typeahead
+      var cities = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace, 
+        identify: function(obj) { return obj.value; },
+        prefetch: { url: '<%= api_airports_path %>'} 
+      });
+      function citiesWithDefaults(q, sync) {
+          if (q === '') {
+            sync(cities.all().slice(0, 5)); 		  
+          }else {
+              cities.search(q, sync);
+          }
+        }
+      cities.initialize();
+      $('.city-suggestion').typeahead({
+          hint: false,
+          highlight:false,
+          minLength: 0
+          },
+          {
+          name: 'states',
+          displayKey: 'value',
+          source: citiesWithDefaults,
+          templates: {
+              suggestion: function (i) {
+                  return '<p><i class="plane blue icon"></i>' + i.value + '</p>'
+              }
+          } 
+      });
+      $('.origin-field').on('typeahead:select', function (e, datum) {
+          $('#origin').val(datum.code);        
+      });
+      $('.destination-field').on('typeahead:select', function (e, datum) {
+          $('#destination').val(datum.code);        
+      });
+      //end of typeahead
+  
     var calnedarIsExist = document.getElementsByClassName("datepicker-plot-area-inline-view").length;
     if (calnedarIsExist == 0) {
 

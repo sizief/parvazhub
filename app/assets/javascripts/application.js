@@ -18,15 +18,12 @@
 //= require persian-date.min
 //= require persian-datepicker-0.4.5.min
 //= require tablesort
+//= require typeahead.bundle.min
 //= require_tree .
 
 // add hide and show to modal for before and after load 
 document.addEventListener("turbolinks:request-start", function() {
    $('.ui.basic.modal.waiting').modal('show');
-});
-document.addEventListener("turbolinks:request-end", function() {
-    //$('.ui.basic.modal.waiting').modal('hide');
-    //$('.ui.dimmer.modals').attr('style','display: none');		
 });
 document.addEventListener("turbolinks:load", function() {
   $('.ui.basic.modal.waiting').modal('hide');
@@ -37,14 +34,6 @@ $(document).ready(function(){
     $('.ui.basic.modal.waiting')
         .modal({blurring: true})
         .modal('setting', 'closable', false);
-        //.modal('attach events', '.waiting-modal', 'show');
-
-    // toggle search box with quick links
-    //$('.city-page-toggle-box').click(function(){
-    //    $('#link-dates').slideToggle(function(){
-    //        $('#city-page-search-box').slideToggle();
-    //    });
-    //});
 });
 
 
