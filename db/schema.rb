@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171024124416) do
+ActiveRecord::Schema.define(version: 20171031142706) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -180,6 +180,26 @@ ActiveRecord::Schema.define(version: 20171024124416) do
     t.index ["telegram_id"], name: "index_telegram_users_on_telegram_id", unique: true, using: :btree
   end
 
+  create_table "temp_airports", force: :cascade do |t|
+    t.string "ident"
+    t.string "type_airport"
+    t.string "name"
+    t.string "latitude_deg"
+    t.string "longitude_deg"
+    t.string "elevation_ft"
+    t.string "continent"
+    t.string "iso_country"
+    t.string "iso_region"
+    t.string "municipality"
+    t.string "scheduled_service"
+    t.string "gps_code"
+    t.string "iata_code"
+    t.string "local_code"
+    t.string "home_link"
+    t.string "wikipedia_link"
+    t.string "keywords"
+  end
+
   create_table "user_flight_price_histories", force: :cascade do |t|
     t.string   "flight_id"
     t.string   "channel"
@@ -204,8 +224,8 @@ ActiveRecord::Schema.define(version: 20171024124416) do
     t.integer  "sign_in_count",          default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.inet     "current_sign_in_ip"
-    t.inet     "last_sign_in_ip"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree

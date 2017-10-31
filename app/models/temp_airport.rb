@@ -1,0 +1,2 @@
+class TempAirport < ApplicationRecord
+end

@@ -1,105 +1,128 @@
 <script type="text/javascript">
-  $(document).ready(function(){ 
-    
-  <% if @is_mobile %>
-    //scroll to to top
-    $( ".typeahead" ).click(function() {
-        $('html, body').animate({
-            scrollTop: $(this).offset().top
-        }, 800);   
-    });
-    <% end %>
-
-     //typeahead
-      var cities = new Bloodhound({
-        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-        queryTokenizer: Bloodhound.tokenizers.whitespace, 
-        identify: function(obj) { return obj.value; },
-        prefetch: { url: '<%= api_airports_path %>'} 
-      });
-      function citiesWithDefaults(q, sync) {
-          if (q === '') {
-            sync(cities.all().slice(0, 5)); 		  
-          }else {
-              cities.search(q, sync);
-          }
-        }
-      cities.initialize();
-      $('.input-container .typeahead').typeahead({
-        hint: false,
-        highlight:false,
-        minLength: 0
-        },
-        {
-        name: 'states',
-        displayKey: 'value',
-        source: citiesWithDefaults,
-        templates: {
-            empty: [
-                '<div style="font-size:0.6em">&nbsp;&nbsp;&nbsp;<i class="teal warning circle icon "></i>',
-                  'نام شهر اشتباه است و یا پروازهاب موجود نیست',
-                '</div>'
-              ].join('\n'),
-            suggestion: function (i) {
-                return '<p><i class="plane blue icon"></i>' + i.value + '</p>'
-            }
-        } 
-    });
-      $('.origin-field').on('typeahead:select', function (e, datum) {
-          $('#origin').val(datum.code); 
-          <% if @is_mobile %>
-          $('html, body').animate({scrollTop: $('.destination-field').offset().top}, 800);  
-          $('.destination-field').focus();
-          <% end %>
-
-      });
-      $('.destination-field').on('typeahead:select', function (e, datum) {
-          $('#destination').val(datum.code);
-          <% if @is_mobile %>
-          $('html, body').animate({scrollTop: $('#date-picker').offset().top}, 800);            
-          $('.destination-field').blur();   
-          <% end %>     
-      });
-      //end of typeahead
+$(document).ready(function(){ 
   
-    var calnedarIsExist = document.getElementsByClassName("datepicker-plot-area-inline-view").length;
-    if (calnedarIsExist == 0) {
+<% if @is_mobile %>
+  //scroll to to top
+  $( ".typeahead" ).click(function() {
+      $('html, body').animate({
+          scrollTop: $(this).offset().top
+      }, 800);   
+  });
+  <% end %>
 
-      var today_timestamp = Math.round((new Date()).getTime() / 1000);
-       $("#date-picker").pDatepicker({
-            maxDate: new persianDate().subtract('day', 1).valueOf(),
-            dayPicker: {scrollEnabled: false},
-            monthPicker: {scrollEnabled: false},
-            persianDigit: true,
-            format : "dddd - DD MMMM",
-            /* format : "YYYY - MM - DD", */
-            altFieldFormatter : function(unix){
-                if (!unix) return '';
-                var date =  new Date(unix);
-                var day = date.getDate();
-                if(day<10) {day = '0'+day};
-                var month = date.getMonth() + 1;
-                if(month<10) {month = '0'+month} ;
-                var year = date.getFullYear();
-                return year + '-' + month + '-' + day;
-            },
-            
-            altField: '#date-picker-field',
-            toolbox: {enabled:false},
-            navigator: {
-                enabled: true,
-                text: {
-                    btnNextText: ">",
-                    btnPrevText: "<"
-                }
-            },
-            autoClose: true,
-            inline: false
-        }); 
-     }
+   //typeahead
+    var cities = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+      queryTokenizer: Bloodhound.tokenizers.whitespace, 
+      identify: function(obj) { return obj.value; },
+      prefetch: { url: '<%= api_airports_path %>'} 
+    });
+    function citiesWithDefaults(q, sync) {
+        if (q === '') {
+          sync(cities.all().slice(0, 5)); 		  
+        }else {
+            cities.search(q, sync);
+        }
+      }
+    cities.initialize();
+
+    var airports = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+      queryTokenizer: Bloodhound.tokenizers.whitespace, 
+      identify: function(obj) { return obj.value; },
+      prefetch: { url: '<%= api_airports_path %>'} 
+    });
     
+      airports.initialize();
 
-    // fix for turbolink does not show waiting modal after first time of form submit
-    $("#flight_search").submit(function( event ) {$('.ui.basic.modal.waiting').modal('show');});
-    }); 
+    $('.input-container .typeahead').typeahead({
+      hint: false,
+      highlight:false,
+      minLength: 0
+      },
+      {
+          name: 'cities',
+          displayKey: 'value',
+          source: citiesWithDefaults,
+          templates: {
+              empty: [
+                  '<div style="font-size:0.6em">&nbsp;&nbsp;&nbsp;<i class="teal warning circle icon "></i>',
+                  'نام شهر اشتباه است و یا پروازهاب موجود نیست',
+                  '</div>'
+              ].join('\n'),
+              suggestion: function (i) {
+                  return '<p><i class="plane blue icon"></i>' + i.value + 'تمام فرودگاه‌ها</p>'
+              }
+          }
+      },
+      {
+          name: 'airports',
+          displayKey: 'value',
+          source: airports,
+          templates: {
+              suggestion: function (i) {
+                  return '<p><i class="world blue icon"></i>' + i.value + '</p>'
+              }
+          }
+      }
+
+  
+  );
+    $('.origin-field').on('typeahead:select', function (e, datum) {
+        $('#origin').val(datum.code); 
+        <% if @is_mobile %>
+        $('html, body').animate({scrollTop: $('.destination-field').offset().top}, 800);  
+        $('.destination-field').focus();
+        <% end %>
+
+    });
+    $('.destination-field').on('typeahead:select', function (e, datum) {
+        $('#destination').val(datum.code);
+        <% if @is_mobile %>
+        $('html, body').animate({scrollTop: $('#date-picker').offset().top}, 800);            
+        $('.destination-field').blur();   
+        <% end %>     
+    });
+    //end of typeahead
+
+  var calnedarIsExist = document.getElementsByClassName("datepicker-plot-area-inline-view").length;
+  if (calnedarIsExist == 0) {
+
+    var today_timestamp = Math.round((new Date()).getTime() / 1000);
+     $("#date-picker").pDatepicker({
+          maxDate: new persianDate().subtract('day', 1).valueOf(),
+          dayPicker: {scrollEnabled: false},
+          monthPicker: {scrollEnabled: false},
+          persianDigit: true,
+          format : "dddd - DD MMMM",
+          /* format : "YYYY - MM - DD", */
+          altFieldFormatter : function(unix){
+              if (!unix) return '';
+              var date =  new Date(unix);
+              var day = date.getDate();
+              if(day<10) {day = '0'+day};
+              var month = date.getMonth() + 1;
+              if(month<10) {month = '0'+month} ;
+              var year = date.getFullYear();
+              return year + '-' + month + '-' + day;
+          },
+          
+          altField: '#date-picker-field',
+          toolbox: {enabled:false},
+          navigator: {
+              enabled: true,
+              text: {
+                  btnNextText: ">",
+                  btnPrevText: "<"
+              }
+          },
+          autoClose: true,
+          inline: false
+      }); 
+   }
+  
+
+  // fix for turbolink does not show waiting modal after first time of form submit
+  $("#flight_search").submit(function( event ) {$('.ui.basic.modal.waiting').modal('show');});
+  }); 
 </script>
