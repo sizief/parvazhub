@@ -1,12 +1,14 @@
 <script type="text/javascript">
   $(document).ready(function(){ 
+    
+  <% if @is_mobile %>
     //scroll to to top
-    $( ".city-suggestion" ).click(function() {
+    $( ".typeahead" ).click(function() {
         $('html, body').animate({
             scrollTop: $(this).offset().top
-        }, 1000);   
+        }, 800);   
     });
-    
+    <% end %>
 
      //typeahead
       var cities = new Bloodhound({
@@ -23,26 +25,40 @@
           }
         }
       cities.initialize();
-      $('.field .typeahead').typeahead({
-          hint: false,
-          highlight:false,
-          minLength: 0
-          },
-          {
-          name: 'states',
-          displayKey: 'value',
-          source: citiesWithDefaults,
-          templates: {
-              suggestion: function (i) {
-                  return '<p><i class="plane blue icon"></i>' + i.value + '</p>'
-              }
-          } 
-      });
+      $('.input-container .typeahead').typeahead({
+        hint: false,
+        highlight:false,
+        minLength: 0
+        },
+        {
+        name: 'states',
+        displayKey: 'value',
+        source: citiesWithDefaults,
+        templates: {
+            empty: [
+                '<div style="font-size:0.6em">&nbsp;&nbsp;&nbsp;<i class="teal warning circle icon "></i>',
+                  'نام شهر اشتباه است و یا پروازهاب موجود نیست',
+                '</div>'
+              ].join('\n'),
+            suggestion: function (i) {
+                return '<p><i class="plane blue icon"></i>' + i.value + '</p>'
+            }
+        } 
+    });
       $('.origin-field').on('typeahead:select', function (e, datum) {
-          $('#origin').val(datum.code);        
+          $('#origin').val(datum.code); 
+          <% if @is_mobile %>
+          $('html, body').animate({scrollTop: $('.destination-field').offset().top}, 800);  
+          $('.destination-field').focus();
+          <% end %>
+
       });
       $('.destination-field').on('typeahead:select', function (e, datum) {
-          $('#destination').val(datum.code);        
+          $('#destination').val(datum.code);
+          <% if @is_mobile %>
+          $('html, body').animate({scrollTop: $('#date-picker').offset().top}, 800);            
+          $('.destination-field').blur();   
+          <% end %>     
       });
       //end of typeahead
   
@@ -83,7 +99,6 @@
      }
     
 
-    $('.ui.dropdown').dropdown('refresh');  
     // fix for turbolink does not show waiting modal after first time of form submit
     $("#flight_search").submit(function( event ) {$('.ui.basic.modal.waiting').modal('show');});
     }); 

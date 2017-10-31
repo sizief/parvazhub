@@ -22,6 +22,7 @@ gem 'scout_apm'
 gem 'sidekiq-status'
 gem 'devise'
 gem 'rollbar'
+gem 'browser'
 
 
 

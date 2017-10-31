@@ -1,6 +1,7 @@
 <% provide(:title,"پروازهاب: جستجو و مقایسه بلیط پرواز") %>
 <% provide(:description,"جستجو و مقایسه قیمت بلیط پرواز") %>
 <header>
+
 <div class="ui grid" id="header">
   		<div class="two column row">
     		<div class="right floated left aligned column">
@@ -40,13 +41,13 @@
    		<%= form_for(:search, url: flight_search_path, method: :get, html: {id:"flight_search"}) do |f| %>
     		<div class="ui huge form" >
      			<div class="two fields">
-      				<div class="field">
-						   <%= f.text_field :originـfield,{:class =>'dir-rtl origin-field ui dropdown city-suggestion typeahead web-font',placeholder: "از مبدا (شهر یا فرودگاه)"} %>
-						   <%= f.hidden_field :origin,{:id =>'origin'} %>
-						   
-      				</div>
-      				<div class="field">
-					  <%= f.text_field :destination_field,{:class =>'dir-rtl destination-field ui dropdown city-suggestion typeahead web-font',placeholder: "به مقصد (شهر یا فرودگاه)"} %>
+      				<div class="field input-container">
+						   <%= f.text_field :originـfield,{:class =>'origin-field typeahead dir-rtl web-font',placeholder: "از مبدا (شهر یا فرودگاه)"} %>						   
+					  </div>
+					  <%= f.hidden_field :origin,{:id =>'origin'} %>
+					  
+      				<div class="field input-container">
+					  <%= f.text_field :destination_field,{:class =>'destination-field typeahead dir-rtl web-font',placeholder: "به مقصد (شهر یا فرودگاه)"} %>
 					  <%= f.hidden_field :destination,{:id =>'destination'} %>
       				</div> 
   				</div>
