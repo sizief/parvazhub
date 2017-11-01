@@ -1,4 +1,6 @@
-class City
+class City < ApplicationRecord
+  validates :city_code, :uniqueness => true
+  
   def City.list
    {
 	  thr:{fa:"تهران",en:"tehran"},

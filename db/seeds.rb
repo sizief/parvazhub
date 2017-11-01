@@ -28,6 +28,7 @@
 #end
  
 
+=begin
 airline_list =[
   {code: "W5", persian_name: "ماهان", english_name:"mahan"},
   {code: "AK", persian_name: "اترک", english_name:"atrak"},
@@ -51,4 +52,28 @@ airline_list =[
 airline_list.each do |airline|
   Airline.create(code: airline[:code], persian_name: airline[:persian_name],english_name: airline[:english_name])
 end
+=end
+
+require 'csv'    
+csv_text = File.read("db/countries.csv")
+csv = CSV.parse(csv_text, :headers => true)
+csv.each do |x|
+  Country.create(x.to_hash)
+end
+
+require 'csv'    
+csv_text = File.read("db/cities.csv")
+csv = CSV.parse(csv_text, :headers => true)
+csv.each do |x|
+  City.create(x.to_hash)
+end
+
+
+require 'csv'    
+csv_text = File.read("db/airports.csv")
+csv = CSV.parse(csv_text, :headers => true)
+csv.each do |x|
+  Airport.create(x.to_hash)
+end
+
 

@@ -1,2 +1,0 @@
-class TempAirport < ApplicationRecord
-end
