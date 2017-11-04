@@ -298,6 +298,11 @@ header{
 
 
 /* twitter typeahead */
+.suggestion-title{
+  font-size: 0.6em;
+  text-align: center;
+  color: #9c9c9c;
+}
 .twitter-typeahead{
   width: 100%;
 }
@@ -335,10 +340,11 @@ direction:rtl;
 
 
 .tt-suggestion {
-  padding: 3px 20px;
-  font-size: 18px;
-  line-height: 24px;
+  font-size: 0.8em;
   cursor: pointer;
+  border-bottom: 1px solid #eee;
+  padding: 0.5em !important;
+  margin: 0 !important;
 }
 .tt-suggestion:hover{
   background: #b3d9e8;

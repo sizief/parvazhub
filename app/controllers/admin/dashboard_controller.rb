@@ -33,49 +33,22 @@ class Admin::DashboardController < ApplicationController
   end
       
   def redirect
-    all = Hash.new
-    today = Hash.new
-    this_week = Hash.new
-    week_before = Hash.new
-    week_before_that = Hash.new
-    
-    Redirect.all.each do |redirect|
-      flight_price_archive = FlightPriceArchive.find(redirect.flight_price_archive_id)
-      all[flight_price_archive.supplier.to_sym] = 0 if all[flight_price_archive.supplier.to_sym].nil?
-      all[flight_price_archive.supplier.to_sym] = all[flight_price_archive.supplier.to_sym] + 1
-    end
-    all = Hash[ all.sort_by { |key, val| key } ]  
-    
-    Redirect.where('created_at > ?',Date.today).each do |redirect|
-      flight_price_archive = FlightPriceArchive.find(redirect.flight_price_archive_id)
-      today[flight_price_archive.supplier.to_sym] = 0 if today[flight_price_archive.supplier.to_sym].nil?
-      today[flight_price_archive.supplier.to_sym] = today[flight_price_archive.supplier.to_sym] + 1
-    end
-    today = Hash[ today.sort_by { |key, val| key } ]  
-   
-    Redirect.where('created_at > ?',Date.today-7).each do |redirect|
-      flight_price_archive = FlightPriceArchive.find(redirect.flight_price_archive_id)
-      this_week[flight_price_archive.supplier.to_sym] = 0 if this_week[flight_price_archive.supplier.to_sym].nil?
-      this_week[flight_price_archive.supplier.to_sym] = this_week[flight_price_archive.supplier.to_sym] + 1
-    end
-    this_week = Hash[ this_week.sort_by { |key, val| key } ]
-    
-    Redirect.where('created_at > ? and created_at <?',Date.today-14,Date.today-7).each do |redirect|
-      flight_price_archive = FlightPriceArchive.find(redirect.flight_price_archive_id)
-      week_before[flight_price_archive.supplier.to_sym] = 0 if week_before[flight_price_archive.supplier.to_sym].nil?
-      week_before[flight_price_archive.supplier.to_sym] = week_before[flight_price_archive.supplier.to_sym] + 1
-    end
-    week_before = Hash[ week_before.sort_by { |key, val| key } ]
+    today_redirects =  calculate_redirects(Date.today, Date.today+1)
+    all_redirects =  calculate_redirects(Date.today-365, Date.today+1)
+    this_week_redirects =  calculate_redirects(Date.today-7, Date.today+1)
+    week_before_redirects =  calculate_redirects(Date.today-14, Date.today-7)
+    week_before_that_redirects =  calculate_redirects(Date.today-21, Date.today-14)
+    this_month_redirects = calculate_redirects((Date.today-(Date.today.to_date.to_parsi.strftime("%-d")).to_i), Date.today+1)
+    @results = {this_month: this_month_redirects, today:today_redirects,all:all_redirects,this_week:this_week_redirects,week_before:week_before_redirects,week_before_that:week_before_that_redirects} 
+  end
 
-    Redirect.where('created_at > ? and created_at <?',Date.today-21,Date.today-14).each do |redirect|
-      flight_price_archive = FlightPriceArchive.find(redirect.flight_price_archive_id)
-      week_before_that[flight_price_archive.supplier.to_sym] = 0 if week_before_that[flight_price_archive.supplier.to_sym].nil?
-      week_before_that[flight_price_archive.supplier.to_sym] = week_before_that[flight_price_archive.supplier.to_sym] + 1
+  def calculate_redirects(begin_date,end_date)
+    supplier = Hash.new
+    Redirect.where('created_at > ? and created_at <?',begin_date,end_date).each do |redirect|
+      supplier[redirect.supplier.to_sym] = 0 if supplier[redirect.supplier.to_sym].nil?
+      supplier[redirect.supplier.to_sym] += 1
     end
-    week_before_that = Hash[ week_before_that.sort_by { |key, val| key } ]
-    
-    @results = {today:today,all:all,this_week:this_week,week_before:week_before,week_before_that:week_before_that}
-    
+    supplier = Hash[ supplier.sort_by { |key, val| key } ]  
   end
 
   def user_search_stat
