@@ -1,0 +1,19 @@
+<% require 'csv' %>
+<% csv_text = File.read("db/cities.csv") %>
+<% csv = CSV.parse(csv_text, :headers => true) %>
+<% csv.each do |x| %>
+fix_<%= x["city_code"] %>:  
+  english_name: "<%= x['english_name'] %>"
+  persian_name: "<%= x['persian_name'] %>"
+  latitude_deg: "<%= x['latitude_deg'] %>"
+  longitude_deg: "<%= x['longitude_deg'] %>"
+  country_code: "<%= x['country_code'] %>"
+  region_code: "<%= x['region_code'] %>"
+  city_code: "<%= x['city_code'] %>"
+  home_link: ""
+  wikipedia_link: ""
+  priority: 2
+  status:
+
+
+<% end %>

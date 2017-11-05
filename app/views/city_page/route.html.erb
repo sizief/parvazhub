@@ -1,20 +1,24 @@
+
 <%= render 'layouts/header' %>
-<% provide(:title,"پروازهاب: جستجو و مقایسه پرواز  #{@origin[:fa]} به #{@destination[:fa]} ") %>
-<% provide(:description,"جستجو و مقایسه قیمت پرواز #{@origin[:fa]} به #{@destination[:fa]}") %>
+<% provide(:title,"پروازهاب: جستجو و مقایسه پرواز  #{@origin.persian_name} به #{@destination.persian_name} ") %>
+<% provide(:description,"جستجو و مقایسه قیمت پرواز #{@origin.persian_name} به #{@destination.persian_name}") %>
 
 <div class="ui stackable one column grid centered wide-search-box"  id="city-page-search-box">
 <h1 class="city-header">
-	جستجو و مقایسه قیمت پروازهای <%= "#{@origin[:fa]} به #{@destination[:fa]}" %>
+	جستجو و مقایسه قیمت پروازهای <%= "#{@origin.persian_name} به #{@destination.persian_name}" %>
 </h1>
    		<%= form_for(:search, url: flight_search_path, method: :get, html: {id:"flight_search",class:"city-page-search-form"}) do |f| %>
     		<div class="ui huge form" >
      			<div class="two fields">
-      				<div class="field">
-	   					<%= f.select :origin, @cities.map{ |key,value| [("از "+"#{value[:fa]}"),value[:en]]}, {:selected => @origin[:en]},{:class =>'ui dropdown'} %>
-      				</div>
-      				<div class="field">
-	   					<%= f.select :destination, @cities.map{ |key,value| [("به "+"#{value[:fa]}"),value[:en]]}, {:selected => @destination[:en]},{:class =>'ui dropdown'} %>
-      				</div> 
+				 	<div class="field input-container">
+				 		<%= f.text_field :originـfield,{:class =>'origin-field typeahead dir-rtl web-font',placeholder: "از مبدا (شهر یا فرودگاه)"} %>						   
+				 		<%= f.hidden_field :origin,{:id =>'origin'} %>
+			 		</div>
+			 
+			 		<div class="field input-container">
+				 		<%= f.text_field :destination_field,{:class =>'destination-field typeahead dir-rtl web-font',placeholder: "به مقصد (شهر یا فرودگاه)"} %>
+				 		<%= f.hidden_field :destination,{:id =>'destination'} %>
+			 		</div> 
   				</div>
   				<div class="field ui calendar">
 						<div class="ui input left icon">
@@ -39,15 +43,15 @@
 
 	<div class="ui stackable one column grid centered wide-search-box"  id="link-dates">
 		<h1 class="city-header">
-			جستجوی پروازهای <%= "#{@origin[:fa]} به #{@destination[:fa]}" %> برای روزهای آينده
+			جستجوی پروازهای <%= "#{@origin.persian_name} به #{@destination.persian_name}" %> برای روزهای آينده
 		</h1>
 		<% @prices[:to].each_with_index do |price,index| %>
 			<% next if ((@link_count > 3) or (price.keys[0].to_s.to_date<Date.today)) %>
 			<div  class="page-button-links" >
-				<a href="<%= search_link_builder(@origin[:en],@destination[:en],price.keys[0].to_s.to_date) %>">
+				<a href="<%= search_link_builder(@origin.english_name,@destination.english_name,price.keys[0].to_s.to_date) %>">
 					<button class="ui submit big yellow web-font fluid right labeled  icon button waiting-modal link-dates-button" style="padding-left: 2.5em !important; font-size:0.9em !important;" >	
 						 پرواز 
-						<%= "#{@origin[:fa]} به #{@destination[:fa]}" %>
+						<%= "#{@origin.persian_name} به #{@destination.persian_name}" %>
 						<%=price.keys[0].to_s.to_date.to_parsi.strftime "%A %-d %B"  %>	
 						<%= "از #{number_with_delimiter(price.values[0])} تومان" unless price.values[0] =="-" %>		
 					<i class="right arrow icon"></i>
@@ -67,7 +71,7 @@
 	<div class="city-calendar" id="city-calendar" >
 		<h4>
 			<b class="yellow-text">کمترین</b>
-            هزینه پرواز <%= "#{@origin[:fa]} به #{@destination[:fa]}" %> برای یک نفر
+            هزینه پرواز <%= "#{@origin.persian_name} به #{@destination.persian_name}" %> برای یک نفر
         </h4>
 		<table class="ui celled table stackable rtl">
 		  	<thead class="not-mobile">
@@ -90,11 +94,11 @@
 						<td class="center aligned disable"></td>
 					<%else%>	
 						<td class="center aligned">
-							<a href="<%= search_link_builder(@origin[:en],@destination[:en],price.keys[0].to_s.to_date) %>" >
+							<a href="<%= search_link_builder(@origin.english_name,@destination.english_name,price.keys[0].to_s.to_date) %>" >
 								<div class="route-calendar-box">
 									<div class="route-calendar-date">
 										<span class="mobile-only">پرواز 
-											<%= "#{@origin[:fa]} به #{@destination[:fa]}" %>
+											<%= "#{@origin.persian_name} به #{@destination.persian_name}" %>
 											<%=price.keys[0].to_s.to_date.to_parsi.strftime "%A"  %>	
 										</span>
 										<%=price.keys[0].to_s.to_date.to_parsi.strftime "%-d %B"  %>	
@@ -128,14 +132,14 @@
 			<h4>
 				برنامه پروازی
 				<b class="yellow-text"> امروز</b>
-				<%= "#{@origin[:fa]} به #{@destination[:fa]}" %> 
+				<%= "#{@origin.persian_name} به #{@destination.persian_name}" %> 
 			</h4>
 			<p>
 				امروز
 				<%= @today_statistic[:date].to_date.to_parsi.strftime "%A %-d %B"   %>
 				<%= @today_statistic[:count] %>
 				پرواز  در مسیر 
-				<%= "#{@origin[:fa]} به #{@destination[:fa]}" %> 
+				<%= "#{@origin.persian_name} به #{@destination.persian_name}" %> 
 				پرواز می‌کنند. اولین پرواز امروز ساعت
 				<%= @today_statistic[:first_flight_time] %> 
 				است. آخرین پرواز امروز ساعت
@@ -150,14 +154,14 @@
 			<h4>
 				برنامه پروازی
 				<b class="yellow-text"> فردا</b>
-				<%= "#{@origin[:fa]} به #{@destination[:fa]}" %> 
+				<%= "#{@origin.persian_name} به #{@destination.persian_name}" %> 
 			</h4>
 			<p>
 				فردا
 				<%= @tomorrow_statistic[:date].to_date.to_parsi.strftime "%A %-d %B"   %>
 				<%= @tomorrow_statistic[:count] %>
 				پرواز  در مسیر 
-				<%= "#{@origin[:fa]} به #{@destination[:fa]}" %> 
+				<%= "#{@origin.persian_name} به #{@destination.persian_name}" %> 
 				پرواز می‌کنند. اولین پرواز فردا ساعت
 				<%= @tomorrow_statistic[:first_flight_time] %> 
 				است. آخرین پرواز فردا ساعت
@@ -172,14 +176,14 @@
 			<h4>
 				برنامه پروازی
 				<b class="yellow-text"> پس‌فردا</b>
-				<%= "#{@origin[:fa]} به #{@destination[:fa]}" %> 
+				<%= "#{@origin.persian_name} به #{@destination.persian_name}" %> 
 			</h4>
 			<p>
 				پس‌فردا
 				<%= @day_after_statistic[:date].to_date.to_parsi.strftime "%A %-d %B"   %>
 				<%= @day_after_statistic[:count] %>
 				پرواز  در مسیر 
-				<%= "#{@origin[:fa]} به #{@destination[:fa]}" %> 
+				<%= "#{@origin.persian_name} به #{@destination.persian_name}" %> 
 				پرواز می‌کنند. اولین پرواز پس‌فردا ساعت
 				<%= @day_after_statistic[:first_flight_time] %> 
 				است. آخرین پرواز پس‌فردا ساعت
@@ -193,7 +197,7 @@
 	<div class="city-calendar" >
 		<h4>
 			چه روزهایی
-			<%= "#{@origin[:fa]} به #{@destination[:fa]}" %> 
+			<%= "#{@origin.persian_name} به #{@destination.persian_name}" %> 
 			پرواز دارد؟
 		</h4>
 		<p>

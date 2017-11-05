@@ -133,9 +133,12 @@ class Telegram::Method
   def send_suppliers(flight_id,chat)
     flight = Flight.find(flight_id)
     origin_code = City.get_city_code_based_on_name chat.origin
-    origin_name = City.list[origin_code.to_sym][:en]    
+    #origin_name = City.list[origin_code.to_sym][:en]    
+    origin_name = City.find_by(city_code: origin_code).english_name 
+    
     destination_code = City.get_city_code_based_on_name chat.destination
-    destination_name = City.list[destination_code.to_sym][:en]    
+    #destination_name = City.list[destination_code.to_sym][:en]    
+    destination_name = City.find_by(city_code: destination_code).english_name 
     date = format_date chat.date
 
     text = "<b>پرواز شماره #{flight.flight_number} از #{chat.origin} به #{chat.destination} #{hour_to_human(flight.departure_time.to_datetime.strftime("%H:%M"))}  </b>"
@@ -256,9 +259,14 @@ class Telegram::Method
 
   def get_city_list(selected_city=nil)
     cities = Array.new
-    City.list.each do |city|
-      cities.push(city.last[:fa]) unless city.last[:fa] == selected_city
+    #City.list.each do |city|
+    #  cities.push(city.last[:fa]) unless city.last[:fa] == selected_city
+    #end
+
+    City.where("priority < 40").order(:priority).each do |city|
+      cities.push(city.persian_name) unless city.persian_name == selected_city
     end
+
     return cities
   end
 

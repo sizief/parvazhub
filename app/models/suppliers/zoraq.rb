@@ -130,9 +130,9 @@ class Suppliers::Zoraq
       deeplink = "http://zoraq.com"+fare_source_code.to_s
     else
       country_name = "Iran"
-      destination_city_english = City.list[destination.to_sym][:en].capitalize
-      destination_city_farsi = City.list[destination.to_sym][:fa].capitalize
-      origin_city_farsi = City.list[origin.to_sym][:fa].capitalize
+      destination_city_english = City.find_by(city_code: destination).english_name.capitalize
+      destination_city_farsi =  City.find_by(city_code: destination).persian_name
+      origin_city_farsi =  City.find_by(city_code: origin).persian_name
 
       depart_date = date.tr("-","")[2..-1]
       return_date = ((date.to_date+1).to_s).tr("-","")[2..-1]

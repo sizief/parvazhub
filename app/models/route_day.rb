@@ -4,14 +4,9 @@ class RouteDay < ApplicationRecord
   belongs_to :route
 
   def calculate_all
-    City.list.each do |origin|
-      City.list.each do |destination|
-        unless destination == origin
-          route = Route.find_by(origin: origin[0], destination: destination[0])
+    Route.all.each do |route|
           days_available = inspect_days(route.id)
           import(days_available,route.id)
-        end
-      end
     end
   end
  

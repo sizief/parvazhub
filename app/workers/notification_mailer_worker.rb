@@ -3,7 +3,7 @@ require 'sidekiq-scheduler'
 class NotificationMailerWorker
   include Sidekiq::Worker
   sidekiq_options :retry => true, :backtrace => true
-  @@city = City.list
+  #@@city = City.list
 
   def perform
   	list = Notification.where(notification_type:"price_alert").where(status:true)

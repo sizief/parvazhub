@@ -43,8 +43,9 @@
      			<div class="two fields">
       				<div class="field input-container">
 						   <%= f.text_field :originـfield,{:class =>'origin-field typeahead dir-rtl web-font',placeholder: "از مبدا (شهر یا فرودگاه)"} %>						   
+						   <%= f.hidden_field :origin,{:id =>'origin'} %>
 					  </div>
-					  <%= f.hidden_field :origin,{:id =>'origin'} %>
+					  
 					  
       				<div class="field input-container">
 					  <%= f.text_field :destination_field,{:class =>'destination-field typeahead dir-rtl web-font',placeholder: "به مقصد (شهر یا فرودگاه)"} %>
@@ -117,19 +118,19 @@
 
 <div class="six column stackable ui grid centered">
   	<% @flight_price_showoff_cities.each do |city| %>
-		<% flight_list = Flight.new.get_lowest_price_collection("thr",city) %>
+		<% flight_list = Flight.new.get_lowest_price_collection("thr",city.city_code) %>
 	  	<div class="column">
 			<div class="ui fluid card">
 			    <div class="image">
-			    	<%= image_tag "cities/"+@cities[city.to_sym][:en]+".jpg",{class:"price-box-image"} %>
+			    	<%= image_tag "cities/"+city.english_name+".jpg",{class:"price-box-image"} %>
 			    </div>
 			    <div class="content">
 			    	<% flight_list.each do |day,flight| %>
 						<% unless flight.nil? %>
 							<div class="date price-box-text">
-								<a href="<%= search_link_builder('tehran',City.list[city.to_sym][:en],(flight.departure_time).to_date.to_s) %>" >
+								<a href="<%= search_link_builder('tehran',city.english_name,(flight.departure_time).to_date.to_s) %>" >
 									پرواز تهران به 
-									<%= @cities[city.to_sym][:fa] %>
+									<%= city.persian_name %>
 									<%= day_name_to_human day %>
 									<b><%= number_with_delimiter(flight.best_price) %></b>
 									تومان

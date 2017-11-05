@@ -18,7 +18,8 @@ class Airports::Mehrabad < Airports::DomesticAirport
       destination = City.get_city_code_based_on_name destination_name_in_persian
       next if destination == false #we dont want all cities
 
-      route = Route.find_by(origin:"#{origin}",destination:"#{destination}")
+      route = Route.new.get_route(origin,destination)
+      next if route.nil?
       call_sign = flight.css(".cell-fno p").text
       actual_departure_time = flight.css(".cell-dateTime2 p").text
       status = flight.css(".cell-status p").text
@@ -33,13 +34,17 @@ class Airports::Mehrabad < Airports::DomesticAirport
         actual_departure_time = convert_to_gregorian actual_departure_time
       end
 
-      FlightDetail.create(route_id: "#{route.id}",
+      begin
+        FlightDetail.create(route_id: "#{route.id}",
         call_sign: "#{call_sign}",
         departure_time: "#{departure_date_time}",
         airplane_type: "#{airplane_type}",
         status: "#{status}",
         terminal:"#{terminal}",
         actual_departure_time:"#{actual_departure_time}")
+      rescue
+        raise "route is empty, origin:#{origin}, destination:#{destination}"
+      end
 
     end
   end 
@@ -53,7 +58,8 @@ class Airports::Mehrabad < Airports::DomesticAirport
       origin = City.get_city_code_based_on_name origin_name_in_persian
       next if origin == false #we dont want all cities
 
-      route = Route.find_by(origin:"#{origin}",destination:"#{destination}")
+      route = Route.new.get_route(origin,destination)
+      next if route.nil?
       call_sign = flight.css(".cell-fno p").text
       status = flight.css(".cell-status p").text.tr("|","")
       airplane_type = flight.css(".cell-aircraft p").text
@@ -62,11 +68,15 @@ class Airports::Mehrabad < Airports::DomesticAirport
       day.strip!
       departure_date_time = get_date_time(day,departure_time)
 
-      FlightDetail.create(route_id: "#{route.id}",
-        call_sign: "#{call_sign}",
-        departure_time: "#{departure_date_time}",
-        airplane_type: "#{airplane_type}",
-        status: "#{status}")
+      begin
+        FlightDetail.create(route_id: "#{route.id}",
+          call_sign: "#{call_sign}",
+          departure_time: "#{departure_date_time}",
+          airplane_type: "#{airplane_type}",
+          status: "#{status}")
+      rescue
+          raise "route is empty, origin:#{origin}, destination:#{destination}"
+      end
 
     end
   end

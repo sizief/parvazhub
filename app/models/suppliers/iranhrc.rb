@@ -107,12 +107,12 @@ class Suppliers::Iranhrc
   end
 
   def get_deep_link(origin,destination,date)
-    origin_name = City.list[origin.to_sym][:en].upcase
-    origin_name = city_name_correction origin_name
+    #origin_name = City.list[origin.to_sym][:en].upcase
+    #origin_name = city_name_correction origin_name
 
-    destination_name = City.list[destination.to_sym][:en].upcase
-    destination_name = city_name_correction destination_name
-    shamsi_date = date.to_date.to_parsi  
+    #destination_name = City.list[destination.to_sym][:en].upcase
+    #destination_name = city_name_correction destination_name
+    #shamsi_date = date.to_date.to_parsi  
      
     #if ((destination_name == "RASHT" ) or (destination_name == "ARDABIL" ))
     #  deeplink= "http://iranhrc.ir/flights/#{origin_name}-to-#{destination_name}"

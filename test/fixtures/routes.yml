@@ -1,19 +1,9 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-<% id = 1 %>
-<% cities = City.list %>
-<% cities.each do |origin_key,origin_value| %>
-<%   cities.each do |destination_key,destination_value| %>
-<%     next if destination_key == origin_key   %>
-<%=origin_key.to_s+destination_key.to_s+":" %>
-  id: <%= id.to_s %>
-  origin: <%= origin_key.to_s %>
-  destination: <%= destination_key.to_s %>
-<%     id+=1 %>
-<%    end %>
+<% require 'csv' %>
+<% csv_text = File.read("db/routes.csv") %>
+<% csv = CSV.parse(csv_text, :headers => true) %>
+<% csv.each do |x| %>
+fix_<%= x["id"] %>:  
+  id: "<%= x['id'] %>"
+  origin: "<%= x['origin'] %>"
+  destination: "<%= x['destination'] %>"
 <% end %>
-
-#one:
-#  id: 1
-#  origin: thr
-#  destination: mhd

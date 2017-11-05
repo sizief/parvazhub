@@ -9,16 +9,16 @@ class Airports::DomesticAirport
 
   def self.airports
     [
-      ["mashhad","mhd",342],
-      ["tabriz","tbz",79],
-      ["shiraz","syz",175],
-      ["ahwaz","awz",94],
-      ["isfahan","ifn",104],
+      ["mashhad","mhd",346],
+      ["tabriz","tbz",81],
+      ["shiraz","syz",181],
+      ["ahwaz","awz",96],
+      ["isfahan","ifn",108],
       ["kerman","ker",26],
-      ["sari","sry",6],
+      ["sari","sry",8],
       ["rasht","ras",14],
       ["yazd","azd",38],
-      ["kermanshah","ksh",11],
+      ["kermanshah","ksh",13],
       ["bandarabbas","bnd",23],
       ["zahedan","zah",22],
       ["bushehr","buz",29],
@@ -60,7 +60,8 @@ class Airports::DomesticAirport
 
       next if destination == false #we dont want all cities
 
-      route = Route.find_by(origin:"#{origin}",destination:"#{destination}")
+      route = Route.new.get_route(origin,destination)
+      next if route.nil?
       call_sign = flight.css(".cell-fno p").text
       actual_departure_time = flight.css(".cell-airline p")[1].text
       status = flight.css(".cell-status p").text.tr("|","")
@@ -95,7 +96,8 @@ class Airports::DomesticAirport
 
       next if origin == false #we dont want all cities
 
-      route = Route.find_by(origin:"#{origin}",destination:"#{destination}")
+      route = Route.new.get_route(origin,destination)
+      next if route.nil?
       call_sign = flight.css(".cell-fno p").text
       actual_departure_time = flight.css(".cell-aircraft3 p").text
       status = flight.css(".cell-status p").text.tr("|","")

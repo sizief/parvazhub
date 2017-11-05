@@ -34,7 +34,7 @@ four:
   terminal: nil
   actual_departure_time: nil
 
-four:
+five:
   route_id: 1
   call_sign: "IRC3715"
   departure_time: "2017-09-23 23:00:00"

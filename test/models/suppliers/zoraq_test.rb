@@ -53,6 +53,8 @@ class SuppliersZoraqTest < ActiveSupport::TestCase
     fare_source_code = "/Flight/Checkout/?sessionKey=6405f715-e704-4030-b9e4-cd2c2401f2b1&identifier=c32867c9-2dbe-4b42-9871-41df8382a220&searchType=DomesticFlights"
     deeplink = @zoraq_search.get_zoraq_deeplink(@origin,@destination,date,fare_source_code)
     assert deeplink.include? "Iran/Mashhad"
+    assert deeplink.include? "مشهد"
+    assert deeplink.include? "تهران"
   end
   
 

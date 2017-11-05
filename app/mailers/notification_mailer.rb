@@ -7,7 +7,7 @@ class NotificationMailer < ApplicationMailer
   	@flights = Flight.new.flight_list(route,date)
   	@email =email
     @search_parameter ={origin_code: route[:origin],destination_code: route[:destination],date: date}
-    @cities = City.list 
+    #@cities = City.list 
 
     mail(to: @email, subject: subject, bcc:"sizief@gmail.com")
   end

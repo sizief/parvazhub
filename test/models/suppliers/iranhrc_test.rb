@@ -3,7 +3,7 @@ require 'test_helper'
 class SuppliersIranhrcTest < ActiveSupport::TestCase
 
   def setup
-    @iranhrc_search = Suppliers::Safarme.new
+    @iranhrc_search = Suppliers::Iranhrc.new
     @origin = "thr"
     @destination = "mhd"
     @date = "2017-08-20"
@@ -41,7 +41,7 @@ class SuppliersIranhrcTest < ActiveSupport::TestCase
   test "Save flights to database" do
     response = @iranhrc_search.search(@origin,@destination,@date,@search_history_id)
     route = Route.find_by(origin:@origin, destination: @destination)
-    assert_difference 'Flight.count', 30 do
+    assert_difference 'Flight.count', 20 do
       @iranhrc_search.import_domestic_flights(response,route.id,@origin,@destination,@date,@search_history_id)
     end
   end
@@ -49,9 +49,10 @@ class SuppliersIranhrcTest < ActiveSupport::TestCase
   test "Save flight prices to database" do
     response = @iranhrc_search.search(@origin,@destination,@date,@search_history_id)
     route = Route.find_by(origin:@origin, destination: @destination)
-    assert_difference 'FlightPrice.count', 30 do
+    assert_difference 'FlightPrice.count', 20 do
       @iranhrc_search.import_domestic_flights(response,route.id,@origin,@destination,@date,@search_history_id)
     end
   end
+
 
 end

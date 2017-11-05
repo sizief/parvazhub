@@ -5,7 +5,6 @@ class NotificationController < ApplicationController
   	origin = params[:origin]
   	destination = params[:destination]
   	date = params[:date]
-  	city = City.list
 
   	route = Route.find_by(origin:origin,destination:destination)
   	if Notification.price_alert_register(route.id,date,email)

@@ -18,6 +18,17 @@ class RouteTest < ActiveSupport::TestCase
     route = Route.find_by(origin: "ifn", destination: "thr")
     assert_not route.nil?
   end
+   
+  test "should create route if city exists but route not available" do
+    available_city_1 = "thr"
+    available_city_2 = "mhd"
+    not_available_city = "trb"
+
+    assert_not Route.new.get_route("thr","mhd").nil?
+    assert Route.new.get_route("thr","ttt").nil?
+    assert_not Route.new.get_route("thr","nyc").nil?
+  end
+
 
   
 end

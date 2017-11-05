@@ -33,7 +33,6 @@ Rails.application.routes.draw do
 	post 'notification/price_alert_register', to: 'notification#price_alert_register', as: 'price_alert_register'
 	
 	get '/about_us', to:'static_pages#about_us'
-	get '/cheap-flights', to:'static_pages#cheap_flights'
 	get 'static_pages/about_us'
 
 	get '/beta/telegram/update', to: 'telegram#update'
@@ -43,7 +42,7 @@ Rails.application.routes.draw do
 	get '/review/:property_name', to: 'review#property_reviews', as: 'property_page'
 	post '/review', to: 'review#register', as: 'register_review'
 
-	get '/api/airports', to: 'api#airports', as: 'api_airports'
+	get '/api/cities_prefetch_suggestion', to: 'api#cities_prefetch_suggestion', as: 'api_cities_prefetch_suggestion'
 	
 	get '/flight-prices/:id', to: redirect('/', status: 302) #, to: 'search_result#flight_prices', as: 'flight-prices-ajax' #, :defaults => { :format => 'js' }
 	

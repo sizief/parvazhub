@@ -49,4 +49,10 @@ class SuppliersSafarmeTest < ActiveSupport::TestCase
     end
   end
 
+  test "test deeplink" do
+    deeplink = @safarme_search.get_deep_link("thr","mhd","2018-01-10")
+    date = "2018-01-10".to_date.to_parsi
+    assert_equal deeplink,"http://safarme.com/flights/TEHRAN-to-MASHHAD/#{date}"  
+  end
+
 end

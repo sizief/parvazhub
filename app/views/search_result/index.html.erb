@@ -1,19 +1,17 @@
-
 <%= render 'layouts/header' %>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
-<% provide(:canonical,"<link rel=\"canonical\" href=\"http://parvazhub.com/flights/#{@search_parameter[:origin_name]}-#{@search_parameter[:destination_name]}\"/> ".html_safe)%>
+<% provide(:canonical,"<link rel=\"canonical\" href=\"http://parvazhub.com/flights/#{@search_parameter[:origin_english_name]}-#{@search_parameter[:destination_english_name]}\"/> ".html_safe)%>
 
-<% provide(:title,"پروازهاب:‌ پرواز #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]}  #{@search_parameter[:date_in_human]} ")%>
-<% provide(:description,"لیست پروازهای #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]}  #{@search_parameter[:date_in_human]}") %>
+<% provide(:title,"پروازهاب:‌ پرواز #{@search_parameter[:origin_persian_name]} به #{@search_parameter[:destination_persian_name]}  #{@search_parameter[:date_in_human]} ")%>
+<% provide(:description,"لیست پروازهای #{@search_parameter[:origin_persian_name]} به #{@search_parameter[:destination_persian_name]}  #{@search_parameter[:date_in_human]}") %>
 
 <div class="ui container" id="search-results-container">
 	<div class="ui grid" id="results-message">
   		<div class="one column row">
     		<div class="column">
 				<i class="plane icon"></i> 
-				<%= @cities[@search_parameter[:origin_code].to_sym][:fa] %>
+				<%= @search_parameter[:origin_persian_name] %>
 				  به 
-				 <%= @cities[@search_parameter[:destination_code].to_sym][:fa] %> 
+				 <%= @search_parameter[:destination_persian_name] %> 
 				 <%= @search_parameter[:date].to_date.to_parsi.strftime "%A %-d %B"   %>
 				 <br>
 				 <a class="ui primary basic blue" onclick="$('#search-box-inner').transition('slide');" style="cursor:pointer">
@@ -52,11 +50,15 @@
 		<%= form_for(:search, url: flight_search_path, method: :get, html: {id:"flight_search"}) do |f| %>
 			<div class="ui form">
 				<div class="four fields">
-					<div class="field">
-						<%= f.select :origin, @cities.map{ |key,value| [value[:fa],value[:en]]}, {:selected => @search_parameter[:origin_name]},{:class =>'ui dropdown'} %>
+					<div class="field input-container">
+						<%= f.text_field :originـfield,{:class =>'origin-field typeahead dir-rtl web-font',placeholder: "از مبدا (شهر یا فرودگاه)"} %>			
+						<%= f.hidden_field :origin,{:id =>'origin'} %>
 					</div>
-					<div class="field">
-						<%= f.select :destination, @cities.map{ |key,value| [value[:fa],value[:en]]}, {:selected => @search_parameter[:destination_name]},{:class =>'ui dropdown'} %>
+					
+					
+					<div class="field input-container">
+						<%= f.text_field :destination_field,{:class =>'destination-field typeahead dir-rtl web-font',placeholder: "به مقصد (شهر یا فرودگاه)"} %>
+						<%= f.hidden_field :destination,{:id =>'destination'} %>
 					</div>
 					<div class="field ui calendar">
 						<div class="ui input left icon">
@@ -77,11 +79,10 @@
 	  <% @flight_dates.each do |key,value|%>
 	  	<div class=" grey statistic">
 		  <div class="value ">
-			  <%= link_to((value.nil? ? "<i class='plane icon'></i>".html_safe : number_with_delimiter(value.best_price)), search_link_builder(@search_parameter[:origin_name],@search_parameter[:destination_name],key.to_s.to_date))   %>
-			  
+			  <%= link_to((value.nil? ? "<i class='plane icon'></i>".html_safe : number_with_delimiter(value.best_price)), search_link_builder(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],key.to_s.to_date))   %> 
 		  </div>
 		  <div class="label web-font">
-		  	<%= link_to(key.to_s.to_date.to_parsi.strftime("%A %-d %B "), search_link_builder(@search_parameter[:origin_name],@search_parameter[:destination_name],key.to_s.to_date))   %>
+		  	<%= link_to(key.to_s.to_date.to_parsi.strftime("%A %-d %B "), search_link_builder(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],key.to_s.to_date))   %>
 		  </div>
 	   	</div>
 	  <% end %>
@@ -104,7 +105,7 @@
 						<td class="left aligned">
 							<div class="two fields">
 								<div class="field">
-									<a href="<%= flight_prices_path(@search_parameter[:origin_name],@search_parameter[:destination_name],@search_parameter[:date],flight.id) %>" data-remote="false">														
+									<a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight.id) %>" data-remote="false">														
 										<h5 class="ui image header web-font">
 											<%= airline_logo_for flight.airline_code %> 
 											<div class="content">
@@ -148,12 +149,12 @@
 						<td>
 							<div class="suppliers-count">	
 								<b>
-									<a href="<%= flight_prices_path(@search_parameter[:origin_name],@search_parameter[:destination_name],@search_parameter[:date],flight.id) %>" data-remote="false" style="color:black">	
+									<a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight.id) %>" data-remote="false" style="color:black">	
 										مشاهده‌ ارزان‌ترین قیمت از <%= flight.suppliers_count %> سایت 
 									</a>
 								</b>
 							</div>
-							<a href="<%= flight_prices_path(@search_parameter[:origin_name],@search_parameter[:destination_name],@search_parameter[:date],flight.id) %>" data-remote="false">	
+							<a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight.id) %>" data-remote="false">	
 								<button class="ui submit yellow web-font fluid right labeled icon button flight-price-button" style="padding-right: 0 !important;">
 									<i class="right arrow icon"></i> از
 									<%= "#{number_with_delimiter(flight.best_price)} تومان " %>
@@ -188,19 +189,19 @@
 					<% unless key.to_s == @search_parameter[:date].to_s %>
 					
 					<li>
-						<% link_text = "جستجوی پرواز #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]} "+key.to_s.to_date.to_parsi.strftime("%A %-d %B ") %>
-						<%= link_to(link_text, search_link_builder(@search_parameter[:origin_name],@search_parameter[:destination_name],key.to_s.to_date))   %>
+						<% link_text = "جستجوی پرواز #{@search_parameter[:origin_persian_name]} به #{@search_parameter[:destination_persian_name]} "+key.to_s.to_date.to_parsi.strftime("%A %-d %B ") %>
+						<%= link_to(link_text, search_link_builder(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],key.to_s.to_date))   %>
 					</li>
 					<% end %>
 				<% end %>
 			</ul>
 			اگر همچنان موفق به پیدا کردن پرواز مورد نظرتان نشدید، صفحه‌ی  
-			<%= link_to "پروازهای #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به #{@cities[@search_parameter[:destination_code].to_sym][:fa]}", route_page_path(origin_name:  @search_parameter[:origin_name],destination_name: @search_parameter[:destination_name], :anchor => "city-calendar"),class:"city-page-link" %> روی تقویم را ببینید.
+			<%= link_to "پروازهای #{@search_parameter[:origin_persian_name]} به #{@search_parameter[:destination_persian_name]}", route_page_path(origin_name:  @search_parameter[:origin_english_name],destination_name: @search_parameter[:destination_english_name], :anchor => "city-calendar"),class:"city-page-link" %> روی تقویم را ببینید.
 
 			<h5 class="web-font">
 				<i class="teal warning circle icon big"></i>
 				چه روزهایی
-				<%= " #{@cities[@search_parameter[:origin_code].to_sym][:fa]} به  #{@cities[@search_parameter[:destination_code].to_sym][:fa]}" %> 
+				<%= " #{@search_parameter[:origin_persian_name]} به  #{@search_parameter[:destination_persian_name]}" %> 
 				پرواز دارد؟
 			</h5>
 			<% unless @route_days.empty? %>

@@ -6,12 +6,17 @@ class Route < ApplicationRecord
   has_many :flights
   has_many :user_Search_history
 
-    #give the route id for given destination and origin
-    def self.create_route(origin,destination)
-       route = Route.find_by(origin:"#{origin}",destination:"#{destination}")
-       if route.nil? #create this route if it is not exist is database
-         route = Route.create(origin: origin.downcase, destination: destination.downcase)
-       end
-       route
+    def get_route(origin,destination)
+      route = Route.find_by(origin:"#{origin}",destination:"#{destination}")
+      if route.nil?
+        is_origin = City.find_by(city_code: origin)
+        is_destination = City.find_by(city_code: destination)
+        if (is_origin and is_destination)
+          route = Route.new(origin: origin, destination: destination)
+          route.save
+        end
+      end
+      
+      return route
     end
 end

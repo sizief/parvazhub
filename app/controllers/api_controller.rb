@@ -1,14 +1,13 @@
 class ApiController < ApplicationController
     
-    def airports
-        airports = Array.new
-        cities = City.list
+    def cities_prefetch_suggestion
+        city_list = Array.new
+        cities = City.where(country_code: "IR").order(:priority)
         cities.each do |city|
-            value = city[1][:fa]
-            key = city[1][:en] 
-            airports << {'code': key, 'value': "#{value} - #{key} "}
+            value = city.persian_name
+            key = city.english_name
+            city_list << {'code': key, 'value': "#{value} - #{key} "}
         end
-        render json: airports
-        
+        render json: city_list  
     end    
 end

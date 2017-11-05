@@ -9,11 +9,14 @@
     <%= form_for(:search, url: flight_search_path, method: :get, html: {id:"flight_search"}) do |f| %>
         <div class="ui huge form" >
             <div class="two fields">
-                <div class="field">
-                    <%= f.select :origin, @cities.map{ |key,value| [("از "+"#{value[:fa]}"),value[:en]]},{:selected => "theran"},{:class =>'ui dropdown'} %>
+                <div class="field input-container">
+                    <%= f.text_field :originـfield,{:class =>'origin-field typeahead dir-rtl web-font',placeholder: "از مبدا (شهر یا فرودگاه)"} %>						   
+                    <%= f.hidden_field :origin,{:id =>'origin'} %>
                 </div>
-                <div class="field">
-                    <%= f.select :destination, @cities.map{ |key,value| [("به "+"#{value[:fa]}"),value[:en]]},{:selected => @default_destination_city},{:class =>'ui dropdown'} %>
+        
+                <div class="field input-container">
+                    <%= f.text_field :destination_field,{:class =>'destination-field typeahead dir-rtl web-font',placeholder: "به مقصد (شهر یا فرودگاه)"} %>
+                    <%= f.hidden_field :destination,{:id =>'destination'} %>
                 </div> 
             </div>
             <div class="field ui calendar">
@@ -34,26 +37,19 @@
 </div>
 
 <div class="ui container" id="search-results-container" style="padding-top: 1em">
-	<% @cities.each do |origin_key,origin_value|  %>
-		<div class="city-calendar" >
-			<h4>
-				پروازهای
-				<b class="yellow-text"> 
-                    <%= "#{origin_value[:fa]}" %>
-                </b> 
-			</h4>
-            <p>
-                <% @cities.each do |destination_key,destination_value|  %>
-                    <% unless origin_key == destination_key %>
-                        <%= link_to "پرواز #{origin_value[:fa]} به  #{destination_value[:fa]}", route_page_path(origin_name: "#{origin_value[:en]}",destination_name: "#{destination_value[:en]}") %>
-                         | 
-                        <%= link_to "پرواز #{destination_value[:fa]} به #{origin_value[:fa]} ", route_page_path(origin_name: "#{destination_value[:en]}",destination_name: "#{origin_value[:en]}") %> 
-                         | 
-                    <% end %>
-                <% end %>
-			</p>
-		</div>
-	<% end %>
+    
+    <div class="city-calendar" >
+    
+        <% @routes.each do |route|  %>
+            <% origin = City.find_by(city_code: route.origin)  %>
+            <% destination = City.find_by(city_code: route.destination)  %>
+            
+                <%= link_to "پرواز #{origin.persian_name} به  #{destination.persian_name}", route_page_path(origin_name: "#{origin.english_name}",destination_name: "#{destination.english_name}") %>
+                    | 
+                <%= link_to "پرواز #{destination.persian_name} به #{origin.persian_name} ", route_page_path(origin_name: "#{destination.english_name}",destination_name: "#{origin.english_name}") %> 
+        
+        <% end %>
+    </div>
 </div>
 
 
@@ -66,15 +62,15 @@
             </b> 
         </h4>
         <p>
-            <% @cities.each do |origin_key,origin_value|  %>
-                <% @cities.each do |destination_key,destination_value|  %>
-                    <% unless origin_key == destination_key %>
-                        <%= link_to "پرواز #{origin_value[:fa]} به  #{destination_value[:fa]} امروز", flight_result_path(origin_name: "#{origin_value[:en]}",destination_name: "#{destination_value[:en]}",date:(Date.today).to_s) %>
-                            | 
-                        <%= link_to "پرواز#{destination_value[:fa]} به #{origin_value[:fa]} امروز", flight_result_path(origin_name: "#{destination_value[:en]}",destination_name: "#{origin_value[:en]}",date:(Date.today).to_s) %> 
-                            | 
-                    <% end %>
-                <% end %>
+            <% @routes.each do |route|  %>
+            <% origin = City.find_by(city_code: route.origin)  %>
+            <% destination = City.find_by(city_code: route.destination)  %>
+               
+                <%= link_to "پرواز #{origin.persian_name} به  #{destination.persian_name} امروز", flight_result_path(origin_name: "#{origin.english_name}",destination_name: "#{destination.english_name}",date:(Date.today).to_s) %>
+                    | 
+                <%= link_to "پرواز#{destination.persian_name} به #{origin.persian_name} امروز", flight_result_path(origin_name: "#{destination.english_name}",destination_name: "#{origin.english_name}",date:(Date.today).to_s) %> 
+                    | 
+                   
             <% end %>
         </p>
     </div>
@@ -89,15 +85,14 @@
             </b> 
         </h4>
         <p>
-            <% @cities.each do |origin_key,origin_value|  %>
-                <% @cities.each do |destination_key,destination_value|  %>
-                    <% unless origin_key == destination_key %>
-                        <%= link_to "پرواز #{origin_value[:fa]} به  #{destination_value[:fa]} فردا", flight_result_path(origin_name: "#{origin_value[:en]}",destination_name: "#{destination_value[:en]}",date:(Date.today+1).to_s) %>
+        <% @routes.each do |route|  %>
+            <% origin = City.find_by(city_code: route.origin)  %>
+            <% destination = City.find_by(city_code: route.destination)  %>
+                        <%= link_to "پرواز #{origin.persian_name} به  #{destination.persian_name} فردا", flight_result_path(origin_name: "#{origin.english_name}",destination_name: "#{destination.english_name}",date:(Date.today+1).to_s) %>
                             | 
-                        <%= link_to "پرواز#{destination_value[:fa]} به #{origin_value[:fa]} فردا", flight_result_path(origin_name: "#{destination_value[:en]}",destination_name: "#{origin_value[:en]}",date:(Date.today+1).to_s) %> 
+                        <%= link_to "پرواز#{destination.persian_name} به #{origin.persian_name} فردا", flight_result_path(origin_name: "#{destination.english_name}",destination_name: "#{origin.english_name}",date:(Date.today+1).to_s) %> 
                             | 
-                    <% end %>
-                <% end %>
+                   
             <% end %>
         </p>
     </div>

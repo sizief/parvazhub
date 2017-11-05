@@ -8,31 +8,26 @@ class CityPageController < ApplicationController
   def route
     @link_count = 0
     @prices = Hash.new
-    @cities = City.list
    
-	  @origin_code = City.get_city_code_based_on_english_name params[:origin_name]
-    not_found unless @origin_code 
+	  @origin = City.find_by(english_name:  params[:origin_name].downcase) 
+    not_found unless @origin
       
-    @destination_code = City.get_city_code_based_on_english_name params[:destination_name]
-	  not_found unless @destination_code 
+    @destination = City.find_by(english_name: params[:destination_name].downcase)
+	  not_found unless @destination 
 
-    @origin = City.list[@origin_code.to_sym]
-    @destination = City.list[@destination_code.to_sym]
-
-    @route_days = RouteDay.week_days(@origin_code,@destination_code)
+    @route_days = RouteDay.week_days(@origin.city_code,@destination.city_code)
     
-    @prices[:to] = Flight.new.get_lowest_price_for_month(@origin_code,@destination_code)
-    #@prices[:from] = Flight.new.get_lowest_price_for_month(@destination_code,@origin_code)
+    @prices[:to] = Flight.new.get_lowest_price_for_month(@origin.city_code,@destination.city_code)
 
-    @today_statistic = route_statistic(@origin_code,@destination_code,Date.today.to_s)
-    @tomorrow_statistic = route_statistic(@origin_code,@destination_code,(Date.today+1).to_s)
-    @day_after_statistic = route_statistic(@origin_code,@destination_code,(Date.today+2).to_s)
+    @today_statistic = route_statistic(@origin.city_code,@destination.city_code,Date.today.to_s)
+    @tomorrow_statistic = route_statistic(@origin.city_code,@destination.city_code,(Date.today+1).to_s)
+    @day_after_statistic = route_statistic(@origin.city_code,@destination.city_code,(Date.today+2).to_s)
 
     @prices = prepare_for_calendar_view @prices
   end
 
   def flight
-    @cities = City.list
+    @routes = Route.all.order(:origin)
     @default_destination_city = City.default_destination_city
   end
 

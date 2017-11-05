@@ -107,11 +107,10 @@ class Suppliers::Safarme
   end
 
   def get_deep_link(origin,destination,date)
-    origin_name = City.list[origin.to_sym][:en].upcase
-    origin_name = city_name_correction origin_name
-
-    destination_name = City.list[destination.to_sym][:en].upcase
-    destination_name = city_name_correction destination_name
+    origin_city = City.find_by(city_code: origin)
+    origin_name = city_name_correction origin_city.english_name.upcase
+    destination_city = City.find_by(city_code: destination)
+    destination_name = city_name_correction destination_city.english_name.upcase
     shamsi_date = date.to_date.to_parsi  
 
     if ((destination_name == "RASHT" ) or (destination_name == "ARDABIL" ))

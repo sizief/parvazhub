@@ -6,14 +6,6 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-#cities = City.list
-#cities.each do |origin_key,origin_value|
-#	cities.each do |destination_key,destination_value|
-#    unless Route.find_by(origin: origin_key, destination: destination_key)
-#      Route.create(origin: origin_key, destination: destination_key) unless destination_key == origin_key
-#    end
-#	end
-#end
 
 #supplier_list = [
 #        {class: "Suppliers::Flightio",name: "flightio"},
@@ -52,7 +44,7 @@ airline_list =[
 airline_list.each do |airline|
   Airline.create(code: airline[:code], persian_name: airline[:persian_name],english_name: airline[:english_name])
 end
-=end
+
 
 require 'csv'    
 csv_text = File.read("db/countries.csv")
@@ -61,12 +53,7 @@ csv.each do |x|
   Country.create(x.to_hash)
 end
 
-require 'csv'    
-csv_text = File.read("db/cities.csv")
-csv = CSV.parse(csv_text, :headers => true)
-csv.each do |x|
-  City.create(x.to_hash)
-end
+
 
 
 require 'csv'    
@@ -74,6 +61,13 @@ csv_text = File.read("db/airports.csv")
 csv = CSV.parse(csv_text, :headers => true)
 csv.each do |x|
   Airport.create(x.to_hash)
+end
+=end
+require 'csv'    
+csv_text = File.read("db/cities.csv")
+csv = CSV.parse(csv_text, :headers => true)
+csv.each do |x|
+  City.create(x.to_hash)
 end
 
 
