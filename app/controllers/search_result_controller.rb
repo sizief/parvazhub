@@ -83,7 +83,8 @@ class SearchResultController < ApplicationController
        @flight_dates = Flight.new.get_lowest_price_time_table(origin.city_code,destination.city_code,Date.today.to_s)
      else
        @flight_dates = Flight.new.get_lowest_price_time_table(origin.city_code,destination.city_code,date)
-     end      
+     end   
+     @is_mobile = browser.device.mobile?    
 
      render :index
   end

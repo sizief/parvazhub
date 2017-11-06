@@ -17,48 +17,22 @@
 				 <a class="ui primary basic blue" onclick="$('#search-box-inner').transition('slide');" style="cursor:pointer">
 				 <i class="search icon"></i> تغییر مبدا، مقصد یا تاریخ</a>
 		 	</div>
-		 	<!--<div class="left floated column right aligned">
-		  		<button class="ui tiny blue button web-font" onclick="$('#price-alert-register').transition('slide');">
-		  		قیمت‌ها را هر روز به ایمیلم بفرست
-		  		</button>
-		  	</div>-->
 		</div> 	
 	</div>
-
-	<!--<div class="ui" id="price-alert-register">
-	<%= form_tag(price_alert_register_path, method: :post, class: "ui form", remote: true) do %>			<div class="ui form">
-			<div class="three fields">
-				<div class="field text-right">
-					<i class="alarm outline icon teal"></i>
-					به چه آدرسی بفرستیم؟
-				</div>
-				<div class="field">
-					<%= text_field_tag :email %>
-					<%= hidden_field_tag(:origin, @search_parameter[:origin_code]) %>
-					<%= hidden_field_tag(:destination, @search_parameter[:destination_code]) %>
-					<%= hidden_field_tag(:date, @search_parameter[:date]) %>
-				</div>
-				<div class="field center aligned">
-					<%= submit_tag "ثبت کن", class: "ui submit web-font blue button fluid" %>
-				</div>	
-			</div>
-		</div>
-	<%end%>
-	</div>-->
 
 	<div class="ui" id="search-box-inner">
 		<%= form_for(:search, url: flight_search_path, method: :get, html: {id:"flight_search"}) do |f| %>
 			<div class="ui form">
 				<div class="four fields">
 					<div class="field input-container">
-						<%= f.text_field :originـfield,{:class =>'origin-field typeahead dir-rtl web-font',placeholder: "از مبدا (شهر یا فرودگاه)"} %>			
-						<%= f.hidden_field :origin,{:id =>'origin'} %>
+						<%= f.text_field :originـfield,{:class =>'origin-field typeahead dir-rtl web-font',placeholder: "از مبدا (شهر یا فرودگاه)", value:@search_parameter[:origin_persian_name]} %>			
+						<%= f.hidden_field :origin,{:id =>'origin',value:@search_parameter[:origin_english_name]} %>
 					</div>
 					
 					
 					<div class="field input-container">
-						<%= f.text_field :destination_field,{:class =>'destination-field typeahead dir-rtl web-font',placeholder: "به مقصد (شهر یا فرودگاه)"} %>
-						<%= f.hidden_field :destination,{:id =>'destination'} %>
+						<%= f.text_field :destination_field,{:class =>'destination-field typeahead dir-rtl web-font',placeholder: "به مقصد (شهر یا فرودگاه)",value:@search_parameter[:destination_persian_name]} %>
+						<%= f.hidden_field :destination,{:id =>'destination',value:@search_parameter[:destination_english_name]} %>
 					</div>
 					<div class="field ui calendar">
 						<div class="ui input left icon">
