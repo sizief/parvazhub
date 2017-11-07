@@ -64,7 +64,7 @@ csv.each do |x|
 end
 =end
 require 'csv'    
-csv_text = File.read("db/cities.csv")
+csv_text = File.read("db/cities-with-farsi.csv")
 csv = CSV.parse(csv_text, :headers => true)
 csv.each do |x|
   City.create(x.to_hash)

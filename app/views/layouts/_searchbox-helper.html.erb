@@ -15,13 +15,20 @@ $(document).ready(function(){
       datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
       queryTokenizer: Bloodhound.tokenizers.whitespace, 
       identify: function(obj) { return obj.value; },
-      prefetch: { url: '<%= api_cities_prefetch_suggestion_path %>'}
+      prefetch: { url: '<%= api_city_prefetch_suggestion_path %>'},
+      remote: {
+        url: '<%= api_city_suggestion_path "QUERY" %>',
+        wildcard: 'QUERY',
+        cache: false
+      },
+      limit: 10
+      
     });
-    function citiesWithDefaults(q, sync) {
+    function citiesWithDefaults(q, sync, async) {
         if (q === '') {
-          sync(cities.all().slice(0, 5)); 		  
+          sync(cities.all().slice(0, 6)); 		  
         }else {
-            cities.search(q, sync);
+            cities.search(q, sync, async);
         }
       }
     cities.initialize();
@@ -30,7 +37,8 @@ $(document).ready(function(){
       hint: false,
       highlight:false,
       minLength: 0,
-      autoselect: true
+      autoselect: true,
+      limit: 10
       },
       {
           name: 'cities',
@@ -44,7 +52,8 @@ $(document).ready(function(){
                   '</div>'
               ].join('\n'),
               suggestion: function (i) {
-                  return '<p><i class="plane blue icon"></i>' + i.value + '</p>'
+                  return '<p><i class="plane blue icon"></i>' + i.value + 
+                  '<span style="font-size: 0.8em;color:gray">  '+i.country + '</span></p>'
               }
           }
       }
