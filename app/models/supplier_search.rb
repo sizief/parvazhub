@@ -3,17 +3,22 @@ class SupplierSearch
 	def search(origin,destination,date,timeout,who_started)
     ActiveRecord::Base.connection_pool.with_connection do  
       route = Route.find_by(origin:"#{origin}", destination:"#{destination}")
-      search_supplier_in_threads(timeout,origin,destination,route.id,date,who_started) 
-      #search_supplier_in_series(timeout,origin,destination,route.id,date,who_started) 
-      
+      search_supplier_in_threads(timeout,origin,destination,route,date,who_started) 
+      #search_supplier_in_series(timeout,origin,destination,route,date,who_started) 
     end
 	end
 
-  def search_supplier_in_threads(delay,origin,destination,route_id,date,who_started)    
+  def search_supplier_in_threads(delay,origin,destination,route,date,who_started)    
     threads = []
+    is_search_international = route.international
     supplier_list = nil
     ActiveRecord::Base.connection_pool.with_connection do  
-      supplier_list = Supplier.where(status:true)
+      if is_search_international 
+        supplier_list = Supplier.where(status:true, international: true)
+      else
+        supplier_list = Supplier.where(status:true, domestic: true)
+      end        
+
     end
     begin 
       
@@ -21,7 +26,7 @@ class SupplierSearch
         supplier_list.each do |supplier|
           threads << Thread.new do
             begin
-              search_supplier(supplier[:name],supplier[:class_name],origin,destination,route_id,date,who_started)
+              search_supplier(supplier[:name],supplier[:class_name],origin,destination,route,date,who_started)
             rescue
             end
           end
@@ -35,7 +40,7 @@ class SupplierSearch
     end
   end
 
-  def search_supplier_in_series(delay,origin,destination,route_id,date,who_started)  
+  def search_supplier_in_series(delay,origin,destination,route,date,who_started)  
     supplier_list = nil
     ActiveRecord::Base.connection_pool.with_connection do  
       supplier_list = Supplier.where(status:true)
@@ -44,7 +49,7 @@ class SupplierSearch
       
         supplier_list.each do |supplier|
             begin
-              search_supplier(supplier[:name],supplier[:class_name],origin,destination,route_id,date,who_started)
+              search_supplier(supplier[:name],supplier[:class_name],origin,destination,route,date,who_started)
             rescue
             end
         end
@@ -52,19 +57,19 @@ class SupplierSearch
     end
   end
 
-  def search_supplier(supplier_name,supplier_class,origin,destination,route_id,date,who_started)
+  def search_supplier(supplier_name,supplier_class,origin,destination,route,date,who_started)
       search_history = nil
       flight_list = supplier_class.constantize.new()
       
       ActiveRecord::Base.connection_pool.with_connection do        
-        search_history = SearchHistory.create(supplier_name:"#{supplier_name}",route_id:route_id,departure_time: date,status:"#{who_started} Started(#{Time.now.strftime('%M:%S')})")
+        search_history = SearchHistory.create(supplier_name:"#{supplier_name}",route_id:route.id,departure_time: date,status:"#{who_started} Started(#{Time.now.strftime('%M:%S')})")
       end
       
       response = flight_list.search(origin,destination,date,search_history.id)
 
       if response[:status] == true
         log(supplier_name,response[:response]) if Rails.env.development?  
-        flight_list.import_domestic_flights(response,route_id,origin,destination,date,search_history.id)
+        flight_list.import_domestic_flights(response,route.id,origin,destination,date,search_history.id)
         update_flight_best_price(origin,destination,date) 
       end
   end

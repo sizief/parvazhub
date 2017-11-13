@@ -1,11 +1,11 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-# This model initially had no columns defined. If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-# column: value
+<% require 'csv' %>
+<% csv_text = File.read("db/airlines.csv") %>
+<% csv = CSV.parse(csv_text, :headers => true) %>
+<% csv.each do |x| %>
+fix_<%= x["id"] %>:  
+  english_name: "<%= x['english_name'] %>"
+  persian_name: "<%= x['persian_name'] %>"
+  code: "<%= x['code'] %>"
+  rate_count: "<%= x['rate_count'] %>"
+  rate_average: "<%= x['rate_average'] %>"
+<% end %>

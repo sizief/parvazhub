@@ -41,7 +41,8 @@ class SearchResultController < ApplicationController
     end
     response_available = SearchHistory.where(route_id:route.id,departure_time:"#{date}").where('created_at >= ?', allow_response_time(date).to_f.minutes.ago).count
     if ((response_available == 0) and (date >= Date.today.to_s))
-      SupplierSearch.new.search(route.origin,route.destination,date,20,"user") 
+      search_timeout = route.international? ? 30 : 20
+      SupplierSearch.new.search(route.origin,route.destination,date,search_timeout,"user") 
     end
   end
 
@@ -75,8 +76,7 @@ class SearchResultController < ApplicationController
      date_in_human = date.to_date.to_parsi.strftime '%A %-d %B'     
      @search_parameter ={origin_english_name: origin.english_name, origin_persian_name: origin.persian_name, origin_code: origin.city_code,
                          destination_english_name: destination.english_name, destination_persian_name: destination.persian_name, destination_code: destination.city_code,
-                         date: date, date_in_human: date_in_human}
-     @airline_english_list = Airline.english_hash_list
+                         date: date, date_in_human: date_in_human, international: route.international}
      @route_days = RouteDay.week_days(origin.city_code,destination.city_code)
      
      if date <= Date.today.to_s

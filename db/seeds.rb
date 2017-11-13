@@ -54,20 +54,26 @@ csv.each do |x|
 end
 
 
-
-
 require 'csv'    
 csv_text = File.read("db/airports.csv")
 csv = CSV.parse(csv_text, :headers => true)
 csv.each do |x|
   Airport.create(x.to_hash)
 end
-=end
+
+
 require 'csv'    
 csv_text = File.read("db/cities-with-farsi.csv")
 csv = CSV.parse(csv_text, :headers => true)
 csv.each do |x|
   City.create(x.to_hash)
 end
+=end
 
+require 'csv'    
+csv_text = File.read("db/airlines.csv")
+csv = CSV.parse(csv_text, :headers => true)
+csv.each do |x|
+  Airline.create(x.to_hash)
+end
 

@@ -11,7 +11,7 @@ class Airports::DomesticAirport
     [
       ["mashhad","mhd",346],
       ["tabriz","tbz",81],
-      ["shiraz","syz",181],
+      ["shiraz","syz",179],
       ["ahwaz","awz",96],
       ["isfahan","ifn",108],
       ["kerman","ker",26],

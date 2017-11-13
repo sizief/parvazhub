@@ -43,4 +43,30 @@ module SearchResultHelper
 		end
 	end
 
+	def trip_duration_to_human total_minute
+		message = " "
+		hours = total_minute / 60
+		minutes = (total_minute) % 60
+		message = "#{hours} ساعت " unless hours == 0 
+		message += "و #{minutes} دقیقه " unless minutes == 0 
+		return message
+	end
+
+	def stop_to_human stops
+		stops = stops.split(",")
+		if stops.count == 1
+			message = "بدون توقف" 
+		else
+			message = "این سفر #{stops.count-1} توقف در "
+		    stops.each_with_index do |stop, index|
+				next if stops.count == index+1
+				message += " و " if index >= 1
+				message += stop
+			end
+			message += " دارد"
+
+		end
+		message
+	end
+
 end

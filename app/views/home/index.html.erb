@@ -43,13 +43,13 @@
      			<div class="two fields">
       				<div class="field input-container">
 						   <%= f.text_field :originـfield,{:class =>'origin-field typeahead dir-rtl web-font',placeholder: "از مبدا (شهر یا فرودگاه)"} %>						   
-						   <%= f.hidden_field :origin,{:id =>'origin'} %>
+						   <%= f.hidden_field :origin,{:id =>'origin',:value =>'tehran'} %>
 					  </div>
 					  
 					  
       				<div class="field input-container">
 					  <%= f.text_field :destination_field,{:class =>'destination-field typeahead dir-rtl web-font',placeholder: "به مقصد (شهر یا فرودگاه)"} %>
-					  <%= f.hidden_field :destination,{:id =>'destination'} %>
+					  <%= f.hidden_field :destination,{:id =>'destination',:value =>'mashhad'} %>
       				</div> 
   				</div>
   				<div id="date-picker" style="height: 10em; font-family: samim;">

@@ -2,8 +2,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
 <% provide(:canonical,"<link rel=\"canonical\" href=\"http://parvazhub.com/flights/#{@search_parameter[:origin_english_name]}-#{@search_parameter[:destination_english_name]}\"/> ".html_safe)%>
 
-<% provide(:title,"پروازهاب: قیمت‌‌های #{@search_parameter[:origin_persian_name]} به  #{@search_parameter[:destination_persian_name]} #{@search_parameter[:date].to_date.to_parsi.strftime('%d %B')} #{airline_name_for(@flight.airline_code)} #{hour_to_human(@flight.departure_time.to_datetime.strftime('%H:%M'))}" ) %>
-<% provide(:description,"لیست بهترین قیمت‌های پرواز #{@search_parameter[:origin_persian_name]} به  #{@search_parameter[:destination_persian_name]} #{@search_parameter[:date].to_date.to_parsi.strftime('%d %B')} ایرلاین #{airline_name_for(@flight.airline_code)} #{hour_to_human(@flight.departure_time.to_datetime.strftime('%H:%M'))}" ) %>
+<% provide(:title,"پروازهاب: قیمت‌‌های #{@search_parameter[:origin_persian_name]} به  #{@search_parameter[:destination_persian_name]} #{@search_parameter[:date].to_date.to_parsi.strftime('%d %B')} #{airline_name_for(@flight)} #{hour_to_human(@flight.departure_time.to_datetime.strftime('%H:%M'))}" ) %>
+<% provide(:description,"لیست بهترین قیمت‌های پرواز #{@search_parameter[:origin_persian_name]} به  #{@search_parameter[:destination_persian_name]} #{@search_parameter[:date].to_date.to_parsi.strftime('%d %B')} ایرلاین #{airline_name_for(@flight)} #{hour_to_human(@flight.departure_time.to_datetime.strftime('%H:%M'))}" ) %>
 
 <div class="ui container" id="search-results-container">
 
@@ -12,7 +12,7 @@
             <%= airline_logo_for @flight.airline_code %> 
             <div class="content">
                 بهترین قیمت‌های پرواز   
-                <%= airline_name_for @flight.airline_code %>     
+                <%= airline_name_for @flight %>     
                 <%= hour_to_human @flight.departure_time.to_datetime.strftime("%H:%M") %>            
                 <%= @flight.airplane_type.empty? ? " " : airplane_name_for(@flight.airplane_type) %>
                 <div class="sub header" style="margin-top: 7px">
@@ -75,7 +75,7 @@
                                 $(document).ready(function(){
                                     var myChart = new Chart(ctx, {
                                         type: 'line',
-                                        data: {labels: labels,datasets: [{label: " تغییرات حداقل قیمت بلیط <%= hour_to_human @flight.departure_time.to_datetime.strftime('%H:%M') %> <%= airline_name_for @flight.airline_code %> ",borderColor: 'rgb(154, 154, 154)',backgroundColor:  'rgb(154, 154, 154)', data: data,fill: false,lineTension: 0}]},
+                                        data: {labels: labels,datasets: [{label: " تغییرات حداقل قیمت بلیط <%= hour_to_human @flight.departure_time.to_datetime.strftime('%H:%M') %> <%= airline_name_for @flight %> ",borderColor: 'rgb(154, 154, 154)',backgroundColor:  'rgb(154, 154, 154)', data: data,fill: false,lineTension: 0}]},
                                         options: {
                                             showLines: true,
                                             scales: {

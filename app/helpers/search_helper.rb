@@ -40,9 +40,13 @@ module SearchHelper
 		days_in_farsi[day]
 	end
 
-    def airline_name_for(airline_code)
-	  airlines = Airline.persian_hash_list 
-	  airlines[airline_code.to_sym].nil? ? airline_code : airlines[airline_code.to_sym]
+    def airline_name_for(flight)
+	  if flight.airline_persian_name.nil?
+		name = flight.airline_english_name
+	  else
+		name = flight.airline_persian_name
+	  end
+	  return name
 	end
 
 	def airplane_name_for airplane_type

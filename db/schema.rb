@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171101150116) do
+ActiveRecord::Schema.define(version: 20171113081438) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -119,11 +119,14 @@ ActiveRecord::Schema.define(version: 20171101150116) do
     t.string   "flight_number"
     t.datetime "departure_time"
     t.string   "airline_code"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
     t.string   "airplane_type"
     t.integer  "best_price"
     t.string   "price_by"
+    t.datetime "arrival_date_time"
+    t.integer  "trip_duration"
+    t.string   "stops"
     t.index ["route_id", "flight_number", "departure_time"], name: "index_flights_on_route_id_and_flight_number_and_departure_time", unique: true, using: :btree
   end
 
@@ -180,8 +183,9 @@ ActiveRecord::Schema.define(version: 20171101150116) do
   create_table "routes", force: :cascade do |t|
     t.string   "origin"
     t.string   "destination"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.boolean  "international"
   end
 
   create_table "search_histories", force: :cascade do |t|
@@ -198,8 +202,10 @@ ActiveRecord::Schema.define(version: 20171101150116) do
     t.string   "name"
     t.string   "class_name"
     t.boolean  "status"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.boolean  "international"
+    t.boolean  "domestic"
   end
 
   create_table "telegram_search_queries", force: :cascade do |t|
@@ -222,6 +228,26 @@ ActiveRecord::Schema.define(version: 20171101150116) do
     t.string "last_name"
     t.string "username"
     t.index ["telegram_id"], name: "index_telegram_users_on_telegram_id", unique: true, using: :btree
+  end
+
+  create_table "temp_airports", force: :cascade do |t|
+    t.string "ident"
+    t.string "type_airport"
+    t.string "name"
+    t.string "latitude_deg"
+    t.string "longitude_deg"
+    t.string "elevation_ft"
+    t.string "continent"
+    t.string "iso_country"
+    t.string "iso_region"
+    t.string "municipality"
+    t.string "scheduled_service"
+    t.string "gps_code"
+    t.string "iata_code"
+    t.string "local_code"
+    t.string "home_link"
+    t.string "wikipedia_link"
+    t.string "keywords"
   end
 
   create_table "user_flight_price_histories", force: :cascade do |t|

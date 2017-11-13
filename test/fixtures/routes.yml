@@ -6,4 +6,5 @@ fix_<%= x["id"] %>:
   id: "<%= x['id'] %>"
   origin: "<%= x['origin'] %>"
   destination: "<%= x['destination'] %>"
+  international: "<%= x['international'] %>"
 <% end %>

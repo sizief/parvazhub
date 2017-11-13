@@ -8,12 +8,16 @@ class Flight < ApplicationRecord
 
   attr_accessor :delay
   attr_accessor :suppliers_count
+  attr_accessor :airline_persian_name
+  attr_accessor :airline_english_name
+  attr_accessor :airline_rate_average
 
-  def self.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
+  def self.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type, arrival_date_time = nil ,stops = nil,trip_duration = nil)
     is_flight_exist = Flight.find_by(flight_number:flight_number,departure_time:departure_time)
     if is_flight_exist.nil?
       begin
-        stored_flight = Flight.create(route_id: "#{route_id}", flight_number:"#{flight_number}", departure_time:"#{departure_time}", airline_code:"#{airline_code}", airplane_type: "#{airplane_type}")
+        #stored_flight = Flight.create(route_id: "#{route_id}", flight_number:"#{flight_number}", departure_time:"#{departure_time}",arrival_date_time: "#{arrival_date_time}", airline_code:"#{airline_code}", airplane_type: "#{airplane_type}")
+        stored_flight = Flight.create(route_id: route_id, flight_number: flight_number, departure_time: departure_time,arrival_date_time: arrival_date_time, airline_code: airline_code, airplane_type: airplane_type, stops: stops, trip_duration: trip_duration)
         flight_id = stored_flight.id
       rescue
         flight_id = Flight.find_by(flight_number:flight_number,departure_time:departure_time).id
@@ -119,14 +123,27 @@ class Flight < ApplicationRecord
   end
 
   def flight_list(route,date)
+    airline_list = Airline.list 
     flight_list = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s).where.not(best_price:0)
     flight_list.each do |flight|
-      flight.suppliers_count = flight.flight_prices.count
       flight_info = FlightInfo.find_by(flight_id: flight.id) 
+      flight.suppliers_count = flight.flight_prices.count
+      flight.delay = flight_info.delay unless flight_info.nil?
+      flight.airline_code = flight.airline_code.split(",")[0]
+      unless airline_list[flight.airline_code.to_sym].nil? 
+        flight.airline_english_name = airline_list[flight.airline_code.to_sym][:english_name]
+        flight.airline_persian_name = airline_list[flight.airline_code.to_sym][:persian_name] 
+        flight.airline_rate_average = airline_list[flight.airline_code.to_sym][:rate_average].nil? ? 0 : airline_list[flight.airline_code.to_sym][:rate_average]
+      else
+        flight.airline_english_name = flight.airline_code
+        flight.airline_persian_name = flight.airline_code
+        flight.airline_rate_average = 0 
+      end
+
+      flight.airplane_type = "" unless flight.airplane_type
       if flight.airplane_type.empty?
-         flight.airplane_type = flight_info.airplane unless flight_info.nil?
-         flight.delay = flight_info.delay unless flight_info.nil?
-       end
+         flight.airplane_type = flight_info.airplane unless flight_info.nil? 
+      end
      end
     flight_list = flight_list.sort_by(&:best_price)
   end

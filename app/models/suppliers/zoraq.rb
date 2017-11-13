@@ -1,10 +1,15 @@
 class Suppliers::Zoraq
-    require "uri"
-    require "rest-client"
+  require "uri"
+  require "rest-client"
     
-    def search(origin,destination,date,search_history_id)
+  def search(origin,destination,date,search_history_id)
       if Rails.env.test?
-        response = File.read("test/fixtures/files/domestic-zoraq.log") 
+        if Route.select(:international).find_by(origin: origin, destination: destination).international
+          file = "international-zoraq.log"
+        else
+          file = "domestic-zoraq.log"
+        end
+          response = File.read("test/fixtures/files/"+file) 
         return {response: response}
       end
 
@@ -23,89 +28,112 @@ class Suppliers::Zoraq
           return {status:false}
       end
       return {status:true,response: response.body}
-    end
+  end
 
-    def import_domestic_flights(response,route_id,origin,destination,date,search_history_id)
-      flight_prices = Array.new()
-      json_response = JSON.parse(response[:response])
-      ActiveRecord::Base.connection_pool.with_connection do        
-        SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
-      end
-      json_response["PricedItineraries"].each do |flight|
-        flight_number = airline_code = airplane_type = departure_date_time = flight_id = nil
-        flight_legs = flight["OriginDestinationOptions"][0]["FlightSegments"]
-      
-        flight_legs.each do |leg|
-          corrected_airline_code = airline_code_correction(leg["OperatingAirline"]["Code"])
+  def import_domestic_flights(response,route_id,origin,destination,date,search_history_id)
+      begin
+        flight_prices = Array.new()
+        json_response = JSON.parse(response[:response])
+        ActiveRecord::Base.connection_pool.with_connection do        
+          SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
+        end
+        json_response["PricedItineraries"].each do |flight|
+          leg_data = flight_id = nil
+          flight_legs = flight["OriginDestinationOptions"][0]["FlightSegments"]
+          leg_data = prepare flight_legs
 
-          #to add airline code to flight number for some corrupted flight numbers
-          #for example there is 4545 flight number which is not correct
-          #the correct format is w54545
-          if leg["FlightNumber"].include? corrected_airline_code
-            correct_flight_number = leg["FlightNumber"]
-          else
-            correct_flight_number = corrected_airline_code+leg["FlightNumber"]
+          ActiveRecord::Base.connection_pool.with_connection do        
+            flight_id = Flight.create_or_find_flight(route_id,
+            leg_data[:flight_number].join(","),
+            leg_data[:departure_date_time].first,
+            leg_data[:airline_code].join(","),
+            leg_data[:airplane_type].join(","),
+            leg_data[:arrival_date_time].last,
+            leg_data[:stop].join(","),
+            leg_data[:trip_duration])
           end
 
-          correct_flight_number = correct_flight_number.tr('.','') #sometimes zoraq responses with "." in start or end of a flight number
+          departure_date = leg_data[:departure_date_time].first.strftime("%F")
+          price = flight["AirItineraryPricingInfo"]["PTC_FareBreakdowns"][0]["PassengerFare"]["TotalFare"]["Amount"]
+          deeplink_url = get_zoraq_deeplink(origin, destination,date,flight["AirItineraryPricingInfo"]["FareSourceCode"])
+          
+          #to prevent duplicate flight prices we compare flight prices before insert into database
+          flight_price_so_far = flight_prices.select {|flight_price| flight_price.flight_id == flight_id}
+          unless flight_price_so_far.empty? #check to see a flight price for given flight is exists
+            if flight_price_so_far.first.price.to_i <= price.to_i #saved price is cheaper or equal to new price so we dont touch it
+              next
+            else
+              flight_price_so_far.first.price = price #new price is cheaper, so update the old price and go to next price
+              flight_price_so_far.first.deep_link = deeplink_url
+              next
+            end
+          end
 
-          flight_number = flight_number.nil? ? correct_flight_number : flight_number +"|"+correct_flight_number
-          airline_code = airline_code.nil? ? corrected_airline_code : airline_code +"|"+corrected_airline_code
-          airplane_type = airplane_type.nil? ? leg["OperatingAirline"]["Equipment"] : airplane_type +"|"+leg["OperatingAirline"]["Equipment"]
-          #we need just first departre date time, so the other leg's departre time is commented
-          departure_date_time = departure_date_time.nil? ? leg["DepartureDateTime"] : departure_date_time # +"|"+leg["DepartureDateTime"]
-        end
+          ActiveRecord::Base.connection_pool.with_connection do        
+            flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"zoraq", flight_date:"#{departure_date}", deep_link:"#{deeplink_url}" )
+          end
 
-        departure_time = parse_date(departure_date_time).utc.to_datetime
-        departure_time = departure_time + ENV["IRAN_ADDITIONAL_TIMEZONE"].to_f.minutes # add 4:30 hours because zoraq date time is in iran time zone #.strftime("%H:%M")
-
-        ActiveRecord::Base.connection_pool.with_connection do        
-          flight_id = Flight.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
-        end
-
-        departure_date = departure_time.strftime("%F")
-        price = flight["AirItineraryPricingInfo"]["PTC_FareBreakdowns"][0]["PassengerFare"]["TotalFare"]["Amount"]
-        deeplink_url = get_zoraq_deeplink(origin, destination,date,flight["AirItineraryPricingInfo"]["FareSourceCode"])
+        end #end of each loop
         
-        #to prevent duplicate flight prices we compare flight prices before insert into database
-        flight_price_so_far = flight_prices.select {|flight_price| flight_price.flight_id == flight_id}
-        unless flight_price_so_far.empty? #check to see a flight price for given flight is exists
-          if flight_price_so_far.first.price.to_i <= price.to_i #saved price is cheaper or equal to new price so we dont touch it
-            next
-          else
-            flight_price_so_far.first.price = price #new price is cheaper, so update the old price and go to next price
-            flight_price_so_far.first.deep_link = deeplink_url
-            next
+        unless flight_prices.empty?
+          ActiveRecord::Base.connection_pool.with_connection do        
+            FlightPrice.delete_old_flight_prices("zoraq",route_id,date) 
+            FlightPrice.import flight_prices
+            FlightPriceArchive.archive flight_prices
+            SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
+          end
+        else
+          ActiveRecord::Base.connection_pool.with_connection do        
+            SearchHistory.append_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
           end
         end
-
-        ActiveRecord::Base.connection_pool.with_connection do        
-          flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"zoraq", flight_date:"#{departure_date}", deep_link:"#{deeplink_url}" )
-        end
-
-      end #end of each loop
-      
-      unless flight_prices.empty?
-        ActiveRecord::Base.connection_pool.with_connection do        
-          FlightPrice.delete_old_flight_prices("zoraq",route_id,date) 
-          FlightPrice.import flight_prices
-          FlightPriceArchive.archive flight_prices
-          SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
-        end
-      else
-        ActiveRecord::Base.connection_pool.with_connection do        
-          SearchHistory.append_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
-        end
+      rescue
+        raise
       end
+  end
 
+  def prepare flight_legs
+    flight_numbers, airline_codes, airplane_types, departure_date_times, arrival_date_times, stops = Array.new, Array.new, Array.new, Array.new, Array.new, Array.new
+    trip_duration = 0
+    flight_legs.each do |leg|
+      airline_code = airline_code_correction(leg["OperatingAirline"]["Code"])
+      flight_number = (leg["FlightNumber"].include? airline_code) ? leg["FlightNumber"] : airline_code+leg["FlightNumber"]
+      flight_number = flight_number.tr('.','') #sometimes zoraq responses with "." in start or end of a flight number
 
+      flight_numbers << flight_number 
+      airline_codes << airline_code
+      airplane_types << leg["OperatingAirline"]["Equipment"]
+      departure_date_times << parse_date(leg["DepartureDateTime"]).utc.to_datetime + ENV["IRAN_ADDITIONAL_TIMEZONE"].to_f.minutes # add 4:30 hours because zoraq date time is in iran time zone #.strftime("%H:%M")
+      arrival_date_times << parse_date(leg["ArrivalDateTime"]).utc.to_datetime + ENV["IRAN_ADDITIONAL_TIMEZONE"].to_f.minutes
+      stops << leg["ArrivalAirportLocationCode"]
+      trip_duration += leg["JourneyDuration"]
+    end
+    
+    trip_duration += calculate_stopover_duration(departure_date_times,arrival_date_times)
+    return {flight_number: flight_numbers,
+            airline_code: airline_codes,
+            airplane_type: airplane_types,
+            departure_date_time: departure_date_times,
+            arrival_date_time: arrival_date_times,
+            stop: stops,
+            trip_duration: trip_duration}
+  end
+
+  def calculate_stopover_duration (departures,arrivals)
+    duration = 0    
+    if departures.count > 1
+      departures.each_with_index do |departure,index|
+        next if index == 0
+        duration += ((departure - arrivals[index-1])*24*60).to_i        
+      end
+    end
+    duration
   end
 
   def parse_date(datestring)
     seconds_since_epoch = datestring.scan(/[0-9]+/)[0].to_i / 1000.0
     return Time.at(seconds_since_epoch)
   end
-
 
   def airline_code_correction(airline_code)
     airlines ={

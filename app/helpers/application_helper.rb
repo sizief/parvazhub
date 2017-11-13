@@ -20,10 +20,6 @@ module ApplicationHelper
     return markup_delivery
   end
 
-  def get_airline_rate(code)
-    airline = Airline.find_by(code: code)
-    amount = airline.nil? ? 0 : airline.rate_average
-    amount ||= 0
-  end
+
 
 end

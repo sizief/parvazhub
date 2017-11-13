@@ -3,6 +3,10 @@
 
 <div class="ui container" id="search-results-container" style="direction: rtl;padding-top: 2em;" >
 	<div class="ui stackable one column grid centered" style="margin-top: 1em">
+	<div style="font-size:1.5em; padding:1.5em">
+	مسیر مورد نظر شما در سیستم ما موجود نیست. لطفا مسیر دیگری انتخاب کنید.
+	</div>
+	
 	<%= form_for(:search, url: flight_search_path, method: :get, html: {id:"flight_search"}) do |f| %>
 		<div class="ui huge form" >
 			<div class="two fields">

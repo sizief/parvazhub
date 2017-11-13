@@ -25,11 +25,25 @@ class SuppliersZoraqTest < ActiveSupport::TestCase
     assert_not response[:response].empty?
   end
 
+  test "Zoraq international search should answered with hash response" do
+    response = @zoraq_search.search("thr","ist",@date,@search_history_id)
+    assert response.is_a? Hash
+    assert_not response[:response].empty?
+  end
+
   test "flights from zoraq should saved to flights table" do
     response = @zoraq_search.search(@origin,@destination,@date,@search_history_id)
     route = Route.find_by(origin:@origin,destination:@destination)
     assert_difference 'Flight.count', 7 do
       @zoraq_search.import_domestic_flights(response,route.id,@origin,@destination,@date,@search_history_id)
+    end
+  end
+
+  test "international flights from zoraq should saved to flights table" do
+    response = @zoraq_search.search("thr","ist",@date,@search_history_id)
+    route = Route.find_by(origin:"thr",destination:"ist")
+    assert_difference 'Flight.count', 87 do
+      @zoraq_search.import_domestic_flights(response,route.id,"thr","ist",@date,@search_history_id)
     end
   end
 
@@ -56,6 +70,16 @@ class SuppliersZoraqTest < ActiveSupport::TestCase
     assert deeplink.include? "مشهد"
     assert deeplink.include? "تهران"
   end
+
+  test "calculate stop overs" do
+    arrivals = ["2017-11-19 18:00:00".to_datetime,"2017-11-19 20:00:00".to_datetime,"2017-11-19 23:00:00".to_datetime]
+    departures = ["2017-11-19 14:00:00".to_datetime,"2017-11-19 19:00:00".to_datetime,"2017-11-19 22:00:00".to_datetime]
+    
+    assert_equal  @zoraq_search.calculate_stopover_duration(["2017-11-19 18:00:00".to_datetime],["2017-11-19 18:00:00".to_datetime]),0 
+    assert_equal  @zoraq_search.calculate_stopover_duration(departures,arrivals),180
+
+  end
+
   
 
 end

@@ -82,12 +82,12 @@
 									<a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight.id) %>" data-remote="false">														
 										<h5 class="ui image header web-font">
 											<%= airline_logo_for flight.airline_code %> 
-											<div class="content">
-												<%= airline_name_for flight.airline_code %>
+											<div class="content" style="font-size:0.9em">
+												<%= airline_name_for flight %>
 												<div class="ui tiny rating">
 											</div>
 												<div class="sub header" style="margin-top: 7px">
-													<span class="nm"><%= flight.flight_number %></span>
+													<span class="nm"><%= flight.flight_number.split(",").first %></span>
 													<span class="mobile-only"><%= flight.airplane_type.empty? ? "" : airplane_name_for(flight.airplane_type) %></span>													
 												</div>
 											</div>
@@ -95,31 +95,34 @@
 									</a>
 								</div>
 								<div class="field">
-									<% unless @airline_english_list[flight.airline_code.to_sym].nil? %>
-										<a href="<%= property_page_path(Airline.find_by(code: flight.airline_code).english_name) %>" >
-										
-										<button class="mini ui basic button web-font" style="font-size: 0.9em;">
-											<%= get_star_icon(5,get_airline_rate(flight.airline_code),"green","small").html_safe %>
-											<span style="width:100%;display:block; padding-top:5px;">
-												امتیاز به <%= airline_name_for flight.airline_code %>  
-											</span>
-										</button>										
-										
-										
+									<div class="mini ui basic  web-font rate-button dir-rtl text-right" data-content="امتیاز کاربران به <%= airline_name_for flight %>. برای ثبت کلیک کنید" >
+										<a href="<%= property_page_path(flight.airline_english_name) %>" >
+											<%= get_star_icon(5,flight.airline_rate_average,"green","small").html_safe %>
 										</a>
-									<% end %>		
+									</div>	
 								</div>
 							</div>	
 						</td>
 						<td>
-							<div class="content">
-									<%= hour_to_human flight.departure_time.to_datetime.strftime("%H:%M") %>
-				            		<div class="sub header" style="margin-top: 7px;color: gray;font-size: 0.8em;">
-										<%= (delay_to_human flight.delay) %>
-				          			</div>
-				        		</div>
+							<div class="content" style="font-size: 0.9em;color: #1d1c1c;">
+								<i class="plane grey icon"></i>	
+								<%= hour_to_human flight.departure_time.to_datetime.strftime("%H:%M") %>  
+								<% unless flight.arrival_date_time.nil? %>
+									<div style="width:100%; margin-top:5px;border-top: 1px dashed #eee;padding-top:6px;">
+										<i class="vertically flipped plane  grey icon"></i>
+										<%= hour_to_human flight.arrival_date_time.to_datetime.strftime("%H:%M")  %>
+									</div>
+								<% end %>
+				            	<div class="sub header" style="margin-top: 7px;color: gray;font-size: 0.8em;">
+									<%= (delay_to_human flight.delay) %>
+				          		</div>
+				        	</div>
 						</td>
-						<td class="nm"><%= flight.airplane_type.empty? ? "-" : airplane_name_for(flight.airplane_type) %></td>
+						<td class="nm">
+							<%= flight.airplane_type.empty? ? "-" : airplane_name_for(flight.airplane_type) %>
+							
+							
+						</td>
 						<td>
 							<div class="suppliers-count">	
 								<b>
@@ -137,6 +140,17 @@
 							</a>
 						</td>
 					</tr>
+					<% if @search_parameter[:international] %>
+						<tr>
+							<td colspan="5" style="border:0">
+								<div style="font-size: 0.8em;color: #797777;">
+									<i class="ticket icon"></i>
+									<%= stop_to_human flight.stops  %>.
+									کل مدت زمان سفر <%= trip_duration_to_human flight.trip_duration %> است.
+								</div>
+							</td>
+						</tr>
+					<% end %>
 				<% end %>	
 			<% end %>
 		</tbody>
@@ -200,6 +214,7 @@
 </div>
 <script type="text/javascript">
 	$('table').tablesort();
+	$('.rate-button').popup();
 </script>
 
 <%= render 'layouts/searchbox-helper' %>

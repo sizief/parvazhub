@@ -12,11 +12,21 @@ class Route < ApplicationRecord
         is_origin = City.find_by(city_code: origin)
         is_destination = City.find_by(city_code: destination)
         if (is_origin and is_destination)
-          route = Route.new(origin: origin, destination: destination)
+          route = create_route(origin, destination)
           route.save
         end
       end
       
       return route
+    end
+
+    def create_route(origin,destination)
+      if ((City.find_by(city_code: origin).country_code=="IR") and 
+        (City.find_by(city_code: destination).country_code=="IR"))
+        international = false
+      else
+        international = true
+      end
+      Route.create(origin: origin, destination: destination, international: international)
     end
 end
