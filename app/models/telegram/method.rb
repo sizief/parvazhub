@@ -88,7 +88,7 @@ class Telegram::Method
     chat = Telegram::SearchQuery.find_by(chat_id: chat_id)
   
     #Step 0
-    if text =="/start" or "/reset" or "/Reset" or "/Start" or text =="جستجوی مجدد"
+    if ["/start","/reset","/Reset","/Start","جستجوی مجدد"].include? text
       send answer_step_0(chat,text,true)
          
     #Step 1
