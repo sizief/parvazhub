@@ -19,10 +19,10 @@
                     <%= @search_parameter[:destination_persian_name] %> 
                     <%= @search_parameter[:date].to_date.to_parsi.strftime "%A %d %B"   %>
                 </div>
-            </div>
+            </div> 
         </h5> 
     </div>
-
+ 
         <table class="ui  table rtl" style="width:97% !important">
             <tbody>
                 <% @flight_prices.each_with_index do |flight_price,index|  %>
