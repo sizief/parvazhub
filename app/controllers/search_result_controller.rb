@@ -19,6 +19,11 @@ class SearchResultController < ApplicationController
       date = params[:date]
     end
 
+    if date < Date.today.to_s 
+       redirect_to  action: 'search', origin_name: origin_name, destination_name: destination_name, date: "today"
+       return
+    end
+    
     origin = City.find_by(english_name: origin_name.downcase) 
     destination = City.find_by(english_name: destination_name.downcase)
     origin_city_code = origin.nil? ? false : origin.city_code

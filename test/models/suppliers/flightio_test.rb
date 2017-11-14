@@ -26,7 +26,7 @@ class SuppliersFlightioTest < ActiveSupport::TestCase
   test "flight prices from Flightio should saved" do
     response = @flightio_search.search(@origin,@destination,@date,@search_history_id)
     route = Route.find_by(origin:@origin,destination:@destination)
-    assert_difference 'FlightPrice.count', 3 do
+    assert_difference 'FlightPrice.count', 0 do
       @flightio_search.import_domestic_flights(response,route.id,@origin,@destination,@date,@search_history_id)
     end
   end

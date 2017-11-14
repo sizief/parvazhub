@@ -61,8 +61,10 @@ class Suppliers::Flightio
         deeplink_url = response[:deeplink]+combination_id
         departure_hour = flight['sourcedeparttime']
         
-        departure_time_from = date +" "+ departure_hour + ":00:00"
-        departure_time_to = date+" "+(departure_hour.to_i+1).to_s+":00:00"
+        departure_time_from = date +" "+ departure_hour[0..1]+":"+departure_hour[2..3] + ":00"
+        departure_time_to = (departure_time_from.to_datetime + (0.04)).strftime('%Y-%m-%d  %H:%M:%S').to_s
+        
+        #departure_time_to = date +" "+ (departure_hour[0..1].to_i+1)+":"+departure_hour[2..3] + ":00"
 
         ActiveRecord::Base.connection_pool.with_connection do 
           flight_id_list = Flight.where(route_id:route_id).where(airline_code:"#{airline_code}").where(departure_time: "#{departure_time_from}".."#{departure_time_to}")
