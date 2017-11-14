@@ -12,7 +12,7 @@
                 بهترین قیمت‌های پرواز   
                 <%= airline_name_for @flight %>     
                 <%= hour_to_human @flight.departure_time.to_datetime.strftime("%H:%M") %>            
-                <%= @flight.airplane_type.empty? ? " " : airplane_name_for(@flight.airplane_type) %>
+                <%= @flight.airplane_type.blank? ? " " : airplane_name_for(@flight.airplane_type) %>
                 <div class="sub header" style="margin-top: 7px">
                     <%= @search_parameter[:origin_persian_name] %>
                     به 

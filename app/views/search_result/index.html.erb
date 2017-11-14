@@ -88,7 +88,7 @@
 											</div>
 												<div class="sub header" style="margin-top: 7px">
 													<span class="nm"><%= flight.flight_number.split(",").first %></span>
-													<span class="mobile-only"><%= flight.airplane_type.empty? ? "" : airplane_name_for(flight.airplane_type) %></span>													
+													<span class="mobile-only"><%= flight.airplane_type.blank? ? "" : airplane_name_for(flight.airplane_type) %></span>													
 												</div>
 											</div>
 										</h5>
@@ -119,7 +119,7 @@
 				        	</div>
 						</td>
 						<td class="nm">
-							<%= flight.airplane_type.empty? ? "-" : airplane_name_for(flight.airplane_type) %>
+							<%= flight.airplane_type.blank? ? "-" : airplane_name_for(flight.airplane_type) %>
 							
 							
 						</td>

@@ -140,8 +140,7 @@ class Flight < ApplicationRecord
         flight.airline_rate_average = 0 
       end
 
-      flight.airplane_type = "" unless flight.airplane_type
-      if flight.airplane_type.empty?
+      if flight.airplane_type.blank?
          flight.airplane_type = flight_info.airplane unless flight_info.nil? 
       end
      end
