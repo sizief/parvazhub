@@ -19,6 +19,7 @@
 //= require persian-datepicker-0.4.5.min
 //= require tablesort
 //= require typeahead.bundle.min
+//= require chart.min
 //= require_tree .
 
 // add hide and show to modal for before and after load 
