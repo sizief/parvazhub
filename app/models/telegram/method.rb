@@ -88,7 +88,7 @@ class Telegram::Method
     chat = Telegram::SearchQuery.find_by(chat_id: chat_id)
   
     #Step 0
-    if text =="/start" or text =="جستجوی مجدد"
+    if text =="/start" or "/reset" or "/Reset" or "/Start" or text =="جستجوی مجدد"
       send answer_step_0(chat,text,true)
          
     #Step 1
@@ -177,7 +177,7 @@ class Telegram::Method
       text += "📣 به ترتیب از ارزان‌ترین به گران‌ترین \n\n"      
       flights.each_with_index do |flight,index|
         next if index > @@number_of_result
-        text += "#{airline_name_for(flight.airline_code)} | #{hour_to_human(flight.departure_time.to_datetime.strftime("%H:%M"))} | <b>#{number_with_delimiter(flight.best_price)} تومان</b>
+        text += "#{airline_name_for(flight)} | #{hour_to_human(flight.departure_time.to_datetime.strftime("%H:%M"))} | <b>#{number_with_delimiter(flight.best_price)} تومان</b>
         👉 /flight#{flight.id} \n\n"
       end
       text += "\n\n 📣 جستجوی مسیر یا تاریخ جدید:\n /start"
