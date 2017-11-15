@@ -8,4 +8,5 @@ fix_<%= x["id"] %>:
   code: "<%= x['code'] %>"
   rate_count: "<%= x['rate_count'] %>"
   rate_average: "<%= x['rate_average'] %>"
+  country_code: "<%= x['country_code'] %>"
 <% end %>

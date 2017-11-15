@@ -6,7 +6,7 @@
 <div class="ui container" id="search-results-container" style="padding-top: 1em; direction:rtl;">
 خط هوایی مورد نظرتان را انتخاب کنید:
     <ul>
-    <% Airline.all.each do |airline|  %>
+    <% Airline.where(country_code: "IR").each do |airline|  %>
 		<div class="city-calendar" >
             <a href="<%= property_page_path airline.english_name  %>" >
                 <li>    
