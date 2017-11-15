@@ -2,9 +2,14 @@ class ApiController < ApplicationController
     
     def city_prefetch_suggestion
         city_list = Array.new
-        cities = City.where(country_code: "IR").order(:priority)
+        country_list = Country.select(:country_code,:persian_name,:english_name).all.to_a
+        #cities = City.where(country_code: "IR").order(:priority)
+        cities = City.where("priority <?",100).order("priority")
+        
         cities.each do |city|
-            city_list << {'code': city.english_name, 'value': city.persian_name, 'country': "ایران"}
+            country_object = country_list.detect {|c| c.country_code == city.country_code}
+            country_value = country_object.persian_name.nil? ? country_object.english_name : country_object.persian_name
+            city_list << {'code': city.english_name, 'value': city.persian_name, 'country': country_value}
         end
         render json: city_list  
     end

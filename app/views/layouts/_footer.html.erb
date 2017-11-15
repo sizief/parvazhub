@@ -15,8 +15,8 @@
          
           <div class="column center aligned">			
             <%= link_to "پروازهای تهران به مشهد امروز", flight_result_path(origin_name: "tehran",destination_name: "mashhad",date:Date.today.to_s),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به شیراز امروز", flight_result_path(origin_name: "tehran",destination_name: "shiraz",date:Date.today.to_s),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به کیش امروز", flight_result_path(origin_name: "tehran",destination_name: "kish",date:Date.today.to_s),class:"footer-link" %>
+            <%= link_to "پروازهای تهران به دبی امروز", flight_result_path(origin_name: "tehran",destination_name: "dubai",date:Date.today.to_s),class:"footer-link" %>
+            <%= link_to "پروازهای تهران به استانبول امروز", flight_result_path(origin_name: "tehran",destination_name: "istanbul",date:Date.today.to_s),class:"footer-link" %>
             <%= link_to "پروازهای تهران به اهواز امروز", flight_result_path(origin_name: "tehran",destination_name: "ahvaz",date:Date.today.to_s),class:"footer-link" %>
             <%= link_to "تمام پروازها", flight_page_path,class:"footer-link" %>
             
@@ -26,7 +26,7 @@
             <%= link_to "پروازهای مشهد به تهران ", route_page_path(origin_name: "mashhad",destination_name: "tehran"),class:"footer-link" %>
             <%= link_to "پروازهای شیراز به تهران ", route_page_path(origin_name: "shiraz",destination_name: "tehran"),class:"footer-link" %>
             <%= link_to "پروازهای کیش به تهران ", route_page_path(origin_name: "kish",destination_name: "tehran"),class:"footer-link" %>
-            <%= link_to "پروازهای تبریز به تهران " , route_page_path(origin_name: "tabriz",destination_name: "tehran"),class:"footer-link" %>
+            <%= link_to "پروازهای استانبول به تهران " , route_page_path(origin_name: "istanbul",destination_name: "tehran"),class:"footer-link" %>
             <%= link_to "پروازهای اهواز به تهران ", route_page_path(origin_name: "ahvaz",destination_name: "tehran"),class:"footer-link" %>
           </div>
 

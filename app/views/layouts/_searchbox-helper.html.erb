@@ -15,11 +15,11 @@ $(document).ready(function(){
       datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
       queryTokenizer: Bloodhound.tokenizers.whitespace, 
       identify: function(obj) { return obj.value; },
-      prefetch: { url: '<%= api_city_prefetch_suggestion_path %>'},
+      prefetch: { url: '<%= api_city_prefetch_suggestion_path %>',cache: false
+    },
       remote: {
         url: '<%= api_city_suggestion_path "QUERY" %>',
-        wildcard: 'QUERY',
-        cache: false
+        wildcard: 'QUERY'
       },
       limit: 10
       
