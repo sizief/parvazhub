@@ -162,7 +162,7 @@
 	<% if @flights.empty? %>
 	  	<div class="standard-text" style="background:white;padding-top:2em;margin:2em;direction:rtl">
 		
-			<i class="teal warning circle icon big"></i>	
+			<i class="blue info circle  icon big"></i>	
 			<% if @search_parameter[:date].to_date < Date.today %>
 				امروز 
 				<%= Date.today.to_date.to_parsi.strftime "%A %-d %B"   %> 
@@ -189,7 +189,8 @@
 			<%= link_to "پروازهای #{@search_parameter[:origin_persian_name]} به #{@search_parameter[:destination_persian_name]}", route_page_path(origin_name:  @search_parameter[:origin_english_name],destination_name: @search_parameter[:destination_english_name], :anchor => "city-calendar"),class:"city-page-link" %> روی تقویم را ببینید.
 
 			<h5 class="web-font">
-				<i class="teal warning circle icon big"></i>
+			<i class="blue info circle  icon big"></i>	
+			
 				چه روزهایی
 				<%= " #{@search_parameter[:origin_persian_name]} به  #{@search_parameter[:destination_persian_name]}" %> 
 				پرواز دارد؟
