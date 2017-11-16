@@ -101,7 +101,13 @@
 										</a>
 									</div>	
 								</div>
-							</div>	
+							</div>
+							<% if @search_parameter[:international] %>
+								<div style="font-size: 0.8em;color: #797777;">
+									<i class="ticket icon"></i>
+									<%= stop_to_human flight.stops  %>
+								</div>
+							<% end %>	
 						</td>
 						<td>
 							<div class="content" style="font-size: 0.9em;color: #1d1c1c;">
@@ -116,7 +122,13 @@
 				            	<div class="sub header" style="margin-top: 7px;color: gray;font-size: 0.8em;">
 									<%= (delay_to_human flight.delay) %>
 				          		</div>
-				        	</div>
+							</div>
+							<% if @search_parameter[:international] %>
+							<div style="font-size: 0.8em;color: #797777;">
+								<i class="wait icon"></i>
+								کل زمان سفر <%= trip_duration_to_human flight.trip_duration %>
+							</div>
+						<% end %>	
 						</td>
 						<td class="nm">
 							<%= flight.airplane_type.blank? ? "-" : airplane_name_for(flight.airplane_type) %>
@@ -140,17 +152,7 @@
 							</a>
 						</td>
 					</tr>
-					<% if @search_parameter[:international] %>
-						<tr>
-							<td colspan="5" style="border:0">
-								<div style="font-size: 0.8em;color: #797777;">
-									<i class="ticket icon"></i>
-									<%= stop_to_human flight.stops  %>.
-									کل مدت زمان سفر <%= trip_duration_to_human flight.trip_duration %> است.
-								</div>
-							</td>
-						</tr>
-					<% end %>
+					
 				<% end %>	
 			<% end %>
 		</tbody>

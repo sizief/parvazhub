@@ -57,14 +57,12 @@ module SearchResultHelper
 		if stops.count == 1
 			message = "بدون توقف" 
 		else
-			message = "این سفر #{stops.count-1} توقف در "
+			message = "#{stops.count-1} توقف در "
 		    stops.each_with_index do |stop, index|
 				next if stops.count == index+1
 				message += " و " if index >= 1
 				message += stop
 			end
-			message += " دارد"
-
 		end
 		message
 	end
