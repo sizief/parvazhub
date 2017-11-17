@@ -32,4 +32,14 @@ class ApiController < ApplicationController
         end
         render json: city_list  
     end
+
+    def service_test
+        sql = "Select 1 from countries"
+        status = ActiveRecord::Base.connection.execute(sql)
+        if status
+            render json: {
+            status: 200
+          }.to_json
+        end
+    end
 end

@@ -9,11 +9,14 @@ class CityPageController < ApplicationController
     @link_count = 0
     @prices = Hash.new
    
-	  @origin = City.find_by(english_name:  params[:origin_name].downcase) 
-    not_found unless @origin
-      
+	  @origin = City.find_by(english_name:  params[:origin_name].downcase)   
     @destination = City.find_by(english_name: params[:destination_name].downcase)
-	  not_found unless @destination 
+    origin_city_code = @origin.nil? ? false : @origin.city_code
+    destination_city_code = @destination.nil? ? false : @destination.city_code
+    
+    route = Route.new.get_route(origin_city_code,destination_city_code)
+    not_found unless route
+    
 
     @route_days = RouteDay.week_days(@origin.city_code,@destination.city_code)
     

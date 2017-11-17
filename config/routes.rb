@@ -44,6 +44,8 @@ Rails.application.routes.draw do
 
 	get '/api/city_prefetch_suggestion', to: 'api#city_prefetch_suggestion', as: 'api_city_prefetch_suggestion'
 	get '/api/city_suggestion/:query', to: 'api#city_suggestion', as: 'api_city_suggestion'
+	get '/api/service-test/', to: 'api#service_test', as: 'service_test'
+	
 	
 	get '/flight-prices/:id', to: redirect('/', status: 302) #, to: 'search_result#flight_prices', as: 'flight-prices-ajax' #, :defaults => { :format => 'js' }
 	
