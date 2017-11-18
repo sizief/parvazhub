@@ -63,7 +63,7 @@
                 <% if @prices.count > 1 %>
                     <tr>
                         <td colspan="6">
-                            <div style="width:70%; margin:auto" class="nm">
+                            <div style="width:90%;min-height:100%; margin:auto" >
                                 <canvas id="myChart"></canvas>
 
                                 <script>
@@ -73,7 +73,7 @@
                                 $(document).ready(function(){
                                     var myChart = new Chart(ctx, {
                                         type: 'line',
-                                        data: {labels: labels,datasets: [{label: " تغییرات حداقل قیمت بلیط <%= hour_to_human @flight.departure_time.to_datetime.strftime('%H:%M') %> <%= airline_name_for @flight %> ",borderColor: 'rgb(154, 154, 154)',backgroundColor:  'rgb(154, 154, 154)', data: data,fill: false,lineTension: 0}]},
+                                        data: {labels: labels,datasets: [{label: " تغییرات حداقل قیمت بلیط <%= hour_to_human @flight.departure_time.to_datetime.strftime('%H:%M') %> <%= airline_name_for @flight %> ",borderColor: 'rgb(54,162,235)',backgroundColor:  'rgb(54,162,235)', data: data,fill: false,lineTension: 0}]},
                                         options: {
                                             showLines: true,
                                             scales: {
