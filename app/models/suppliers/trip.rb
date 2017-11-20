@@ -2,58 +2,74 @@ class Suppliers::Trip
   require "uri"
   require "rest-client"
 
-    def send_request (origin,destination,date,search_history_id,provider)
-      if Rails.env.test?
-        response = File.read("test/fixtures/files/domestic-trip.log") 
-        return response
-      end
-
-      params = "src=#{origin.upcase}&isCityCodeSrc=true&dst=#{destination.upcase}&isCityCodeDst=true&class=e&depDate=#{date.upcase}&retDate=&adt=1&chd=0&inf=0&provider=#{provider}"
-      search_url = "http://www.trip.ir/flightResult?" + params
-      
-       
-      begin
-        response = RestClient::Request.execute(method: :get, url: "#{URI.parse(search_url)}", proxy: nil)
-        response = response.body
-      rescue => e
-        return nil
-      end
-      return response
+  def send_request(request_type,url,params)
+    if Rails.env.test?
+      return "{\"success\": true,\"sid\": \"5a11518313fb7ae1cb2b4bb5\"}"
     end
+    begin
+      #response = RestClient::Request.execute(method: request_type.to_sym, url: "#{URI.parse(url)}",headers: {params: params}, proxy: nil)
+      response = RestClient::Request.execute(method: :post, url: "#{URI.parse(url)}", payload: params.to_json, headers: {:'Content-Type'=> "application/json"},proxy: nil)
+    rescue => e
+      return nil
+    end
+      return response.body
+  end
 
-    def search(origin,destination,date,search_history_id)
-      response = nil
-      threads = []
+  def register_request (origin,destination,date)
+    params = {
+      "src": origin.upcase,		
+      "isCityCodeSrc": true,	
+      "dst": destination.upcase,
+      "isCityCodeDst": true,
+      "class": "e",
+      "depDate": date,
+      "retDate": "",
+      "adt": 1,
+      "chd": 0,
+      "inf": 0
+    }
+    url = "https://www.trip.ir/flex/search"
+    response = send_request("post",url,params)
+    return JSON.parse(response)
+  end
 
-      [6,8,10,12].each do |provider|
-        
-        ActiveRecord::Base.connection_pool.with_connection do
-          SearchHistory.append_status(search_history_id,"R#{provider}(#{Time.now.strftime('%M:%S')})")
-        end
-        threads << Thread.new do
-          provider_response = send_request(origin,destination,date,search_history_id,provider)
-          unless provider_response.nil? #there is a response from provider
-            if response.nil? #the first provider response
-              response = JSON.parse(provider_response)["flights"] 
-            else
-              response = response + JSON.parse(provider_response)["flights"] 
-            end
-          end 
-        end
- 
-      end
-      
-      threads.each do |thread|
-        thread.join
-      end
+  def is_search_complete(id)
+    url = "https://www.trip.ir/flex/progress"
+    if Rails.env.test?
+      response = "{\"success\": true,\"val\": 100}"
+    else
+      response = send_request("post",url,{"sid":id})
+    end
+    json_response = JSON.parse(response)
+    is_complete = (json_response["val"] == 100) ? true : false
+  end
 
-      unless response.nil?
-        return {status:true,response: response}
-      else
-        return {status:false}
-      end
+  def search(origin,destination,date,search_history_id)
+    search_id = register_request(origin,destination,date)["sid"]
+    url = "https://www.trip.ir/flex/results"
+    params = {
+      "sid": search_id,
+      "itemPerPage": 1000	
+    }
+
+    while (not is_search_complete(search_id))
+      sleep 1
+    end
     
+    if Rails.env.test?
+      if Route.select(:international).find_by(origin: origin, destination: destination).international
+        file = "international-trip.log"
+      else
+        file = "domestic-trip.log"
+      end
+      response = File.read("test/fixtures/files/"+file) 
+    else
+      response = send_request("post",url,params)
     end
+
+    raw_response = response.nil? ? {status:false} :  {status:true,response: response}
+    return raw_response
+  end
 
     def import_domestic_flights(response,route_id,origin,destination,date,search_history_id)
       flight_id = nil
@@ -61,21 +77,24 @@ class Suppliers::Trip
       ActiveRecord::Base.connection_pool.with_connection do
         SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
       end
-      
-      response[:response].each do |flight|
-        airline_code = get_airline_code(flight["legs"][0]["operatorCode"])
-        next if airline_code.nil?
-        flight_number = airline_code + flight_number_correction(flight["legs"][0]["flightNo"],airline_code)
-        departure_time = flight["legs"][0]["departureTime"]
-        departure_time += ":00" if departure_time.size == 16 
-        airplane_type = ""
+      response = JSON.parse(response[:response])
+      response["flights"].each do |flight|
+        leg_data = flight_id = nil
+        leg_data = prepare flight["legs"]
         price = flight["fares"]["total"]["price"]
-        uuid = flight["uuid"]
-
-        #deeplink_url = get_deep_link(uuid)
-        deeplink_url = get_deep_link(origin,destination,date,uuid)
-        ActiveRecord::Base.connection_pool.with_connection do
-          flight_id = Flight.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
+        id = flight["_id"]
+        deeplink_url = get_deep_link(origin,destination,date,id)
+        
+        next if leg_data.nil?
+        ActiveRecord::Base.connection_pool.with_connection do        
+          flight_id = Flight.create_or_find_flight(route_id,
+          leg_data[:flight_number].join(","),
+          leg_data[:departure_date_time].first,
+          leg_data[:airline_code].join(","),
+          leg_data[:airplane_type].join(","),
+          leg_data[:arrival_date_time].last,
+          leg_data[:stop].join(","),
+          leg_data[:trip_duration])
         end
 
         #to prevent duplicate flight prices we compare flight prices before insert into database
@@ -110,10 +129,53 @@ class Suppliers::Trip
       end
 
   end
+  
+  def prepare flight_legs
+    flight_numbers, airline_codes, airplane_types, departure_date_times, arrival_date_times, stops = Array.new, Array.new, Array.new, Array.new, Array.new, Array.new    
+    trip_duration = 0
+    flight_legs.each do |leg|
+      airline_code = get_airline_code(leg["operatorCode"])
+      return nil if airline_code.nil?
+      airline_codes << airline_code
+      flight_numbers << airline_code + flight_number_correction(leg["flightNo"],airline_code)
+      
+      departure_date_time = leg["departureTime"]
+      departure_date_time += ":00" if departure_date_time.size == 16 
+      departure_date_times << departure_date_time.to_datetime
 
-  def get_deep_link(origin,destination,date,uuid)
+      arrival_date_time = leg["arrivalTime"]
+      arrival_date_time += ":00" if arrival_date_time.size == 16 
+      arrival_date_times << arrival_date_time.to_datetime
+
+      stops << leg["arrivalAirport"]
+      trip_duration += leg["duration"]
+    end
+    
+    trip_duration += calculate_stopover_duration(departure_date_times,arrival_date_times)    
+    return {flight_number: flight_numbers,
+            airline_code: airline_codes,
+            airplane_type: airplane_types,
+            departure_date_time: departure_date_times,
+            arrival_date_time: arrival_date_times,
+            stop: stops,
+            trip_duration: trip_duration
+          }
+  end
+
+  def calculate_stopover_duration (departures,arrivals)
+    duration = 0    
+    if departures.count > 1
+      departures.each_with_index do |departure,index|
+        next if index == 0
+        duration += ((departure - arrivals[index-1])*24*60).to_i        
+      end
+    end
+    duration
+  end
+
+  def get_deep_link(origin,destination,date,id)
     if ((date == Date.today.to_s) or (date == (Date.today+1).to_s)) 
-      deep_link = "http://www.trip.ir/order/passengerUUID?depUUID=#{uuid}&channel=parvazhub"
+      deep_link = "https://www.trip.ir/flex/register?depFlight=#{id}&channel=parvazhub"
     else
       deep_link = "http://www.trip.ir/flightSearch?src=#{origin.upcase}&isCityCodeSrc=true&dst=#{destination.upcase}&isCityCodeDst=true&class=e&depDate=#{date.upcase}&retDate=&adt=1&chd=0&inf=0"
     end
@@ -131,7 +193,8 @@ class Suppliers::Trip
       "ATR"=>"AK",
       "RZ"=>"SE",
       "IRZ"=>"SE",
-      "ZZ"=>"SE"
+      "ZZ"=>"SE",
+      "J21"=>"J2"
 		}
 	airlines[airline_code].nil? ? airline_code : airlines[airline_code]
   end

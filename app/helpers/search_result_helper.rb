@@ -45,10 +45,13 @@ module SearchResultHelper
 
 	def trip_duration_to_human total_minute
 		message = " "
-		hours = total_minute / 60
-		minutes = (total_minute) % 60
-		message = "#{hours} ساعت " unless hours == 0 
-		message += "و #{minutes} دقیقه " unless minutes == 0 
+		unless total_minute.nil?
+			message = " "
+			hours = total_minute / 60
+			minutes = (total_minute) % 60
+			message = "#{hours} ساعت " unless hours == 0 
+			message += "و #{minutes} دقیقه " unless minutes == 0 
+		end
 		return message
 	end
 

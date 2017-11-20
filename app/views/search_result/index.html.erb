@@ -135,14 +135,7 @@
 							
 							
 						</td>
-						<td>
-							<div class="suppliers-count">	
-								<b>
-									<a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight.id) %>" data-remote="false" style="color:black">	
-										مشاهده‌ ارزان‌ترین قیمت از <%= flight.suppliers_count %> سایت 
-									</a>
-								</b>
-							</div>
+						<td>	
 							<a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight.id) %>" data-remote="false">	
 								<button class="ui submit yellow web-font fluid right labeled icon button flight-price-button" style="padding-right: 0 !important;">
 									<i class="right arrow icon"></i> از
@@ -150,6 +143,11 @@
 									
 								</button>
 							</a>
+							<div class="suppliers-count">	
+								<a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight.id) %>" data-remote="false" style="color:black">	
+									مشاهده‌ ارزان‌ترین قیمت از <b><%= flight.suppliers_count %></b> سایت 
+								</a>
+							</div>
 						</td>
 					</tr>
 					
