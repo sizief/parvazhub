@@ -33,6 +33,14 @@ group :development do
   gem 'spring-watcher-listen', '2.0.0'
   gem 'byebug',  '9.0.0', platform: :mri
   gem 'simplecov', :require => false, :group => :test
+  gem 'rubocop', require: false
+  gem 'bullet'
+  gem 'rack-mini-profiler'
+end
+
+group :benchmark do
+  gem 'rails-perftest'   
+  gem 'ruby-prof'
 end
 
 group :test do

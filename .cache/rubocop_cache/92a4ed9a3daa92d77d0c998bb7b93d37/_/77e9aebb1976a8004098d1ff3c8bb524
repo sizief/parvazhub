@@ -1,0 +1,1 @@
+[{"severity":"convention","location":{"begin_pos":0,"end_pos":75},"message":"`%w`-literals should be delimited by `[` and `]`.","cop_name":"Style/PercentLiteralDelimiters","status":"uncorrected"}]
