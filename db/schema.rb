@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171115083847) do
+ActiveRecord::Schema.define(version: 20171127141522) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,14 +120,15 @@ ActiveRecord::Schema.define(version: 20171115083847) do
     t.string   "flight_number"
     t.datetime "departure_time"
     t.string   "airline_code"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
     t.string   "airplane_type"
     t.integer  "best_price"
     t.string   "price_by"
     t.datetime "arrival_date_time"
     t.integer  "trip_duration"
     t.string   "stops"
+    t.integer  "flight_prices_count"
     t.index ["route_id", "flight_number", "departure_time"], name: "index_flights_on_route_id_and_flight_number_and_departure_time", unique: true, using: :btree
   end
 
@@ -197,6 +198,13 @@ ActiveRecord::Schema.define(version: 20171115083847) do
     t.string   "departure_time"
     t.string   "status"
     t.index ["route_id"], name: "index_search_histories_on_route_id", using: :btree
+  end
+
+  create_table "search_history_flight_ids", force: :cascade do |t|
+    t.integer  "search_history_id"
+    t.text     "flight_ids"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
   end
 
   create_table "suppliers", force: :cascade do |t|

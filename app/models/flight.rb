@@ -14,23 +14,15 @@ class Flight < ApplicationRecord
 
   def self.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type, arrival_date_time = nil ,stops = nil,trip_duration = nil)
     ActiveRecord::Base.connection_pool.with_connection do 
-      is_flight_exist = Flight.find_by(route_id: route_id,flight_number:flight_number,departure_time:departure_time)
-      if is_flight_exist.nil?
-        begin
-          #stored_flight = Flight.create(route_id: "#{route_id}", flight_number:"#{flight_number}", departure_time:"#{departure_time}",arrival_date_time: "#{arrival_date_time}", airline_code:"#{airline_code}", airplane_type: "#{airplane_type}")
-          stored_flight = Flight.create(route_id: route_id, flight_number: flight_number, departure_time: departure_time,arrival_date_time: arrival_date_time, airline_code: airline_code, airplane_type: airplane_type, stops: stops, trip_duration: trip_duration)
-          flight_id = stored_flight.id
-        rescue
-          flight_id = Flight.find_by(flight_number:flight_number,departure_time:departure_time).id
-        end
-      else
-        flight_id = is_flight_exist.id
+      flight = Flight.create(route_id: route_id, flight_number: flight_number, departure_time: departure_time,arrival_date_time: arrival_date_time, airline_code: airline_code, airplane_type: airplane_type, stops: stops, trip_duration: trip_duration)
+      unless flight.id #flight is already exists
+        flight = Flight.find_by(flight_number:flight_number,departure_time:departure_time)          
       end
+      flight.id
     end
   end
 
-  def self.update_best_price(origin,destination,date) 
-    route = Route.find_by(origin:"#{origin}",destination:"#{destination}")
+  def self.update_best_price(route,date) 
     flights = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s)
     flights.each do |flight|
       stored_flight_prices = flight.flight_prices.select("price,supplier").order("price").first
@@ -40,9 +32,14 @@ class Flight < ApplicationRecord
           flight.best_price = stored_flight_prices.price 
           flight.price_by = stored_flight_prices.supplier 
         end
-        flight.save()
+        flight.save
       end
   end
+
+  def self.update_flight_price_count flight_ids
+    flight_ids.each{|flight_id| Flight.reset_counters(flight_id, :flight_prices)}
+  end    
+
 
   def get_lowest_price_collection(origin,destination)
       route = Route.find_by(origin:origin, destination:destination)
@@ -126,11 +123,10 @@ class Flight < ApplicationRecord
 
   def flight_list(route,date)
     airline_list = Airline.list 
-    flight_list = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s).where.not(best_price:0)
+    flight_list = route.flights.includes(:flight_info).where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s).where.not(best_price:0)
     flight_list.each do |flight|
-      flight_info = FlightInfo.find_by(flight_id: flight.id) 
-      flight.suppliers_count = flight.flight_prices.count
-      flight.delay = flight_info.delay unless flight_info.nil?
+      flight.suppliers_count = flight.flight_prices_count
+      flight.delay = flight.flight_info.delay unless flight.flight_info.nil?
       flight.airline_code = flight.airline_code.split(",")[0]
       unless airline_list[flight.airline_code.to_sym].nil? 
         flight.airline_english_name = airline_list[flight.airline_code.to_sym][:english_name]
@@ -143,7 +139,7 @@ class Flight < ApplicationRecord
       end
 
       if flight.airplane_type.blank?
-         flight.airplane_type = flight_info.airplane unless flight_info.nil? 
+         flight.airplane_type = flight.flight_info.airplane unless flight.flight_info.nil? 
       end
      end
     flight_list = flight_list.sort_by(&:best_price)
@@ -152,6 +148,8 @@ class Flight < ApplicationRecord
   def get_call_sign(flight_number,airline_code)
     call_sign = flight_number.upcase.sub airline_code.upcase, airline_call_sign(airline_code)
   end
+
+  
 
   
 

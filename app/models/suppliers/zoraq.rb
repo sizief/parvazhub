@@ -74,11 +74,18 @@ class Suppliers::Zoraq
           end
 
         end #end of each loop
+        ActiveRecord::Base.connection_pool.with_connection do
+          SearchHistory.append_status(search_history_id,"db import(#{Time.now.strftime('%M:%S')})")
+        end
         
         unless flight_prices.empty?
           ActiveRecord::Base.connection_pool.with_connection do        
             FlightPrice.delete_old_flight_prices("zoraq",route_id,date) 
+            SearchHistory.append_status(search_history_id,"db delete(#{Time.now.strftime('%M:%S')})")
+            
             FlightPrice.import flight_prices
+            SearchHistory.append_status(search_history_id,"db import fp(#{Time.now.strftime('%M:%S')})")
+            
             FlightPriceArchive.archive flight_prices
             SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
           end

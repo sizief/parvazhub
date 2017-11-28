@@ -2,12 +2,33 @@ class Suppliers::Trip
   require "uri"
   require "rest-client"
 
+  attr_reader :origin, :destination, :date, :search_history_id, :supplier_name, :route
+  
+  def initialize args
+    @origin = args[:origin]
+    @destination = args[:destination]
+    @date = args[:date]
+    @search_history_id = args[:search_history_id]
+    @supplier_name = "trip"
+    @route = args[:route]
+  end
+
+  def search
+    flight_ids = nil
+    response = search_supplier
+    if response[:status] == true
+      Log.new(log_name: supplier_name, content: response[:response]).save if Rails.env.development?        
+      flight_ids = import_domestic_flights(response,route.id,origin,destination,date,search_history_id)
+      #puts "flighttttttttttttttttttttttttttttttttttttttttt #{flight_ids}"
+      SearchHistoryFlightId.new(id: search_history_id, flight_ids: flight_ids).save_or_update
+    end
+  end
+
   def send_request(request_type,url,params)
     if Rails.env.test?
       return "{\"success\": true,\"sid\": \"5a11518313fb7ae1cb2b4bb5\"}"
     end
     begin
-      #response = RestClient::Request.execute(method: request_type.to_sym, url: "#{URI.parse(url)}",headers: {params: params}, proxy: nil)
       response = RestClient::Request.execute(method: :post, url: "#{URI.parse(url)}", payload: params.to_json, headers: {:'Content-Type'=> "application/json"},proxy: nil)
     rescue => e
       return nil
@@ -44,7 +65,7 @@ class Suppliers::Trip
     is_complete = (json_response["val"] == 100) ? true : false
   end
 
-  def search(origin,destination,date,search_history_id)
+  def search_supplier
     search_id = register_request(origin,destination,date)["sid"]
     url = "https://www.trip.ir/flex/results"
     params = {
@@ -52,9 +73,7 @@ class Suppliers::Trip
       "itemPerPage": 1000	
     }
 
-    while (not is_search_complete(search_id))
-      sleep 1
-    end
+    wait 25, search_id  #seconds maximum 
     
     if Rails.env.test?
       if Route.select(:international).find_by(origin: origin, destination: destination).international
@@ -67,18 +86,18 @@ class Suppliers::Trip
       response = send_request("post",url,params)
     end
 
-    raw_response = response.nil? ? {status:false} :  {status:true,response: response}
+    raw_response = response.nil? ? {status:false} :  {status:true,response: response}    
     return raw_response
   end
 
     def import_domestic_flights(response,route_id,origin,destination,date,search_history_id)
       flight_id = nil
-      flight_prices = Array.new()
+      flight_prices, flight_ids = Array.new(), Array.new()
       ActiveRecord::Base.connection_pool.with_connection do
         SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
       end
       response = JSON.parse(response[:response])
-      response["flights"].each do |flight|
+      response["flights"][0..ENV["MAX_NUMBER_FLIGHT"].to_i].each do |flight|
         leg_data = flight_id = nil
         leg_data = prepare flight["legs"]
         price = flight["fares"]["total"]["price"]
@@ -96,6 +115,7 @@ class Suppliers::Trip
           leg_data[:stop].join(","),
           leg_data[:trip_duration])
         end
+        flight_ids << flight_id
 
         #to prevent duplicate flight prices we compare flight prices before insert into database
         flight_price_so_far = flight_prices.select {|flight_price| flight_price.flight_id == flight_id}
@@ -109,17 +129,15 @@ class Suppliers::Trip
           end
         end
 
-        ActiveRecord::Base.connection_pool.with_connection do
-          flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"trip", flight_date:"#{date}", deep_link:"#{deeplink_url}" )
-        end
+        flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"trip", flight_date:"#{date}", deep_link:"#{deeplink_url}" )
 
       end #end of each loop
-      
+
       unless flight_prices.empty?
         ActiveRecord::Base.connection_pool.with_connection do
           FlightPrice.delete_old_flight_prices("trip",route_id,date)
-          FlightPrice.import flight_prices
-          FlightPriceArchive.archive flight_prices
+          FlightPrice.import flight_prices, validate: false
+          FlightPriceArchive.archive flight_prices #todo: change it to job
           SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
         end
       else
@@ -127,7 +145,7 @@ class Suppliers::Trip
           SearchHistory.append_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
         end
       end
-
+      return flight_ids
   end
   
   def prepare flight_legs
@@ -196,6 +214,17 @@ class Suppliers::Trip
       "ZZ"=>"SE"
     		}
 	airlines[airline_code].nil? ? airline_code : airlines[airline_code]
+  end
+
+  def wait seconds,search_id
+    begin 
+      Timeout.timeout(seconds) do
+        while (not is_search_complete(search_id))
+          sleep 1
+        end
+      end
+    rescue
+    end
   end
 
 end

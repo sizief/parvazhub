@@ -1,0 +1,7 @@
+"id","name","class_name","status","created_at","updated_at","international","domestic"
+5,"Ghasedak","Suppliers::Ghasedak",f,"2017-08-01 00:00:00","2017-11-19 14:11:22.884628",f,f
+7,"Trip","Suppliers::Trip",t,"2017-08-13 00:00:00","2017-11-19 15:42:11.570031",t,t
+2,"zoraq","Suppliers::Zoraq",t,"2017-06-10 18:03:25.26675","2017-11-25 09:39:18.122638",t,t
+9,"iranhrc","Suppliers::Iranhrc",f,"2017-08-15 12:18:48.064794","2017-11-19 14:11:12.894574",f,f
+1,"flightio","Suppliers::Flightio",f,"2017-06-10 18:03:25.262205","2017-11-19 14:11:16.21974",f,f
+4,"safarme","Suppliers::Safarme",f,"2017-08-01 00:00:00","2017-11-19 14:11:20.475588",f,f

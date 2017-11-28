@@ -22,6 +22,7 @@ class SuppliersTripTest < ActiveSupport::TestCase
       "inf": 0
   }
     @request_type = "post"
+    ENV["MAX_NUMBER_FLIGHT"] = "1000" #override default value which assigned in env file
   end
     
   test "send request for register" do

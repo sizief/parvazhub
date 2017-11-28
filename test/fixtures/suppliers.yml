@@ -1,16 +1,12 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  name: "Flightio"
-  class_name: "Suppliers::Flightio"
-  status: true
-
-two:
-  name: "Zoraq"
-  class_name: "Suppliers::Zoraq"
-  status: true
-
-three:
-  name: "Alibaba"
-  class_name: "Suppliers::Alibaba"
-  status: false
+<% require 'csv' %>
+<% csv_text = File.read("db/suppliers.csv") %>
+<% csv = CSV.parse(csv_text, :headers => true) %>
+<% csv.each do |x| %>
+fix_<%= x["id"] %>:  
+  id: "<%= x['id'] %>"
+  name: "<%= x['name'] %>"
+  class_name: "<%= x['class_name'] %>"
+  status: "<%= x['status'] %>"
+  international: "<%= x['international'] %>"
+  domestic: "<%= x['domestic'] %>"
+<% end %>

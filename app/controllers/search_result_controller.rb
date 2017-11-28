@@ -46,8 +46,12 @@ class SearchResultController < ApplicationController
     end
     response_available = SearchHistory.where(route_id:route.id,departure_time:"#{date}").where('created_at >= ?', allow_response_time(date).to_f.minutes.ago).count
     if ((response_available == 0) and (date >= Date.today.to_s))
-      search_timeout = route.international? ? 40 : 20
-      SupplierSearch.new.search(route.origin,route.destination,date,search_timeout,"user") 
+      timeout = route.international? ? ENV["TIMEOUT_INTERNATIONAL"].to_i : ENV["TIMEOUT_DOMESTIC"].to_i
+      SupplierSearch.new(origin: route.origin,
+                                destination: route.destination,
+                                date: date,
+                                timeout: timeout,
+                                who_started: "user").search
     end
   end
 

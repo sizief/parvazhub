@@ -4,7 +4,7 @@ class SupplierTest < ActiveSupport::TestCase
 
   test "should return all suppliers name" do
   	supplier_list = Supplier.all
-  	assert supplier_list.size == 3
+  	assert supplier_list.size > 3
   end
 
   test "should return true suppliers if asked" do

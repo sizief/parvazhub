@@ -4,7 +4,7 @@ class Admin::DashboardController < ApplicationController
   end
 
   def search_history
-  	@sh = SearchHistory.order(id: :desc).first(300)
+  	@sh = SearchHistory.includes(:route).order(id: :desc).first(300)
   end
 
   def supplier_control
