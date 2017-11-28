@@ -16,7 +16,7 @@ class Flight < ApplicationRecord
     ActiveRecord::Base.connection_pool.with_connection do 
       flight = Flight.create(route_id: route_id, flight_number: flight_number, departure_time: departure_time,arrival_date_time: arrival_date_time, airline_code: airline_code, airplane_type: airplane_type, stops: stops, trip_duration: trip_duration)
       unless flight.id #flight is already exists
-        flight = Flight.find_by(flight_number:flight_number,departure_time:departure_time)          
+        flight = Flight.find_by(route_id: route_id,flight_number:flight_number,departure_time:departure_time)          
       end
       flight.id
     end
