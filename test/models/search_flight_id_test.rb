@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class SearchHistoryFlightIdTest < ActiveSupport::TestCase
+class SearchFlightIdTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

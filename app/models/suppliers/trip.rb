@@ -1,28 +1,6 @@
-class Suppliers::Trip
+class Suppliers::Trip < Suppliers::Base  
   require "uri"
   require "rest-client"
-
-  attr_reader :origin, :destination, :date, :search_history_id, :supplier_name, :route
-  
-  def initialize args
-    @origin = args[:origin]
-    @destination = args[:destination]
-    @date = args[:date]
-    @search_history_id = args[:search_history_id]
-    @supplier_name = "trip"
-    @route = args[:route]
-  end
-
-  def search
-    flight_ids = nil
-    response = search_supplier
-    if response[:status] == true
-      Log.new(log_name: supplier_name, content: response[:response]).save if Rails.env.development?        
-      flight_ids = import_domestic_flights(response,route.id,origin,destination,date,search_history_id)
-      #puts "flighttttttttttttttttttttttttttttttttttttttttt #{flight_ids}"
-      SearchHistoryFlightId.new(id: search_history_id, flight_ids: flight_ids).save_or_update
-    end
-  end
 
   def send_request(request_type,url,params)
     if Rails.env.test?
