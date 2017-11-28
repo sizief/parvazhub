@@ -13,14 +13,14 @@ class Flight < ApplicationRecord
   attr_accessor :airline_rate_average
 
   def self.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type, arrival_date_time = nil ,stops = nil,trip_duration = nil)
-    is_flight_exist = Flight.find_by(flight_number:flight_number,departure_time:departure_time)
+    is_flight_exist = Flight.find_by(route_id: route_id ,flight_number:flight_number,departure_time:departure_time)
     if is_flight_exist.nil?
       begin
         #stored_flight = Flight.create(route_id: "#{route_id}", flight_number:"#{flight_number}", departure_time:"#{departure_time}",arrival_date_time: "#{arrival_date_time}", airline_code:"#{airline_code}", airplane_type: "#{airplane_type}")
         stored_flight = Flight.create(route_id: route_id, flight_number: flight_number, departure_time: departure_time,arrival_date_time: arrival_date_time, airline_code: airline_code, airplane_type: airplane_type, stops: stops, trip_duration: trip_duration)
         flight_id = stored_flight.id
       rescue
-        flight_id = Flight.find_by(flight_number:flight_number,departure_time:departure_time).id
+        flight_id = Flight.find_by(route_id: route_id,flight_number:flight_number,departure_time:departure_time).id
       end
     else
       flight_id = is_flight_exist.id
