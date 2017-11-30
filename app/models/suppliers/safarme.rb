@@ -1,4 +1,4 @@
-class Suppliers::Safarme
+class Suppliers::Safarme < Suppliers::Base  
     require "uri"
     require "rest-client"
 
@@ -8,9 +8,6 @@ class Suppliers::Safarme
       begin
         params = "ApiSiteId=18F1FBCA-32F6-48B6-AF76-7243C6013668&SourceAbbrivation=#{origin.upcase}&DestinationAbbrivation=#{destination.upcase}&flightdate=#{safarme_template_date}&count=1&AdultCount=1&InfantCount=0&FlightType=#{flight_type}"
         search_url = @@search_url+params
-        ActiveRecord::Base.connection_pool.with_connection do
-          SearchHistory.append_status(search_history_id,"R#{flight_type}(#{Time.now.strftime('%M:%S')})")
-        end
         
         if Rails.env.test?
           response = File.read("test/fixtures/files/domestic-safarme.log")
@@ -27,7 +24,7 @@ class Suppliers::Safarme
       return response
     end
 
-    def search(origin,destination,date,search_history_id)
+    def search_supplier
       safarme_template_date = (date.to_datetime.to_s)[0..18]
       first_response = send_request(origin,destination,safarme_template_date,search_history_id,"1")
       second_response = send_request(origin,destination,safarme_template_date,search_history_id,"2")
@@ -35,9 +32,9 @@ class Suppliers::Safarme
       return {status:true,response: response}
     end
 
-    def import_domestic_flights(response,route_id,origin,destination,date,search_history_id)
+    def import_flights(response,route_id,origin,destination,date,search_history_id)
       flight_id = nil
-      flight_prices = Array.new()
+      flight_prices, flight_ids = Array.new(), Array.new()
       ActiveRecord::Base.connection_pool.with_connection do
         SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
       end
@@ -53,6 +50,7 @@ class Suppliers::Safarme
         ActiveRecord::Base.connection_pool.with_connection do
           flight_id = Flight.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
         end
+        flight_ids << flight_id
 
         #to prevent duplicate flight prices we compare flight prices before insert into database
         flight_price_so_far = flight_prices.select {|flight_price| flight_price.flight_id == flight_id}
@@ -71,19 +69,19 @@ class Suppliers::Safarme
 
       end #end of each loop
       
-      unless flight_prices.empty?
-        ActiveRecord::Base.connection_pool.with_connection do
-          FlightPrice.delete_old_flight_prices("safarme",route_id,date)
-          FlightPrice.import flight_prices
-          FlightPriceArchive.archive flight_prices
-          SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
-        end
-      else
-        ActiveRecord::Base.connection_pool.with_connection do
-          SearchHistory.append_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
-        end
+    unless flight_prices.empty?
+      ActiveRecord::Base.connection_pool.with_connection do
+        FlightPrice.delete_old_flight_prices("safarme",route_id,date)
+        FlightPrice.import flight_prices, validate: false
+        FlightPriceArchive.archive flight_prices
+        SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
       end
-
+    else
+      ActiveRecord::Base.connection_pool.with_connection do
+        SearchHistory.append_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
+      end
+    end
+    return flight_ids
   end
 
   def get_airline_code(safarme_internal_code)

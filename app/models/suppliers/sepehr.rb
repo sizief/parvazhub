@@ -1,6 +1,8 @@
 class Suppliers::Sepehr
     require "uri"
     require "rest-client"
+=begin
+
     
     def search(origin,destination,date,search_history_id)
       if Rails.env.test?
@@ -24,7 +26,7 @@ class Suppliers::Sepehr
       return {status:true,response: response.body}
     end
 
-    def import_domestic_flights(response,route_id,origin,destination,date,search_history_id)
+    def import_flights(response,route_id,origin,destination,date,search_history_id)
       flight_id = nil
       flight_prices = Array.new()
       json_response = JSON.parse(response[:response])
@@ -93,5 +95,5 @@ class Suppliers::Sepehr
     shamsi_date = date.to_date.to_parsi.to_s    
     deeplink = "http://sepehr.in/searchflight/#{origin}-#{destination}/#{shamsi_date}/1-0-0"
   end
-
+=end
 end

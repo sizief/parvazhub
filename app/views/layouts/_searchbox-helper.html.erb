@@ -2,8 +2,7 @@
 $(document).ready(function(){ 
   
 <% if @is_mobile %>
-  //scroll to to top
-  $( ".typeahead" ).click(function() {
+  $( ".typeahead" ).click(function() {   //scroll to top  
       $('html, body').animate({
           scrollTop: $(this).offset().top
       }, 800);  
@@ -23,8 +22,8 @@ $(document).ready(function(){
         wildcard: 'QUERY'
       },
       limit: 10
-      
     });
+
     function citiesWithDefaults(q, sync, async) {
         if (q === '') {
           sync(cities.all().slice(0, 6)); 		  
@@ -75,11 +74,9 @@ $(document).ready(function(){
         $('.destination-field').blur();   
         <% end %>     
     });
-    //end of typeahead
 
   var calnedarIsExist = document.getElementsByClassName("datepicker-plot-area-inline-view").length;
   if (calnedarIsExist == 0) {
-
     var today_timestamp = Math.round((new Date()).getTime() / 1000);
      $("#date-picker").pDatepicker({
           maxDate: new persianDate().subtract('day', 1).valueOf(),
@@ -113,7 +110,6 @@ $(document).ready(function(){
       }); 
    }
   
-
   // fix for turbolink does not show waiting modal after first time of form submit
   $("#flight_search").submit(function( event ) {$('.ui.basic.modal.waiting').modal('show');});
   }); 

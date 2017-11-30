@@ -1,21 +1,22 @@
-class Suppliers::Respina
+#did not update after version 2, so it is not working. 
+class Suppliers::Respina < Suppliers::Base  
     require "uri"
     require "rest-client"
+=begin
 
-  def search(origin,destination,date,search_history_id)
+
+  def search_supplier
+    url = "http://respina24.net/flight/getFlightAjax?"
+    search_date = date.to_date.to_s.gsub("-","/")  
+
       if Rails.env.test?
         response = File.read("test/fixtures/files/domestic-respina.log") 
         return {response: response}
       end
 
       begin
-
-        url = "http://respina24.net/flight/getFlightAjax?"
-        date = date.to_date.to_s.gsub("-","/")  
-        params = "source[]=#{origin.upcase}&destination[]=#{destination.upcase}&DepartureGo=#{date}"
-        ActiveRecord::Base.connection_pool.with_connection do
-          SearchHistory.append_status(search_history_id,"R1(#{Time.now.strftime('%M:%S')})")
-        end
+        
+        params = "source[]=#{origin.upcase}&destination[]=#{destination.upcase}&DepartureGo=#{search_date}"
         response = RestClient::Request.execute(method: :get, url: "#{URI.parse(url+params)}", proxy: nil)
       rescue => e
         ActiveRecord::Base.connection_pool.with_connection do
@@ -27,9 +28,9 @@ class Suppliers::Respina
   end
 
 
-    def import_domestic_flights(response,route_id,origin,destination,date,search_history_id)
+    def import_flights(response,route_id,origin,destination,date,search_history_id)
       flight_id = nil
-      flight_prices = Array.new()
+      flight_prices, flight_ids = Array.new(), Array.new()
       json_response = JSON.parse(response[:response])
       ActiveRecord::Base.connection_pool.with_connection do
         SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
@@ -47,7 +48,8 @@ class Suppliers::Respina
         ActiveRecord::Base.connection_pool.with_connection do
           flight_id = Flight.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
         end
-      
+        flight_ids << flight_id
+
         price = (flight["adultPrice"].to_f)/10
         deeplink_url = "http://respina24.net/"
         
@@ -72,7 +74,7 @@ class Suppliers::Respina
       unless flight_prices.empty?
         ActiveRecord::Base.connection_pool.with_connection do
           FlightPrice.delete_old_flight_prices("respina",route_id,date) 
-          FlightPrice.import flight_prices
+          FlightPrice.import flight_prices, validate: false
           FlightPriceArchive.archive flight_prices
           SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
         end
@@ -82,7 +84,7 @@ class Suppliers::Respina
         end
       end
 
-
+      return flight_ids
   end
 
   def get_airline_code(airline_code)
@@ -104,5 +106,5 @@ class Suppliers::Respina
 	airlines[airline_code].nil? ? nil : airlines[airline_code]
   end
 
-
+=end
 end

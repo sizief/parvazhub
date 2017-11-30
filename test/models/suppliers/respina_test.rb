@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class SuppliersRespinaTest < ActiveSupport::TestCase
+=begin
 
   def setup
     @respina_search = Suppliers::Respina.new
@@ -42,4 +43,5 @@ class SuppliersRespinaTest < ActiveSupport::TestCase
       @respina_search.import_domestic_flights(response,route.id,@origin,@destination,@date,@search_history_id)
     end
   end
+=begin
 end

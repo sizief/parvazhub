@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class SuppliersAlibabaTest < ActiveSupport::TestCase
-
+=begin
   def setup
     @alibaba_search = Suppliers::Alibaba.new
     @origin = "thr"
@@ -31,5 +31,5 @@ class SuppliersAlibabaTest < ActiveSupport::TestCase
       @alibaba_search.import_domestic_flights(response,route.id,@origin,@destination,@date,@search_history_id)
     end
   end
-
+=end
 end

@@ -1,6 +1,7 @@
 class Suppliers::Travelchi
   require "uri"
   require "rest-client"
+=begin
 
   def search(origin,destination,date,search_history_id)
       proxy_url = nil
@@ -28,7 +29,7 @@ class Suppliers::Travelchi
       return {status:true,response: response.body}
     end
 
-    def import_domestic_flights(response,route_id,origin,destination,date,search_history_id)
+    def import_flights(response,route_id,origin,destination,date,search_history_id)
       flight_id = nil
       flight_prices = Array.new()
       json_response = JSON.parse(response[:response])
@@ -132,5 +133,5 @@ class Suppliers::Travelchi
     date = date.to_date.to_parsi.to_s.gsub("-","/")
     link = "http://travelchi.ir/%D9%86%D8%AA%D8%A7%DB%8C%D8%AC-%D8%AC%D8%B3%D8%AA%D8%AC%D9%88-%D9%BE%D8%B1%D9%88%D8%A7%D8%B2/?search_type=flights&ajax=1&From=-#{origin.upcase}&To=-#{destination.upcase}&AdultCount=1&ChildCount=0&InfantCount=0&FlightDate=#{date}&scope=local"
   end 
-
+=end
 end

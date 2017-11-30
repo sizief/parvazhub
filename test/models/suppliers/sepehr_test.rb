@@ -1,4 +1,6 @@
 require 'test_helper'
+=begin
+
 
 class SuppliersSepehrTest < ActiveSupport::TestCase
 
@@ -39,5 +41,5 @@ class SuppliersSepehrTest < ActiveSupport::TestCase
       @sepehr_search.import_domestic_flights(response,route.id,@origin,@destination,@date,@search_history_id)
     end
   end
-
+=end
 end

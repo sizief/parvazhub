@@ -68,7 +68,7 @@ class Suppliers::Trip < Suppliers::Base
     return raw_response
   end
 
-    def import_domestic_flights(response,route_id,origin,destination,date,search_history_id)
+    def import_flights(response,route_id,origin,destination,date,search_history_id)
       flight_id = nil
       flight_prices, flight_ids = Array.new(), Array.new()
       ActiveRecord::Base.connection_pool.with_connection do
@@ -108,23 +108,27 @@ class Suppliers::Trip < Suppliers::Base
         end
 
         flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"trip", flight_date:"#{date}", deep_link:"#{deeplink_url}" )
-
       end #end of each loop
 
       unless flight_prices.empty?
         ActiveRecord::Base.connection_pool.with_connection do
+          SearchHistory.append_status(search_history_id,"p done(#{Time.now.strftime('%M:%S')})")                  
           FlightPrice.delete_old_flight_prices("trip",route_id,date)
+          SearchHistory.append_status(search_history_id,"delete(#{Time.now.strftime('%M:%S')})")
+          
           FlightPrice.import flight_prices, validate: false
+          SearchHistory.append_status(search_history_id,"fp(#{Time.now.strftime('%M:%S')})")
+          
           FlightPriceArchive.archive flight_prices #todo: change it to job
           SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
         end
       else
         ActiveRecord::Base.connection_pool.with_connection do
-          SearchHistory.append_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
+          SearchHistory.append_status(search_history_id,"empty (#{Time.now.strftime('%M:%S')})")
         end
       end
       return flight_ids
-  end
+    end
   
   def prepare flight_legs
     flight_numbers, airline_codes, airplane_types, departure_date_times, arrival_date_times, stops = Array.new, Array.new, Array.new, Array.new, Array.new, Array.new    

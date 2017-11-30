@@ -1,8 +1,8 @@
-class Suppliers::Zoraq
+class Suppliers::Zoraq < Suppliers::Base  
   require "uri"
   require "rest-client"
     
-  def search(origin,destination,date,search_history_id)
+  def search_supplier
       if Rails.env.test?
         if Route.select(:international).find_by(origin: origin, destination: destination).international
           file = "international-zoraq.log"
@@ -16,87 +16,79 @@ class Suppliers::Zoraq
       begin
         url = "http://zoraq.com/Flight/DeepLinkSearch"
   	    params = {'OrginLocationIata' => "#{origin.upcase}", 'DestLocationIata' => "#{destination.upcase}", 'DepartureGo' => "#{date}", 'Passengers[0].Type' =>'ADT', 'Passengers[0].Quantity'=>'1'}
-        ActiveRecord::Base.connection_pool.with_connection do        
-          SearchHistory.append_status(search_history_id,"R1(#{Time.now.strftime('%M:%S')})")
-        end
-        #response = RestClient.post("#{URI.parse(url)}", params)
         response = RestClient::Request.execute(method: :post, url: "#{URI.parse(url)}",headers: {params: params}, proxy: nil)
       rescue => e
         ActiveRecord::Base.connection_pool.with_connection do        
           SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
         end
-          return {status:false}
+        return {status:false}
       end
       return {status:true,response: response.body}
   end
 
-  def import_domestic_flights(response,route_id,origin,destination,date,search_history_id)
-      begin
-        flight_prices = Array.new()
-        json_response = JSON.parse(response[:response])
-        ActiveRecord::Base.connection_pool.with_connection do        
-          SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
-        end
-        json_response["PricedItineraries"].each do |flight|
-          leg_data = flight_id = nil
-          flight_legs = flight["OriginDestinationOptions"][0]["FlightSegments"]
-          leg_data = prepare flight_legs
-
-          ActiveRecord::Base.connection_pool.with_connection do        
-            flight_id = Flight.create_or_find_flight(route_id,
-            leg_data[:flight_number].join(","),
-            leg_data[:departure_date_time].first,
-            leg_data[:airline_code].join(","),
-            leg_data[:airplane_type].join(","),
-            leg_data[:arrival_date_time].last,
-            leg_data[:stop].join(","),
-            leg_data[:trip_duration])
-          end
-
-          departure_date = leg_data[:departure_date_time].first.strftime("%F")
-          price = flight["AirItineraryPricingInfo"]["PTC_FareBreakdowns"][0]["PassengerFare"]["TotalFare"]["Amount"]
-          deeplink_url = get_zoraq_deeplink(origin, destination,date,flight["AirItineraryPricingInfo"]["FareSourceCode"])
-          
-          #to prevent duplicate flight prices we compare flight prices before insert into database
-          flight_price_so_far = flight_prices.select {|flight_price| flight_price.flight_id == flight_id}
-          unless flight_price_so_far.empty? #check to see a flight price for given flight is exists
-            if flight_price_so_far.first.price.to_i <= price.to_i #saved price is cheaper or equal to new price so we dont touch it
-              next
-            else
-              flight_price_so_far.first.price = price #new price is cheaper, so update the old price and go to next price
-              flight_price_so_far.first.deep_link = deeplink_url
-              next
-            end
-          end
-
-          ActiveRecord::Base.connection_pool.with_connection do        
-            flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"zoraq", flight_date:"#{departure_date}", deep_link:"#{deeplink_url}" )
-          end
-
-        end #end of each loop
-        ActiveRecord::Base.connection_pool.with_connection do
-          SearchHistory.append_status(search_history_id,"db import(#{Time.now.strftime('%M:%S')})")
-        end
-        
-        unless flight_prices.empty?
-          ActiveRecord::Base.connection_pool.with_connection do        
-            FlightPrice.delete_old_flight_prices("zoraq",route_id,date) 
-            SearchHistory.append_status(search_history_id,"db delete(#{Time.now.strftime('%M:%S')})")
-            
-            FlightPrice.import flight_prices
-            SearchHistory.append_status(search_history_id,"db import fp(#{Time.now.strftime('%M:%S')})")
-            
-            FlightPriceArchive.archive flight_prices
-            SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
-          end
-        else
-          ActiveRecord::Base.connection_pool.with_connection do        
-            SearchHistory.append_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
-          end
-        end
-      rescue
-        raise
+  def import_flights(response,route_id,origin,destination,date,search_history_id)
+    flight_id = nil
+    flight_prices, flight_ids = Array.new(), Array.new()
+    json_response = JSON.parse(response[:response])
+    ActiveRecord::Base.connection_pool.with_connection do        
+      SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
+    end
+    json_response["PricedItineraries"].each do |flight|
+      leg_data = flight_id = nil
+      flight_legs = flight["OriginDestinationOptions"][0]["FlightSegments"]
+      leg_data = prepare flight_legs
+      
+      next if leg_data.nil?      
+      ActiveRecord::Base.connection_pool.with_connection do        
+          flight_id = Flight.create_or_find_flight(route_id,
+          leg_data[:flight_number].join(","),
+          leg_data[:departure_date_time].first,
+          leg_data[:airline_code].join(","),
+          leg_data[:airplane_type].join(","),
+          leg_data[:arrival_date_time].last,
+          leg_data[:stop].join(","),
+          leg_data[:trip_duration])
       end
+      flight_ids << flight_id      
+
+      departure_date = leg_data[:departure_date_time].first.strftime("%F")
+      price = flight["AirItineraryPricingInfo"]["PTC_FareBreakdowns"][0]["PassengerFare"]["TotalFare"]["Amount"]
+      deeplink_url = get_zoraq_deeplink(origin, destination,date,flight["AirItineraryPricingInfo"]["FareSourceCode"])
+        
+      #to prevent duplicate flight prices we compare flight prices before insert into database
+      flight_price_so_far = flight_prices.select {|flight_price| flight_price.flight_id == flight_id}
+      unless flight_price_so_far.empty? #check to see a flight price for given flight is exists
+        if flight_price_so_far.first.price.to_i <= price.to_i #saved price is cheaper or equal to new price so we dont touch it
+          next
+        else
+          flight_price_so_far.first.price = price #new price is cheaper, so update the old price and go to next price
+          flight_price_so_far.first.deep_link = deeplink_url
+          next
+        end
+      end
+
+      flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"zoraq", flight_date:"#{departure_date}", deep_link:"#{deeplink_url}" )
+
+    end #end of each loop
+      
+    unless flight_prices.empty?
+      ActiveRecord::Base.connection_pool.with_connection do 
+        SearchHistory.append_status(search_history_id,"p done(#{Time.now.strftime('%M:%S')})")        
+        FlightPrice.delete_old_flight_prices("zoraq",route_id,date)
+        SearchHistory.append_status(search_history_id,"delete(#{Time.now.strftime('%M:%S')})")
+        
+        FlightPrice.import flight_prices, validate: false
+        SearchHistory.append_status(search_history_id,"fp(#{Time.now.strftime('%M:%S')})")
+        
+        FlightPriceArchive.archive flight_prices
+        SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
+      end
+    else
+      ActiveRecord::Base.connection_pool.with_connection do        
+        SearchHistory.append_status(search_history_id,"empty (#{Time.now.strftime('%M:%S')})")
+      end
+    end
+    return flight_ids
   end
 
   def prepare flight_legs

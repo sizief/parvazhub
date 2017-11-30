@@ -12,15 +12,16 @@ class SupplierSearch
   end
 
 	def search
-    #search_supplier_in_threads
-    search_supplier_in_series
+    search_supplier_in_threads
+    #search_supplier_in_series
   end
   
   def search_supplier_in_threads   
     threads = []
     flight_ids = Array.new    
-    Timeout.timeout(timeout) do
-      begin
+    
+    begin
+      Timeout.timeout(timeout) do
         supplier_list.each do |supplier|
           threads << Thread.new do
             begin
@@ -29,14 +30,18 @@ class SupplierSearch
               raise if Rails.env.development?
             end
           end
-        end 
+        end  
         threads.each do |thread|
           thread.join  
-        end
-      rescue  
-        raise if Rails.env.development?
-      end  
-    end
+        end    
+      end
+     
+    rescue Timeout::Error
+      # do nothing 
+    rescue  
+      raise if Rails.env.development?
+    end 
+    
     update_all_after_supplier_search
   end
 
@@ -76,7 +81,7 @@ class SupplierSearch
 
   def merge_and_update_all (flight_ids,route,date)
     update_flight_best_price
-    #Flight.update_flight_price_count flight_ids     
+    Flight.update_flight_price_count flight_ids     
   end
 
   def search_supplier(supplier_name,supplier_class)
@@ -89,7 +94,8 @@ class SupplierSearch
                                                 route: route,
                                                 date: date,
                                                 search_history_id: search_history.id,
-                                                search_flight_token: search_flight.token)
+                                                search_flight_token: search_flight.token,
+                                                supplier_name: supplier_name)
     supplier.search      
   end
 

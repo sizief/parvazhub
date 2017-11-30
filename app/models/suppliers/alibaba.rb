@@ -1,6 +1,7 @@
+#did not update after version 2, so it is not working. 
 class Suppliers::Alibaba
   require "open-uri"
-
+=begin
 
 
   def search(origin,destination,date,search_history_id)
@@ -126,5 +127,5 @@ class Suppliers::Alibaba
       return airline_codes.key("#{alibaba_airline_code}").to_s.upcase
     end
   end
-
+=end
 end

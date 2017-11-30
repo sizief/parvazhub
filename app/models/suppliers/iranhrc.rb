@@ -1,4 +1,4 @@
-class Suppliers::Iranhrc
+class Suppliers::Iranhrc < Suppliers::Base  
     require "uri"
     require "rest-client"
     
@@ -8,9 +8,6 @@ class Suppliers::Iranhrc
       begin
         params = "ApiSiteId=2D23087B-9D0F-4076-90FD-5AF91DB75CBC&SourceAbbrivation=#{origin.upcase}&DestinationAbbrivation=#{destination.upcase}&flightdate=#{iranhrc_template_date}&count=1&AdultCount=1&InfantCount=0&FlightType=#{flight_type}"
         search_url = @@search_url+params
-        ActiveRecord::Base.connection_pool.with_connection do
-          SearchHistory.append_status(search_history_id,"R#{flight_type}(#{Time.now.strftime('%M:%S')})")
-        end
         
         if Rails.env.test?
           response = File.read("test/fixtures/files/domestic-iranhrc.log")
@@ -27,7 +24,7 @@ class Suppliers::Iranhrc
       return response
     end
 
-    def search(origin,destination,date,search_history_id)
+    def search_supplier
       iranhrc_template_date = date+"T00:00:00.0Z"
       first_response = send_request(origin,destination,iranhrc_template_date,search_history_id,"1")
       second_response = send_request(origin,destination,iranhrc_template_date,search_history_id,"2")
@@ -35,9 +32,9 @@ class Suppliers::Iranhrc
       return {status:true,response: response}
     end
 
-    def import_domestic_flights(response,route_id,origin,destination,date,search_history_id)
+    def import_flights(response,route_id,origin,destination,date,search_history_id)
       flight_id = nil
-      flight_prices = Array.new()
+      flight_prices, flight_ids = Array.new(), Array.new()
       ActiveRecord::Base.connection_pool.with_connection do
         SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
       end
@@ -53,6 +50,7 @@ class Suppliers::Iranhrc
         ActiveRecord::Base.connection_pool.with_connection do
           flight_id = Flight.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
         end
+        flight_ids << flight_id
 
         #to prevent duplicate flight prices we compare flight prices before insert into database
         flight_price_so_far = flight_prices.select {|flight_price| flight_price.flight_id == flight_id}
@@ -65,25 +63,23 @@ class Suppliers::Iranhrc
           end
         end
 
-        ActiveRecord::Base.connection_pool.with_connection do
-          flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"iranhrc", flight_date:"#{date}", deep_link:"#{deeplink_url}" )
-        end
+        flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"iranhrc", flight_date:"#{date}", deep_link:"#{deeplink_url}" )
 
       end #end of each loop
       
-      unless flight_prices.empty?
-        ActiveRecord::Base.connection_pool.with_connection do
-          FlightPrice.delete_old_flight_prices("iranhrc",route_id,date)
-          FlightPrice.import flight_prices
-          FlightPriceArchive.archive flight_prices
-          SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
-        end
-      else
-        ActiveRecord::Base.connection_pool.with_connection do
-          SearchHistory.append_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
-        end
+    unless flight_prices.empty?
+      ActiveRecord::Base.connection_pool.with_connection do
+        FlightPrice.delete_old_flight_prices("iranhrc",route_id,date)
+        FlightPrice.import flight_prices, validate: false
+        FlightPriceArchive.archive flight_prices
+        SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
       end
-
+    else
+      ActiveRecord::Base.connection_pool.with_connection do
+        SearchHistory.append_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
+      end
+    end
+    return flight_ids
   end
 
   def get_airline_code(iranhrc_internal_code)
