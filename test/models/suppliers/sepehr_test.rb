@@ -1,8 +1,7 @@
 require 'test_helper'
-=begin
-
 
 class SuppliersSepehrTest < ActiveSupport::TestCase
+=begin
 
   def setup
     @sepehr_search = Suppliers::Sepehr.new

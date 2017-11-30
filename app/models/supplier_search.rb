@@ -48,8 +48,8 @@ class SupplierSearch
   def search_supplier_in_series 
     flight_ids = Array.new
     suppliers = supplier_list
-    Timeout.timeout(timeout) do
-      begin 
+    begin 
+      Timeout.timeout(timeout) do
         suppliers.each do |supplier|
           begin
             search_supplier(supplier[:name],supplier[:class_name])
@@ -57,12 +57,14 @@ class SupplierSearch
             raise if Rails.env.development?
           end
         end
-      rescue 
-        raise if Rails.env.development?
       end
-      update_all_after_supplier_search
-    end
-
+    rescue Timeout::Error
+      # do nothing 
+    rescue  
+      raise if Rails.env.development?
+    end 
+      
+    update_all_after_supplier_search
   end
 
   def update_all_after_supplier_search
