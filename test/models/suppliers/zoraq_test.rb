@@ -81,14 +81,20 @@ class SuppliersZoraqTest < ActiveSupport::TestCase
   test "zoraq deeplink for today should be goes to checkout page" do
     date = Date.today.to_s
     fare_source_code = "/Flight/Checkout/?sessionKey=6405f715-e704-4030-b9e4-cd2c2401f2b1&identifier=c32867c9-2dbe-4b42-9871-41df8382a220&searchType=DomesticFlights"
-    deeplink = @zoraq_obj.get_zoraq_deeplink(@origin,@destination,date,fare_source_code)
+    origin_object = City.find_by(city_code: @origin)
+    destination_object = City.find_by(city_code: @destination)
+    
+    deeplink = @zoraq_obj.get_zoraq_deeplink(origin_object,destination_object,date,fare_source_code)
     assert deeplink.include? "Checkout"
   end
 
   test "zoraq deeplink for days after today should be goes to list page" do
     date = (Date.today+1).to_s
     fare_source_code = "/Flight/Checkout/?sessionKey=6405f715-e704-4030-b9e4-cd2c2401f2b1&identifier=c32867c9-2dbe-4b42-9871-41df8382a220&searchType=DomesticFlights"
-    deeplink = @zoraq_obj.get_zoraq_deeplink(@origin,@destination,date,fare_source_code)
+    origin_object = City.find_by(city_code: @origin)
+    destination_object = City.find_by(city_code: @destination)
+    
+    deeplink = @zoraq_obj.get_zoraq_deeplink(origin_object,destination_object,date,fare_source_code)
     assert deeplink.include? "Iran/Mashhad"
     assert deeplink.include? "مشهد"
     assert deeplink.include? "تهران"

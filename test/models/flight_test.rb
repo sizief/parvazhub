@@ -17,10 +17,7 @@ class FlightTest < ActiveSupport::TestCase
   	assert_not @second_flight.valid?
   end
 
-  test "route id should be exists" do
-  	@flight.route_id = nil
-  	assert_not @flight.save
-  end
+
 
   test "airline_call_sign" do
     exist_airline_code = "W5"
