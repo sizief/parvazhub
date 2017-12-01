@@ -29,6 +29,9 @@ class Suppliers::Zoraq < Suppliers::Base
   def import_flights(response,route_id,origin,destination,date,search_history_id)
     flight_id = nil
     flight_prices, flight_ids = Array.new(), Array.new()
+    origin_object = City.find_by(city_code: origin)
+    destination_object = City.find_by(city_code: destination)
+
     json_response = JSON.parse(response[:response])
     ActiveRecord::Base.connection_pool.with_connection do        
       SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
@@ -53,7 +56,7 @@ class Suppliers::Zoraq < Suppliers::Base
 
       departure_date = leg_data[:departure_date_time].first.strftime("%F")
       price = flight["AirItineraryPricingInfo"]["PTC_FareBreakdowns"][0]["PassengerFare"]["TotalFare"]["Amount"]
-      deeplink_url = get_zoraq_deeplink(origin, destination,date,flight["AirItineraryPricingInfo"]["FareSourceCode"])
+      deeplink_url = get_zoraq_deeplink(origin_object, destination_object,date,flight["AirItineraryPricingInfo"]["FareSourceCode"])
         
       #to prevent duplicate flight prices we compare flight prices before insert into database
       flight_price_so_far = flight_prices.select {|flight_price| flight_price.flight_id == flight_id}
@@ -152,14 +155,14 @@ class Suppliers::Zoraq < Suppliers::Base
 	  airlines[airline_code].nil? ? airline_code.upcase : airlines[airline_code]
   end
 
-  def get_zoraq_deeplink(origin,destination,date,fare_source_code)
+  def get_zoraq_deeplink(origin_object,destination_object,date,fare_source_code)
     if date == Date.today.to_s
       deeplink = "http://zoraq.com"+fare_source_code.to_s
     else
       country_name = "Iran"
-      destination_city_english = City.find_by(city_code: destination).english_name.capitalize
-      destination_city_farsi =  City.find_by(city_code: destination).persian_name
-      origin_city_farsi =  City.find_by(city_code: origin).persian_name
+      destination_city_english = destination_object.english_name.capitalize
+      destination_city_farsi =  destination_object.persian_name
+      origin_city_farsi =  origin_object.persian_name
 
       depart_date = date.tr("-","")[2..-1]
       return_date = ((date.to_date+1).to_s).tr("-","")[2..-1]

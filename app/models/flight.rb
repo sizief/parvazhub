@@ -1,7 +1,8 @@
 class Flight < ApplicationRecord
-	validates :flight_number, :uniqueness => { :scope => :departure_time,
-    :message => "already saved" }
-  validates :route_id, presence: true
+	#validates :flight_number, :uniqueness => { :scope => :departure_time,:message => "already saved" }
+  validates_uniqueness_of :route_id, :scope => [:flight_number, :departure_time]
+  
+  #validates :route_id, presence: true
   belongs_to :route
   has_many :flight_prices
   has_one :flight_info
