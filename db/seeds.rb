@@ -44,7 +44,7 @@ csv.each do |x|
   Airline.create(x.to_hash)
 end
 
-=end
+
 
 iranian_airlines =[{code: "W5", persian_name: "ماهان", english_name:"mahan"},
   {code: "AK", persian_name: "اترک", english_name:"atrak"},
@@ -70,4 +70,6 @@ iranian_airlines =[{code: "W5", persian_name: "ماهان", english_name:"mahan"
     x.save
   end
 
+=end
 
+City.create(english_name: "saint petersburg",persian_name: "سن‌پترزبورگ", country_code: "RU", city_code: "led", status: true)
