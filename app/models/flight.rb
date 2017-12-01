@@ -78,12 +78,12 @@ class Flight < ApplicationRecord
 
   end
 
-  def get_lowest_price_for_month(origin,destination)
+  def get_lowest_price_for_month(origin,destination,start_date)
     duration = 21
     prices = Array.new
     route = Route.find_by(origin:origin, destination:destination)
     0.upto(duration) do |x|
-      date = (Date.today+x).to_s
+      date = (start_date+x).to_s
       amount = get_lowest_price(route,date)
       if amount
         amount = amount[:best_price]

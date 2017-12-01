@@ -24,6 +24,7 @@ Rails.application.routes.draw do
 	get '/flight_search', to:'search_result#flight_search', as: 'flight_search'
     
 	get '/flights/', to: 'city_page#flight', as: 'flight_page'
+	get '/flights/:origin_name-:destination_name-:month/', to: 'city_page#route', as: 'route_by_month_page'	
 	get '/flights/:origin_name-:destination_name/', to: 'city_page#route', as: 'route_page'
 	get '/flights/:origin_name-:destination_name/:date', to:'search_result#search', as: 'flight_result'
 	get '/flights/:origin_name-:destination_name/:date/:id', to: 'search_result#flight_prices', as: 'flight_prices'
