@@ -25,13 +25,13 @@
 			<div class="ui form">
 				<div class="four fields">
 					<div class="field input-container">
-						<%= f.text_field :originـfield,{:class =>'origin-field typeahead dir-rtl web-font',placeholder: "از مبدا (شهر یا فرودگاه)", value:@search_parameter[:origin_persian_name]} %>			
+						<%= f.text_field :originـfield,{:class =>'origin-field typeahead dir-rtl web-font',placeholder: "مبدا (شهر فارسی یا انگلیسی)", value:@search_parameter[:origin_persian_name]} %>			
 						<%= f.hidden_field :origin,{:id =>'origin',value:@search_parameter[:origin_english_name]} %>
 					</div>
 					
 					
 					<div class="field input-container">
-						<%= f.text_field :destination_field,{:class =>'destination-field typeahead dir-rtl web-font',placeholder: "به مقصد (شهر یا فرودگاه)",value:@search_parameter[:destination_persian_name]} %>
+						<%= f.text_field :destination_field,{:class =>'destination-field typeahead dir-rtl web-font',placeholder: "مقصد (شهر فارسی یا انگلیسی)",value:@search_parameter[:destination_persian_name]} %>
 						<%= f.hidden_field :destination,{:id =>'destination',value:@search_parameter[:destination_english_name]} %>
 					</div>
 					<div class="field ui calendar">
