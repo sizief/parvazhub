@@ -21,6 +21,10 @@ class FlightResult
     end
     Flight.new.flight_list(route,date,result_time_to_live)
   end
+
+  def get_archive
+    Flight.new.flight_list(route,date,1440.to_f.minutes.ago)
+  end
   
   def self.allow_response_time(date)
     if date == Date.today.to_s #today

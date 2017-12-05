@@ -2,11 +2,10 @@ require 'sidekiq-scheduler'
 
 class BackgroundSearchWorker
   include Sidekiq::Worker
-  sidekiq_options :retry => 1, :backtrace => true
+  sidekiq_options :retry => 0, :backtrace => true
   @@origin_destination = [
   	{origin:"thr",destination:"mhd"},
   	{origin:"thr",destination:"kih"},
-  	{origin:"thr",destination:"syz"},
     {origin:"thr",destination:"ist"},
     {origin:"thr",destination:"dxb"},
     {origin:"mhd",destination:"thr"},

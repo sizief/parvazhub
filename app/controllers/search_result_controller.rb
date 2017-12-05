@@ -39,19 +39,26 @@ class SearchResultController < ApplicationController
   end
 
   def get_results(route,origin,destination,date,channel,user_agent_request)
-    unless is_bot(user_agent_request)
+    if is_bot(user_agent_request)
       text = "☝️ [#{Rails.env}] #{route.id}, #{date} \n #{user_agent_request}"
       UserSearchHistoryWorker.perform_async(text,route.id,date,channel)
+      flights = get_flights(date,route,true)
+    else
+      flights = get_flights(date,route,false)
     end
-    return get_flights(date,route)
+    return flights
   end
 
   def notfound
     render :notfound
   end
 
-  def get_flights(date,route)
-    date >= Date.today.to_s ? FlightResult.new(route,date).get : @flights = Array.new
+  def get_flights(date,route,is_bot)
+    if is_bot
+      FlightResult.new(route,date).get_archive
+    else
+      date >= Date.today.to_s ? FlightResult.new(route,date).get : Array.new
+    end
   end
 
   def index(route,origin,destination,date,flights)
