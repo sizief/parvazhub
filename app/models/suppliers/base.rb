@@ -24,6 +24,27 @@ class Suppliers::Base
   def save_flight_ids flight_ids
     SearchFlightId.create(token: search_flight_token, flight_ids: flight_ids) 
   end
+
+  def mock_results
+    if route.international
+      file = "international-#{supplier_name.downcase}.log"
+    else
+      file = "domestic-#{supplier_name.downcase}.log"
+    end
+    response = File.read("test/fixtures/files/"+file)
+  end
+
+  def calculate_stopover_duration (departures,arrivals)
+    duration = 0    
+    if departures.count > 1
+      departures.each_with_index do |departure,index|
+        next if index == 0
+        duration += ((departure - arrivals[index-1])*24*60).to_i        
+      end
+    end
+    duration
+  end
+
   
 end
     

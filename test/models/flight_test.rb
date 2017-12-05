@@ -17,8 +17,6 @@ class FlightTest < ActiveSupport::TestCase
   	assert_not @second_flight.valid?
   end
 
-
-
   test "airline_call_sign" do
     exist_airline_code = "W5"
     non_exist_airline_code = "TR"
@@ -26,8 +24,9 @@ class FlightTest < ActiveSupport::TestCase
     assert_equal @new_flight.airline_call_sign(non_exist_airline_code), non_exist_airline_code
   end
 
-  test "flight_list should be returned" do
-    flight_list = @new_flight.flight_list(@route,@date)
+  test "flight list" do
+    allow_time = 20
+    flight_list = @new_flight.flight_list(@route,@date,allow_time.to_f.minutes.ago)
     assert !!flight_list
     assert flight_list.is_a? Array
   end

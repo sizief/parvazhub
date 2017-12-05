@@ -40,10 +40,6 @@
     args: [5]
     class: BackgroundSearchWorker
 
-  flight_search_restofweek_4: #every 120 minutes
-    cron: '0 55 0,2,4,6,8,10,12,14,16,18,20,22 * * *'
-    args: [6]
-    class: BackgroundSearchWorker
 
 #airport search worker
   get_airport_data:

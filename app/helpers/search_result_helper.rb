@@ -70,4 +70,19 @@ module SearchResultHelper
 		message
 	end
 
+	def number_with_zero(number)
+	  number_string = number.to_s
+	  case number_string.size
+	  when 5
+		number_with_zero = "000" + number_string
+	  when 6
+		number_with_zero = "00" + number_string
+	  when 7
+		number_with_zero = "0" + number_string
+	  when 8
+		number_with_zero = number_string	
+	  end
+	  number_with_zero
+	end
+
 end

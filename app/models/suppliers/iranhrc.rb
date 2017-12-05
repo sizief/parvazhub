@@ -1,70 +1,88 @@
 class Suppliers::Iranhrc < Suppliers::Base  
-    require "uri"
-    require "rest-client"
-    
-    @@search_url = "http://webapidevicebankgetway.iranhrc.ir/api/Device_Reservation_Flight/SearchFlight?"
-    
-    def send_request (origin,destination,iranhrc_template_date,search_history_id,flight_type)
-      begin
-        params = "ApiSiteId=2D23087B-9D0F-4076-90FD-5AF91DB75CBC&SourceAbbrivation=#{origin.upcase}&DestinationAbbrivation=#{destination.upcase}&flightdate=#{iranhrc_template_date}&count=1&AdultCount=1&InfantCount=0&FlightType=#{flight_type}"
-        search_url = @@search_url+params
-        
-        if Rails.env.test?
-          response = File.read("test/fixtures/files/domestic-iranhrc.log")
-        else 
-          response = RestClient::Request.execute(method: :get, url: "#{URI.parse(search_url)}", proxy: nil)
-          response = response.body
-        end
-      rescue => e
-        ActiveRecord::Base.connection_pool.with_connection do
-          SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
-        end
-        return {status:false}
-      end
-      return response
-    end
+  require "uri"
+  require "rest-client"
 
-    def search_supplier
-      iranhrc_template_date = date+"T00:00:00.0Z"
-      first_response = send_request(origin,destination,iranhrc_template_date,search_history_id,"1")
-      second_response = send_request(origin,destination,iranhrc_template_date,search_history_id,"2")
-      response = JSON.parse(first_response) + JSON.parse(second_response)
-      return {status:true,response: response}
+  @@api_site_id = "0c8e9eaa-417c-4862-baa9-c28ffa1f6ac9"
+    
+  def get_params
+    prepared_date = date.to_date.strftime "%Y/%m/%d"        
+    params = {'From' => "#{origin.upcase}", 
+              'To' => "#{destination.upcase}", 
+              'Date' => "#{prepared_date}", 
+              'AdultCount' => 1,
+              'ChildCount' => 0,
+              'InfantCount' => 0,
+              'CabinType' => 100,
+              'ApiSiteID' => @@api_site_id}
+  end
+
+  def search_supplier 
+    begin
+      url = "http://parvazhubiranhrcwebapi.safariran.ir/api/FlightReservationApi/SearchFlightData"
+      if Rails.env.test?
+        response = mock_results
+      else
+        response = RestClient::Request.execute(method: :post, 
+                                                url: "#{URI.parse(url)}",
+                                                payload: get_params, 
+                                                proxy: nil)
+        response = response.body
+      end
+    rescue => e
+      SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
+      return {status:false}
     end
+    return {status:true,response: response}
+  end
+
+  def prepare_response response
+    response[0] = ''
+    response[-1] = ''
+    return response.tr("\\","")
+  end
 
     def import_flights(response,route_id,origin,destination,date,search_history_id)
       flight_id = nil
       flight_prices, flight_ids = Array.new(), Array.new()
+      prepared_response = prepare_response(response[:response])
+      json_response = JSON.parse(prepared_response)
+      
       ActiveRecord::Base.connection_pool.with_connection do
         SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
       end
       
-      response[:response].each do |flight|
-        airline_code = get_airline_code(flight["AirLineID"])
-        next if airline_code.nil?
-        flight_number = airline_code + (flight["TitleFlight"].delete("^0-9"))
-        departure_time = date + " " + flight["startTime"]
-        airplane_type = ""
-        price = (flight["price"]/10).to_i
-        deeplink_url = get_deep_link(origin,destination,date)
+      json_response[0..ENV["MAX_NUMBER_FLIGHT"].to_i].each do |flight|
+        next if flight.nil?
+        leg_data = flight_id = nil
+        leg_data = prepare [flight]
+       
+        next if leg_data.nil?
         ActiveRecord::Base.connection_pool.with_connection do
-          flight_id = Flight.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type)
+          flight_id = Flight.create_or_find_flight(route_id,
+          leg_data[:flight_number].join(","),
+          leg_data[:departure_date_time].first,
+          leg_data[:airline_code].join(","),
+          leg_data[:airplane_type].join(","),
+          leg_data[:arrival_date_time].last,
+          leg_data[:stop].join(","),
+          leg_data[:trip_duration])
         end
         flight_ids << flight_id
 
-        #to prevent duplicate flight prices we compare flight prices before insert into database
+        deeplink_url = get_deep_link(flight["FlightInDateID"],flight["SessionID"])
+        price = (flight["Price"]/10).to_i
+        
         flight_price_so_far = flight_prices.select {|flight_price| flight_price.flight_id == flight_id}
-        unless flight_price_so_far.empty? #check to see a flight price for given flight is exists
-          if flight_price_so_far.first.price.to_i <= price.to_i #saved price is cheaper or equal to new price so we dont touch it
+        unless flight_price_so_far.empty? 
+          if flight_price_so_far.first.price.to_i <= price.to_i 
             next
           else
-            flight_price_so_far.first.price = price #new price is cheaper, so update the old price and go to next price
+            flight_price_so_far.first.price = price 
             next
           end
         end
 
-        flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"iranhrc", flight_date:"#{date}", deep_link:"#{deeplink_url}" )
-
+        flight_prices << FlightPrice.new(is_deep_link_url: false, flight_id: "#{flight_id}", price: "#{price}", supplier:"iranhrc", flight_date:"#{date}", deep_link:"#{deeplink_url}" )
       end #end of each loop
       
     unless flight_prices.empty?
@@ -82,53 +100,59 @@ class Suppliers::Iranhrc < Suppliers::Base
     return flight_ids
   end
 
-  def get_airline_code(iranhrc_internal_code)
-    airlines ={"5a9b4784-ded0-4fc0-b479-9294d4e2c0c3"=>"W5",
-		"84309f8d-1a6a-491b-bec6-57aa42748009"=>"AK", 
-			"43fdbf67-7c3e-4da9-bcfd-2ce4ed3bd987"=>"B9", 
-			"3d26ded2-ce83-4e90-b2a4-827f3c1b4c9e"=>"I3", 
-			"ff971cf7-dd37-49c5-87c9-71597d0fb297"=>"JI", 
-			"2a671594-be4b-4a6c-9ff0-fbca720d7de1"=>"IV", 
-			"ac5f813e-507c-4c75-998d-63fca4aa891d"=>"NV", 
-			"403babc0-cd2b-4c50-95bc-fab21a408e6f"=>"SE", 
-			"b76a53dd-661a-4329-adb5-15cd191e698a"=>"ZV",
-			"1784a7b0-d7da-4f57-a33f-69d64d778bcf"=>"HH",
-			"be9bc96f-ae32-43c0-a009-19c3dbb30e00"=>"QB",
-			"de1f05e1-a513-4400-b2f1-29d1141a0a27"=>"Y9",
-			"d0ea772a-36c7-44f0-9644-9f075e4f514e"=>"EP",
-			"6ca2226d-6bab-4abb-8039-63155ff26464"=>"IR",
-			"661b0e4a-01c9-49dc-a6ef-532996665532"=>"SR"
-		}
-	airlines[iranhrc_internal_code].nil? ? nil : airlines[iranhrc_internal_code]
-  end
+  def prepare flight
+    flight_numbers, airline_codes, airplane_types, departure_date_times, arrival_date_times, stops = Array.new, Array.new, Array.new, Array.new, Array.new, Array.new
+    trip_duration = 0
 
-  def get_deep_link(origin,destination,date)
-    #origin_name = City.list[origin.to_sym][:en].upcase
-    #origin_name = city_name_correction origin_name
+    flight.each do |leg|
+      airline_code = get_airline_code(leg["AirLineCode"])
+      flight_number = airline_code + (leg["TitleFlight"].delete("^0-9"))
 
-    #destination_name = City.list[destination.to_sym][:en].upcase
-    #destination_name = city_name_correction destination_name
-    #shamsi_date = date.to_date.to_parsi  
-     
-    #if ((destination_name == "RASHT" ) or (destination_name == "ARDABIL" ))
-    #  deeplink= "http://iranhrc.ir/flights/#{origin_name}-to-#{destination_name}"
-    #else
-    #  deeplink= "http://iranhrc.ir/flights/#{origin_name}-to-#{destination_name}/#{shamsi_date}"
-    #end
-    deeplink = "http://iranhrc.ir/"
-  end
-
-  def city_name_correction(city_name)
+      flight_numbers << flight_number 
+      airline_codes << airline_code
+      departure_date_times << date + " " + leg["StartTime"]
+      price = leg["Price"]/10
+      
+      stops << nil
+      airplane_types << nil
+      arrival_date_times << nil  
+    end  
     
-    if city_name == "BANDARABBAS"
-      return "Bandar%20%60Abbas"
-    elsif city_name == "ISFAHAN"
-        return "Esfahan"
-    elsif city_name == "BUSHEHR"
-        return "Bandar-e Bushehr"
-    else
-      return city_name
-    end
+    return {flight_number: flight_numbers,
+            airline_code: airline_codes,
+            airplane_type: airplane_types,
+            departure_date_time: departure_date_times,
+            arrival_date_time: arrival_date_times,
+            stop: stops,
+            trip_duration: trip_duration}
+  end
+
+  def get_deep_link(flight_in_date_id,session_id)
+    array_obj = Array.new
+    array_obj << {flight_in_date_id: flight_in_date_id, session_id: session_id}
+    array_obj.to_json
+  end
+
+  def get_airline_code(airline_code)
+    airlines ={
+      "0"=>"SE",
+      "SPN"=>"SR"
+    		}
+	airlines[airline_code].nil? ? airline_code : airlines[airline_code]
+  end
+
+  def self.create_deep_link data
+    url = "http://parvazhubiranhrcwebapi.safariran.ir/api/FlightReservationApi/ReserveFlight"
+    json_data = JSON.parse(data)[0]
+    params = {'SessionId' => json_data["session_id"], 
+              'FlightInDateId' => json_data["flight_in_date_id"], 
+              'ApiSiteId' => @@api_site_id,
+              'ReturnFlightInDateId' => nil} 
+    response = RestClient::Request.execute(method: :post, 
+                                          url: "#{URI.parse(url)}",
+                                          payload: params, 
+                                          proxy: nil)
+    return response.body.tr('"','')
   end
 
 end

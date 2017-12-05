@@ -1,45 +1,51 @@
-class Suppliers::Zoraq < Suppliers::Base  
+class Suppliers::Flytoday < Suppliers::Base  
   require "uri"
   require "rest-client"
-    
-  def search_supplier
-      if Rails.env.test?
-        if Route.select(:international).find_by(origin: origin, destination: destination).international
-          file = "international-zoraq.log"
-        else
-          file = "domestic-zoraq.log"
-        end
-          response = File.read("test/fixtures/files/"+file) 
-        return {response: response}
-      end
+  
+  def get_params
+    shamsi_date = date.to_date.to_parsi.strftime "%Y-%m-%d"        
+    params = {'OriginLocationCodes[0]' => "#{origin.upcase}", 
+              'DestinationLocationCodes[0]' => "#{destination.upcase}", 
+              'DepartureDateTimes[0]' => "#{shamsi_date}", 
+              'DepartureDateTimes_lang[0]' => "",
+              'DepartureDateTimeR' => "",
+              'AdultCount' => 1,
+              'ChildCount' => 0,
+              'InfantCount' => 0,
+              'CabinType' => 100,
+              'Foreign_FlightType' => 'OneWay'}
+  end
 
-      begin
-        url = "http://zoraq.com/Flight/DeepLinkSearch"
-  	    params = {'OrginLocationIata' => "#{origin.upcase}", 'DestLocationIata' => "#{destination.upcase}", 'DepartureGo' => "#{date}", 'Passengers[0].Type' =>'ADT', 'Passengers[0].Quantity'=>'1'}
-        response = RestClient::Request.execute(method: :post, url: "#{URI.parse(url)}",headers: {params: params}, proxy: nil)
-      rescue => e
-        ActiveRecord::Base.connection_pool.with_connection do        
-          SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
-        end
-        return {status:false}
-      end
-      return {status:true,response: response.body}
+  def search_supplier 
+    begin
+      url = "https://www.flytoday.ir/flight/search/deeplinksearch"
+    if Rails.env.test?
+      response = mock_results
+    else
+      response = RestClient::Request.execute(method: :post, 
+                                                url: "#{URI.parse(url)}",
+                                                payload: get_params, 
+                                                proxy: nil)
+      response = response.body
+    end
+    rescue => e
+      SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
+      return {status:false}
+    end
+    return {status:true,response: response}
   end
 
   def import_flights(response,route_id,origin,destination,date,search_history_id)
     flight_id = nil
     flight_prices, flight_ids = Array.new(), Array.new()
-    origin_object = City.find_by(city_code: origin)
-    destination_object = City.find_by(city_code: destination)
-
+   
     json_response = JSON.parse(response[:response])
     ActiveRecord::Base.connection_pool.with_connection do        
       SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
     end
     json_response["PricedItineraries"][0..ENV["MAX_NUMBER_FLIGHT"].to_i].each do |flight|
       leg_data = flight_id = nil
-      flight_legs = flight["OriginDestinationOptions"][0]["FlightSegments"]
-      leg_data = prepare flight_legs
+      leg_data = prepare flight["FlightSegments"]
       
       next if leg_data.nil?      
       ActiveRecord::Base.connection_pool.with_connection do        
@@ -54,9 +60,9 @@ class Suppliers::Zoraq < Suppliers::Base
       end
       flight_ids << flight_id      
 
-      departure_date = leg_data[:departure_date_time].first.strftime("%F")
-      price = flight["AirItineraryPricingInfo"]["PTC_FareBreakdowns"][0]["PassengerFare"]["TotalFare"]["Amount"]
-      deeplink_url = get_zoraq_deeplink(origin_object, destination_object,date,flight["AirItineraryPricingInfo"]["FareSourceCode"])
+      price = flight["PtcFareBreakdowns"][0]["TotalFareWithMarkupAndVat"]      
+      price = (price/10).to_i
+      deeplink_url = get_deeplink(flight["FareSourceCode"])
         
       #to prevent duplicate flight prices we compare flight prices before insert into database
       flight_price_so_far = flight_prices.select {|flight_price| flight_price.flight_id == flight_id}
@@ -70,15 +76,15 @@ class Suppliers::Zoraq < Suppliers::Base
         end
       end
 
-      flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"zoraq", flight_date:"#{departure_date}", deep_link:"#{deeplink_url}" )
+      flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"flytoday", flight_date:"#{date}", deep_link:"#{deeplink_url}" )
 
     end #end of each loop
       
     unless flight_prices.empty?
       ActiveRecord::Base.connection_pool.with_connection do 
         SearchHistory.append_status(search_history_id,"p done(#{Time.now.strftime('%M:%S')})")        
-        FlightPrice.delete_old_flight_prices("zoraq",route_id,date)
-        SearchHistory.append_status(search_history_id,"delete(#{Time.now.strftime('%M:%S')})")
+        FlightPrice.delete_old_flight_prices("flytoday",route_id,date)
+        SearchHistory.append_status(search_history_id,"d(#{Time.now.strftime('%M:%S')})")
         
         FlightPrice.import flight_prices, validate: false
         SearchHistory.append_status(search_history_id,"fp(#{Time.now.strftime('%M:%S')})")
@@ -98,17 +104,16 @@ class Suppliers::Zoraq < Suppliers::Base
     flight_numbers, airline_codes, airplane_types, departure_date_times, arrival_date_times, stops = Array.new, Array.new, Array.new, Array.new, Array.new, Array.new
     trip_duration = 0
     flight_legs.each do |leg|
-      airline_code = airline_code_correction(leg["OperatingAirline"]["Code"])
+      airline_code = leg["OperatingAirline"]
       flight_number = (leg["FlightNumber"].include? airline_code) ? leg["FlightNumber"] : airline_code+leg["FlightNumber"]
-      flight_number = flight_number.tr('.','') #sometimes zoraq responses with "." in start or end of a flight number
 
       flight_numbers << flight_number 
       airline_codes << airline_code
-      airplane_types << leg["OperatingAirline"]["Equipment"]
-      departure_date_times << parse_date(leg["DepartureDateTime"]).utc.to_datetime + ENV["IRAN_ADDITIONAL_TIMEZONE"].to_f.minutes # add 4:30 hours because zoraq date time is in iran time zone #.strftime("%H:%M")
+      airplane_types << leg["OperatingEquipment"]
+      departure_date_times << parse_date(leg["DepartureDateTime"]).utc.to_datetime + ENV["IRAN_ADDITIONAL_TIMEZONE"].to_f.minutes # add 4:30 hours because flytoday date time is in iran time zone #.strftime("%H:%M")
       arrival_date_times << parse_date(leg["ArrivalDateTime"]).utc.to_datetime + ENV["IRAN_ADDITIONAL_TIMEZONE"].to_f.minutes
-      stops << leg["ArrivalAirportLocationCode"]
-      trip_duration += leg["JourneyDuration"]
+      stops << leg["ArrivalAirport"]
+      trip_duration += to_minutes leg["JourneyDuration"]
     end
     
     trip_duration += calculate_stopover_duration(departure_date_times,arrival_date_times)
@@ -121,31 +126,20 @@ class Suppliers::Zoraq < Suppliers::Base
             trip_duration: trip_duration}
   end
 
+  def to_minutes time_string
+    total_time = 0
+    time_string = time_string.split(":")
+    total_time = time_string.first.to_i * 60
+    total_time += time_string.second.to_i
+  end
+
   def parse_date(datestring)
     seconds_since_epoch = datestring.scan(/[0-9]+/)[0].to_i / 1000.0
     return Time.at(seconds_since_epoch)
   end
 
-  def airline_code_correction(airline_code)
-    airlines ={
-      "@1"=>"AK",
-      "@2"=>"B9",
-      "@3"=>"SEPAHAN",
-      "@4"=>"hesa",
-      "@5"=>"I3",
-      "@7"=>"JI",
-      "@8"=>"IV",
-      "@9"=>"NV",
-      "@A"=>"SE",
-      "@B"=>"ZV",
-      "ZZ"=>"SE",
-      "SA"=>"SE"
-		}
-	  airlines[airline_code].nil? ? airline_code.upcase : airlines[airline_code]
-  end
-
-  def get_zoraq_deeplink(origin_object,destination_object,date,fare_source_code)
-    "http://zoraq.com"+fare_source_code.to_s
+  def get_deeplink(fare_source_code)
+    "https://flytoday.ir/flight/book?fsc=#{fare_source_code}"
   end
 
 end
