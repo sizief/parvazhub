@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class SuppliersSepehrTest < ActiveSupport::TestCase
-=begin
 
   def setup
     @sepehr_search = Suppliers::Sepehr.new
@@ -40,5 +39,4 @@ class SuppliersSepehrTest < ActiveSupport::TestCase
       @sepehr_search.import_domestic_flights(response,route.id,@origin,@destination,@date,@search_history_id)
     end
   end
-=end
 end

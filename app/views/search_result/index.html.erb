@@ -135,7 +135,8 @@
 							
 							
 						</td>
-						<td>	
+						<td>
+							<div class="hide"><%= number_with_zero(flight.best_price) %></div>
 							<a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight.id) %>" data-remote="false">	
 								<button class="ui submit yellow web-font fluid right labeled icon button flight-price-button" style="padding-right: 0 !important;">
 									<i class="right arrow icon"></i> از

@@ -80,7 +80,7 @@ class Suppliers::Trip < Suppliers::Base
         leg_data = prepare flight["legs"]
         price = flight["fares"]["total"]["price"]
         id = flight["_id"]
-        deeplink_url = get_deep_link(origin,destination,date,id)
+        deeplink_url = get_deep_link(id)
         
         next if leg_data.nil?
         ActiveRecord::Base.connection_pool.with_connection do        
@@ -173,12 +173,8 @@ class Suppliers::Trip < Suppliers::Base
     duration
   end
 
-  def get_deep_link(origin,destination,date,id)
-    if ((date == Date.today.to_s) or (date == (Date.today+1).to_s)) 
-      deep_link = "https://www.trip.ir/flex/register?depFlight=#{id}&channel=parvazhub"
-    else
-      deep_link = "http://www.trip.ir/flightSearch?src=#{origin.upcase}&isCityCodeSrc=true&dst=#{destination.upcase}&isCityCodeDst=true&class=e&depDate=#{date.upcase}&retDate=&adt=1&chd=0&inf=0"
-    end
+  def get_deep_link(id)
+    "https://www.trip.ir/flex/register?depFlight=#{id}&channel=parvazhub"
   end
 
   def flight_number_correction(flight_number,airline_code)

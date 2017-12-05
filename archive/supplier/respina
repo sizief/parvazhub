@@ -2,7 +2,6 @@
 class Suppliers::Respina < Suppliers::Base  
     require "uri"
     require "rest-client"
-=begin
 
 
   def search_supplier
@@ -106,5 +105,4 @@ class Suppliers::Respina < Suppliers::Base
 	airlines[airline_code].nil? ? nil : airlines[airline_code]
   end
 
-=end
 end

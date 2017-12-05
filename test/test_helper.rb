@@ -9,6 +9,7 @@ require 'rails/test_help'
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
+  ENV["MAX_NUMBER_FLIGHT"] = "1000" 
   
 
   # Add more helper methods to be used by all tests here...

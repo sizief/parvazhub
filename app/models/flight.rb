@@ -36,6 +36,7 @@ class Flight < ApplicationRecord
         else
           flight.best_price = stored_flight_prices.price 
           flight.price_by = stored_flight_prices.supplier 
+          flight.updated_at = Time.now #ensure that the updated at is going to update even if the value is not changed
         end
         flight.save
       end
@@ -126,9 +127,12 @@ class Flight < ApplicationRecord
   airlines[airline_code].nil? ? airline_code : airlines[airline_code]
   end
 
-  def flight_list(route,date)
+  def flight_list(route,date,result_time_to_live)
     airline_list = Airline.list 
-    flight_list = route.flights.includes(:flight_info).where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s).where.not(best_price:0)
+    flight_list = route.flights.includes(:flight_info)
+                              .where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s)
+                              .where.not(best_price:0)
+                              .where('updated_at >= ?', result_time_to_live)
     flight_list.each do |flight|
       flight.suppliers_count = flight.flight_prices_count
       flight.delay = flight.flight_info.delay unless flight.flight_info.nil?
@@ -153,9 +157,5 @@ class Flight < ApplicationRecord
   def get_call_sign(flight_number,airline_code)
     call_sign = flight_number.upcase.sub airline_code.upcase, airline_call_sign(airline_code)
   end
-
-  
-
-  
 
 end

@@ -7,15 +7,10 @@ class BackgroundSearchWorker
   	{origin:"thr",destination:"mhd"},
   	{origin:"thr",destination:"kih"},
   	{origin:"thr",destination:"syz"},
-    {origin:"thr",destination:"tbz"},
-    {origin:"thr",destination:"awz"},
     {origin:"thr",destination:"ist"},
     {origin:"thr",destination:"dxb"},
     {origin:"mhd",destination:"thr"},
   	{origin:"kih",destination:"thr"},
-  	{origin:"syz",destination:"thr"},
-    {origin:"tbz",destination:"thr"},
-    {origin:"awz",destination:"thr"},
     {origin:"ist",destination:"thr"},
     {origin:"dxb",destination:"thr"}
   ]

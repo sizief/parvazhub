@@ -168,8 +168,12 @@ class Telegram::Method
     date = format_date chat.date
     
     route = Route.find_by(origin:"#{origin_code}",destination:"#{destination_code}")
-    SearchResultController.new.search_suppliers(route,date,"telegram","telegram")
-    flights = Flight.new.flight_list(route,date)
+    flights = SearchResultController.new.get_results(route,
+                                                     City.find_by(city_code: origin_code),
+                                                     City.find_by(city_code: destination_code),
+                                                     date,
+                                                     "telegram",
+                                                     "telegram")
     
     if flights.empty?
       text += "برای این مسیر در این تاریخ متاسفانه پروازی پیدا نکردم. از صفحه کلید پایین صفحه می‌تونی روزهای دیگر را درخواست کنی و یا مسیر دیگری را جستجو کنی: /start"

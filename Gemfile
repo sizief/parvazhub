@@ -18,7 +18,6 @@ gem "activerecord-import", ">= 0.2.0"
 gem 'sidekiq'
 gem 'redis-rails'
 gem 'sidekiq-scheduler'
-gem 'scout_apm'
 gem 'sidekiq-status'
 gem 'devise'
 gem 'rollbar'
@@ -36,11 +35,6 @@ group :development do
   gem 'rubocop', require: false
   gem 'bullet'
   gem 'rack-mini-profiler'
-end
-
-group :benchmark do
-  gem 'rails-perftest'   
-  gem 'ruby-prof'
 end
 
 group :test do
