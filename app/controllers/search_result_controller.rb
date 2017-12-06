@@ -40,10 +40,11 @@ class SearchResultController < ApplicationController
 
   def get_results(route,origin,destination,date,channel,user_agent_request)
     if is_bot(user_agent_request)
-      text = "☝️ [#{Rails.env}] #{route.id}, #{date} \n #{user_agent_request}"
-      UserSearchHistoryWorker.perform_async(text,route.id,date,channel)
+      # do not search suplier, just get results from db
       flights = get_flights(date,route,true)
     else
+      text = "☝️ [#{Rails.env}] #{route.id}, #{date} \n #{user_agent_request}"
+      UserSearchHistoryWorker.perform_async(text,route.id,date,channel)
       flights = get_flights(date,route,false)
     end
     return flights
