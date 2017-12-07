@@ -9,7 +9,7 @@ class BackgroundSearchWorker
     {origin:"thr",destination:"ist"},
     {origin:"mhd",destination:"thr"},
   	{origin:"kih",destination:"thr"},
-    {origin:"ist",destination:"thr"},
+    {origin:"ist",destination:"thr"}
   ]
 
   def perform(date_offset)
