@@ -144,7 +144,7 @@ class Telegram::Method
     text = "<b>پرواز شماره #{flight.flight_number} از #{chat.origin} به #{chat.destination} #{hour_to_human(flight.departure_time.to_datetime.strftime("%H:%M"))}  </b>"
     text += "<a href=\"https://parvazhub.com/flights/#{origin_name}-#{destination_name}/#{date}\" > | پروازهاب</a>\n\n" 
     #flight_prices = FlightPrice.where(flight_id: flight_id).order(:price)
-    flight_prices = SearchResultController.new.get_flight_price("telegram",flight_id,"telegram")
+    flight_prices = SearchResultController.new.get_flight_price(date,"telegram",flight_id,"telegram")
     if flight_prices.empty?
       text += "به نظر می‌رسد این پرواز پر شده. لطفا پرواز دیگری انتخاب کن"
     else
