@@ -61,7 +61,9 @@
 			<% @link_count+=1 %>				
 		<% end %>
 		<div class="city-page-toggle-box">
-			برای تاریخ دیگری قصد جستجو دارید؟ اینجا کلیک کنید
+			 تاریخ دیگری قصد سفر دارید؟ اینجا کلیک کنید
+			<br/>
+			<%= link_to("دیدن قیمت‌های مسیر برگشت", route_page_path(@destination.english_name,@origin.english_name),{style: "color:white"}) %>
 		</div>
 	</div>
 
