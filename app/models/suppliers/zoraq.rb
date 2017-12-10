@@ -77,8 +77,6 @@ class Suppliers::Zoraq < Suppliers::Base
     unless flight_prices.empty?
       ActiveRecord::Base.connection_pool.with_connection do 
         SearchHistory.append_status(search_history_id,"p done(#{Time.now.strftime('%M:%S')})")        
-        FlightPrice.delete_old_flight_prices("zoraq",route_id,date)
-        SearchHistory.append_status(search_history_id,"delete(#{Time.now.strftime('%M:%S')})")
         
         FlightPrice.import flight_prices, validate: false
         SearchHistory.append_status(search_history_id,"fp(#{Time.now.strftime('%M:%S')})")

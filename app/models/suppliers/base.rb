@@ -13,6 +13,11 @@ class Suppliers::Base
 
   def search
     flight_ids = nil
+    ActiveRecord::Base.connection_pool.with_connection do       
+      FlightPrice.delete_old_flight_prices(supplier_name.downcase,route.id,date)
+      SearchHistory.append_status(search_history_id,"delete(#{Time.now.strftime('%M:%S')})")
+    end
+    
     response = search_supplier
     if response[:status] == true
       Log.new(log_name: supplier_name, content: response[:response]).save if Rails.env.development?        

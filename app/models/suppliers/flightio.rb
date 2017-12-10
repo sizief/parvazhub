@@ -85,7 +85,6 @@ class Suppliers::Flightio < Suppliers::Base
       
     unless flight_prices.empty?
       ActiveRecord::Base.connection_pool.with_connection do
-        FlightPrice.delete_old_flight_prices("flightio",route_id,date) 
         FlightPrice.import flight_prices, validate: false
         FlightPriceArchive.archive flight_prices
         SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
