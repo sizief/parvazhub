@@ -26,7 +26,7 @@ module SearchResultHelper
 			return "سفرمی"
 		elsif supplier_name == "flightio"
 			return "فلایتیو"
-		elsif supplier_name == "ghasedak24"
+		elsif supplier_name == "ghasedak"
 			return "قاصدک۲۴"
 		elsif supplier_name == "respina"
 			return "رسپینا۲۴"

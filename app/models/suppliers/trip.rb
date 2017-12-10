@@ -107,7 +107,7 @@ class Suppliers::Trip < Suppliers::Base
           end
         end
 
-        flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier:"trip", flight_date:"#{date}", deep_link:"#{deeplink_url}" )
+        flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier: supplier_name.downcase, flight_date:"#{date}", deep_link:"#{deeplink_url}" )
       end #end of each loop
 
       unless flight_prices.empty?
