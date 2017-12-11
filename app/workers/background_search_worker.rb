@@ -6,10 +6,8 @@ class BackgroundSearchWorker
   @@origin_destination = [
   	{origin:"thr",destination:"mhd"},
   	{origin:"thr",destination:"kih"},
-    {origin:"thr",destination:"ist"},
     {origin:"mhd",destination:"thr"},
-  	{origin:"kih",destination:"thr"},
-    {origin:"ist",destination:"thr"}
+  	{origin:"kih",destination:"thr"}
   ]
 
   def perform(date_offset)
