@@ -24,19 +24,19 @@ class FlightInfo < ApplicationRecord
     end
 
     def prepare_flight_info(flight)
-        call_sign = Flight.new.get_call_sign(flight.flight_number,flight.airline_code)
-        flight_details = FlightDetail.where(call_sign: call_sign)
-        airplane = flight.airplane_type
-        delay = canceled = nil
-        
-        unless flight_details.empty?
-          airplane = flight_details.last.airplane_type unless flight_details.last.airplane_type.nil?
-          delay = calculate_delay_based_on_flight_number(call_sign)
-          weekly_delay = calculate_delay_based_on_week(call_sign, flight.departure_time.to_date) 
-          #canceled = should count "باطل شده"
-        end
+      call_sign = Flight.new.get_call_sign(flight.flight_number,flight.airline_code)
+      flight_details = FlightDetail.where(call_sign: call_sign)
+      airplane = flight.airplane_type
+      delay = canceled = nil
+      
+      unless flight_details.empty?
+        airplane = flight_details.last.airplane_type unless flight_details.last.airplane_type.nil?
+        delay = calculate_delay_based_on_flight_number(call_sign)
+        weekly_delay = calculate_delay_based_on_week(call_sign, flight.departure_time.to_date) 
+        #canceled = should count "باطل شده"
+      end
 
-        return {call_sign: call_sign,airplane: airplane,delay: delay,canceled: canceled, weekly_delay: weekly_delay}
+      return {call_sign: call_sign,airplane: airplane,delay: delay,canceled: canceled, weekly_delay: weekly_delay}
     end
 
     def calculate_delay_based_on_flight_number (call_sign)
