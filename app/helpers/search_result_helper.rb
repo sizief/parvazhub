@@ -11,8 +11,10 @@ module SearchResultHelper
 			number = 40
 		elsif delay.to_f >= 45 and delay.to_f < 55
 			number = 50
-		elsif delay.to_f >= 55 
-			number = 60
+		elsif delay.to_f >= 55 and delay.to_f < 85
+			number = 80
+		elsif delay.to_f >= 85 
+			number = 120 #delay.to_f
 		end
 		return "<i class=\"warning circle yellow icon\"></i>احتمال  #{number} دقیقه تاخیر".html_safe
 	end
