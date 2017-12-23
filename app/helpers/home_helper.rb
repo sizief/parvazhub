@@ -6,7 +6,7 @@ module HomeHelper
 
   def today_price origin_code, destination_code
     flights = flight_list origin_code,destination_code
-    price = flights[:today].nil? ? nil : flights[:today].best_price
+    price = flights[:tomorrow].nil? ? nil : flights[:tomorrow].best_price
     prepare_price_message price
   end
 
