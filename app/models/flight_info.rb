@@ -32,17 +32,16 @@ class FlightInfo < ApplicationRecord
       
       unless flight_details.empty?
         airplane = flight_details.last.airplane_type unless flight_details.last.airplane_type.nil?
-        delay = calculate_delay_based_on_flight_number(call_sign)
-        weekly_delay = calculate_delay_based_on_week(call_sign, flight.departure_time.to_date) 
+        delay = calculate_delay_based_on_flight_number(flight_details)
+        weekly_delay = calculate_delay_based_on_week(flight_details, flight.departure_time.to_date) 
         #canceled = should count "باطل شده"
       end
 
       return {call_sign: call_sign,airplane: airplane,delay: delay,canceled: canceled, weekly_delay: weekly_delay}
     end
 
-    def calculate_delay_based_on_flight_number (call_sign)
+    def calculate_delay_based_on_flight_number (flight_details)
       delay = Array.new
-      flight_details = FlightDetail.where(call_sign: call_sign)
       flight_details.each do |flight_detail|
         unless flight_detail.actual_departure_time.nil?
           delay << ((flight_detail.actual_departure_time.to_datetime - flight_detail.departure_time.to_datetime)*24*60).to_i
@@ -55,9 +54,8 @@ class FlightInfo < ApplicationRecord
       end
     end
 
-    def calculate_delay_based_on_week (call_sign,date)
+    def calculate_delay_based_on_week (flight_details,date)
       delay = Array.new
-      flight_details = FlightDetail.where(call_sign: call_sign)
       flight_details.each do |flight_detail|
         unless flight_detail.actual_departure_time.nil?
           is_happend_week_ago = (date - flight_detail.departure_time.to_date).round % 7
