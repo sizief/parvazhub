@@ -3,7 +3,8 @@ class FlightInfo < ApplicationRecord
     belongs_to :flight
 
     def calculate_info
-      flights = Flight.where(['departure_time >= ?', Date.today.to_datetime])
+      domestic_routes=Route.select(:id).where(international: false)
+      flights = Flight.where(route_id: domestic_routes).where(['departure_time >= ?', Date.today.to_datetime])
       flights.each do |flight|
         if flight.flight_info.nil?
             create_flight_info(flight)
