@@ -15,7 +15,6 @@
 	</div>
 </header>
 
-
 <div class="ui vertical masthead segment" id="cover-photo" style="direction: rtl; margin-bottom: 2em;">  
 	<div class="ui container text center aligned header" id="slogan">
 		<a href="/">
@@ -39,7 +38,6 @@
 			</div>
 		</h1>
 	</div>
-
 
 	<div class="ui stackable one column grid centered" style="margin-top: 1em">
    		<%= form_for(:search, url: flight_search_path, method: :get, html: {id:"flight_search"}) do |f| %>
@@ -120,31 +118,27 @@
 	</div>
 </div>
 
-<div class="six column stackable ui grid centered">
-  	<% @flight_price_showoff_cities.each do |city| %>
-		<% flight_list = Flight.new.get_lowest_price_collection("thr",city.city_code) %>
-	  	<div class="column">
-			<div class="ui fluid card">
-			    <div class="image">
-			    	<%= image_tag "cities/"+city.english_name+".jpg",{class:"price-box-image"} %>
-			    </div>
-			    <div class="content">
-			    	<% flight_list.each do |day,flight| %>
-						<% unless flight.nil? %>
-							<div class="date price-box-text">
-								<a href="<%= search_link_builder('tehran',city.english_name,(flight.departure_time).to_date.to_s) %>" >
-									پرواز تهران به 
-									<%= city.persian_name %>
-									<%= day_name_to_human day %>
-									<b><%= number_with_delimiter(flight.best_price) %></b>
-									تومان
-								</a>
-					    	</div>
-				    	<% end %>
-				 	<% end %>  
+
+<div class="ui four stackable cards" style="width:80%;margin:auto;">
+	<% @city_pairs.each do |city| %>
+		<div class="card">
+			<div class="content">
+				<div class="header web-font text-center">
+					<%= city[:origin].persian_name %>
+					به
+					<%= city[:destination].persian_name %>
+				</div>
+				<div class="description text-center dir-rtl">
+					<%= today_price(city[:origin].city_code, city[:destination].city_code) %>	
 				</div>
 			</div>
-		</div> 
+			<div class="ui bottom attached button yellow web-font dir-rtl">
+				<a style="color:white" href="<%= flight_result_path(city[:origin].english_name, city[:destination].english_name, Date.today+1) %>">
+					نمایش پروازهای فردا
+					<i class="right arrow icon"></i>				
+				</a>
+			</div>
+		</div>
 	<% end %>   
 </div>
 

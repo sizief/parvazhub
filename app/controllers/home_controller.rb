@@ -1,11 +1,15 @@
 class HomeController < ApplicationController
 
-
   def index
-    @flight_price_showoff_cities =[City.find_by(city_code:"syz"),
-    City.find_by(city_code:"kih"),
-    City.find_by(city_code:"mhd"),
-    City.find_by(city_code:"tbz")]
+    @city_pairs = [{origin: find_obj("thr"), destination: find_obj("mhd")},
+                   {origin: find_obj("thr"), destination: find_obj("kih")},
+                   {origin: find_obj("thr"), destination: find_obj("syz")},
+                   {origin: find_obj("thr"), destination: find_obj("ist")}]
+    
     @is_mobile = browser.device.mobile? 
+  end
+
+  def find_obj city_code
+    City.find_by(city_code: city_code)
   end
 end

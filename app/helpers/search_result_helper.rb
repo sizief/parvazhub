@@ -40,6 +40,8 @@ module SearchResultHelper
 			return "HRC"
 		elsif supplier_name == "sepehr"
 			return "سپهرسیر"
+		elsif supplier_name == "sepehr"
+			return "فلای‌تودی"
 		else
 			return supplier_name
 		end
