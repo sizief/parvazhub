@@ -8,7 +8,7 @@ class FlightPrice < ApplicationRecord
 	end 
 
 	def get_flight_price(flight_id,result_time_to_live)
-		FlightPrice.where(flight_id: flight_id)
+		FlightPrice.select(:id, :flight_id, :price, :supplier, :created_at).where(flight_id: flight_id)
 					.where('created_at >= ?', result_time_to_live)
 					.order(:price)
 	end

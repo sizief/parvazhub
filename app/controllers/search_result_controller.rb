@@ -33,12 +33,12 @@ class SearchResultController < ApplicationController
     if route.nil? 
       notfound
     else 
-      flights = get_results(route,origin,destination,date,"website",request.user_agent)
+      flights = get_results(route,date,"website",request.user_agent)
       index(route,origin,destination,date,flights)
     end
   end
 
-  def get_results(route,origin,destination,date,channel,user_agent_request)
+  def get_results(route,date,channel,user_agent_request)
     if is_bot(user_agent_request)
       # do not search suplier, just get results from db
       flights = get_flights(date,route,true)

@@ -169,8 +169,6 @@ class Telegram::Method
     
     route = Route.find_by(origin:"#{origin_code}",destination:"#{destination_code}")
     flights = SearchResultController.new.get_results(route,
-                                                     City.find_by(city_code: origin_code),
-                                                     City.find_by(city_code: destination_code),
                                                      date,
                                                      "telegram",
                                                      "telegram")

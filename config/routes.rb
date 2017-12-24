@@ -43,9 +43,12 @@ Rails.application.routes.draw do
 	get '/review/:property_name', to: 'review#property_reviews', as: 'property_page'
 	post '/review', to: 'review#register', as: 'register_review'
 
-	get '/api/city_prefetch_suggestion', to: 'api#city_prefetch_suggestion', as: 'api_city_prefetch_suggestion'
-	get '/api/city_suggestion/:query', to: 'api#city_suggestion', as: 'api_city_suggestion'
-	get '/api/service-test/', to: 'api#service_test', as: 'service_test'
+	get '/api/v1/city_prefetch_suggestion', to: 'api#city_prefetch_suggestion', as: 'api_city_prefetch_suggestion'
+	get '/api/v1/city_suggestion/:query', to: 'api#city_suggestion', as: 'api_city_suggestion'
+	get '/api/v1/service-test/', to: 'api#service_test', as: 'service_test'
+	get '/api/v1/flights/', to: 'api#flights', as: 'api_flights'
+	get '/api/v1/suppliers/', to: 'api#suppliers', as: 'api_suppliers'
+
 	
 	
 	get '/flight-prices/:id', to: redirect('/', status: 302) #, to: 'search_result#flight_prices', as: 'flight-prices-ajax' #, :defaults => { :format => 'js' }
