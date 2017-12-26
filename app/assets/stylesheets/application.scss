@@ -56,6 +56,9 @@
 .hide{
   display: none
 }
+.white{
+  color: white !important;
+}
 
 /* general */
 .alert{
@@ -203,6 +206,30 @@ header{
   display: block !important;
   margin: auto !important;
   margin-top: 1.5em !important;
+}
+
+/* nag */
+.nag-box{
+  width:100%;
+  padding:14px 0 24px 0; 
+  background: #397a96;
+  height: auto;
+  color: white; 
+  direction:rtl;
+  display: none;
+}
+.nag-close{
+  text-align:right;
+  width:5%;
+  vertical-align:top; 
+  padding-right:12px; 
+  cursor:pointer;
+  display: inline-block;
+}
+.nag-text{
+  width:90%; 
+  text-align:center;
+  display: inline-block;
 }
 
 

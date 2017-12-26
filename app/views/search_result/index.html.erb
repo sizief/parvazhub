@@ -74,30 +74,30 @@
 	  	</thead>
 		<tbody>
 			<% @flights.each do |flight|  %>
-				<% unless ((flight.best_price == 0) or (flight.suppliers_count == 0))  %>
+				<% unless ((flight[:best_price] == 0) or (flight[:supplier_count] == 0))  %>
 					<tr class="center aligned very basic" >
 						<td class="left aligned">
 							<div class="two fields">
 								<div class="field">
-									<a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight.id) %>" data-remote="false">														
+									<a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight[:id]) %>" data-remote="false">														
 										<h5 class="ui image header web-font">
-											<%= airline_logo_for flight.airline_code %> 
+											<%= airline_logo_for flight[:airline_code] %> 
 											<div class="content" style="font-size:0.9em">
-												<%= airline_name_for flight %>
+												<%= flight[:airline_persian_name] %>
 												<div class="ui tiny rating">
 											</div>
 												<div class="sub header" style="margin-top: 7px">
-													<span class="nm"><%= flight.flight_number.split(",").first %></span>
-													<span class="mobile-only"><%= flight.airplane_type.blank? ? "" : airplane_name_for(flight.airplane_type) %></span>													
+													<span class="nm"><%= flight[:flight_number].split(",").first %></span>
+													<span class="mobile-only"><%= flight[:airplane_type].blank? ? "" : airplane_name_for(flight[:airplane_type]) %></span>													
 												</div>
 											</div>
 										</h5>
 									</a>
 								</div>
 								<div class="field">
-									<div class="mini ui basic  web-font rate-button dir-rtl text-right" data-content="امتیاز کاربران به <%= airline_name_for flight %>. برای ثبت کلیک کنید" >
-										<a href="<%= property_page_path(flight.airline_english_name) %>" >
-											<%= get_star_icon(5,flight.airline_rate_average,"green","small").html_safe %>
+									<div class="mini ui basic  web-font rate-button dir-rtl text-right" data-content="امتیاز کاربران به <%= flight[:airline_persian_name] %>. برای ثبت کلیک کنید" >
+										<a href="<%= property_page_path(flight[:airline_english_name]) %>" >
+											<%= get_star_icon(5,flight[:airline_rate_average],"green","small").html_safe %>
 										</a>
 									</div>	
 								</div>
@@ -105,48 +105,48 @@
 							<% if @search_parameter[:international] %>
 								<div style="font-size: 0.8em;color: #797777;">
 									<i class="ticket icon"></i>
-									<%= stop_to_human flight.stops  %>
+									<%= stop_to_human flight[:stops]  %>
 								</div>
 							<% end %>	
 						</td>
 						<td>
 							<div class="content" style="font-size: 0.9em;color: #1d1c1c;">
 								<i class="plane grey icon"></i>	
-								<%= hour_to_human flight.departure_time.to_datetime.strftime("%H:%M") %>  
-								<% unless flight.arrival_date_time.nil? %>
+								<%= hour_to_human flight[:departure_time].to_datetime.strftime("%H:%M") %>  
+								<% unless flight[:arrival_date_time].nil? %>
 									<div style="width:100%; margin-top:5px;border-top: 1px dashed #eee;padding-top:6px;">
 										<i class="vertically flipped plane  grey icon"></i>
-										<%= hour_to_human flight.arrival_date_time.to_datetime.strftime("%H:%M")  %>
+										<%= hour_to_human flight[:arrival_date_time].to_datetime.strftime("%H:%M")  %>
 									</div>
 								<% end %>
 				            	<div class="sub header" style="margin-top: 7px;color: gray;font-size: 0.8em;">
-									<%= (delay_to_human flight.delay) %>
+									<%= (delay_to_human flight[:delay]) %>
 				          		</div>
 							</div>
 							<% if @search_parameter[:international] %>
 							<div style="font-size: 0.8em;color: #797777;">
 								<i class="wait icon"></i>
-								کل زمان سفر <%= trip_duration_to_human flight.trip_duration %>
+								کل زمان سفر <%= trip_duration_to_human flight[:trip_duration] %>
 							</div>
 						<% end %>	
 						</td>
 						<td class="nm">
-							<%= flight.airplane_type.blank? ? "-" : airplane_name_for(flight.airplane_type) %>
+							<%= flight[:airplane_type].blank? ? "-" : airplane_name_for(flight[:airplane_type]) %>
 							
 							
 						</td>
 						<td>
-							<div class="hide"><%= number_with_zero(flight.best_price) %></div>
-							<a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight.id) %>" data-remote="false">	
+							<div class="hide"><%= number_with_zero(flight[:best_price]) %></div>
+							<a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight[:id]) %>" data-remote="false">	
 								<button class="ui submit yellow web-font fluid right labeled icon button flight-price-button" style="padding-right: 0 !important;">
 									<i class="right arrow icon"></i> از
-									<%= "#{number_with_delimiter(flight.best_price)} تومان " %>
+									<%= "#{number_with_delimiter(flight[:best_price])} تومان " %>
 									
 								</button>
 							</a>
 							<div class="suppliers-count">	
-								<a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight.id) %>" data-remote="false" style="color:black">	
-									مشاهده‌ ارزان‌ترین قیمت از <b><%= flight.suppliers_count %></b> سایت 
+								<a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight[:id]) %>" data-remote="false" style="color:black">	
+									مشاهده‌ ارزان‌ترین قیمت از <b><%= flight[:supplier_count] %></b> سایت 
 								</a>
 							</div>
 						</td>

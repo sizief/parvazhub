@@ -23,18 +23,13 @@ class SearchResultController < ApplicationController
        redirect_to  action: 'search', origin_name: origin_name, destination_name: destination_name, date: "today"
        return
     end
-    
-    origin = City.find_by(english_name: origin_name.downcase) 
-    destination = City.find_by(english_name: destination_name.downcase)
-    origin_city_code = origin.nil? ? false : origin.city_code
-    destination_city_code = destination.nil? ? false : destination.city_code
-    route = Route.new.get_route(origin_city_code,destination_city_code)
 
+    route = Route.new.get_route_by_english_name(origin_name,destination_name)
     if route.nil? 
       notfound
     else 
       flights = get_results(route,date,"website",request.user_agent)
-      index(route,origin,destination,date,flights)
+      index(route,date,flights)
     end
   end
 
@@ -62,8 +57,10 @@ class SearchResultController < ApplicationController
     end
   end
 
-  def index(route,origin,destination,date,flights)
+  def index(route,date,flights)
     @flights = flights
+    origin = City.find_by(city_code: route.origin)
+    destination = City.find_by(city_code: route.destination)
      date_in_human = date.to_date.to_parsi.strftime '%A %-d %B'     
      @search_parameter ={origin_english_name: origin.english_name, origin_persian_name: origin.persian_name, origin_code: origin.city_code,
                          destination_english_name: destination.english_name, destination_persian_name: destination.persian_name, destination_code: destination.city_code,

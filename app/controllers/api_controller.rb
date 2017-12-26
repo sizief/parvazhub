@@ -46,7 +46,8 @@ class ApiController < ApplicationController
     def flights
       channel, user_agent_request = "app"
       date = search_params[:date]
-      route = get_route search_params[:origin_code], search_params[:destination_code] 
+      route = get_route search_params[:origin_name], search_params[:destination_name] 
+      search_params = 
 
       if route and date_is_valid(date)
         body = get_flights(route, date,channel,user_agent_request) 
@@ -54,10 +55,22 @@ class ApiController < ApplicationController
       else 
         body = "Aamoo ina chi chie mifresi? "
         body += "Date is invalid. Correct date format contract: 2017-01-01." unless date_is_valid(date)
-        body += "City codes are invalid. Correct origin and destination format contract: thr or mhd." unless route
+        body += "City codes are invalid. Correct origin and destination format contract: tehran or mashhad." unless route
         status = false
       end
-      render json: {status: status, body: body}
+      render json: {status: status, search_params: api_search_params(route,date), body: body}
+    end
+
+    def api_search_params route,date
+      unless route.nil?
+        origin =  City.find_by(city_code: route.origin)
+        destination =  City.find_by(city_code: route.destination)
+        {
+          origin_persian_name: origin.persian_name,
+          destination_persian_name: destination.persian_name,
+          date: date
+        }
+      end
     end
 
     def suppliers
@@ -75,8 +88,7 @@ class ApiController < ApplicationController
         render json: {status: status, body: body}
       end
   
-    private
-
+  private
     def get_flight_price(channel,flight,request_user_agent)
       text = "✌️ [#{Rails.env}] #{flight.id} \n #{request_user_agent}"
       UserFlightPriceHistoryWorker.perform_async(channel,text,flight.id)
@@ -97,8 +109,8 @@ class ApiController < ApplicationController
       end
     end
 
-    def get_route origin_code, destination_code
-      route = Route.new.get_route(origin_code,destination_code)
+    def get_route origin_name, destination_name
+      route = Route.new.get_route_by_english_name(origin_name,destination_name)
     end
 
     def get_flights(route,date,channel,user_agent_request)
@@ -108,7 +120,7 @@ class ApiController < ApplicationController
     end
 
     def search_params
-      params.permit(:origin_code,:destination_code,:date)
+      params.permit(:origin_name,:destination_name,:date)
     end
 
     def flight_price_params

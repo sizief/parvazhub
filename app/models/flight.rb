@@ -129,29 +129,47 @@ class Flight < ApplicationRecord
 
   def flight_list(route,date,result_time_to_live)
     airline_list = Airline.list 
+    responses = Array.new
     flight_list = route.flights.includes(:flight_info)
                               .where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s)
                               .where.not(best_price:0)
                               .where('updated_at >= ?', result_time_to_live)
+                              .order(:best_price)
+                  
     flight_list.each do |flight|
-      flight.suppliers_count = flight.flight_prices_count
-      flight.delay = flight.flight_info.delay unless flight.flight_info.nil?
-      flight.airline_code = flight.airline_code.split(",")[0]
+      response = Hash.new
+      response[:id] = flight.id
+      response[:flight_number] = flight.flight_number
+      response[:departure_time] = flight.departure_time
+      response[:best_price] = flight.best_price
+      response[:price_by] = flight.price_by
+      response[:arrival_date_time] = flight.arrival_date_time
+      response[:trip_duration] = flight.trip_duration
+      response[:stops] = flight.stops
+
+      response[:supplier_count] = flight.flight_prices_count
+      response[:delay] = flight.flight_info.delay unless flight.flight_info.nil?
+      response[:airline_code] = flight.airline_code.split(",")[0]
       unless airline_list[flight.airline_code.to_sym].nil? 
-        flight.airline_english_name = airline_list[flight.airline_code.to_sym][:english_name]
-        flight.airline_persian_name = airline_list[flight.airline_code.to_sym][:persian_name] 
-        flight.airline_rate_average = airline_list[flight.airline_code.to_sym][:rate_average].nil? ? 0 : airline_list[flight.airline_code.to_sym][:rate_average]
+        response[:airline_english_name] = airline_list[flight.airline_code.to_sym][:english_name]
+        response[:airline_persian_name] = airline_list[flight.airline_code.to_sym][:persian_name] 
+        response[:airline_rate_average] = airline_list[flight.airline_code.to_sym][:rate_average].nil? ? 0 : airline_list[flight.airline_code.to_sym][:rate_average]
       else
-        flight.airline_english_name = flight.airline_code
-        flight.airline_persian_name = flight.airline_code
-        flight.airline_rate_average = 0 
+        response[:airline_english_name] = flight.airline_code
+        response[:airline_persian_name] = flight.airline_code
+        response[:airline_rate_average] = 0 
       end
 
       if flight.airplane_type.blank?
-         flight.airplane_type = flight.flight_info.airplane unless flight.flight_info.nil? 
+        response[:airplane_type] = flight.flight_info.airplane unless flight.flight_info.nil? 
+      else
+        response[:airplane_type] = flight.airplane_type
       end
+
+      responses << response
      end
-    flight_list = flight_list.sort_by(&:best_price)
+     return responses
+    
   end
 
   def get_call_sign(flight_number,airline_code)

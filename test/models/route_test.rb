@@ -29,6 +29,14 @@ class RouteTest < ActiveSupport::TestCase
     assert_not Route.new.get_route("thr","nyc").nil?
   end
 
+  test "get route by english name" do
+    route = Route.new.get_route_by_english_name("tehran","mashhad")
+    assert route.is_a? Route
+  end
 
+  test "get route by english name should return nil for not exist cities" do
+    route = Route.new.get_route_by_english_name("tehran","gholi")
+    assert route.nil?
+  end
   
 end

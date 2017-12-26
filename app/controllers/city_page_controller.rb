@@ -47,13 +47,11 @@ class CityPageController < ApplicationController
       start_date = Date.today
     end
 
-	  @origin = City.find_by(english_name:  params[:origin_name].downcase)   
-    @destination = City.find_by(english_name: params[:destination_name].downcase)
-    origin_city_code = @origin.nil? ? false : @origin.city_code
-    destination_city_code = @destination.nil? ? false : @destination.city_code
-    
-    route = Route.new.get_route(origin_city_code,destination_city_code)
+    route = Route.new.get_route_by_english_name(params[:origin_name],params[:destination_name])
     not_found unless route
+
+    @origin = City.find_by(city_code: route.origin)
+    @destination = City.find_by(city_code: route.destination)
     
     @route_days = RouteDay.week_days(@origin.city_code,@destination.city_code)
     
