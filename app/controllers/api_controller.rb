@@ -47,7 +47,6 @@ class ApiController < ApplicationController
       channel, user_agent_request = "app"
       date = search_params[:date]
       route = get_route search_params[:origin_name], search_params[:destination_name] 
-      search_params = 
 
       if route and date_is_valid(date)
         body = get_flights(route, date,channel,user_agent_request) 
@@ -59,18 +58,6 @@ class ApiController < ApplicationController
         status = false
       end
       render json: {status: status, search_params: api_search_params(route,date), body: body}
-    end
-
-    def api_search_params route,date
-      unless route.nil?
-        origin =  City.find_by(city_code: route.origin)
-        destination =  City.find_by(city_code: route.destination)
-        {
-          origin_persian_name: origin.persian_name,
-          destination_persian_name: destination.persian_name,
-          date: date
-        }
-      end
     end
 
     def suppliers
@@ -89,6 +76,19 @@ class ApiController < ApplicationController
       end
   
   private
+
+    def api_search_params route,date
+      unless route.nil?
+        origin =  City.find_by(city_code: route.origin)
+        destination =  City.find_by(city_code: route.destination)
+        {
+          origin_persian_name: origin.persian_name,
+          destination_persian_name: destination.persian_name,
+          date: date
+        }
+      end
+    end
+    
     def get_flight_price(channel,flight,request_user_agent)
       text = "✌️ [#{Rails.env}] #{flight.id} \n #{request_user_agent}"
       UserFlightPriceHistoryWorker.perform_async(channel,text,flight.id)
@@ -110,12 +110,16 @@ class ApiController < ApplicationController
     end
 
     def get_route origin_name, destination_name
-      route = Route.new.get_route_by_english_name(origin_name,destination_name)
+      unless origin_name.nil? and destination_name.nil?
+        route = Route.new.get_route_by_english_name(origin_name,destination_name)
+      else
+        nil
+      end
     end
 
     def get_flights(route,date,channel,user_agent_request)
       text = "☝️ [#{Rails.env}] #{route.id}, #{date} \n #{user_agent_request}"
-      UserSearchHistoryWorker.perform_async(text,route.id,date,channel)
+      UserSearchHistoryWorker.perform_async(text,route.id,date,channel) unless Rails.env.test?
       flights = FlightResult.new(route,date).get
     end
 
