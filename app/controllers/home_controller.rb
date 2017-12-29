@@ -12,4 +12,6 @@ class HomeController < ApplicationController
   def find_obj city_code
     City.find_by(city_code: city_code)
   end
+
+
 end

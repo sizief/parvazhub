@@ -30,4 +30,8 @@ class CityPageControllerTest < ActionDispatch::IntegrationTest
     assert_equal  @city_page_controller.get_start_date("khordad"), "2018-05-22".to_date
   end
 
+  test "create city page controoler obkect" do
+    CityPageController.new
+  end
+
 end

@@ -5,4 +5,8 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
     get home_index_url
     assert_response :success
   end
+
+  test "create home object" do
+    HomeController.new
+  end
 end

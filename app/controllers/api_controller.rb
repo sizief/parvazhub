@@ -44,7 +44,8 @@ class ApiController < ApplicationController
     end
 
     def flights
-      channel, user_agent_request = "app"
+      channel = "application" 
+      user_agent_request = "application"
       date = search_params[:date]
       route = get_route search_params[:origin_name], search_params[:destination_name] 
 
@@ -61,19 +62,18 @@ class ApiController < ApplicationController
     end
 
     def suppliers
-        channel, user_agent_request = "app"
-        flight = Flight.find_by_id(flight_price_params[:id])
+      channel, user_agent_request = "application"
+      flight = Flight.find_by_id(flight_price_params[:id])
   
-        if flight
-          body = get_flight_price(channel,flight,user_agent_request)
-          status = true  
-        else 
-          body = "Halo vajebe ba ee parvazoo beri? "
-          body += "Flight ID is invalid or out of date or sold out." unless flight
-          status = false
-        end
-        render json: {status: status, body: body}
+     if flight
+        body = get_flight_price(flight,channel,user_agent_request)
+        status = true  
+     else 
+        body = "Flight ID is invalid or out of date or sold out." unless flight
+        status = false
       end
+      render json: {status: status, body: body}
+    end
   
   private
 
@@ -88,13 +88,9 @@ class ApiController < ApplicationController
         }
       end
     end
-    
-    def get_flight_price(channel,flight,request_user_agent)
-      text = "✌️ [#{Rails.env}] #{flight.id} \n #{request_user_agent}"
-      UserFlightPriceHistoryWorker.perform_async(channel,text,flight.id)
-      result_time_to_live = FlightResult.allow_response_time(flight.departure_time.to_date.to_s)
-      results = FlightPrice.new.get_flight_price(flight.id,result_time_to_live)
-      return results
+
+    def get_flight_price(flight,channel,request_user_agent) 
+      SearchResultController.new.get_flight_price(flight,channel,request_user_agent)
     end
 
     def date_is_valid date
@@ -118,9 +114,8 @@ class ApiController < ApplicationController
     end
 
     def get_flights(route,date,channel,user_agent_request)
-      text = "☝️ [#{Rails.env}] #{route.id}, #{date} \n #{user_agent_request}"
-      UserSearchHistoryWorker.perform_async(text,route.id,date,channel) unless Rails.env.test?
-      flights = FlightResult.new(route,date).get
+      results = SearchResultController.new
+      results.get_flight_results(route,date,channel,user_agent_request)
     end
 
     def search_params
