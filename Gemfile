@@ -22,6 +22,8 @@ gem 'sidekiq-status'
 gem 'devise'
 gem 'rollbar'
 gem 'browser'
+gem 'excon'
+
 
 
 

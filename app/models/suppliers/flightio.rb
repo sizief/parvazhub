@@ -2,40 +2,55 @@ class Suppliers::Flightio < Suppliers::Base
   require "open-uri"
   require "uri"
 
+  def register_request(origin,destination,date)
+    get_flight_url = "http://api.flightio.com/api/SearchFlight"
+    date_time_string = date + "T00:00:00"
+    params = {"ADT": 1, 
+              "CHD": 0,
+              "INF": 0,
+              "CabinType": "1",
+              "flightType": "2",
+              "tripMode": "1",
+              "DestinationInformationList": [
+                {
+                  "DepartureDate": "#{date_time_string}",
+                  "DestinationLocationAirPortCode": "#{destination.upcase}",
+                  "DestinationLocationAllAirport": true,
+                  "DestinationLocationCityCode": "#{destination.upcase}",
+                  "Index": 1,
+                  "OriginLocationAirPortCode": "#{origin.upcase}",
+                  "OriginLocationAllAirport": true,
+                  "OriginLocationCityCode": "#{origin.upcase}"
+                }
+              ] 
+            } 
+    request_params = {"ValueObject": "#{params.to_json}"} 
+    headers = {"Content-Type": "application/json", 
+               "FUser": "FlightioAppAndroid", 
+               "FApiVersion": "1.1", 
+               "FPass": "Pw4FlightioAppAndroid" }
+    response = Excon.post(get_flight_url,
+                          :body => request_params.to_json,
+                          :headers => headers)
+    return JSON.parse(response.body)
+  end
+  
   def search_supplier
     if Rails.env.test?
         response = File.read("test/fixtures/files/domestic-flightio.log") 
         return {response: response, deeplink: "http://flightio.com/fa/"}
     end
 
-    get_flight_url = "https://flightio.com/fa/Home/DomesticSearch"
-    shamsi_date_object = date.to_date.to_parsi   
-    shamsi_date = "#{shamsi_date_object}".tr("-","/") #convert it to 1396/02/26
-
     begin
-      params = {'DOM_TripMode' => '1', 'DOM_SourceCityCode' => "#{origin.upcase}", 'DOM_SourceCityName' => '', 'DOM_DestinationCityCode'=>"#{destination.upcase}", 'DOM_DestinationCityName'=>'','DOM_DepartDate_Str' => "#{shamsi_date}", 'DOM_ReturnDate_Str' => '', 'DOM_AdultCount' => '1', 'DOM_ChildCount' => '0', 'DOM_InfantCount' => '0'}  
-      RestClient::Request.execute(method: :post, url: "#{URI.parse(get_flight_url)}",headers: {params: params}, proxy: nil)
-    rescue RestClient::Exception => ex
-      response  = ex.response.headers[:location] #the url redirected to another one
-    rescue => e #this is for get socket error, DNS error
-      ActiveRecord::Base.connection_pool.with_connection do 
-        SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
-      end
-      return {status:false}
-    end
-    
-    begin
-      request_id = response[29..-1]
+      request_id = register_request(origin,destination,date)["Data"]
       search_flight_url = "https://flightio.com/fa/FlightResult/ListTable?FSL_Id="+ request_id
       deep_link = "https://flightio.com/fa/FlightPreview/Detail?FSL_Id=" + request_id + "&CombinationID="
-      second_response = RestClient::Request.execute(method: :get, url: "#{URI.parse(search_flight_url)}", proxy: nil)
+      headers = {"FUser": "FlightioAppAndroid", "FPass": "Pw4FlightioAppAndroid" }
+      response = Excon.get(search_flight_url,:headers => headers)
     rescue => e
-      ActiveRecord::Base.connection_pool.with_connection do 
-        SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
-      end
       return {status:false}
     end
-    return {status:true, response: second_response, deeplink: deep_link}
+    return {status:true, response: response.body, deeplink: deep_link}
   end
 
   def import_flights(response,route_id,origin,destination,date,search_history_id)
