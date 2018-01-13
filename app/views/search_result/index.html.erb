@@ -93,7 +93,7 @@
 										<h5 class="ui image header web-font">
 											<%= airline_logo_for flight[:airline_code] %> 
 											<div class="content" style="font-size:0.9em">
-												<%= flight[:airline_persian_name] %>
+												<%= flight[:airline_persian_name].nil? ? flight[:airline_english_name] : flight[:airline_persian_name] %>
 												<div class="ui tiny rating">
 											</div>
 												<div class="sub header" style="margin-top: 7px">
