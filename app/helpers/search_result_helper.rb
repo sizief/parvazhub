@@ -19,34 +19,6 @@ module SearchResultHelper
 		return "<i class=\"warning circle yellow icon\"></i>احتمال  #{number} دقیقه تاخیر".html_safe
 	end
 
-	def supplier_to_human(supplier_name)
-		if supplier_name == "zoraq"
-			return "زورق"
-		elsif supplier_name == "alibaba"
-			return "علی‌بابا"
-		elsif supplier_name == "safarme"
-			return "سفرمی"
-		elsif supplier_name == "flightio"
-			return "فلایتیو"
-		elsif supplier_name == "ghasedak"
-			return "قاصدک۲۴"
-		elsif supplier_name == "respina"
-			return "رسپینا۲۴"
-		elsif supplier_name == "trip"
-			return "تریپ"
-		elsif supplier_name == "travelchi"
-			return "تراولچی"
-		elsif supplier_name == "iranhrc"
-			return "HRC"
-		elsif supplier_name == "sepehr"
-			return "سپهرسیر"
-		elsif supplier_name == "sepehr"
-			return "فلای‌تودی"
-		else
-			return supplier_name
-		end
-	end
-
 	def trip_duration_to_human total_minute
 		message = " "
 		unless total_minute.nil?
