@@ -13,7 +13,7 @@ module SearchHelper
 
 	def supplier_logo_for (supplier,size=nil)
 		size ||= "tiny"
-		image_url = "suppliers/" + supplier + "-logo.png"
+		image_url = "/static/suppliers/" + supplier + "-logo.png"
 		image_tag image_url , class: "image ui supplier-logo #{size} flight-price-logo"
 	end
 

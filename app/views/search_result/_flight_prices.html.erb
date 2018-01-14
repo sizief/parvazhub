@@ -10,7 +10,7 @@
 					</td>
 					<td>	
 						<%= supplier_logo_for flight_price.supplier %>
-						وب‌سایت <%= supplier_to_human flight_price.supplier %> 
+						وب‌سایت <%=  flight_price[:supplier_persian_name] %> 
 					</td>
 					<td>	
 						<a href="/redirect/website/<%= flight_price.id%>"  target= "_blank">
@@ -19,7 +19,7 @@
 					</td>
 					<td>
 						 <a href="/redirect/website/<%= flight_price.id%>" class="ui green label  flight-price"  target= "_blank">
-						 	<i class="external icon"></i> خرید از سایت <%= supplier_to_human flight_price.supplier %>  در پنجره جدید 
+						 	<i class="external icon"></i> خرید از سایت <%=  flight_price[:supplier_persian_name] %>  در پنجره جدید 
 						 </a>
 						<!--<span style="font-size:x-small"><%=  time_ago_in_words(flight_price.created_at) %> ago</span>-->
 					</td>

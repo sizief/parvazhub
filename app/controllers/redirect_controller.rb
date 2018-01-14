@@ -2,12 +2,14 @@ class RedirectController < ApplicationController
 require 'uri'
 
   def define_args
-    {origin_name: params[:origin_name],
+    {
+     origin_name: params[:origin_name],
      destination_name: params[:destination_name],
      date: params[:date],
      flight_id: params[:flight_id],
      flight_price_id: params[:flight_price_id],
-     channel: params[:channel]}
+     channel: params[:channel]
+    }
   end
 
   def save_redirect args,flight_price,deep_link,request

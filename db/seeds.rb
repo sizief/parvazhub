@@ -70,6 +70,9 @@ iranian_airlines =[{code: "W5", persian_name: "ماهان", english_name:"mahan"
     x.save
   end
 
-=end
 
 City.create(english_name: "saint petersburg",persian_name: "سن‌پترزبورگ", country_code: "RU", city_code: "led", status: true)
+=end
+
+
+
