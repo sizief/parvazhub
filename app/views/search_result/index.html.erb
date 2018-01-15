@@ -60,13 +60,13 @@
 	</div>
 
 	<div class="ui mini five statistics" id="flight-price-table" >
-	  <% @flight_dates.each do |key,value|%>
+	  <% @flight_dates.each do |flight_date|%>
 	  	<div class=" grey statistic">
 		  <div class="value ">
-			  <%= link_to((value.nil? ? "<i class='plane icon'></i>".html_safe : number_with_delimiter(value.best_price)), search_link_builder(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],key.to_s.to_date))   %> 
+			  <%= link_to((flight_date[:price].nil? ? "<i class='plane icon'></i>".html_safe : number_with_delimiter(flight_date[:price])), search_link_builder(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],flight_date[:date]))   %> 
 		  </div>
 		  <div class="label web-font">
-		  	<%= link_to(key.to_s.to_date.to_parsi.strftime("%A %-d %B "), search_link_builder(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],key.to_s.to_date))   %>
+		  	<%= link_to(flight_date[:date].to_date.to_parsi.strftime("%A %-d %B "), search_link_builder(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],flight_date[:date]))   %>
 		  </div>
 	   	</div>
 	  <% end %>
@@ -184,12 +184,12 @@
 			<% end %>
 			
 			<ul>
-				<% @flight_dates.each do |key,value|%>
-					<% unless key.to_s == @search_parameter[:date].to_s %>
+				<% @flight_dates.each do |flight_date|%>
+					<% unless flight_date[:date] == @search_parameter[:date].to_s %>
 					
 					<li>
-						<% link_text = "جستجوی پرواز #{@search_parameter[:origin_persian_name]} به #{@search_parameter[:destination_persian_name]} "+key.to_s.to_date.to_parsi.strftime("%A %-d %B ") %>
-						<%= link_to(link_text, search_link_builder(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],key.to_s.to_date))   %>
+						<% link_text = "جستجوی پرواز #{@search_parameter[:origin_persian_name]} به #{@search_parameter[:destination_persian_name]} "+flight_date[:date].to_date.to_parsi.strftime("%A %-d %B ") %>
+						<%= link_to(link_text, search_link_builder(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],flight_date[:date]))   %>
 					</li>
 					<% end %>
 				<% end %>

@@ -1,9 +1,40 @@
 class CityPageController < ApplicationController
-  include CityPageHelper
 
   def not_found
   	raise ActionController::RoutingError.new('Not Found')
   end
+
+  def route
+    @link_count = 0
+    @prices = Hash.new
+    if check_month params[:month]   
+      month = params[:month]    
+      start_date = get_start_date month
+    else 
+      month = nil
+      start_date = Date.today
+    end
+
+    route = Route.new.get_route_by_english_name(params[:origin_name],params[:destination_name])
+    not_found unless route
+
+    @origin = City.find_by(city_code: route.origin)
+    @destination = City.find_by(city_code: route.destination)
+    @route_days = RouteDay.week_days(@origin.city_code,@destination.city_code)
+    @prices = Flight.new.get_lowest_price_for_a_month(@origin.city_code,@destination.city_code,start_date)
+    @today_statistic = route_statistic(@origin.city_code,@destination.city_code,Date.today.to_s)
+    @tomorrow_statistic = route_statistic(@origin.city_code,@destination.city_code,(Date.today+1).to_s)
+    @day_after_statistic = route_statistic(@origin.city_code,@destination.city_code,(Date.today+2).to_s)
+
+    @prices_for_calendar = prepare_for_calendar_view @prices
+  end
+
+  def flight
+    @routes = Route.all.order(:origin)
+    @default_destination_city = City.default_destination_city
+  end
+
+  private
 
   def check_month month
     months = %w(farvardin ordibehesht khordad tir mordad shahrivar mehr aban azar day bahman esfand)
@@ -35,40 +66,6 @@ class CityPageController < ApplicationController
       (DateTime.now.year.to_s + "-" + selected_date).to_date
     end
   end
-    
-  def route
-    @link_count = 0
-    @prices = Hash.new
-    if check_month params[:month]   
-      month = params[:month]    
-      start_date = get_start_date month
-    else 
-      month = nil
-      start_date = Date.today
-    end
-
-    route = Route.new.get_route_by_english_name(params[:origin_name],params[:destination_name])
-    not_found unless route
-
-    @origin = City.find_by(city_code: route.origin)
-    @destination = City.find_by(city_code: route.destination)
-    
-    @route_days = RouteDay.week_days(@origin.city_code,@destination.city_code)
-    
-    @prices[:to] = Flight.new.get_lowest_price_for_month(@origin.city_code,@destination.city_code,start_date)
-
-    @today_statistic = route_statistic(@origin.city_code,@destination.city_code,Date.today.to_s)
-    @tomorrow_statistic = route_statistic(@origin.city_code,@destination.city_code,(Date.today+1).to_s)
-    @day_after_statistic = route_statistic(@origin.city_code,@destination.city_code,(Date.today+2).to_s)
-
-    @prices = prepare_for_calendar_view @prices
-  end
-
-  def flight
-    @routes = Route.all.order(:origin)
-    @default_destination_city = City.default_destination_city
-  end
-
 
   def route_statistic(origin_code,destination_code,date)
     response = Hash.new
@@ -85,5 +82,40 @@ class CityPageController < ApplicationController
 
     return response
   end
+
+  def prepare_for_calendar_view prices 
+    offset =0
+    temp_prices = prices
+    first_day = prices.first[:date].to_date
+    last_day = prices.last[:date].to_date
+    first_day_name = first_day.strftime "%A"
+    case first_day_name
+      when "Saturday"
+        offset = 0
+      when "Sunday"
+        offset = 1
+      when "Monday"
+        offset = 2
+      when "Tuesday"
+        offset = 3
+      when "Wednesday"
+        offset = 4
+      when "Thursday"
+        offset = 5
+      when "Friday"
+        offset = 6
+    end
+
+    #Always start on Saturday
+    0.upto(offset-1) do |i|
+      temp_prices.unshift({date: (first_day-i-1).to_s, price: nil})
+    end
+
+    0.upto(27-prices.size) do |i|
+      temp_prices << {date: (last_day-i+1).to_s, price: nil}
+    end
+    return temp_prices
+  end
+
 
 end

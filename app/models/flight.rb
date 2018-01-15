@@ -59,8 +59,7 @@ class Flight < ApplicationRecord
       prices
   end
 
-  def get_lowest_price_time_table(origin,destination,date)
-
+  def get_lowest_price_timetable(origin,destination,date)
       route = Route.find_by(origin:origin, destination:destination)
       if date.to_date == Date.today
         starting_date = date
@@ -69,29 +68,30 @@ class Flight < ApplicationRecord
       else
         starting_date = (date.to_date-2).to_s
       end
-      
-      prices = Hash.new()
+
+      prices = Array.new
       dates = [(starting_date.to_date).to_s, (starting_date.to_date+1).to_s, (starting_date.to_date+2).to_s, (starting_date.to_date+3).to_s, (starting_date.to_date+4).to_s]
-      dates.each do |date|
-        prices[date.to_sym] =  get_lowest_price(route,date)
+      dates.each do |selected_date|
+        price = Hash.new()
+        price[:date] = selected_date
+        flight = get_lowest_price(route,selected_date)
+        price[:price] = flight.nil? ? nil : flight.best_price 
+        prices << price
       end
       prices
-
   end
 
-  def get_lowest_price_for_month(origin,destination,start_date)
+  def get_lowest_price_for_a_month(origin,destination,start_date)
     duration = 21
     prices = Array.new
     route = Route.find_by(origin:origin, destination:destination)
     0.upto(duration) do |x|
-      date = (start_date+x).to_s
-      amount = get_lowest_price(route,date)
-      if amount
-        amount = amount[:best_price]
-      else
-        amount = "-"
-      end
-      prices << {date.to_sym =>amount}
+      price = Hash.new()
+      selected_date = (start_date+x).to_s
+      price[:date] = selected_date
+      flight = get_lowest_price(route,selected_date)
+      price[:price] = flight.nil? ? nil : flight.best_price 
+      prices << price
     end
     prices
   end
