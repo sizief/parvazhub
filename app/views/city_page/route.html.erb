@@ -48,15 +48,16 @@
 		<% @prices_for_calendar.each_with_index do |price,index| %>
 			<% next if ((@link_count > 3) or (price[:date].to_date<Date.today)) %>
 			<div  class="page-button-links" >
-				<button class="ui submit big yellow web-font fluid right labeled  icon button waiting-modal link-dates-button" style="padding-left: 2.5em !important; font-size:0.9em !important;" >	
-					<a href="<%= search_link_builder(@origin.english_name,@destination.english_name,price[:date]) %>" class="white">
+				<a href="<%= search_link_builder(@origin.english_name,@destination.english_name,price[:date]) %>" class="white">
+					<button class="ui submit big yellow web-font fluid right labeled  icon button waiting-modal link-dates-button" style="padding-left: 2.5em !important; font-size:0.9em !important;" >	
 					 پرواز 
 						<%= "#{@origin.persian_name} به #{@destination.persian_name}" %>
 						<%=price[:date].to_date.to_parsi.strftime "%A %-d %B"  %>	
 						<%= "از #{number_with_delimiter(price[:price])} تومان" unless price[:price].nil? %>		
-					</a>
-					<i class="right arrow icon"></i>
-				</button>
+					
+						<i class="right arrow icon"></i>
+					</button>
+				</a>
 				
 			</div>	
 			<% @link_count+=1 %>				

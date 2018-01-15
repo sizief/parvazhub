@@ -152,12 +152,13 @@
 							<div class="hide">
 								<%= number_with_zero(flight[:best_price]) %>
 							</div>
-							<button class="ui submit yellow web-font fluid right labeled icon button flight-price-button" style="padding-right: 0 !important;">
-								<i class="right arrow icon"></i> از	
-								<a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight[:id]) %>" data-remote="false">	
+							<a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight[:id]) %>" data-remote="false">	
+								<button class="ui submit yellow web-font fluid right labeled icon button flight-price-button" style="padding-right: 0 !important;">
+									<i class="right arrow icon"></i> از	
 									<span class="white"><%= "#{number_with_delimiter(flight[:best_price])} تومان " %></span>
-								</a>
-							</button>
+								</button>
+							</a>
+							
 							<div class="suppliers-count">	
 								<a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight[:id]) %>" data-remote="false" style="color:black">	
 									مشاهده‌ ارزان‌ترین قیمت از <b><%= flight[:supplier_count] %></b> سایت 
