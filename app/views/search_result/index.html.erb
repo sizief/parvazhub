@@ -16,14 +16,14 @@
 					 <%= @search_parameter[:date].to_date.to_parsi.strftime "%A %-d %B"   %>
 					   
 					<a class="light-yellow ui primary basic blue" onclick="$('#search-box-inner').transition('slide');" style="cursor:pointer; padding-left:5px; font-size:0.8em;">
-						<i class="yellow chevron down icon"></i> تغییر شهر یا تاریخ
+						<i class="yellow chevron down icon"></i> تغییر شهر/تاریخ
 					</a>
 				</div>
 				<div style="font-size:0.8em">
 					<a class="light-yellow" href="<%= route_page_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name]) %>">
 						<i class="yellow line chart icon"></i> مقایسه قیمت در تمام ماه
 					</a>
-					 | 
+					
 					<a class="light-yellow" href="<%= flight_result_path(@search_parameter[:destination_english_name], @search_parameter[:origin_english_name],@search_parameter[:date]) %>">
 						<i class="yellow exchange icon"></i> مشاهده پروازهای برگشت
 					</a>
