@@ -8,22 +8,25 @@
 	<div class="ui grid" id="results-message">
   		<div class="one column row">
     		<div class="column">
-				<div style="width:100%;margin-bottom:6px;">
+				<div class="results-header">
 					<i class="plane icon"></i> 
 					<%= @search_parameter[:origin_persian_name] %>
 				  	به	 
 				 	<%= @search_parameter[:destination_persian_name] %> 
 					 <%= @search_parameter[:date].to_date.to_parsi.strftime "%A %-d %B"   %>
+					   
+					<a class="light-yellow ui primary basic blue" onclick="$('#search-box-inner').transition('slide');" style="cursor:pointer; padding-left:5px; font-size:0.8em;">
+						<i class="yellow chevron down icon"></i> تغییر شهر یا تاریخ
+					</a>
 				</div>
-				<div>
-						<a class="ui primary basic blue" onclick="$('#search-box-inner').transition('slide');" style="cursor:pointer; padding-left:5px;">
-							<i class="search icon"></i> تغییر مبدا، مقصد یا تاریخ
-						</a>
-					
-						<a href="<%= route_page_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name]) %>">
-							<i class="line chart icon"></i> مقایسه قیمت در تمام ماه
-						</a>
-					
+				<div style="font-size:0.8em">
+					<a class="light-yellow" href="<%= route_page_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name]) %>">
+						<i class="yellow line chart icon"></i> مقایسه قیمت در تمام ماه
+					</a>
+					 | 
+					<a class="light-yellow" href="<%= flight_result_path(@search_parameter[:destination_english_name], @search_parameter[:origin_english_name],@search_parameter[:date]) %>">
+						<i class="yellow exchange icon"></i> مشاهده پروازهای برگشت
+					</a>
 				</div>
 
 		 	</div>
@@ -212,14 +215,9 @@
 			<% else %>
 				برای هیچ روزی در هفته پروازی در این مسیر وجود ندارد.
 			<% end %>
-			
-
 		
 		</div>	
 	<% end %>
-	
-	
- 
 </div>
 
 <div class="ui basic modal prices">

@@ -38,7 +38,7 @@
 .full-width{
   width:100% !important;
 }
-.yellow-text{
+.yellow{
   color:#FBBD08
 }
 .mobile-only{
@@ -58,6 +58,9 @@
 }
 .white{
   color: white !important;
+}
+.light-yellow{
+  color: #f7efc3;
 }
 
 /* general */
@@ -171,6 +174,7 @@ header{
   text-align: center;
   padding:1em;
   border-top: 1px #26a1d6 solid;
+  background: #26a1d6;
 }
 .search-box-label{
   color:white !important; 

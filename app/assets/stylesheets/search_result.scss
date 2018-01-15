@@ -44,11 +44,19 @@
 #results-message{
  direction: rtl;
  padding: 0;
- background: aliceblue;
  margin-left: 0 !important;
  margin-right: 0 !important;
  margin-bottom: 1px;
- margin-top: 2em;
+ margin-top: 0;
+ color:white;
+ background: #29aae1;
+}
+.results-header{
+  width: 100%;
+    margin-bottom: 6px;
+    border-bottom: 1px solid #51beec;
+    padding: 0 0 8px 0;
+    margin: 0 0 8px 0;
 }
 
 #flight-price-table {
