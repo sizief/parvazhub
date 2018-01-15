@@ -60,9 +60,9 @@ class SearchResultController < ApplicationController
         @route_days = RouteDay.week_days(origin.city_code,destination.city_code)
         
         if date <= Date.today.to_s
-        @flight_dates = Flight.new.get_lowest_price_time_table(origin.city_code,destination.city_code,Date.today.to_s)
+        @flight_dates = Flight.new.get_lowest_price_timetable(origin.city_code,destination.city_code,Date.today.to_s)
         else
-        @flight_dates = Flight.new.get_lowest_price_time_table(origin.city_code,destination.city_code,date)
+        @flight_dates = Flight.new.get_lowest_price_timetable(origin.city_code,destination.city_code,date)
         end   
         @is_mobile = browser.device.mobile?    
 
@@ -83,8 +83,8 @@ class SearchResultController < ApplicationController
     date_in_human = date.to_date.to_parsi.strftime '%A %d %B'   
     @flight = Flight.find(flight_id)
     @search_parameter ={origin_english_name: origin.english_name, origin_persian_name: origin.persian_name, origin_code: origin.city_code,
-    destination_english_name: destination.english_name, destination_persian_name: destination.persian_name, destination_code: destination.city_code,
-    date: date, date_in_human: date_in_human}
+                        destination_english_name: destination.english_name, destination_persian_name: destination.persian_name, destination_code: destination.city_code,
+                        date: date, date_in_human: date_in_human}
     @flight_prices = get_flight_price(@flight,"website",request.user_agent)
     @flight_price_over_time = FlightPriceArchive.flight_price_over_time(flight_id,date)
     @flight_price_over_time.each do |date,price|
