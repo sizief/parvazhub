@@ -112,7 +112,7 @@ class CityPageController < ApplicationController
     end
 
     0.upto(27-prices.size) do |i|
-      temp_prices << {date: (last_day-i+1).to_s, price: nil}
+      temp_prices << {date: (last_day+i+1).to_s, price: nil}
     end
     return temp_prices
   end
