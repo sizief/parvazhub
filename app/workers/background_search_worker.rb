@@ -1,32 +1,41 @@
 require 'sidekiq-scheduler'
 
-class BackgroundSearchWorker
+class BackgroundSearchWorker 
   include Sidekiq::Worker
   sidekiq_options :retry => 0, :backtrace => true
-  @@origin_destination = [
-  	{origin:"thr",destination:"mhd"},
-  	{origin:"thr",destination:"kih"},
-    {origin:"mhd",destination:"thr"},
-  	{origin:"kih",destination:"thr"}
-  ]
 
-  def perform(date_offset)
+  def perform(args)
+     search_hourly(args["date_offset"]) if args["type"] == nil
+     search_daily if args["type"] == "daily"
+  end
+
+  private
+  def search_daily
+    routes = MostSearchRoute.new.get 10
+    0.upto(30) do |date_offset|
+      date = (Date.today+date_offset.to_f).to_s
+      search routes,date
+      sleep 10
+    end
+  end
+
+  def search_hourly date_offset
+    routes = MostSearchRoute.new.get 5
     date = (Date.today+date_offset.to_f).to_s
-    
-  	@@origin_destination.each do |x|
-      #background_search = SupplierSearch.new()
-      #background_search.search(x[:origin],x[:destination],date,40,"bg")
-      #sleep 8
-      route = Route.find_by(origin: x[:origin], destination: x[:destination])
-      timeout = route.international? ? ENV["TIMEOUT_INTERNATIONAL"].to_i : ENV["TIMEOUT_DOMESTIC"].to_i
+  	search routes,date
+  end 
 
-      SupplierSearch.new(origin: x[:origin],
-                          destination: x[:destination],
-                          date: date,
-                          timeout: timeout,
-                          who_started: "bg").search
+  def search routes,date
+    routes.each do |route|
+      timeout = route.route.international? ? ENV["TIMEOUT_INTERNATIONAL"].to_i : ENV["TIMEOUT_DOMESTIC"].to_i
+      SupplierSearch.new(origin: route.route[:origin],
+                        destination: route.route[:destination],
+                        date: date,
+                        timeout: timeout,
+                        search_initiator: "job_search").search
       break if Rails.env.test? 
     end
   end
 
+ 
 end

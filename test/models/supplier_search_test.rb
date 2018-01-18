@@ -6,7 +6,7 @@ class SupplierSearchTest < ActiveSupport::TestCase
     destination = "kih"
     date = Date.today.to_s
     timeout = ENV["TIMEOUT_DOMESTIC"]
-    args = {origin: origin, destination: destination, date: date, timeout: timeout,who_started: "test"}
+    args = {origin: origin, destination: destination, date: date, timeout: timeout,search_initiator: "test"}
     @supplier_search = SupplierSearch.new(args)
   end
 

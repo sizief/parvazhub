@@ -1,11 +1,15 @@
 class HomeController < ApplicationController
 
   def index
-    @city_pairs = [{origin: find_obj("thr"), destination: find_obj("mhd")},
-                   {origin: find_obj("thr"), destination: find_obj("kih")},
-                   {origin: find_obj("thr"), destination: find_obj("syz")},
-                   {origin: find_obj("thr"), destination: find_obj("ist")}]
-    
+    @routes = Array.new
+    routes = MostSearchRoute.new.get 12 
+    routes.each do |route|
+      begin
+        route = Route.find(route)
+        @routes << {route: route, details: Route.route_detail(route)}
+      rescue
+      end
+    end
     @is_mobile = browser.device.mobile? 
   end
 

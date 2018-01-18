@@ -1,20 +1,15 @@
 module HomeHelper
 
-  def flight_list origin_code, destination_code
-    Flight.new.get_lowest_price_collection(origin_code,destination_code)
+  def tomorrow_price route
+    flight = Flight.new.get_lowest_price(route,Date.today+1)
+    prepare_price_message flight
   end
 
-  def today_price origin_code, destination_code
-    flights = flight_list origin_code,destination_code
-    price = flights[:tomorrow].nil? ? nil : flights[:tomorrow].best_price
-    prepare_price_message price
-  end
-
-  def prepare_price_message price
-    if price.nil?
+  def prepare_price_message flight
+    if flight.nil?
       message = "پر شد"
     else
-      message = number_with_delimiter price
+      message = number_with_delimiter flight.best_price
       message += " "+"تومان"
       
     end

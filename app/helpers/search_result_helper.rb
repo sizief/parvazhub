@@ -61,4 +61,25 @@ module SearchResultHelper
 	  number_with_zero
 	end
 
+	def day_name date,saerch_parameter_date
+		date = date.to_date
+		day_name = nil
+		if date == Date.today 
+			day_name = "امروز"
+		elsif date == (Date.today+1) 
+			day_name = "فردا"
+		else
+			day_name = date.to_parsi.strftime("%A %-d %B ")
+		end
+		(search_date_dentifier(date,saerch_parameter_date)+day_name).html_safe
+	end
+
+	def search_date_dentifier date,saerch_parameter_date
+		if saerch_parameter_date.to_date == date.to_date
+			"<i class='arrow down icon'></i>" 
+		else
+			""
+		end
+	end
+
 end

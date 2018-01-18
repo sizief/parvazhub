@@ -5,6 +5,7 @@ class Route < ApplicationRecord
     :message => "already saved" }
   has_many :flights
   has_many :user_Search_history
+  has_many :most_search_routes
 
     def get_route(origin,destination)
       route = Route.find_by(origin:"#{origin}",destination:"#{destination}")
@@ -24,6 +25,15 @@ class Route < ApplicationRecord
       origin_city_code = get_city_code_by_name origin_name
       destination_city_code = get_city_code_by_name destination_name
       Route.new.get_route(origin_city_code,destination_city_code)
+    end
+
+    def self.route_detail route
+      origin =  City.find_by(city_code: route.origin)
+      destination =  City.find_by(city_code: route.destination)
+      {
+        origin: {english_name: origin.english_name,persian_name: origin.persian_name},
+        destination: {english_name: destination.english_name, persian_name: destination.persian_name}
+      }
     end
   
     private

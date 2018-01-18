@@ -117,19 +117,19 @@
 
 
 <div class="ui four stackable cards" style="width:80%;margin:auto;">
-	<% @city_pairs.each do |city| %>
+	<% @routes.each do |route| %>
 		<div class="card">
 			<div class="content">
 				<div class="header web-font text-center">
-					<%= city[:origin].persian_name %>
+					<%= route[:details][:origin][:persian_name] %>
 					به
-					<%= city[:destination].persian_name %>
+					<%= route[:details][:destination][:persian_name] %>
 				</div>
 				<div class="description text-center dir-rtl">
-					<%= today_price(city[:origin].city_code, city[:destination].city_code) %>	
+					<%= tomorrow_price(route[:route]) %>	
 				</div>
 			</div>
-			<a style="color:white" href="<%= flight_result_path(city[:origin].english_name, city[:destination].english_name, Date.today+1) %>">
+			<a style="color:white" href="<%= flight_result_path(route[:details][:origin][:english_name], route[:details][:destination][:english_name], Date.today+1) %>">
 				<div class="ui bottom attached button yellow web-font dir-rtl">
 					نمایش پروازهای فردا
 					<i class="right arrow icon"></i>				

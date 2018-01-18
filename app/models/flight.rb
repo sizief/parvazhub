@@ -46,19 +46,6 @@ class Flight < ApplicationRecord
     flight_ids.each{|flight_id| Flight.reset_counters(flight_id, :flight_prices)}
   end    
 
-
-  def get_lowest_price_collection(origin,destination)
-      route = Route.find_by(origin:origin, destination:destination)
-      dates = {today: Date.today.to_s, tomorrow: (Date.today+1).to_s, dayaftertomorrow: (Date.today+2).to_s}
-      prices = {today: '', tomorrow: '', dayaftertomorrow: ''}
-
-      dates.each do |title,date|
-        prices[title.to_sym] = get_lowest_price(route,date)
-      end
-      
-      prices
-  end
-
   def get_lowest_price_timetable(origin,destination,date)
       route = Route.find_by(origin:origin, destination:destination)
       if date.to_date == Date.today
