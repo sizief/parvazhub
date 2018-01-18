@@ -2,10 +2,10 @@ class HomeController < ApplicationController
 
   def index
     @routes = Array.new
-    routes = MostSearchRoute.new.get 12 
+    routes = MostSearchRoute.new.get 9 
     routes.each do |route|
       begin
-        route = Route.find(route)
+        route = Route.find(route[:route_id])
         @routes << {route: route, details: Route.route_detail(route)}
       rescue
       end

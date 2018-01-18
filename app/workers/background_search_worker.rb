@@ -11,11 +11,11 @@ class BackgroundSearchWorker
 
   private
   def search_daily
-    routes = MostSearchRoute.new.get 10
+    routes = MostSearchRoute.new.get 8
     0.upto(30) do |date_offset|
       date = (Date.today+date_offset.to_f).to_s
       search routes,date
-      sleep 10
+      sleep 5
     end
   end
 

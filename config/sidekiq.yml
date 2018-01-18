@@ -89,5 +89,5 @@
 #daily background search
   daily_background_search:
     cron: '0 0 4 * * *'
-    args: [type: "daily"]
+    args: ["type": "daily"]
     class: BackgroundSearchWorker
