@@ -45,7 +45,7 @@
 		<h1 class="city-header">
 			جستجوی پروازهای <%= "#{@origin.persian_name} به #{@destination.persian_name}" %> برای روزهای آينده
 		</h1>
-		<% @prices_for_calendar.each_with_index do |price,index| %>
+		<% @calendar_view_prices.each_with_index do |price,index| %>
 			<% next if ((@link_count > 3) or (price[:date].to_date<Date.today)) %>
 			<div  class="page-button-links" >
 				<a href="<%= search_link_builder(@origin.english_name,@destination.english_name,price[:date]) %>" class="white">
@@ -89,7 +89,7 @@
 		  		</tr>
 		  	</thead>
 			<tbody>
-				<% @prices_for_calendar.each_with_index do |price,index|%>
+				<% @calendar_view_prices.each_with_index do |price,index|%>
 					<% if index%7 == 0 %>
 						<tr class="center aligned very basic">
 					<% end %>	
@@ -128,40 +128,7 @@
 		</table>
 	</div>
 
-	
-	<% unless date_price_is_empty @prices_for_calendar  %>
-		<div class="city-calendar">
-			<h4>
-				<b class="yellow">نمودار تغییر قیمت </b>
-				هزینه پرواز <%= "#{@origin.persian_name} به #{@destination.persian_name}" %> برای یک نفر
-			</h4>
-
-			<div style="width:90%;min-height:100%; margin:auto" >
-				<canvas id="myChart"></canvas>
-				<script>
-				var labels = <%= dates_for_chart @prices_for_calendar %>;
-				var data = <%= prices_for_chart @prices_for_calendar %>;
-				var ctx = document.getElementById("myChart").getContext('2d');
-				$(document).ready(function(){
-					var myChart = new Chart(ctx, {
-						type: 'bar',
-						data: {labels: labels,datasets: [{label: " تغییرات قیمت بلیط <%= @origin.persian_name %> به <%= @destination.persian_name %>", borderColor: 'rgb(54,162,235)',backgroundColor:  'rgb(54,162,235)', data: data,fill: false,lineTension: 0}]},
-						options: {
-							showLines: true,
-							scales: {
-								xAxes: [{
-									ticks: {
-										autoSkip: false
-									}
-								}]
-							}
-						}
-					});
-				});
-				</script>
-			</div>
-		</div>
-	<% end %>
+	<%= render :partial => "route/price_chart", :locals => {prices: @prices, origin: @origin.persian_name, destination: @destination.persian_name } %>
 
 	<% unless @today_statistic[:count] == 0 %>
 		<div class="city-calendar" >

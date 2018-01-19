@@ -65,10 +65,10 @@
 	<div class="ui mini five statistics" id="flight-price-table" >
 	  <% @flight_dates.each do |flight_date|%>
 	  	<div class=" grey statistic">
-		  <div class="value ">
-			  <%= link_to((flight_date[:price].nil? ? "<i class='plane icon'></i>".html_safe : number_with_delimiter(flight_date[:price])), search_link_builder(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],flight_date[:date]))   %> 
+		  <div class="valuee">
+			  <%= link_to(price_to_human(flight_date[:price]), search_link_builder(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],flight_date[:date]))   %> 
 		  </div>
-		  <div class="label web-font">
+		  <div class="label statistic-label  web-font">
 		  	<%= link_to(day_name(flight_date[:date],@search_parameter[:date]), search_link_builder(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],flight_date[:date]))   %>
 		  </div>
 	   	</div>
@@ -219,6 +219,9 @@
 		
 		</div>	
 	<% end %>
+
+	<%= render :partial => "route/price_chart", :locals => {prices: @prices, origin: @search_parameter[:origin_persian_name], destination: @search_parameter[:destination_persian_name] } %>
+
 </div>
 
 <div class="ui basic modal prices">

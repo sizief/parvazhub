@@ -11,8 +11,8 @@ class BackgroundSearchWorker
 
   private
   def search_daily
-    routes = MostSearchRoute.new.get 8
-    0.upto(30) do |date_offset|
+    routes = MostSearchRoute.new.get(ENV["FIRST_PAGE_OFFERS"].to_i)
+    0.upto(21) do |date_offset|
       date = (Date.today+date_offset.to_f).to_s
       search routes,date
       sleep 5

@@ -69,7 +69,7 @@ module SearchResultHelper
 		elsif date == (Date.today+1) 
 			day_name = "فردا"
 		else
-			day_name = date.to_parsi.strftime("%A %-d %B ")
+			day_name = date.to_parsi.strftime("%A")
 		end
 		(search_date_dentifier(date,saerch_parameter_date)+day_name).html_safe
 	end
@@ -80,6 +80,16 @@ module SearchResultHelper
 		else
 			""
 		end
+	end
+
+	def price_to_human price
+		if price.nil? 
+			message = "<i class='plane icon'></i>".html_safe 
+		else
+			 #number_with_delimiter(price)
+			 message = ((price/1000).to_s + "<sup><span style='font-size:0.5em'>هزارتومان</span></sup>").html_safe
+		end
+		message
 	end
 
 end

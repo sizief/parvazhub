@@ -90,10 +90,20 @@ font-size: 0.8em;
   font-size: 1.5em;
   direction: rtl;
 }
+.statistic > .valuee{
+  font-size: 1.5rem;
+  text-align: center;
+}
 
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
-  #flight-price-table {
+  /* #flight-price-table {
       display:none;
+  } */
+  .statistic > .valuee{
+    font-size: 1rem !important;
+  }
+  .statistic-label{
+    font-size: 0.6rem !important;
   }
 
   .not-mobile, .nm{

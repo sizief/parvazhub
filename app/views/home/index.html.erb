@@ -91,7 +91,7 @@
 				از هر آژانسی خرید نکنید. از بین سایت‌های معتبر در پروازهاب بلیط پرواز بخرید تا با خیال راحت سفر کنید.
 			</div>
 			<div class="column center aligned home-text">
-				<span class="home-title">خرید ارزان</span>
+				<span class="home-title">مقایسه قیمت</span>
 				در پروازهاب قیمت‌ بلیط پرواز سایت‌های معتبر را مقایسه کنید تا با خیال راحت ارزان‌ترین بلیط پرواز را بیابید.
 			</div>
 			<div class="column center aligned"></div>
@@ -121,9 +121,11 @@
 		<div class="card">
 			<div class="content">
 				<div class="header web-font text-center">
-					<%= route[:details][:origin][:persian_name] %>
-					به
-					<%= route[:details][:destination][:persian_name] %>
+					<a  href="<%= flight_result_path(route[:details][:origin][:english_name], route[:details][:destination][:english_name], Date.today+1) %>">
+						<%= route[:details][:origin][:persian_name] %>
+							به
+						<%= route[:details][:destination][:persian_name] %>
+					</a>
 				</div>
 				<div class="description text-center dir-rtl">
 					<%= tomorrow_price(route[:route]) %>	

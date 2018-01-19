@@ -2,7 +2,7 @@ class HomeController < ApplicationController
 
   def index
     @routes = Array.new
-    routes = MostSearchRoute.new.get 9 
+    routes = MostSearchRoute.new.get ENV["FIRST_PAGE_OFFERS"].to_i 
     routes.each do |route|
       begin
         route = Route.find(route[:route_id])
@@ -12,10 +12,5 @@ class HomeController < ApplicationController
     end
     @is_mobile = browser.device.mobile? 
   end
-
-  def find_obj city_code
-    City.find_by(city_code: city_code)
-  end
-
 
 end
