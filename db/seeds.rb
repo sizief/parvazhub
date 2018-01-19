@@ -73,6 +73,11 @@ iranian_airlines =[{code: "W5", persian_name: "ماهان", english_name:"mahan"
 
 City.create(english_name: "saint petersburg",persian_name: "سن‌پترزبورگ", country_code: "RU", city_code: "led", status: true)
 =end
+Supplier.all.each do |supplier|
+  job_allowed = (supplier.name == "flytoday")? false : true
+  supplier.job_search_allowed = job_allowed
+  supplier.save
+end
 
 
 

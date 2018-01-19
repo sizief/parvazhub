@@ -27,9 +27,9 @@
 			<span id="slogan-description">
 					
 				جستجو و مقایسه 
-				<b class="yellow-text">رایگان</b>	
+				<b class="yellow">رایگان</b>	
 				بلیط پروازهای
-				<b class="yellow-text"> داخلی و خارجی </b>	
+				<b class="yellow"> داخلی و خارجی </b>	
 				از سایت‌های معتبر 
 
 			</span>	
@@ -91,7 +91,7 @@
 				از هر آژانسی خرید نکنید. از بین سایت‌های معتبر در پروازهاب بلیط پرواز بخرید تا با خیال راحت سفر کنید.
 			</div>
 			<div class="column center aligned home-text">
-				<span class="home-title">خرید ارزان</span>
+				<span class="home-title">مقایسه قیمت</span>
 				در پروازهاب قیمت‌ بلیط پرواز سایت‌های معتبر را مقایسه کنید تا با خیال راحت ارزان‌ترین بلیط پرواز را بیابید.
 			</div>
 			<div class="column center aligned"></div>
@@ -104,12 +104,12 @@
 		<div class="row">
 			<div class="column center aligned home-text">	
 				بات تلگرام پروازهاب سریع‌تر از هر زمانی پرواز مورد نظرتان را پیدا می‌کند. همین الان عضو شوید:
-				<button class="ui blue button telegram-button">	
-					<a href="https://t.me/parvazhubBot">
+				<a href="https://t.me/parvazhubBot">
+					<button class="ui blue button telegram-button">				
 						<span class="telegram-announce">Telegram</span>
-						<%= image_tag "static/telegram.png",{class:"telegram-icon"} %>
-					</a>		
-				</button>  
+						<%= image_tag "static/telegram.png",{class:"telegram-icon"} %>		
+					</button>  
+				</a>
 			</div>
 		</div>
 	</div>
@@ -117,24 +117,26 @@
 
 
 <div class="ui four stackable cards" style="width:80%;margin:auto;">
-	<% @city_pairs.each do |city| %>
+	<% @routes.each do |route| %>
 		<div class="card">
 			<div class="content">
 				<div class="header web-font text-center">
-					<%= city[:origin].persian_name %>
-					به
-					<%= city[:destination].persian_name %>
+					<a  href="<%= flight_result_path(route[:details][:origin][:english_name], route[:details][:destination][:english_name], Date.today+1) %>">
+						<%= route[:details][:origin][:persian_name] %>
+							به
+						<%= route[:details][:destination][:persian_name] %>
+					</a>
 				</div>
 				<div class="description text-center dir-rtl">
-					<%= today_price(city[:origin].city_code, city[:destination].city_code) %>	
+					<%= tomorrow_price(route[:route]) %>	
 				</div>
 			</div>
-			<div class="ui bottom attached button yellow web-font dir-rtl">
-				<a style="color:white" href="<%= flight_result_path(city[:origin].english_name, city[:destination].english_name, Date.today+1) %>">
+			<a style="color:white" href="<%= flight_result_path(route[:details][:origin][:english_name], route[:details][:destination][:english_name], Date.today+1) %>">
+				<div class="ui bottom attached button yellow web-font dir-rtl">
 					نمایش پروازهای فردا
 					<i class="right arrow icon"></i>				
-				</a>
-			</div>
+				</div>
+			</a>
 		</div>
 	<% end %>   
 </div>

@@ -1,4 +1,4 @@
-class CityPageController < ApplicationController
+class RouteController < ApplicationController
 
   def not_found
   	raise ActionController::RoutingError.new('Not Found')
@@ -25,8 +25,7 @@ class CityPageController < ApplicationController
     @today_statistic = route_statistic(@origin.city_code,@destination.city_code,Date.today.to_s)
     @tomorrow_statistic = route_statistic(@origin.city_code,@destination.city_code,(Date.today+1).to_s)
     @day_after_statistic = route_statistic(@origin.city_code,@destination.city_code,(Date.today+2).to_s)
-
-    @prices_for_calendar = prepare_for_calendar_view @prices
+    @calendar_view_prices = prepare_for_calendar_view(@prices)
   end
 
   def flight
@@ -85,7 +84,7 @@ class CityPageController < ApplicationController
 
   def prepare_for_calendar_view prices 
     offset =0
-    temp_prices = prices
+    temp_prices = prices.dup
     first_day = prices.first[:date].to_date
     last_day = prices.last[:date].to_date
     first_day_name = first_day.strftime "%A"
@@ -112,7 +111,7 @@ class CityPageController < ApplicationController
     end
 
     0.upto(27-prices.size) do |i|
-      temp_prices << {date: (last_day-i+1).to_s, price: nil}
+      temp_prices << {date: (last_day+i+1).to_s, price: nil}
     end
     return temp_prices
   end

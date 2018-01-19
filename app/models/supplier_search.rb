@@ -1,12 +1,12 @@
 class SupplierSearch
-  attr_reader :origin,:destination,:date,:timeout,:who_started,:route, :search_flight
+  attr_reader :origin,:destination,:date,:timeout,:search_initiator,:route, :search_flight
   
   def initialize args
     @origin = args[:origin]
     @destination = args[:destination]
     @date = args[:date]
     @timeout = args[:timeout]
-    @who_started = args[:who_started]
+    @search_initiator = args[:search_initiator]
     @route = Route.find_by(origin: origin, destination: destination)
     @search_flight = SearchFlightId.create(token: DateTime.now.strftime('%Q'))
   end
@@ -77,8 +77,10 @@ class SupplierSearch
     SearchFlightId.get_ids search_flight.token
   end
 
-  def supplier_list
-    route.international ? Supplier.where(status:true, international: true) : Supplier.where(status:true, domestic: true)
+  def supplier_list 
+    suppliers = route.international ? Supplier.where(status:true, international: true) : Supplier.where(status:true, domestic: true)
+    suppliers = suppliers.where(job_search_allowed: true) if search_initiator == "job_search"
+    return suppliers
   end
 
   def merge_and_update_all (flight_ids,route,date)
@@ -92,7 +94,7 @@ class SupplierSearch
       search_history = SearchHistory.create(supplier_name:"#{supplier_name}",
                                             route_id:route.id,
                                             departure_time: date,
-                                            status:"#{who_started}(#{Time.now.strftime('%M:%S')})")
+                                            status:"#{search_initiator}(#{Time.now.strftime('%M:%S')})")
     end  
     supplier = supplier_class.constantize.new(origin: origin,
                                                 destination: destination,

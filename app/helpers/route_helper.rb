@@ -1,7 +1,7 @@
-module CityPageHelper
+module RouteHelper
 
   def dates_for_chart price_dates
-    raw price_dates.map{|item| item[:date].to_date.to_parsi.strftime "%-d %B" }
+    raw price_dates.map{|item| ((item[:date].to_date == Date.today)? "امروز" : item[:date].to_date.to_parsi.strftime("%A %-d %B")) }
   end
 
   def prices_for_chart price_dates
@@ -10,7 +10,9 @@ module CityPageHelper
 
   def date_price_is_empty price_dates
     prices = price_dates.map{|item| item[:price]}
-    prices.compact.empty?
+    prices.compact.count < 2
+
+    #prices.compact.empty?
   end
 
 end

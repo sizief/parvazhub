@@ -44,11 +44,19 @@
 #results-message{
  direction: rtl;
  padding: 0;
- background: aliceblue;
  margin-left: 0 !important;
  margin-right: 0 !important;
  margin-bottom: 1px;
- margin-top: 2em;
+ margin-top: 1.5rem;
+ color:white;
+ background: #29aae1;
+}
+.results-header{
+  width: 100%;
+    margin-bottom: 6px;
+    border-bottom: 1px solid #51beec;
+    padding: 0 0 8px 0;
+    margin: 0 0 8px 0;
 }
 
 #flight-price-table {
@@ -82,10 +90,20 @@ font-size: 0.8em;
   font-size: 1.5em;
   direction: rtl;
 }
+.statistic > .valuee{
+  font-size: 1.5rem;
+  text-align: center;
+}
 
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
-  #flight-price-table {
+  /* #flight-price-table {
       display:none;
+  } */
+  .statistic > .valuee{
+    font-size: 1rem !important;
+  }
+  .statistic-label{
+    font-size: 0.6rem !important;
   }
 
   .not-mobile, .nm{

@@ -17,7 +17,7 @@ class FlightResult
                                   destination: route.destination,
                                   date: date,
                                   timeout: timeout,
-                                  who_started: "user").search
+                                  search_initiator: "user").search
     end
     Flight.new.flight_list(route,date,result_time_to_live)
   end

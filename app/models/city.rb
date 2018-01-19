@@ -1,10 +1,6 @@
 class City < ApplicationRecord
   validates :city_code, :uniqueness => true
   validates :english_name, :uniqueness => true
-  
-  def City.pages
-    city_pages=["kih","mhd","syz","ifn","tbz","abd","awz"]
-  end
 
   def City.default_destination_city
 	"kish"
