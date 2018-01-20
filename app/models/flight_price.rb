@@ -49,11 +49,13 @@ class FlightPrice < ApplicationRecord
 	  elsif supplier_name == "travelchi"
 		return "تراولچی"
 	  elsif supplier_name == "iranhrc"
-		return "HRC"
+		return "ایران‌اچ‌آر‌سی"
 	  elsif supplier_name == "sepehr"
 		return "سپهرسیر"
 	  elsif supplier_name == "flytoday"
 		return "فلای‌تودی"
+	  elsif supplier_name == "safarestan"
+		return "سفرستان"
 	  else
 		return supplier_name
 	  end

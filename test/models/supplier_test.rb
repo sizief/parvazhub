@@ -9,6 +9,6 @@ class SupplierTest < ActiveSupport::TestCase
 
   test "should return true suppliers if asked" do
     supplier_list = Supplier.where(status:true)
-  	assert supplier_list.size == 2
+  	assert supplier_list.size == 3
   end
 end

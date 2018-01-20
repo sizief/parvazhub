@@ -23,8 +23,7 @@ gem 'devise'
 gem 'rollbar'
 gem 'browser'
 gem 'excon'
-
-
+gem 'rbzip2', '0.3.0'
 
 
 group :development do

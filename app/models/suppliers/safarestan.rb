@@ -1,82 +1,72 @@
 class Suppliers::Safarestan < Suppliers::Base  
     require "uri"
     require "rest-client"
+    require 'rbzip2'
+
     
     def get_params
-      params = {"apikey":"c9672995-2d2d-11e7-bc7a-001c429a2edb",
-                "uid":"",
-                "clientVersion":4,
-                "productType":"localFlight",
-                "searchFilter":{
-                    "sourceAirportCode":"#{origin.upcase}",
-                    "targetAirportCode":"#{destination.upcase}",
-                    "sourceAllinFromCity":true,
-                    "targetAllinFromCity":true,
-                    "leaveDate":date,
-                    "adultCount":1,
-                    "childCount":0,
-                    "infantCount":0,
-                    "oneWay":true,
-                    "productType":"localFlight",
-                    "compressed":true,
-                    "expireTime":0,
-                    "validTimeout":0,
-                    "isNew":true
-                },
-                "deviceInfo":{}
-            }
+      {"apikey":"c9672995-2d2d-11e7-bc7a-001c429a2edb",
+        "uid":"",
+        "clientVersion":4,
+        "productType":"localFlight",
+        "searchFilter":{
+            "sourceAirportCode":"#{origin.upcase}",
+            "targetAirportCode":"#{destination.upcase}",
+            "sourceAllinFromCity":true,
+            "targetAllinFromCity":true,
+            "leaveDate":date,
+            "adultCount":1,
+            "childCount":0,
+            "infantCount":0,
+            "oneWay":true,
+            "productType":"localFlight",
+            "compressed":true,
+            "expireTime":0,
+            "validTimeout":0,
+            "isNew":true
+        },
+        "deviceInfo":{}
+      }
     end
   
     def search_supplier 
       begin
         url = "http://mobileapp.safarestan.com/api/search"
-      if Rails.env.test?
-        response = mock_results
-      else
-        response = RestClient::Request.execute(method: :post, 
+        if Rails.env.test?
+          response = mock_results
+        else
+          response = RestClient::Request.execute(method: :post, 
                                                   url: "#{URI.parse(url)}",
-                                                  payload: params.to_json, 
+                                                  payload: get_params.to_json, 
                                                   proxy: nil)
-        response = response.body
-      end
+          response = response.body
+        end
       rescue => e
         SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
         return {status:false}
       end
       return {status:true,response: response}
     end
-  
+
     def import_flights(response,route_id,origin,destination,date,search_history_id)
       flight_id = nil
       flight_prices, flight_ids = Array.new(), Array.new()
      
-      json_response = JSON.parse(response[:response])
       ActiveRecord::Base.connection_pool.with_connection do        
         SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
       end
       
-      json_response = decode json_response if json_response["result"]["compressed"]
-      
-      json_response["result"]["products"][0..ENV["MAX_NUMBER_FLIGHT"].to_i].each do |flight|
+      json_response = decode(JSON.parse(response[:response]))
+      json_response[0..ENV["MAX_NUMBER_FLIGHT"].to_i].each do |flight|
         leg_data = flight_id = nil
-        leg_data = prepare flight["FlightSegments"]
+        leg_data = prepare flight
+        flight_id = find_flight_id leg_data,route_id
         
-        next if leg_data.nil?      
-        ActiveRecord::Base.connection_pool.with_connection do        
-            flight_id = Flight.create_or_find_flight(route_id,
-            leg_data[:flight_number].join(","),
-            leg_data[:departure_date_time].first,
-            leg_data[:airline_code].join(","),
-            leg_data[:airplane_type].join(","),
-            leg_data[:arrival_date_time].last,
-            leg_data[:stop].join(","),
-            leg_data[:trip_duration])
-        end
-        flight_ids << flight_id      
+        next if ((leg_data.nil?) or (flight_id.nil?))
+        flight_ids << flight_id
   
-        price = flight["PtcFareBreakdowns"][0]["TotalFareWithMarkupAndVat"]      
-        price = (price/10).to_i
-        deeplink_url = get_deeplink(flight["FareSourceCode"])
+        price = (flight["singleAdultFinalPrice"]/10).to_i     
+        deeplink_url = get_deeplink
           
         #to prevent duplicate flight prices we compare flight prices before insert into database
         flight_price_so_far = flight_prices.select {|flight_price| flight_price.flight_id == flight_id}
@@ -112,46 +102,42 @@ class Suppliers::Safarestan < Suppliers::Base
       return flight_ids
     end
   
-    def prepare flight_legs
-      flight_numbers, airline_codes, airplane_types, departure_date_times, arrival_date_times, stops = Array.new, Array.new, Array.new, Array.new, Array.new, Array.new
-      trip_duration = 0
-      flight_legs.each do |leg|
-        airline_code = leg["OperatingAirline"]
-        flight_number = (leg["FlightNumber"].include? airline_code) ? leg["FlightNumber"] : airline_code+leg["FlightNumber"]
-  
-        flight_numbers << flight_number 
-        airline_codes << airline_code
-        airplane_types << leg["OperatingEquipment"]
-        departure_date_times << parse_date(leg["DepartureDateTime"]).utc.to_datetime + ENV["IRAN_ADDITIONAL_TIMEZONE"].to_f.minutes # add 4:30 hours because flytoday date time is in iran time zone #.strftime("%H:%M")
-        arrival_date_times << parse_date(leg["ArrivalDateTime"]).utc.to_datetime + ENV["IRAN_ADDITIONAL_TIMEZONE"].to_f.minutes
-        stops << leg["ArrivalAirport"]
-        trip_duration += to_minutes leg["JourneyDuration"]
+    
+
+
+    private
+    def find_flight_id leg_data,route_id
+      flights, flight_id = nil, nil
+      departure_time_from = (leg_data[:departure_date_time]).strftime('%Y-%m-%d  %H:%M:%S').to_s
+      departure_time_to = (leg_data[:departure_date_time] + (0.04)).strftime('%Y-%m-%d  %H:%M:%S').to_s
+      ActiveRecord::Base.connection_pool.with_connection do 
+        flights = Flight.where(route_id: route_id).where(airline_code: leg_data[:airline_code]).where(departure_time: "#{departure_time_from}".."#{departure_time_to}")
       end
-      
-      trip_duration += calculate_stopover_duration(departure_date_times,arrival_date_times)
-      return {flight_number: flight_numbers,
-              airline_code: airline_codes,
-              airplane_type: airplane_types,
-              departure_date_time: departure_date_times,
-              arrival_date_time: arrival_date_times,
-              stop: stops,
-              trip_duration: trip_duration}
+
+      flight_id = flights.first[:id] unless flights.empty?   
     end
-  
-    def to_minutes time_string
-      total_time = 0
-      time_string = time_string.split(":")
-      total_time = time_string.first.to_i * 60
-      total_time += time_string.second.to_i
+
+    def decode response
+      if response["result"]["compressed"]
+        temp = Base64.decode64 response["result"]["products"]
+        response = RBzip2.default_adapter::Decompressor.new(StringIO.new(temp.to_s))
+        response = JSON.parse response.read
+      else
+        response = response["result"]["products"]
+      end
     end
-  
-    def parse_date(datestring)
-      seconds_since_epoch = datestring.scan(/[0-9]+/)[0].to_i / 1000.0
-      return Time.at(seconds_since_epoch)
+
+    def prepare leg
+      {
+        airline_code: leg["airlineCode"],
+        departure_date_time: leg["departureTime"].to_datetime,
+        arrival_date_time: leg["arrivalTime"].to_datetime,
+        trip_duration: leg["duration"]
+      }
     end
-  
-    def get_deeplink(fare_source_code)
-      "https://flytoday.ir/flight/book?fsc=#{fare_source_code}"
+
+    def get_deeplink
+      "https://www.safarestan.com/"
     end
   
   end
