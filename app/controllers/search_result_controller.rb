@@ -53,7 +53,7 @@ class SearchResultController < ApplicationController
     @flights = flights
     origin = City.find_by(city_code: route.origin)
     destination = City.find_by(city_code: route.destination)
-    date_in_human = date.to_date.to_parsi.strftime '%A %-d %B'     
+    date_in_human = date_to_human date    
     @search_parameter ={origin_english_name: origin.english_name, origin_persian_name: origin.persian_name, origin_code: origin.city_code,
                             destination_english_name: destination.english_name, destination_persian_name: destination.persian_name, destination_code: destination.city_code,
                             date: date, date_in_human: date_in_human, international: route.international}
@@ -113,5 +113,17 @@ class SearchResultController < ApplicationController
         date >= Date.today.to_s ? FlightResult.new(route,date).get : Array.new
     end
   end
+
+  def date_to_human date
+    date = date.to_date
+    if date == Date.today
+      "امروز"
+    elsif date == (Date.today+1) 
+      "فردا"
+    else
+      date.to_date.to_parsi.strftime '%A %-d %B' 
+    end
+  end
+
       
 end

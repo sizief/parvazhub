@@ -2,7 +2,7 @@
 <% provide(:canonical,"<link rel=\"canonical\" href=\"http://parvazhub.com/flights/#{@search_parameter[:origin_english_name]}-#{@search_parameter[:destination_english_name]}\"/> ".html_safe)%>
 
 <% provide(:title,"پروازهاب:‌ پرواز #{@search_parameter[:origin_persian_name]} به #{@search_parameter[:destination_persian_name]}  #{@search_parameter[:date_in_human]} ")%>
-<% provide(:description,"لیست پروازهای #{@search_parameter[:origin_persian_name]} به #{@search_parameter[:destination_persian_name]}  #{@search_parameter[:date_in_human]}") %>
+<% provide(:description,"لیست بلیط و پروازهای #{@search_parameter[:origin_persian_name]} به #{@search_parameter[:destination_persian_name]}  #{@search_parameter[:date_in_human]}") %>
 
 <div class="ui container" id="search-results-container">
 	<div class="ui grid" id="results-message">
@@ -23,8 +23,8 @@
 					<a class="light-yellow" href="<%= route_page_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name]) %>">
 						<i class="yellow line chart icon"></i> مقایسه قیمت در تمام ماه
 					</a>
-					
-					<a class="light-yellow" href="<%= flight_result_path(@search_parameter[:destination_english_name], @search_parameter[:origin_english_name],@search_parameter[:date]) %>">
+					     
+					<a style="margin-left:12px;"class="light-yellow" href="<%= flight_result_path(@search_parameter[:destination_english_name], @search_parameter[:origin_english_name],@search_parameter[:date]) %>">
 						<i class="yellow exchange icon"></i> مشاهده پروازهای برگشت
 					</a>
 				</div>
