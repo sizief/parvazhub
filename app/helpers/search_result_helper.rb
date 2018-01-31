@@ -32,12 +32,12 @@ module SearchResultHelper
 	end
 
 	def stop_to_human stops
-		stops = stops.split(",")
-		if stops.count == 1
+		if stops.nil?
 			message = "بدون توقف" 
 		else
+			stops = stops.split(",")
 			message = "#{stops.count-1} توقف در "
-		    stops.each_with_index do |stop, index|
+		  stops.each_with_index do |stop, index|
 				next if stops.count == index+1
 				message += " و " if index >= 1
 				message += stop

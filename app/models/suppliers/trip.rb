@@ -83,6 +83,7 @@ class Suppliers::Trip < Suppliers::Base
         deeplink_url = get_deep_link(id)
         
         next if leg_data.nil?
+        stops = leg_data[:stop].empty? ? nil : leg_data[:stop].join(",")   
         ActiveRecord::Base.connection_pool.with_connection do        
           flight_id = Flight.create_or_find_flight(route_id,
           leg_data[:flight_number].join(","),
@@ -90,7 +91,7 @@ class Suppliers::Trip < Suppliers::Base
           leg_data[:airline_code].join(","),
           leg_data[:airplane_type].join(","),
           leg_data[:arrival_date_time].last,
-          leg_data[:stop].join(","),
+          stops,
           leg_data[:trip_duration])
         end
         flight_ids << flight_id
@@ -145,7 +146,7 @@ class Suppliers::Trip < Suppliers::Base
       arrival_date_time += ":00" if arrival_date_time.size == 16 
       arrival_date_times << arrival_date_time.to_datetime
 
-      stops << leg["arrivalAirport"]
+      stops << leg["arrivalAirport"] if flight_legs.count > 1
       trip_duration += leg["duration"]
     end
     

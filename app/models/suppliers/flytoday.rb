@@ -47,7 +47,8 @@ class Suppliers::Flytoday < Suppliers::Base
       leg_data = flight_id = nil
       leg_data = prepare flight["FlightSegments"]
       
-      next if leg_data.nil?      
+      next if leg_data.nil? 
+      stops = leg_data[:stop].empty? ? nil : leg_data[:stop].join(",")        
       ActiveRecord::Base.connection_pool.with_connection do        
           flight_id = Flight.create_or_find_flight(route_id,
           leg_data[:flight_number].join(","),
@@ -55,7 +56,7 @@ class Suppliers::Flytoday < Suppliers::Base
           leg_data[:airline_code].join(","),
           leg_data[:airplane_type].join(","),
           leg_data[:arrival_date_time].last,
-          leg_data[:stop].join(","),
+          stops,
           leg_data[:trip_duration])
       end
       flight_ids << flight_id      
@@ -110,7 +111,7 @@ class Suppliers::Flytoday < Suppliers::Base
       airplane_types << leg["OperatingEquipment"]
       departure_date_times << parse_date(leg["DepartureDateTime"]).utc.to_datetime + ENV["IRAN_ADDITIONAL_TIMEZONE"].to_f.minutes # add 4:30 hours because flytoday date time is in iran time zone #.strftime("%H:%M")
       arrival_date_times << parse_date(leg["ArrivalDateTime"]).utc.to_datetime + ENV["IRAN_ADDITIONAL_TIMEZONE"].to_f.minutes
-      stops << leg["ArrivalAirport"]
+      stops << leg["ArrivalAirport"] if flight_legs.count > 1
       trip_duration += to_minutes leg["JourneyDuration"]
     end
     
