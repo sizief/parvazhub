@@ -41,7 +41,8 @@ class Suppliers::Zoraq < Suppliers::Base
       flight_legs = flight["OriginDestinationOptions"][0]["FlightSegments"]
       leg_data = prepare flight_legs
       
-      next if leg_data.nil?      
+      next if leg_data.nil?   
+      stops = leg_data[:stop].empty? ? nil : leg_data[:stop].join(",")   
       ActiveRecord::Base.connection_pool.with_connection do        
           flight_id = Flight.create_or_find_flight(route_id,
           leg_data[:flight_number].join(","),
@@ -49,7 +50,7 @@ class Suppliers::Zoraq < Suppliers::Base
           leg_data[:airline_code].join(","),
           leg_data[:airplane_type].join(","),
           leg_data[:arrival_date_time].last,
-          leg_data[:stop].join(","),
+          stops,
           leg_data[:trip_duration])
       end
       flight_ids << flight_id      
@@ -105,7 +106,7 @@ class Suppliers::Zoraq < Suppliers::Base
       airplane_types << leg["OperatingAirline"]["Equipment"]
       departure_date_times << parse_date(leg["DepartureDateTime"]).utc.to_datetime + ENV["IRAN_ADDITIONAL_TIMEZONE"].to_f.minutes # add 4:30 hours because zoraq date time is in iran time zone #.strftime("%H:%M")
       arrival_date_times << parse_date(leg["ArrivalDateTime"]).utc.to_datetime + ENV["IRAN_ADDITIONAL_TIMEZONE"].to_f.minutes
-      stops << leg["ArrivalAirportLocationCode"]
+      stops << leg["ArrivalAirportLocationCode"] if flight_legs.count > 1
       trip_duration += leg["JourneyDuration"]
     end
     
