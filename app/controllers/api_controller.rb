@@ -44,8 +44,8 @@ class ApiController < ApplicationController
     end
 
     def flights
-      channel = "application" 
-      user_agent_request = "application"
+      channel = "android" 
+      user_agent_request = "android"
       date = search_params[:date]
       route = get_route search_params[:origin_name], search_params[:destination_name] 
 
@@ -62,7 +62,7 @@ class ApiController < ApplicationController
     end
 
     def suppliers
-      channel, user_agent_request = "application"
+      channel, user_agent_request = "android"
       flight = Flight.find_by_id(flight_price_params[:id])
   
      if flight

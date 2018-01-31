@@ -132,7 +132,7 @@ class Suppliers::Trip < Suppliers::Base
   def prepare flight_legs
     flight_numbers, airline_codes, airplane_types, departure_date_times, arrival_date_times, stops = Array.new, Array.new, Array.new, Array.new, Array.new, Array.new    
     trip_duration = 0
-    flight_legs.each do |leg|
+    flight_legs.each_with_index do |leg,index|
       airline_code = get_airline_code(leg["operatorCode"])
       return nil if airline_code.nil?
       airline_codes << airline_code
@@ -146,7 +146,7 @@ class Suppliers::Trip < Suppliers::Base
       arrival_date_time += ":00" if arrival_date_time.size == 16 
       arrival_date_times << arrival_date_time.to_datetime
 
-      stops << leg["arrivalAirport"] if flight_legs.count > 1
+      stops << leg["arrivalAirport"] unless flight_legs.count == index+1 #we dont need last stops
       trip_duration += leg["duration"]
     end
     

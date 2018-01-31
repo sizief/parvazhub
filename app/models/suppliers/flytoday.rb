@@ -102,7 +102,7 @@ class Suppliers::Flytoday < Suppliers::Base
   def prepare flight_legs
     flight_numbers, airline_codes, airplane_types, departure_date_times, arrival_date_times, stops = Array.new, Array.new, Array.new, Array.new, Array.new, Array.new
     trip_duration = 0
-    flight_legs.each do |leg|
+    flight_legs.each_with_index do |leg,index|
       airline_code = leg["OperatingAirline"]
       flight_number = (leg["FlightNumber"].include? airline_code) ? leg["FlightNumber"] : airline_code+leg["FlightNumber"]
 
@@ -111,7 +111,7 @@ class Suppliers::Flytoday < Suppliers::Base
       airplane_types << leg["OperatingEquipment"]
       departure_date_times << parse_date(leg["DepartureDateTime"]).utc.to_datetime + ENV["IRAN_ADDITIONAL_TIMEZONE"].to_f.minutes # add 4:30 hours because flytoday date time is in iran time zone #.strftime("%H:%M")
       arrival_date_times << parse_date(leg["ArrivalDateTime"]).utc.to_datetime + ENV["IRAN_ADDITIONAL_TIMEZONE"].to_f.minutes
-      stops << leg["ArrivalAirport"] if flight_legs.count > 1
+      stops << leg["ArrivalAirport"] unless flight_legs.count == index+1 #we dont need last stops
       trip_duration += to_minutes leg["JourneyDuration"]
     end
     
