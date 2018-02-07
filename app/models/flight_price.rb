@@ -33,31 +33,33 @@ class FlightPrice < ApplicationRecord
 
 	def supplier_persian_name(supplier_name)
 	  if supplier_name == "zoraq"
-		return "زورق"
+		  return "زورق"
 	  elsif supplier_name == "alibaba"
-		return "علی‌بابا"
+		  return "علی‌بابا"
 	  elsif supplier_name == "safarme"
-		return "سفرمی"
+		  return "سفرمی"
 	  elsif supplier_name == "flightio"
-		return "فلایتیو"
+			return "فلایتیو"
 	  elsif supplier_name == "ghasedak"
-		return "قاصدک۲۴"
+			return "قاصدک۲۴"
 	  elsif supplier_name == "respina"
-		return "رسپینا۲۴"
+			return "رسپینا۲۴"
 	  elsif supplier_name == "trip"
-		return "تریپ"
+			return "تریپ"
 	  elsif supplier_name == "travelchi"
-		return "تراولچی"
+			return "تراولچی"
 	  elsif supplier_name == "iranhrc"
-		return "ایران‌اچ‌آر‌سی"
+			return "ایران‌اچ‌آر‌سی"
 	  elsif supplier_name == "sepehr"
-		return "سپهرسیر"
+			return "سپهرسیر"
 	  elsif supplier_name == "flytoday"
-		return "فلای‌تودی"
+			return "فلای‌تودی"
 	  elsif supplier_name == "safarestan"
-		return "سفرستان"
+			return "سفرستان"
+	  elsif supplier_name == "hipotrip"
+			return "هیپوتریپ"
 	  else
-		return supplier_name
+			return supplier_name
 	  end
 	end
 end
