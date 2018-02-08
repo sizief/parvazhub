@@ -32,12 +32,8 @@ class FlightResult
   end
 
   private
-  def allow_response_time(date)
-    if date == Date.today.to_s #today
-      allow_time = ENV["SUPPLIER_SESSION_TIMEOUT"].to_i/2
-    else 
-      allow_time = ENV["SUPPLIER_SESSION_TIMEOUT"].to_i
-    end
+  def allow_response_time(date) 
+    allow_time = ENV["SUPPLIER_SESSION_TIMEOUT"].to_i
     allow_time.to_f.minutes.ago
   end
 
