@@ -128,7 +128,7 @@ class Suppliers::Hipotrip < Suppliers::Base
       trip_duration = 0
       flight_legs.each do |leg|
         airline_code = code_correction leg["airline"]["iata"]
-        flight_number = (leg["airline"]["flight_number"].include? airline_code) ? leg["airline"]["flight_number"] : airline_code+leg["airline"]["flight_number"]
+        flight_number =  airline_code + flight_number_correction(leg["airline"]["flight_number"],airline_code)
   
         flight_numbers << flight_number 
         airline_codes << airline_code
@@ -169,6 +169,11 @@ class Suppliers::Hipotrip < Suppliers::Base
   
     def get_deeplink request_id, result_id
       "https://hipotrip.com/flight/book/#{request_id}/#{result_id}"
+    end
+
+    def flight_number_correction(flight_number,airline_code)
+      flight_number = flight_number.sub(airline_code,"")  if flight_number.include? airline_code
+      return flight_number.gsub(/[^\d,\.]/, '')        
     end
 
   end
