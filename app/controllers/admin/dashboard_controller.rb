@@ -30,7 +30,7 @@ class Admin::DashboardController < ApplicationController
   end
 
   def index
-    @channels = ["website","telegram","android"]
+    @channels = ["website","telegram","android","ionic"]
   end
       
   def redirect
