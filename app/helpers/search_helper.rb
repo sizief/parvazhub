@@ -51,7 +51,7 @@ module SearchHelper
 
 	def airplane_name_for airplane_type
 	  case airplane_type.upcase
-	  when "MD80","MD-80","MD82","MD-82","MD83","MD-83","MD88","MD-88","MD.88","BOEING MD","MS"
+	  when "MD80","M82","MD-80","MD82","MD-82","MD83","MD-83","MD88","MD-88","MD.88","BOEING MD","MS"
 	  	ariplane_name = "بویینگ MD"
 	  when "AB3"
 	  	ariplane_name = "ایرباس"
@@ -61,6 +61,8 @@ module SearchHelper
 		  ariplane_name = "ایرباس ۳۱۰"
 	  when "A313","AIRBUS A313"
 			ariplane_name = "ایرباس ۳۱۳"
+	  when "A319","AIRBUS A319"
+			ariplane_name = "ایرباس ۳۱۹"
 	  when "A321","AIRBUS A321", "AIRBUS 321"
 			ariplane_name = "ایرباس ۳۲۱"
 	  when "A320","AIRBUS A320","320","AIRBUS 320"
