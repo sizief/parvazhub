@@ -1,6 +1,9 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :redirect_subdomain
+
+  @suppliers = Supplier.where(status: true)
+
   
   def redirect_subdomain
     if request.host == 'www.parvazhub.com'

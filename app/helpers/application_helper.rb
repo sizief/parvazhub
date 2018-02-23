@@ -20,6 +20,10 @@ module ApplicationHelper
     return markup_delivery
   end
 
+  def suppliers_list
+    suppliers = Supplier.where(status: true)
+  end
+
 
 
 end
