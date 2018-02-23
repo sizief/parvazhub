@@ -2,7 +2,7 @@
   <div class="ui stackable sixteen column grid" style="background: #fafafa;border-top: #eee 1px solid;font-size: 1em;">
     <div class="sixteen wide column">
       <div id="what-we-do" class="web-font"  style="direction: rtl;text-align:center;padding: 1em 2em 1em 2em;line-height: 2em; font-size:1em">
-      پروازهاب تمام سایت‌های معتبر پرواز را جستجو می‌کند. ما فروشنده نیستیم، فقط ارزان‌ترین و بهترین زمان سفر را جستجو می‌کنیم.
+      پروازهاب تمام سایت‌های معتبر پرواز را برای یافتن ارزان‌ترین و بهترین زمان سفر جستجو می‌کند.
             <br/>استفاده از پروازهاب کاملا رایگان است. ممنونیم که از پروازهاب استفاده می‌کنید :‌)
         <div>
           <% suppliers_list.each do |supplier| %>
@@ -23,12 +23,18 @@
           
           <div class="column center aligned">			
             <%= link_to "درباره‌ی ما", us_path, class:"footer-link" %>
+            <%= link_to "توسعه دهندگان", our_service_path, class:"footer-link" %>
             <%= link_to "تمام پروازها", flight_page_path,class:"footer-link" %> 
+            <div style="color:white; width:100%; margin:auto;text-align:center;line-height: 2em;">
+            <a href="https://www.linkedin.com/company/parvazhub"><i class="linkedin square icon large"></i></a>
+            <a href="https://twitter.com/Parvazhub_com"><i class="twitter icon large"></i></a>  
+            <a href="https://www.facebook.com/parvazhub/"><i class="facebook icon large"></i></a>  
+          </div>   
           </div>
 
           <div class="column center aligned">			
             <a href="https://t.me/parvazhubBot">
-              <button class="ui blue button telegram-button" style=" margin-top: 0 !important;margin-bottom: 10px !important;">				
+              <button class="ui blue tiny button telegram-button" style=" margin-top: 0 !important;margin-bottom: 10px !important;">				
                 <span class="telegram-announce">Telegram Bot</span>
                 <%= image_tag "static/telegram.png",{class:"telegram-icon"} %>		
               </button>  
@@ -58,12 +64,8 @@
             </div>
         </div>
 
-        <div class="five column row center aligned">
-          <div style="color:white; width:100%; margin:auto;text-align:center;line-height: 2em;border-top: 1px #cccccc solid;width: 80%;padding: 1em;">
-            <a href="https://www.linkedin.com/company/parvazhub"><i class="linkedin square icon large"></i></a>
-            <a href="https://twitter.com/Parvazhub_com"><i class="twitter icon large"></i></a>  
-            <a href="https://www.facebook.com/parvazhub/"><i class="facebook icon large"></i></a>  
-          </div>    
+        <div class="five column row center aligned" style="border-top:1px #e0e0e0 solid">
+           
           <p style="color:#403f3f; direction:rtl; font-size:0.9em;line-height:1.8em;">
           پروازهاب مسئولیتی در قبال خرید از هیچ‌کدام از سایت‌ها ندارد. 
            از طریق ایمیل salam@parvazhub.com و 
