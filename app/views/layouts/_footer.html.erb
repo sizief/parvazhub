@@ -1,8 +1,9 @@
 <div style="margin-top:2em">
   <div class="ui stackable sixteen column grid" style="background: #fafafa;border-top: #eee 1px solid;font-size: 1em;">
     <div class="sixteen wide column">
-      <div id="what-we-do" class="web-font"  style="direction: rtl;padding: 1em 2em 1em 2em;line-height: 2em; font-size:1em">
-      ما پروازهای سیستمی و چارتری را از سایت‌های معتبر جمع‌آوری می‌کنیم تا بهترین بلیط هواپیما را به سادگی پیدا کنید. پروازهاب هیچ مسئولیتی در قبال خرید از هیچ‌کدام از سایت‌ها ندارد.  استفاده از پروازهاب کاملا رایگان است. ممنونیم :‌)
+      <div id="what-we-do" class="web-font"  style="direction: rtl;text-align:center;padding: 1em 2em 1em 2em;line-height: 2em; font-size:1em">
+      پروازهاب تمام سایت‌های معتبر پرواز را جستجو می‌کند. ما فروشنده نیستیم، فقط ارزان‌ترین و بهترین زمان سفر را جستجو می‌کنیم.
+            <br/>استفاده از پروازهاب کاملا رایگان است. ممنونیم که از پروازهاب استفاده می‌کنید :‌)
         <div>
           <% suppliers_list.each do |supplier| %>
             <span style="margin: 20px">
@@ -21,10 +22,7 @@
         <div class="row">
           
           <div class="column center aligned">			
-            <%= link_to "پروازهای مشهد به تهران ", route_page_path(origin_name: "mashhad",destination_name: "tehran"),class:"footer-link" %>
-            <%= link_to "پروازهای کیش به تهران ", route_page_path(origin_name: "kish",destination_name: "tehran"),class:"footer-link" %>
-            <%= link_to "پروازهای استانبول به تهران " , route_page_path(origin_name: "istanbul",destination_name: "tehran"),class:"footer-link" %>
-            <%= link_to "پروازهای اهواز به تهران ", route_page_path(origin_name: "ahvaz",destination_name: "tehran"),class:"footer-link" %>
+            <%= link_to "درباره‌ی ما", about_us_path, class:"footer-link" %>
             <%= link_to "تمام پروازها", flight_page_path,class:"footer-link" %> 
           </div>
 
@@ -48,7 +46,7 @@
 
           <div class="two column center aligned" style="text-align: right;line-height: 1.9em;color: #403f3f;direction:rtl; font-size:0.8em">	
             <div>
-              پذیرایی داخل پرواز خوب نبود؟ هواپیما تمیز نبود؟ پرواز تاخیر زیادی داشت؟
+              پذیرایی پرواز خوب نبود؟ هواپیما تمیز نبود؟ پرواز تاخیر داشت؟
               <br/>
               <a href="/review" target="_blank" style="font-size:1.3em"> 
                 <i class="comments icon"></i>
@@ -67,9 +65,13 @@
             <a href="https://www.facebook.com/parvazhub/"><i class="facebook icon large"></i></a>  
           </div>    
           <p style="color:#403f3f; direction:rtl; font-size:0.9em;line-height:1.8em;">
-                تمام حقوق مادی و معنوی برای پروازهاب محفوظ است. از طریق ایمیل salam@parvazhub.com و 
+          پروازهاب مسئولیتی در قبال خرید از هیچ‌کدام از سایت‌ها ندارد. 
+           از طریق ایمیل salam@parvazhub.com و 
                 <a href="https://t.me/parvazhub_com"> تلگرام </a>
               همیشه در دسترس هستیم.
+              <br>
+              تمام حقوق برای پروازهاب محفوظ است.
+              
           </p>
           <p style="color:#424040; direction:ltr; font-size:0.8em;line-height:1em;width:100%">
           <%= Time.current.year %>  - V.1.4 

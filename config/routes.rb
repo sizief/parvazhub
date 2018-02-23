@@ -33,8 +33,9 @@ Rails.application.routes.draw do
 
 	post 'notification/price_alert_register', to: 'notification#price_alert_register', as: 'price_alert_register'
 	
-	get '/about_us', to:'static_pages#about_us'
-	get 'static_pages/about_us'
+	get '/us', to:'static_pages#us', as: "about_us"
+	get '/our-service', to:'static_pages#our_service', as: 'our_service'
+
 
 	get '/beta/telegram/update', to: 'telegram#update'
 	post '/beta/telegram/webhook', to: 'telegram#webhook'
@@ -49,8 +50,6 @@ Rails.application.routes.draw do
 	get '/api/v1/flights/', to: 'api#flights', as: 'api_flights'
 	get '/api/v1/suppliers/', to: 'api#suppliers', as: 'api_suppliers'
 
-	
-	
 	get '/flight-prices/:id', to: redirect('/', status: 302) #, to: 'search_result#flight_prices', as: 'flight-prices-ajax' #, :defaults => { :format => 'js' }
 	
 	root 'home#index'

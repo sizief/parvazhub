@@ -1,5 +1,8 @@
 class StaticPagesController < ApplicationController
-  def about_us
+  def us
+  end
+
+  def our_service
   end
 
 
