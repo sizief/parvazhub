@@ -33,7 +33,7 @@ Rails.application.routes.draw do
 
 	post 'notification/price_alert_register', to: 'notification#price_alert_register', as: 'price_alert_register'
 	
-	get '/us', to:'static_pages#us', as: "about_us"
+	get '/us', to:'static_pages#us', as: "us"
 	get '/our-service', to:'static_pages#our_service', as: 'our_service'
 
 
