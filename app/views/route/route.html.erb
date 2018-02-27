@@ -11,13 +11,13 @@
     		<div class="ui huge form" >
      			<div class="two fields">
 				 	<div class="field input-container">
-				 		<%= f.text_field :originـfield,{:class =>'origin-field typeahead dir-rtl web-font',placeholder: "از مبدا (شهر یا فرودگاه)"} %>						   
-				 		<%= f.hidden_field :origin,{:id =>'origin'} %>
+				 		<%= f.text_field :originـfield,{:value => @origin.persian_name, :class =>'origin-field typeahead dir-rtl web-font',placeholder: "از مبدا (شهر یا فرودگاه)"} %>						   
+				 		<%= f.hidden_field :origin,{:id =>'origin', :value => @origin.english_name} %>
 			 		</div>
 			 
 			 		<div class="field input-container">
-				 		<%= f.text_field :destination_field,{:class =>'destination-field typeahead dir-rtl web-font',placeholder: "به مقصد (شهر یا فرودگاه)"} %>
-				 		<%= f.hidden_field :destination,{:id =>'destination'} %>
+				 		<%= f.text_field :destination_field,{:value => @destination.persian_name, :class =>'destination-field typeahead dir-rtl web-font',placeholder: "به مقصد (شهر یا فرودگاه)"} %>
+				 		<%= f.hidden_field :destination,{:id =>'destination', :value => @destination.english_name} %>
 			 		</div> 
   				</div>
   				<div class="field ui calendar">
