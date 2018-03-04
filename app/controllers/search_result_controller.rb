@@ -38,7 +38,7 @@ class SearchResultController < ApplicationController
         # do not search supplier, just get results from db
         flights = get_flights(date,route,true)
     else
-        text = "☝️ [#{Rails.env}] #{route.id}, #{date} \n #{user_agent_request}"
+        text = "☝️ [#{Rails.env} | #{channel}] #{route.id}, #{date} \n #{user_agent_request}"
         UserSearchHistoryWorker.perform_async(text,route.id,date,channel) unless Rails.env.test?
         flights = get_flights(date,route,false)
     end
@@ -98,7 +98,7 @@ class SearchResultController < ApplicationController
 
   def get_flight_price(flight,channel,request_user_agent)
     unless is_bot(request_user_agent)
-        text = "✌️ [#{Rails.env}] #{flight.id} \n #{request_user_agent}"
+        text = "✌️ [#{Rails.env} | #{channel}] #{flight.id} \n #{request_user_agent}"
         UserFlightPriceHistoryWorker.perform_async(channel,text,flight.id) unless Rails.env.test?
     end
     FlightResult.new.get_flight_price(flight)
