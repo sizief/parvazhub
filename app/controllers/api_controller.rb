@@ -56,7 +56,7 @@ class ApiController < ApplicationController
 
     def flights
       channel = search_params[:channel].nil? ? "android" : search_params[:channel]
-      user_agent_request = "android"
+      user_agent_request = channel
       date = search_params[:date]
       route = get_route search_params[:origin_name], search_params[:destination_name] 
 
@@ -74,7 +74,7 @@ class ApiController < ApplicationController
 
     def suppliers
       channel = search_params[:channel].nil? ? "android" : search_params[:channel]
-      user_agent_request = "android"
+      user_agent_request = channel
       flight = Flight.find_by_id(flight_price_params[:id])
   
      if flight
