@@ -109,7 +109,7 @@
                     <% @reviews.each do |review| %>
                         <div class="ui grid review-section review-card" id="<%= review.id %>">
                             <div class="column">
-                                    <% if review.author.empty? %>
+                                    <% if (review.author.nil? or review.author == "") %>
                                         ناشناس:
                                     <% else %>
                                         <%= review.author %>:
