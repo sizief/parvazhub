@@ -93,6 +93,9 @@ class SearchResultController < ApplicationController
         @prices << price
     end
     
+    @airline = Airline.find_by(code: @flight.airline_code.split(",").first)
+    @reviews = get_reviews @airline
+  
     render :flight_price
   end
 
@@ -105,6 +108,14 @@ class SearchResultController < ApplicationController
   end
 
   private
+
+  def get_reviews airline
+    if airline.nil?
+      reviews = Array.new
+    else
+      reviews = Review.where(page: airline.english_name).where.not(text:"")
+    end
+  end
 
   def get_flights(date,route,is_bot)
     if is_bot

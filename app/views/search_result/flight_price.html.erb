@@ -9,8 +9,7 @@
         <h5 class="ui image header web-font">
             <%= airline_logo_for @flight.airline_code %> 
             <div class="content">
-                بهترین قیمت‌های پرواز   
-                <%= airline_name_for @flight %>     
+                سایت‌های فروشنده پرواز   
                 <%= hour_to_human @flight.departure_time.to_datetime.strftime("%H:%M") %>            
                 <%= @flight.airplane_type.blank? ? " " : airplane_name_for(@flight.airplane_type) %>
                 <div class="sub header" style="margin-top: 7px">
@@ -21,6 +20,11 @@
                 </div>
             </div> 
         </h5> 
+        <a href="<%= flight_result_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date]) %> ">
+            <button class="ui mini right floated button web-font nm  ">
+            بازگشت به صفحه قبل 
+            </button>
+        </a>
     </div>
  
         <table class="ui  table rtl" style="width:97% !important">
@@ -93,13 +97,53 @@
                 <% end %>
             </tbody>		
         </table>
+
+ 
+        <% unless @airline.nil? %>
+            <div style="direction: rtl;width: 97%;line-height: 2em;font-size: 0.9em;margin-bottom: 2em;">
+                <h5 style="font-family: samim;padding: 1em 0;"><i class="comment outline icon"></i>
+                    آخرین نظرهای مسافران
+                    <%= @airline.persian_name.nil? ? @airline.english_name : @airline.persian_name %>
+                </h5>
+                <% unless @reviews.empty? %>
+                    <% @reviews.each do |review| %>
+                        <div class="ui grid review-section review-card" id="<%= review.id %>">
+                            <div class="column">
+                                    <% if review.author.empty? %>
+                                        ناشناس:
+                                    <% else %>
+                                        <%= review.author %>:
+                                    <% end %> 
+                                <%= review.text %>
+                            </div>
+                        </div>
+                    <% end %>
+                    <div class="ui grid review-section review-card" >
+                        <a href="<%= property_page_path @airline.english_name  %>" >
+                                شما هم در مورد
+                                <%= @airline.persian_name.nil? ? @airline.english_name : @airline.persian_name %>
+                                نظر دهید.
+                        </a>
+                    </div>
+                <% else %>
+                    <div class="ui grid review-section review-card"  >
+                        <a href="<%= property_page_path @airline.english_name  %>" >
+                        هنوز نظری ثبت نشده. اولین نفری باشید که در مورد
+                        <%= @airline.persian_name.nil? ? @airline.english_name : @airline.persian_name %>
+                        نظر می‌دهید!
+                        </a>
+                    </div>
+                <% end %>
+            </div>
+        <% end %>
         
         <a href="<%= flight_result_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date]) %> ">
-            <button class="ui button web-font fluid blue">
+            <button class="ui button web-font fluid ">
                 بازگشت به لیست پروازهای 
                 <%= @search_parameter[:origin_persian_name] %>
                 به 
                 <%= @search_parameter[:destination_persian_name] %> 
+                <i class="left arrow icon"></i>
             </button>
         </a>
           

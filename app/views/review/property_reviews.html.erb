@@ -3,7 +3,7 @@
 <% provide(:description,"نظر مسافران  #{@airline_name}")  %>
 
 <div class="ui container" id="search-results-container" style="direction:rtl">
-<div id="review-register-alert"></div>
+
 
     <div class="ui stackable grid review-header">    
         <div class="six wide column right floated">    
@@ -48,7 +48,7 @@
                 </div>
             </div>
         <% end %>
-    
+    <div id="review-register-alert" style="padding-top:1em;"></div>
     <div id="review-register-form">
         <%= form_tag(register_review_path, method: :post, class: "ui form", remote: true) do %>	
             <h4 class="ui dividing header">نظرتان در مورد کیفیت پروازهای 
