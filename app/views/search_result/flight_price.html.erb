@@ -101,7 +101,8 @@
  
         <% unless @airline.nil? %>
             <div style="direction: rtl;width: 97%;line-height: 2em;font-size: 0.9em;margin-bottom: 2em;">
-                <h5 style="font-family: samim;padding: 1em 0;"><i class="comment outline icon"></i>
+                <h5 style="font-family: samim;padding: 1em 0;">
+                    <i class="comments large icon"></i>
                     آخرین نظرهای مسافران
                     <%= @airline.persian_name.nil? ? @airline.english_name : @airline.persian_name %>
                 </h5>
@@ -118,11 +119,13 @@
                             </div>
                         </div>
                     <% end %>
-                    <div class="ui grid review-section review-card" >
+                    <div class="ui grid review-section review-card" style="font-weight: bold;font-size: 1.1em;padding: 2%;">
                         <a href="<%= property_page_path @airline.english_name  %>" >
-                                شما هم در مورد
+                            <i class="comment large icon"></i>
+
+                                نظر شما در مورد پروازهای
                                 <%= @airline.persian_name.nil? ? @airline.english_name : @airline.persian_name %>
-                                نظر دهید.
+                                چیست؟
                         </a>
                     </div>
                 <% else %>
