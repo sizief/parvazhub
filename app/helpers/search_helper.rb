@@ -31,6 +31,20 @@ module SearchHelper
        	time + " " + phrase
 	end
 
+	def hour_to_human_for_title (time)
+		time_without_colon  = "#{time}".tr(':', '')
+		phrase = case time_without_colon.to_i
+        	when 400..1159 then "صبح"
+        	when 1200..1559 then "ظهر"
+        	when 1600..1959 then "عصر"
+        	when 2000..2359 then "شب"
+        	when 0..359 then "شب"
+        else
+        	" "
+       	end
+       	phrase
+	end
+
 	def search_link_builder(origin_name,destination_name,date)
 		link = "/flights/#{origin_name}-#{destination_name}/#{date}"
 	end
@@ -40,13 +54,8 @@ module SearchHelper
 		days_in_farsi[day]
 	end
 
-    def airline_name_for(flight)
-	  if flight.airline_persian_name.nil?
-		name = flight.airline_english_name
-	  else
-		name = flight.airline_persian_name
-	  end
-	  return name
+    def airline_name_for airline
+		name = airline.persian_name.nil? ? airline.english_name : airline.persian_name
 	end
 
 	def airplane_name_for airplane_type

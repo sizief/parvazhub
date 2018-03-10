@@ -15,4 +15,8 @@ module RouteHelper
     #prices.compact.empty?
   end
 
+  def city_name city_obj
+    name = city_obj.persian_name.nil? ? city_obj.english_name : city_obj.persian_name
+  end
+
 end

@@ -43,38 +43,17 @@
         <% @routes.each do |route|  %>
             <% origin = City.find_by(city_code: route.origin)  %>
             <% destination = City.find_by(city_code: route.destination)  %>
-            
-                <%= link_to "پرواز #{origin.persian_name} به  #{destination.persian_name}", route_page_path(origin_name: "#{origin.english_name}",destination_name: "#{destination.english_name}") %>
+            <% unless origin.nil? or destination.nil? %>
+                <%= link_to "بلیط #{city_name origin} به  #{city_name destination}", route_page_path(origin_name: "#{origin.english_name}",destination_name: "#{destination.english_name}") %>
                     | 
-                <%= link_to "پرواز #{destination.persian_name} به #{origin.persian_name} ", route_page_path(origin_name: "#{destination.english_name}",destination_name: "#{origin.english_name}") %> 
-        
+                <%= link_to "بلیط #{city_name destination} به #{city_name origin}  ", route_page_path(origin_name: "#{destination.english_name}",destination_name: "#{origin.english_name}") %> 
+                | 
+            <% end %>
         <% end %>
     </div>
 </div>
 
 
-<div class="ui container" id="search-results-container" style="padding-top: 1em">
-    <div class="city-calendar" >
-        <h4>
-            پروازهای
-            <b class="yellow"> 
-                امروز
-            </b> 
-        </h4>
-        <p>
-            <% @routes.each do |route|  %>
-            <% origin = City.find_by(city_code: route.origin)  %>
-            <% destination = City.find_by(city_code: route.destination)  %>
-               
-                <%= link_to "پرواز #{origin.persian_name} به  #{destination.persian_name} امروز", flight_result_path(origin_name: "#{origin.english_name}",destination_name: "#{destination.english_name}",date:(Date.today).to_s) %>
-                    | 
-                <%= link_to "پرواز#{destination.persian_name} به #{origin.persian_name} امروز", flight_result_path(origin_name: "#{destination.english_name}",destination_name: "#{origin.english_name}",date:(Date.today).to_s) %> 
-                    | 
-                   
-            <% end %>
-        </p>
-    </div>
-</div>
 
 <div class="ui container" id="search-results-container" style="padding-top: 1em">
     <div class="city-calendar" >
@@ -88,11 +67,14 @@
         <% @routes.each do |route|  %>
             <% origin = City.find_by(city_code: route.origin)  %>
             <% destination = City.find_by(city_code: route.destination)  %>
-                        <%= link_to "پرواز #{origin.persian_name} به  #{destination.persian_name} فردا", flight_result_path(origin_name: "#{origin.english_name}",destination_name: "#{destination.english_name}",date:(Date.today+1).to_s) %>
-                            | 
-                        <%= link_to "پرواز#{destination.persian_name} به #{origin.persian_name} فردا", flight_result_path(origin_name: "#{destination.english_name}",destination_name: "#{origin.english_name}",date:(Date.today+1).to_s) %> 
-                            | 
-                   
+            <% unless origin.nil? or destination.nil? %>
+
+                <%= link_to "بلیط #{city_name origin} به  #{city_name destination} فردا", flight_result_path(origin_name: "#{origin.english_name}",destination_name: "#{destination.english_name}",date:(Date.today+1).to_s) %>
+                    | 
+                <%= link_to "بلیط #{city_name destination} به #{city_name origin} فردا", flight_result_path(origin_name: "#{destination.english_name}",destination_name: "#{origin.english_name}",date:(Date.today+1).to_s) %> 
+                | 
+             
+            <% end %>
             <% end %>
         </p>
     </div>

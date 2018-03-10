@@ -81,7 +81,7 @@ class SearchResultController < ApplicationController
     origin = City.find_by(english_name: origin_name.downcase) 
     destination = City.find_by(english_name: destination_name.downcase)
 
-    date_in_human = date.to_date.to_parsi.strftime '%A %d %B'   
+    date_in_human = date_to_human date #date.to_date.to_parsi.strftime '%A %d %B'   
     @flight = Flight.find(flight_id)
     @search_parameter ={origin_english_name: origin.english_name, origin_persian_name: origin.persian_name, origin_code: origin.city_code,
                         destination_english_name: destination.english_name, destination_persian_name: destination.persian_name, destination_code: destination.city_code,
@@ -132,7 +132,7 @@ class SearchResultController < ApplicationController
     elsif date == (Date.today+1) 
       "فردا"
     else
-      date.to_date.to_parsi.strftime '%A %-d %B' 
+      date.to_date.to_parsi.strftime ' %-d %B' 
     end
   end
 

@@ -1,7 +1,7 @@
 
 <%= render 'layouts/header' %>
-<% provide(:title,"پروازهاب: جستجو و مقایسه پرواز  #{@origin.persian_name} به #{@destination.persian_name} ") %>
-<% provide(:description,"جستجو و مقایسه قیمت پرواز #{@origin.persian_name} به #{@destination.persian_name}") %>
+<% provide(:title,"بلیط #{@destination.persian_name} | پرواز #{@origin.persian_name} #{@destination.persian_name} | پروازهاب" ) %>
+<% provide(:description,"ارزان‌ترین بلیط #{@destination.persian_name}. تمام پروازهای چارتری و سیستمی #{@origin.persian_name} به #{@destination.persian_name}  در پروازهاب") %>
 
 <div class="ui stackable one column grid centered wide-search-box"  id="city-page-search-box">
 <h1 class="city-header">
@@ -50,7 +50,7 @@
 			<div  class="page-button-links" >
 				<a href="<%= search_link_builder(@origin.english_name,@destination.english_name,price[:date]) %>" class="white">
 					<button class="ui submit big yellow web-font fluid right labeled  icon button waiting-modal link-dates-button" style="padding-left: 2.5em !important; font-size:0.9em !important;" >	
-					 پرواز 
+					 بلیط 
 						<%= "#{@origin.persian_name} به #{@destination.persian_name}" %>
 						<%=price[:date].to_date.to_parsi.strftime "%A %-d %B"  %>	
 						<%= "از #{number_with_delimiter(price[:price])} تومان" unless price[:price].nil? %>		
@@ -74,7 +74,7 @@
 	<div class="city-calendar" id="city-calendar" >
 		<h4>
 			<b class="yellow">کمترین</b>
-            هزینه پرواز <%= "#{@origin.persian_name} به #{@destination.persian_name}" %> برای یک نفر
+            قیمت بلیط <%= "#{@origin.persian_name} به #{@destination.persian_name}" %> برای یک نفر
         </h4>
 		<table class="ui celled table stackable rtl">
 		  	<thead class="not-mobile">
@@ -101,7 +101,7 @@
 								<div class="route-calendar-box">
 									<div class="route-calendar-date">
 										<span class="mobile-only">پرواز 
-											<%= "#{@origin.persian_name} به #{@destination.persian_name}" %>
+											<%= "#{@origin.persian_name}  #{@destination.persian_name}" %>
 											<%=price[:date].to_date.to_parsi.strftime "%A"  %>	
 										</span>
 										<%=price[:date].to_date.to_parsi.strftime "%-d %B"  %>	

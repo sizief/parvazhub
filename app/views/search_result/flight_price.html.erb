@@ -1,7 +1,7 @@
 <%= render 'layouts/header' %>
 <% provide(:canonical,"<link rel=\"canonical\" href=\"http://parvazhub.com/flights/#{@search_parameter[:origin_english_name]}-#{@search_parameter[:destination_english_name]}\"/> ".html_safe)%>
-<% provide(:title,"پروازهاب: قیمت‌‌های #{@search_parameter[:origin_persian_name]} به  #{@search_parameter[:destination_persian_name]} #{@search_parameter[:date].to_date.to_parsi.strftime('%d %B')} #{airline_name_for(@flight)} #{hour_to_human(@flight.departure_time.to_datetime.strftime('%H:%M'))}" ) %>
-<% provide(:description,"لیست بهترین قیمت‌های پرواز #{@search_parameter[:origin_persian_name]} به  #{@search_parameter[:destination_persian_name]} #{@search_parameter[:date].to_date.to_parsi.strftime('%d %B')} ایرلاین #{airline_name_for(@flight)} #{hour_to_human(@flight.departure_time.to_datetime.strftime('%H:%M'))}" ) %>
+<% provide(:title,"بلیط  #{@search_parameter[:destination_persian_name]} | پرواز #{@search_parameter[:origin_persian_name]} #{@search_parameter[:destination_persian_name]} #{@search_parameter[:date_in_human]} #{airline_name_for(@airline)} #{hour_to_human_for_title(@flight.departure_time.to_datetime.strftime('%H:%M'))} | پروازهاب" ) %>
+<% provide(:description,"لیست بهترین قیمت‌های بلیط  #{@search_parameter[:origin_persian_name]} به  #{@search_parameter[:destination_persian_name]} #{@search_parameter[:date].to_date.to_parsi.strftime('%d %B')} ایرلاین #{airline_name_for(@airline)} #{hour_to_human(@flight.departure_time.to_datetime.strftime('%H:%M'))}" ) %>
 
 <div class="ui container" id="search-results-container">
 
@@ -9,9 +9,10 @@
         <h5 class="ui image header web-font">
             <%= airline_logo_for @flight.airline_code %> 
             <div class="content">
-                سایت‌های فروشنده پرواز   
+                سایت‌های فروشنده بلیط پرواز   
                 <%= hour_to_human @flight.departure_time.to_datetime.strftime("%H:%M") %>            
                 <%= @flight.airplane_type.blank? ? " " : airplane_name_for(@flight.airplane_type) %>
+                <%= airline_name_for @airline %>
                 <div class="sub header" style="margin-top: 7px">
                     <%= @search_parameter[:origin_persian_name] %>
                     به 
@@ -77,7 +78,7 @@
                                 $(document).ready(function(){
                                     var myChart = new Chart(ctx, {
                                         type: 'line',
-                                        data: {labels: labels,datasets: [{label: " تغییرات حداقل قیمت بلیط <%= hour_to_human @flight.departure_time.to_datetime.strftime('%H:%M') %> <%= airline_name_for @flight %> ",borderColor: 'rgb(54,162,235)',backgroundColor:  'rgb(54,162,235)', data: data,fill: false,lineTension: 0}]},
+                                        data: {labels: labels,datasets: [{label: " تغییرات حداقل قیمت بلیط <%= hour_to_human @flight.departure_time.to_datetime.strftime('%H:%M') %> <%= airline_name_for @airline %> ",borderColor: 'rgb(54,162,235)',backgroundColor:  'rgb(54,162,235)', data: data,fill: false,lineTension: 0}]},
                                         options: {
                                             showLines: true,
                                             scales: {
@@ -104,7 +105,7 @@
                 <h5 style="font-family: samim;padding: 1em 0;">
                     <i class="comments large icon"></i>
                     آخرین نظرهای مسافران
-                    <%= @airline.persian_name.nil? ? @airline.english_name : @airline.persian_name %>
+                    <%= airline_name_for @airline  %>
                 </h5>
                 <% unless @reviews.empty? %>
                     <% @reviews.each do |review| %>
@@ -124,15 +125,15 @@
                             <i class="comment large icon"></i>
 
                                 نظر شما در مورد پروازهای
-                                <%= @airline.persian_name.nil? ? @airline.english_name : @airline.persian_name %>
+                                <%= airline_name_for @airline  %>
                                 چیست؟
                         </a>
                     </div>
                 <% else %>
                     <div class="ui grid review-section review-card"  >
-                        <a href="<%= property_page_path @airline.english_name  %>" >
+                        <a href="<%= property_page_path(@airline.english_name,:anchor => 'review-register-form')  %>" >
                         هنوز نظری ثبت نشده. اولین نفری باشید که در مورد
-                        <%= @airline.persian_name.nil? ? @airline.english_name : @airline.persian_name %>
+                        <%= airline_name_for @airline  %>
                         نظر می‌دهید!
                         </a>
                     </div>
