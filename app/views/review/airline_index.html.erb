@@ -8,7 +8,7 @@
     <ul>
     <% Airline.where(country_code: "IR").each do |airline|  %>
 		<div class="city-calendar" >
-            <a href="<%= property_page_path airline.english_name  %>" >
+            <a href="<%= airline_review_page_path airline.english_name  %>" >
                 <li>    
                     <h4>
                     خط هوایی

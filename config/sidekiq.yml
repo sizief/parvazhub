@@ -78,7 +78,7 @@
 #airline routes worker
   airline_rate_worker:
     cron: '0 /15 * * * *'
-    class: AirlineRateWorker
+    class: ReviewRateWorker
 <% end %>
 
 #update most search routes

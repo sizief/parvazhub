@@ -40,8 +40,10 @@ Rails.application.routes.draw do
 	get '/beta/telegram/update', to: 'telegram#update'
 	post '/beta/telegram/webhook', to: 'telegram#webhook'
 
-	get '/review/', to: 'review#index', as: 'review_index_page'	
-	get '/review/:property_name', to: 'review#property_reviews', as: 'property_page'
+	get '/airline-review/', to: 'review#airline_index', as: 'airline_review_index_page'	
+	get '/airline-review/:property_name', to: 'review#airline_reviews', as: 'airline_review_page'
+	get '/supplier-review/', to: 'review#supplier_index', as: 'supplier_review_index_page'	
+	get '/supplier-review/:property_name', to: 'review#supplier_reviews', as: 'supplier_review_page'
 	post '/review', to: 'review#register', as: 'register_review'
 
 	get '/api/v1/city_prefetch_suggestion', to: 'api#city_prefetch_suggestion', as: 'api_city_prefetch_suggestion'
@@ -50,7 +52,10 @@ Rails.application.routes.draw do
 	get '/api/v1/flights/', to: 'api#flights', as: 'api_flights'
 	get '/api/v1/suppliers/', to: 'api#suppliers', as: 'api_suppliers'
 
-	get '/flight-prices/:id', to: redirect('/', status: 302) #, to: 'search_result#flight_prices', as: 'flight-prices-ajax' #, :defaults => { :format => 'js' }
-	
+	get '/flight-prices/:id', to: redirect('/', status: 301) #, to: 'search_result#flight_prices', as: 'flight-prices-ajax' #, :defaults => { :format => 'js' }
+	get '/review/', to: redirect('/airline-review/', status: 301)
+	get '/review/:property_name', to: redirect('/airline-review/%{property_name}', status: 301)
+
+
 	root 'home#index'
 end

@@ -1,6 +1,6 @@
 class ReviewController < ApplicationController
 
-  def property_reviews
+  def airline_reviews
     airline = Airline.find_by(english_name: params[:property_name])
     not_found if airline.nil?
 
@@ -9,12 +9,21 @@ class ReviewController < ApplicationController
     @page = airline.english_name
     @rate_count = airline.rate_count
     @rate_average = airline.rate_average
-
     @rate_count ||= 0
     @rate_average ||= 0
-
     @reviews = Review.where(page: @page).where.not(text:"")
-    
+  end
+
+  def supplier_reviews
+    supplier = Supplier.where('lower(name) = ?', params[:property_name]).first
+    not_found if supplier.nil?
+
+    @supplier_persian_name = Supplier.new.get_persian_name supplier.name.downcase
+    @supplier_english_name = supplier.name.downcase
+    @page = supplier.name.downcase
+    @rate_count = supplier.rate_count.nil? ? 0 : supplier.rate_count
+    @rate_average = supplier.rate_average.nil? ? 0 : supplier.rate_average
+    @reviews = Review.where(page: @page).where.not(text:"")
   end
 
   def not_found

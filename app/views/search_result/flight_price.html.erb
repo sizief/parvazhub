@@ -121,7 +121,7 @@
                         </div>
                     <% end %>
                     <div class="ui grid review-section review-card" style="font-weight: bold;font-size: 1.1em;padding: 2%;">
-                        <a href="<%= property_page_path @airline.english_name  %>" >
+                        <a href="<%= airline_review_page_path @airline.english_name  %>" >
                             <i class="comment large icon"></i>
 
                                 نظر شما در مورد پروازهای
@@ -131,7 +131,7 @@
                     </div>
                 <% else %>
                     <div class="ui grid review-section review-card"  >
-                        <a href="<%= property_page_path(@airline.english_name,:anchor => 'review-register-form')  %>" >
+                        <a href="<%= airline_review_page_path(@airline.english_name,:anchor => 'review-register-form')  %>" >
                         هنوز نظری ثبت نشده. اولین نفری باشید که در مورد
                         <%= airline_name_for @airline  %>
                         نظر می‌دهید!

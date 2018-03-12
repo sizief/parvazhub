@@ -28,38 +28,10 @@ class FlightPrice < ApplicationRecord
 
 	private
 	def supplier_logo supplier_name
-	  "https://parvazhub.com/static/suppliers/" + supplier_name.to_s + "-logo.png"
+	  Supplier.new.get_logo supplier_name
 	end
 
 	def supplier_persian_name(supplier_name)
-	  if supplier_name == "zoraq"
-		  return "زورق"
-	  elsif supplier_name == "alibaba"
-		  return "علی‌بابا"
-	  elsif supplier_name == "safarme"
-		  return "سفرمی"
-	  elsif supplier_name == "flightio"
-			return "فلایتیو"
-	  elsif supplier_name == "ghasedak"
-			return "قاصدک۲۴"
-	  elsif supplier_name == "respina"
-			return "رسپینا۲۴"
-	  elsif supplier_name == "trip"
-			return "تریپ"
-	  elsif supplier_name == "travelchi"
-			return "تراولچی"
-	  elsif supplier_name == "iranhrc"
-			return "ایران‌اچ‌آر‌سی"
-	  elsif supplier_name == "sepehr"
-			return "سپهرسیر"
-	  elsif supplier_name == "flytoday"
-			return "فلای‌تودی"
-	  elsif supplier_name == "safarestan"
-			return "سفرستان"
-	  elsif supplier_name == "hipotrip"
-			return "هیپوتریپ"
-	  else
-			return supplier_name
-	  end
+	  Supplier.new.get_persian_name supplier_name
 	end
 end

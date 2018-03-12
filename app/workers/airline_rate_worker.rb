@@ -1,11 +1,11 @@
 require 'sidekiq-scheduler'
 
-class AirlineRateWorker
+class ReviewRateWorker
   include Sidekiq::Worker
   
   def perform
-    airline = Airline.new
-    airline.update_rates
+    Airline.new.update_rates
+    Supplier.new.update_rates
   end
 
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180118084118) do
+ActiveRecord::Schema.define(version: 20180312223420) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -236,6 +236,8 @@ ActiveRecord::Schema.define(version: 20180118084118) do
     t.boolean  "international"
     t.boolean  "domestic"
     t.boolean  "job_search_allowed"
+    t.integer  "rate_count"
+    t.integer  "rate_average"
   end
 
   create_table "telegram_search_queries", force: :cascade do |t|
@@ -308,6 +310,10 @@ ActiveRecord::Schema.define(version: 20180118084118) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.string   "telegram"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "channel"
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
