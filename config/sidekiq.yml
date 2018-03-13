@@ -76,7 +76,7 @@
     class: RouteDayWorker
 
 #airline routes worker
-  airline_rate_worker:
+  review_rate_worker:
     cron: '0 /15 * * * *'
     class: ReviewRateWorker
 <% end %>

@@ -9,13 +9,12 @@
     <% Airline.where(country_code: "IR").each do |airline|  %>
 		<div class="city-calendar" >
             <a href="<%= airline_review_page_path airline.english_name  %>" >
-                <li>    
-                    <h4>
+                <h4>
+                    <%= airline_logo_for airline.code,nil,false %> 
                     خط هوایی
                     
                         <%=  airline.persian_name  %>
-                    </h4>
-                </li>
+                </h4>
             </a>   
 		</div>
     <% end %>
