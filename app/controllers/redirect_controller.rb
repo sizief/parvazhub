@@ -48,7 +48,6 @@ require 'uri'
       @flight_price = nil
     end
     
-    
     @flight_price_link = flight_prices_path(args[:origin_name], 
                                             args[:destination_name], 
                                             args[:date], 
