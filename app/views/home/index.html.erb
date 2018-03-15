@@ -22,7 +22,14 @@
       			<!--<i class="circle notched icon" style="color: white"></i>-->
       			<span id="company-name">پروازهاب</span>
     		</div>
-  		</a>
+		  </a>
+		  
+		<div class="item" id="slogan-text" style="font-size:0.8em;padding-top:7px">
+			<% i = rand(1..6) %>
+		  	<img style="width: 20px;margin-bottom: -10px;" src="/static/eid/<%= i %>.png"/>
+			<%= eid_text i %>
+		</div>
+
 		<h1 class="ui header inverted center aligned web-font" style="line-height: 2em;font-size: 1.28rem !important;">
 			<span id="slogan-description">
 					
