@@ -35,6 +35,8 @@ Rails.application.routes.draw do
 	
 	get '/us', to:'static_pages#us', as: "us"
 	get '/our-service', to:'static_pages#our_service', as: 'our_service'
+	get '/policy', to:'static_pages#policy', as: 'policy'
+
 
 
 	get '/beta/telegram/update', to: 'telegram#update'

@@ -5,5 +5,6 @@ class StaticPagesController < ApplicationController
   def our_service
   end
 
-
+  def policy
+  end
 end

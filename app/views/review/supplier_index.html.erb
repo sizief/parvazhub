@@ -9,13 +9,11 @@
     <% Supplier.all.each do |supplier|  %>
 		<div class="city-calendar" >
             <a href="<%= supplier_review_page_path supplier.name.downcase  %>" >
-                   
-                    <h4>
-                    <%= supplier_logo_for supplier.name.downcase %>
-                    وب‌سایت
-                        <%=  supplier_farsi_name_for supplier.name.downcase  %>
-                    </h4>
-                
+                <h4>
+                <%= supplier_logo_for supplier.name.downcase, false %>
+                وب‌سایت
+                    <%=  supplier_farsi_name_for supplier.name.downcase  %>
+                </h4>
             </a>   
 		</div>
     <% end %>

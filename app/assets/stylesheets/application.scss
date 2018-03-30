@@ -62,6 +62,16 @@
 .light-yellow{
   color: #f7efc3;
 }
+.grayscale{
+  -webkit-filter: grayscale(95%); 
+  filter: grayscale(95%);
+}
+
+.footer-suppliers:hover{
+  -webkit-filter: grayscale(1%); 
+  filter: grayscale(1%);
+
+}
 
 /* general */
 .alert{
@@ -184,24 +194,24 @@ header{
 /* Footer links */
 
 #cafe-bazaar{
-  width: 150px;
+  width: 25px;
+  margin-bottom: -8px;
 }
 .footer-link{
   display: block;
   text-decoration: none;
-  color: #eaae00;
   line-height: 2.3em;
   font-size: 0.8em;
 }
 
 /* telegram */
 .telegram-icon{
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
+  margin-bottom: -8px;
 }
 .telegram-announce{
   vertical-align: text-top;
-  color:white;
 }
 .telegram-container{
   padding: 2.5em 0 2.5em 0;

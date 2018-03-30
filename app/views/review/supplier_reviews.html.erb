@@ -1,6 +1,6 @@
 <%= render 'layouts/header' %>
-<% provide(:title," نظر کاربران درباره‌ی #{@supplier_persian_name}")  %>
-<% provide(:description,"نظر مسافران  #{@supplier_persian_name}")  %>
+<% provide(:title," نظر کاربران و مسافران  #{@supplier_persian_name} | پروازهاب")  %>
+<% provide(:description,"نظر مسافران  #{@supplier_persian_name} را در پروازهاب بخوانید. انتفاد و نظر خودتان را ثبت کنید.")  %>
 
 <div class="ui container" id="search-results-container" style="direction:rtl">
 
@@ -8,7 +8,7 @@
     <div class="ui stackable grid review-header">    
         <div class="six wide column right floated">    
             <h5 class="web-font" style="font-size:3.5em">
-            <%= supplier_logo_for @supplier_english_name %>
+            <%= supplier_logo_for @supplier_english_name, false %>
                 <%= @supplier_persian_name %> 
             </h5> 
         </div>
@@ -27,6 +27,14 @@
         
         
     </div>
+        <% if @reviews.empty? %>
+            <div style="font-size:1.5em;">
+                <i class="smile outline loading yellow icon"></i>
+                هنوز نظری ثبت نشده. اولین نفر باشید که در مورد 
+                <%= @supplier_persian_name %>  
+                نظر می‌دهید
+            </div>
+        <% end %>
     
         <% @reviews.each do |review| %>
             <div class="ui grid review-section" id="<%= review.id %>">
@@ -48,6 +56,7 @@
                 </div>
             </div>
         <% end %>
+
     <div id="review-register-alert" style="padding-top:1em;"></div>
     <div id="review-register-form">
         <%= form_tag(register_review_path, method: :post, class: "ui form", remote: true) do %>	

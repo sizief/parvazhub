@@ -1,94 +1,77 @@
-<div style="margin-top:2em">
-  <div class="ui stackable sixteen column grid" style="background: #fafafa;border-top: #eee 1px solid;font-size: 1em;">
-    <div class="sixteen wide column">
-      <div id="what-we-do" class="web-font"  style="direction: rtl;text-align:center;padding: 1em 2em 1em 2em;line-height: 2em; font-size:1em">
-      پروازهاب تمام سایت‌های معتبر پرواز را برای یافتن ارزان‌ترین و بهترین زمان سفر جستجو می‌کند.
-            <br/>استفاده از پروازهاب کاملا رایگان است. ممنونیم که از پروازهاب استفاده می‌کنید :‌)
-        <div>
-          <% suppliers_list.each do |supplier| %>
-            <span style="margin: 20px">
-              <%= supplier_logo_for supplier.name.downcase %>
-            </span>
-          <% end %>
-        </div>
-      </div>	
+  <div style="margin-top:2em">
+    <div class="ui stackable sixteen column grid" style="background: #fafafa;border-top: #eee 1px solid;font-size: 1em;">
+      <div class="sixteen wide column">
+        <div id="what-we-do" class="web-font"  style="direction: rtl;text-align:center;padding: 1em 2em 1em 2em;line-height: 2em; font-size:1em">
+        پروازهاب تمام سایت‌های معتبر پرواز را برای یافتن ارزان‌ترین و بهترین زمان سفر جستجو می‌کند.
+          <div style="margin-top: 1em">
+            <% suppliers_list.each do |supplier| %>
+              <span style="margin: 20px">
+                <a href="<%= supplier_review_page_path supplier.name.downcase  %>" class="grayscale footer-suppliers" >
+                  <%= supplier_logo_for(supplier.name.downcase, false) %>
+                </a>
+              </span>
+            <% end %>
+          </div>
+        </div>	
+      </div>
     </div>
   </div>
 
-  </div>
   <div class="ui inverted vertical footer segment" style="background:#efefef; border-top:1px solid #ccc" >
-      <div class="ui five column grid centered stackable">
-        
-        <div class="row">
+    <div class="ui five column grid centered stackable">
+      <div class="row">
           
-          <div class="column center aligned">			
-            <%= link_to "درباره‌ی ما", us_path, class:"footer-link" %>
-            <%= link_to "توسعه دهندگان", our_service_path, class:"footer-link" %>
-            <%= link_to "تمام پروازها", flight_page_path,class:"footer-link" %> 
-            <div style="color:white; width:100%; margin:auto;text-align:center;line-height: 2em;">
-            <a href="https://www.linkedin.com/company/parvazhub"><i class="linkedin square icon large"></i></a>
-            <a href="https://twitter.com/Parvazhub_com"><i class="twitter icon large"></i></a>  
-            <a href="https://www.facebook.com/parvazhub/"><i class="facebook icon large"></i></a>  
+        <div class="column center aligned">			
+          <div style="text-align:center; width:100%">
+            <img id='sizpfukzfukzjxlzjzpe' style='cursor:pointer' onclick='window.open("https://logo.samandehi.ir/Verify.aspx?id=96617&p=pfvlgvkagvkarfthjyoe", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")' alt='logo-samandehi' src='https://logo.samandehi.ir/logo.aspx?id=96617&p=bsiywlbqwlbqnbpdyndt'/>
+          </div>
+        </div>  
+        
+        <div class="column center aligned">			
+          <%= link_to "درباره‌ و تماس", us_path, class:"footer-link" %>
+          <%= link_to "قوانین در دو خط", policy_path, class:"footer-link" %>
+          <%= link_to "توسعه دهندگان", our_service_path, class:"footer-link" %>
+          <%= link_to "تمام پروازها", flight_page_path,class:"footer-link" %> 
+          <div style="color:white; width:100%; margin:auto;text-align:center;line-height: 2em;">
           </div>   
-          </div>
+        </div>
 
-          <div class="column center aligned">			
-            <div style="text-align:center; width:100%">
-              <img id='sizpfukzfukzjxlzjzpe' style='cursor:pointer' onclick='window.open("https://logo.samandehi.ir/Verify.aspx?id=96617&p=pfvlgvkagvkarfthjyoe", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")' alt='logo-samandehi' src='https://logo.samandehi.ir/logo.aspx?id=96617&p=bsiywlbqwlbqnbpdyndt'/>
-            </div>
-          </div>
-
-          <div class="column center aligned">			
-            <a href="https://t.me/parvazhubBot">
-              <button class="ui blue tiny button telegram-button" style=" margin-top: 0 !important;margin-bottom: 10px !important;">				
-                <span class="telegram-announce">Telegram Bot</span>
-                <%= image_tag "static/telegram.png",{class:"telegram-icon"} %>		
-              </button>  
-            </a>
+        <div class="column center aligned">	
+          <div style="padding:1em">
             <a href="https://cafebazaar.ir/app/com.parvazhub.android/?l=fa">
-              <%= image_tag "static/cafebazaar.png",{id:"cafe-bazaar"} %>		
+              <span class="telegram-announce">اپلیکیشن اندروید</span>
+              <%= image_tag "static/bazar.png",{id:"cafe-bazaar"} %>		
             </a>
           </div>  
+          <div>
+            <a href="https://t.me/parvazhubBot">
+                <span class="telegram-announce">بات تلگرام پروازهاب</span>
+                <%= image_tag "static/telegram.png",{class:"telegram-icon"} %>		
+            </a>
+          </div>
+        </div>  
 
-          <div class="two column center aligned" style="text-align: right;line-height: 1.9em;color: #403f3f;direction:rtl; font-size:0.8em">	
-            <div>
+        <div class="two column center aligned" style="text-align: right;line-height: 1.9em;color: #403f3f;direction:rtl; font-size:0.8em">	
+          <div>
             <a href="<%= supplier_review_index_page_path %>" target="_blank" style="font-size:1.2em"> 
               <i class="comments icon"></i>
               <b>
-                از تجربه خریدتان در سایت‌ها برای بقیه بنویسید.
+                 تجربه خریدتان از سایت‌ها را با بقیه به اشتراک بگذارید.
               </b>
             </a>
-              <br/>
-              <a href="<%= airline_review_index_page_path %>" target="_blank" style="font-size:1.2em"> 
-                <i class="comments icon"></i>
-                <b>
-                به هر ایرلاینی چه امتیازی می‌دهید؟
-                </b>
-              </a>
-              </div> 
-            </div>
+            <br/>
+            <a href="<%= airline_review_index_page_path %>" target="_blank" style="font-size:1.2em"> 
+              <i class="comments icon"></i>
+              <b>
+              به خطوط هوایی چه امتیازی می‌دهید؟
+              </b>
+            </a>
+          </div> 
         </div>
-
-        <div class="five column row center aligned" style="border-top:1px #e0e0e0 solid">
-           
-          <p style="color:#403f3f; direction:rtl; font-size:0.9em;line-height:1.8em;">
-          پروازهاب مسئولیتی در قبال خرید از هیچ‌کدام از سایت‌ها ندارد. 
-           از طریق ایمیل salam@parvazhub.com و 
-                <a href="https://t.me/parvazhub_com"> تلگرام </a>
-              همیشه در دسترس هستیم.
-              <br>
-              تمام حقوق برای پروازهاب محفوظ است.
-              
-          </p>
-          <p style="color:#424040; direction:ltr; font-size:0.8em;line-height:1em;width:100%">
-          <%= Time.current.year %>  - V.1.4 
-          <br/>
-           
-          </p>
-        </div>
-
+        
       </div>
     </div>
+  </div>
 
   <div class="ui basic modal waiting" style="left: initial;text-align: center;font-size: x-large;">
     <div class="description">

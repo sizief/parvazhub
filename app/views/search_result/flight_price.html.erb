@@ -39,8 +39,8 @@
                         </td>
                         <td>
                             <a style="color:black" href="<%= redirect_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],@flight.id,flight_price[:id],'website') %>"  target= "_blank" rel="nofollow">                    
-                                <%= supplier_logo_for flight_price[:supplier_english_name] %>
-                                وب‌سایت <%= flight_price[:supplier_persian_name] %> 
+                                <%= supplier_logo_for flight_price[:supplier_english_name], false %>
+                                 <%= flight_price[:supplier_persian_name] %> 
                             </a>
                             <a style="padding-top:6px; display: block;font-size: 0.8em;" href="<%= supplier_review_page_path flight_price[:supplier_english_name]  %>" >
                                 <i class=" comments large icon"></i>

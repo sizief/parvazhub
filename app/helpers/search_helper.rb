@@ -11,10 +11,11 @@ module SearchHelper
 
 	end
 
-	def supplier_logo_for (supplier,size=nil)
+	def supplier_logo_for (supplier,grayscale,size=nil)
 		size ||= "tiny"
 		image_url = "/static/suppliers/" + supplier + "-logo.png"
-		image_tag image_url , class: "image ui supplier-logo #{size} flight-price-logo"
+		grayscale_class = grayscale ? "grayscale" : ""
+		image_tag image_url , class: "image ui supplier-logo #{size} flight-price-logo #{grayscale_class}"
 	end
 
 	def hour_to_human (time)

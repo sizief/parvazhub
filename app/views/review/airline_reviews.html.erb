@@ -1,6 +1,6 @@
 <%= render 'layouts/header' %>
-<% provide(:title,"پروازهاب:  #{@airline_name}")  %>
-<% provide(:description,"نظر مسافران  #{@airline_name}")  %>
+<% provide(:title,"#{@airline_name} | نظر کاربران و مسافران | پروازهاب")  %>
+<% provide(:description,"نظر مسافران  #{@airline_name} را در پروازهاب بخوانید و نظر و انتقاد خودتان را ثبت کنید")  %>
 
 <div class="ui container" id="search-results-container" style="direction:rtl">
 
@@ -18,37 +18,44 @@
             <span class="rate-total-count" >
                 از مجموع <%= @rate_count %> نظر
             </span>
-            
-                <button class="ui blue button web-font review-button" id="review-button">
-                    به  <%= @airline_name %>     امتیاز دهید!
-                </button>
-        
+            <button class="ui blue button web-font review-button" id="review-button">
+                به  <%= @airline_name %>     امتیاز دهید!
+            </button>
         </div>
-        
-        
     </div>
     
-        <% @reviews.each do |review| %>
-            <div class="ui grid review-section" id="<%= review.id %>">
-                <div class="five wide column">
-                    <div class="review-author">
-                        <% if review.author.empty? %>
-                            ناشناس
-                        <% else %>
-                            <%= review.author %>
-                        <% end %>
-                    </div>
-                    <div class="review-date"><%= review.created_at.to_date.to_parsi.strftime " %-d %B %y"  %></div>
-                    <% unless review.rate.nil? %>
-                        <div class="review-rate"><%= get_star_icon(5,review.rate,"yellow","small").html_safe %></div>
+    <% if @reviews.empty? %>
+        <div style="font-size:1.5em;">
+            <i class="smile outline loading yellow icon"></i>
+            هنوز نظری ثبت نشده. اولین نفر باشید که در مورد 
+            <%= @airline_name %>  
+            نظر می‌دهید
+        </div>
+    <% end %>
+
+    <% @reviews.each do |review| %>
+        <div class="ui grid review-section" id="<%= review.id %>">
+            <div class="five wide column">
+                <div class="review-author">
+                    <% if review.author.empty? %>
+                        ناشناس
+                    <% else %>
+                        <%= review.author %>
                     <% end %>
                 </div>
-                <div class="eleven wide column">
-                    <%= review.text %>
-                </div>
+                <div class="review-date"><%= review.created_at.to_date.to_parsi.strftime " %-d %B %y"  %></div>
+                <% unless review.rate.nil? %>
+                    <div class="review-rate"><%= get_star_icon(5,review.rate,"yellow","small").html_safe %></div>
+                <% end %>
             </div>
-        <% end %>
+            <div class="eleven wide column">
+                <%= review.text %>
+            </div>
+        </div>
+    <% end %>
+
     <div id="review-register-alert" style="padding-top:1em;"></div>
+
     <div id="review-register-form">
         <%= form_tag(register_review_path, method: :post, class: "ui form", remote: true) do %>	
             <h4 class="ui dividing header">نظرتان در مورد کیفیت پروازهای 
