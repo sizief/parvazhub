@@ -15,9 +15,7 @@ class Suppliers::Ghasedak < Suppliers::Base
     begin
       response = RestClient::Request.execute(method: :get, url: "#{URI.parse(url+params)}", proxy: nil,payload: params)
     rescue => e
-      ActiveRecord::Base.connection_pool.with_connection do
-        SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
-      end
+      update_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
       return {status:false}
     end
     return {status:true,response: response.body}
@@ -28,9 +26,7 @@ class Suppliers::Ghasedak < Suppliers::Base
       flight_id = nil
       flight_prices, flight_ids = Array.new(), Array.new()
       json_response = JSON.parse(response[:response])
-      ActiveRecord::Base.connection_pool.with_connection do
-        SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
-      end
+      update_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
       
       json_response["data"].each do |flight|
 
@@ -64,17 +60,7 @@ class Suppliers::Ghasedak < Suppliers::Base
 
       end #end of each loop
       
-    unless flight_prices.empty?
-      ActiveRecord::Base.connection_pool.with_connection do
-        FlightPrice.import flight_prices, validate: false
-        FlightPriceArchive.archive flight_prices
-        SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
-      end
-    else
-      ActiveRecord::Base.connection_pool.with_connection do
-        SearchHistory.append_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
-      end
-    end
+    complete_import flight_prices, search_history_id
     return flight_ids
   end
 

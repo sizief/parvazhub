@@ -91,9 +91,10 @@ class SupplierSearch
   def search_supplier(supplier_name,supplier_class)
     search_history = nil
     ActiveRecord::Base.connection_pool.with_connection do 
-      search_history = SearchHistory.create(supplier_name:"#{supplier_name}",
+      search_history = SearchHistory.create(supplier_name:"#{supplier_name.downcase}",
                                             route_id:route.id,
                                             departure_time: date,
+                                            successful: false,
                                             status:"#{search_initiator}(#{Time.now.strftime('%M:%S')})")
     end  
     supplier = supplier_class.constantize.new(origin: origin,

@@ -58,9 +58,8 @@ class Suppliers::Flightio < Suppliers::Base
     flight_prices, flight_ids = Array.new(), Array.new()
       doc = Nokogiri::HTML(response[:response])
       doc = doc.xpath('//div[@class="search-result flights-boxs depart"]')
-      ActiveRecord::Base.connection_pool.with_connection do 
-        SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
-      end
+      update_status search_history_id, "Extracting(#{Time.now.strftime('%M:%S')})"
+
       doc.each do |flight|
         price = flight['amount']
         airline_code = flight['airline'].tr(",","")
@@ -97,19 +96,10 @@ class Suppliers::Flightio < Suppliers::Base
         flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier: supplier_name.downcase , flight_date:"#{date}", deep_link:"#{deeplink_url}")
         
       end #end of each loop
-      
-    unless flight_prices.empty?
-      ActiveRecord::Base.connection_pool.with_connection do
-        FlightPrice.import flight_prices, validate: false
-        FlightPriceArchive.archive flight_prices
-        SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
-      end
-    else
-      ActiveRecord::Base.connection_pool.with_connection do
-        SearchHistory.append_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
-      end
-    end
+    complete_import flight_prices, search_history_id
     return flight_ids    
   end
+
+ 
 
 end

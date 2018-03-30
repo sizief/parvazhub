@@ -48,4 +48,8 @@ class Supplier < ApplicationRecord
       supplier.save 
     end  
   end
+
+  def get_active_suppliers
+    Supplier.where(status: true)
+  end
 end

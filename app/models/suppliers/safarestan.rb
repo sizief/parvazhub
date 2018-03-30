@@ -42,7 +42,7 @@ class Suppliers::Safarestan < Suppliers::Base
           response = response.body
         end
       rescue => e
-        SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
+        update_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
         return {status:false}
       end
       return {status:true,response: response}
@@ -51,10 +51,7 @@ class Suppliers::Safarestan < Suppliers::Base
     def import_flights(response,route_id,origin,destination,date,search_history_id)
       flight_id = nil
       flight_prices, flight_ids = Array.new(), Array.new()
-     
-      ActiveRecord::Base.connection_pool.with_connection do        
-        SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
-      end
+      update_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
       
       json_response = decode(JSON.parse(response[:response]))
       json_response[0..ENV["MAX_NUMBER_FLIGHT"].to_i].each do |flight|
@@ -84,21 +81,7 @@ class Suppliers::Safarestan < Suppliers::Base
   
       end #end of each loop
         
-      unless flight_prices.empty?
-        ActiveRecord::Base.connection_pool.with_connection do 
-          SearchHistory.append_status(search_history_id,"p done(#{Time.now.strftime('%M:%S')})")        
-          
-          FlightPrice.import flight_prices, validate: false
-          SearchHistory.append_status(search_history_id,"fp(#{Time.now.strftime('%M:%S')})")
-          
-          FlightPriceArchive.archive flight_prices
-          SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
-        end
-      else
-        ActiveRecord::Base.connection_pool.with_connection do        
-          SearchHistory.append_status(search_history_id,"empty (#{Time.now.strftime('%M:%S')})")
-        end
-      end
+      complete_import flight_prices, search_history_id
       return flight_ids
     end
   
