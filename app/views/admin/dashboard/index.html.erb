@@ -5,8 +5,8 @@
 		<div class="ui label">
 			User Search all: <%= user_search_history_all %>
 		</div>
-		</div>
-		<div class="row" style="direction: rtl">
+	</div>
+	<div class="row" style="direction: rtl">
 		<div class="ui small seven statistics" >
 			<% 0.upto(6).each do |x| %>
 				<div class=" green statistic" >
@@ -126,38 +126,33 @@
 
   	<div class="ui divider"></div>
 
+	<% if @show_search_history %>  
+		<div class="row" style="padding: 1em">
+			<div class="ui label">
+				Search History: <%= search_history_all %>
+			</div>
+		</div>
+		<div class="row" style="direction: rtl">
+			<div class="ui small seven statistics" >
+				<% 0.upto(6).each do |x| %>
+					<div class="orange statistic" >
+						<div class="value ">
+							<%= search_history Date.today-x %>
+						</div>
+						<div class="label web-font">
+							<%= (Date.today-x).to_parsi.strftime "%A %d "  %>
+						</div>
+					</div>
+				<% end %>
+			</div>
+		</div>
+
+		<div class="ui divider"></div>
+	<% end %>
+
+
   	<div class="row" style="padding: 1em">
-  		<div class="ui label">
-  			Search History: <%= search_history_all %>
-		</div>
-	</div>
-	<div class="row" style="direction: rtl">
-		<div class="ui small seven statistics" >
-  			<% 0.upto(6).each do |x| %>
-	  			<div class="orange statistic" >
-		  			<div class="value ">
-	  					<%= search_history Date.today-x %>
-	  				</div>
-		  			<div class="label web-font">
-	  					<%= (Date.today-x).to_parsi.strftime "%A %d "  %>
-	  				</div>
-	  			</div>
-  			<% end %>
-  		</div>
-  	</div>
-
-	<div class="ui divider"></div>
-
-  	<div class="row" style="padding: 1em">
-  		<div class="ui label">
-  			Proxy all: <%= Proxy.count %>
-		</div>
-
-		<div class="ui label">
-  			Proxy active: <%= Proxy.where(status:"active").count %>
-		</div>
-
-		<div class="ui label">
+	    <div class="ui label">
 			Telegram User: <%= Telegram::User.count %>
 		</div>
 		  

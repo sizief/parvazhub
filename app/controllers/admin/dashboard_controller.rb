@@ -31,6 +31,7 @@ class Admin::DashboardController < ApplicationController
 
   def index
     @channels = ["website","telegram","android","ionic"]
+    @show_search_history = false
   end
       
   def redirect

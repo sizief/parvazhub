@@ -48,12 +48,11 @@ module Admin::DashboardHelper
 	end
 
 	def redirect_all(channel=nil)
-		if channel.nil?
-			redirect = Redirect.all
-		else
-			redirect = Redirect.where(channel: channel)
-		end
-	  redirect.count
+	  if channel.nil?
+		redirect = Redirect.all.count
+	  else
+		redirect = Redirect.where(channel: channel).count
+	  end
 	end
 
 	def notification date
