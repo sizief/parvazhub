@@ -91,3 +91,8 @@
     cron: '0 0 4 * * *'
     args: ["type": "daily"]
     class: BackgroundSearchWorker
+
+#hourly monitoring 
+  Monitor_Search:
+    cron: '0 0 * * * *'
+    class: SearchMonitorWorker

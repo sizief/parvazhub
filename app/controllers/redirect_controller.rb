@@ -23,8 +23,8 @@ require 'uri'
 
     unless is_bot(request.user_agent)
       redirect.save 
-      text="👊 [#{Rails.env}] #{request.user_agent} #{request.remote_ip} \n #{@flight_price.supplier}"
-      TelegramMonitoringWorker.perform_async(text)
+      #text="👊 [#{Rails.env}] #{request.user_agent} #{request.remote_ip} \n #{@flight_price.supplier}"
+      #TelegramMonitoringWorker.perform_async(text)
     end
   end
 
