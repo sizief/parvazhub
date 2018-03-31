@@ -2,11 +2,44 @@ class Proxy < ApplicationRecord
     validates :ip, :uniqueness => { :scope => :port,
     :message => "already saved" }
 
+    def self.new_proxy
+      active_proxies = Proxy.where(status:"active")
+      random_proxy = active_proxies[rand(active_proxies.count)]
+      if random_proxy.nil? 
+        return nil
+      else
+        proxy_url = "https://"+random_proxy.ip.to_s+":"+random_proxy.port.to_s
+      end
+    end
+
+    def self.set_status(proxy_url,status)
+      ip = proxy_url.split(":")[1][2..-1] 
+      port = proxy_url.split(":")[2]
+      proxy = Proxy.find_by(ip: ip, port: port)
+      unless proxy.nil? 
+        proxy.status = status
+        proxy.save
+      end
+    end
+
+    def check_validity(ip,port)
+      proxy = "https://"+ip.to_s+":"+port.to_s
+      begin
+        RestClient::Request.execute(method: :get, url: 'http://api.ipify.org?format=json',
+                            timeout: 4, proxy: proxy)
+      rescue
+          return false
+      end
+      return true
+    end
+    
     def update_proxy
       import_free_proxy_list
       import_ssl_proxies
       #import_proxynova 
     end
+
+    private
     
     def import_proxynova
       proxy_list_page = "https://www.proxynova.com/proxy-server-list/"
@@ -41,7 +74,6 @@ class Proxy < ApplicationRecord
 
     def import_free_proxy_list
       proxy_list_page = "https://free-proxy-list.net/"
-      #response = RestClient.get("#{URI.parse(proxy_list_page)}")
       response = RestClient::Request.execute(method: :get, url: "#{URI.parse(proxy_list_page)}", timeout: 10)
       html_page = Nokogiri::HTML(response)
       doc = html_page.xpath('//*[@id="proxylisttable"]/tbody/tr')
@@ -84,35 +116,8 @@ class Proxy < ApplicationRecord
       end
     end
     
-    def check_validity(ip,port)
-      proxy = "https://"+ip.to_s+":"+port.to_s
-      begin
-        RestClient::Request.execute(method: :get, url: 'http://api.ipify.org?format=json',
-                            timeout: 4, proxy: proxy)
-      rescue
-          return false
-      end
-      return true
-    end
 
-    def self.new_proxy
-      active_proxies = Proxy.where(status:"active")
-      random_proxy = active_proxies[rand(active_proxies.count)]
-      if random_proxy.nil? 
-        return nil
-      else
-        proxy_url = "https://"+random_proxy.ip.to_s+":"+random_proxy.port.to_s
-      end
-    end
 
-    def self.set_status(proxy_url,status)
-      ip = proxy_url.split(":")[1][2..-1] 
-      port = proxy_url.split(":")[2]
-      proxy = Proxy.find_by(ip: ip, port: port)
-      unless proxy.nil? 
-        proxy.status = status
-        proxy.save
-      end
-    end
+
 
 end

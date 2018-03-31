@@ -46,19 +46,11 @@
     cron: '0 0 0,12 * * *'
     class: AirportSearchWorker
 
-#notification 
-#  price_alert:
-#    cron: '0 0 8 * * *'
-#    class: NotificationMailerWorker
-
 #proxy
-#  proxy_update:
-#    cron: '0 /60 * * * *'
-#    class: ProxyUpdateWorker
+  proxy_update:
+    cron: '0 /60 * * * *'
+    class: ProxyUpdateWorker
 
-#  proxy_checker:
-#    cron: '0 /61 * * * *'
-#    class: ProxyCheckAllWorker
 
 #flightPrice remover 
   flight_price_remover:
@@ -95,4 +87,4 @@
 #hourly monitoring 
   Monitor_Search:
     cron: '0 0 * * * *'
-    class: SearchMonitorWorker
+    class: MonitorSearchWorker

@@ -1,6 +1,6 @@
 require 'sidekiq-scheduler'
 
-class SearchMonitorWorker
+class MonitorSearchWorker
   include Sidekiq::Worker
   sidekiq_options :retry => true, :backtrace => true
  
@@ -28,10 +28,7 @@ class SearchMonitorWorker
     search_history = SearchHistory.where(created_at: (Time.now - 1.hours)..Time.now)
     Supplier.new.get_active_suppliers.each do |supplier|
       supplier_search = search_history.where(supplier_name: supplier.name.downcase)
-      if supplier_search.count == 0 
-        failure_percentage = 100
-        failed_suppliers << "#{supplier.name.downcase}: #{failure_percentage}"
-      else
+      unless supplier_search.count == 0 
         failure_percentage = supplier_search.where(successful: false).count*100/supplier_search.count
         failed_suppliers << "#{supplier.name.downcase}: #{failure_percentage}" if failure_percentage > 20
       end

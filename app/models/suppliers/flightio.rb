@@ -31,7 +31,8 @@ class Suppliers::Flightio < Suppliers::Base
                "FPass": "Pw4FlightioAppAndroid" }
     response = Excon.post(get_flight_url,
                           :body => request_params.to_json,
-                          :headers => headers)
+                          :headers => headers,
+                          :proxy => Proxy.new_proxy)
     return JSON.parse(response.body)
   end
   
@@ -46,7 +47,7 @@ class Suppliers::Flightio < Suppliers::Base
       search_flight_url = "https://flightio.com/fa/FlightResult/ListTable?FSL_Id="+ request_id
       deep_link = "https://flightio.com/fa/FlightPreview/Detail?FSL_Id=" + request_id + "&CombinationID="
       headers = {"FUser": "FlightioAppAndroid", "FPass": "Pw4FlightioAppAndroid" }
-      response = Excon.get(search_flight_url,:headers => headers)
+      response = Excon.get(search_flight_url,:headers => headers,:proxy => Proxy.new_proxy)
     rescue => e
       return {status:false}
     end
