@@ -33,6 +33,10 @@ class Admin::DashboardController < ApplicationController
     @channels = ["website","telegram","android","ionic"]
     @show_search_history = false
   end
+
+  def user
+    @users = User.all
+  end
       
   def redirect
     today_redirects =  calculate_redirects(Date.today, Date.today+1)

@@ -11,36 +11,35 @@ class SearchResultController < ApplicationController
   def search 
     origin_name = params[:origin_name].downcase
     destination_name = params[:destination_name].downcase
-    if params[:date] == "today"
-        date = Date.today.to_s
-    elsif params[:date] == "tomorrow"
-        date = (Date.today+1).to_s
-    else
-        date = params[:date]
-    end
+    date = date_to_code params[:date]
+    channel = "website"
+    user_id = read_cookie 
+
+    route = Route.new.get_route_by_english_name(origin_name,destination_name)
+    user = UserController.new.create_or_find_user_by_id({user_id: user_id , channel: channel, user_agent_request: request.user_agent})
+    set_cookie user.id
 
     if date < Date.today.to_s 
         redirect_to  action: 'search', origin_name: origin_name, destination_name: destination_name, date: "today"
         return
     end
 
-    route = Route.new.get_route_by_english_name(origin_name,destination_name)
     if route.nil? 
         notfound
     else 
-        flights = get_flight_results(route,date,"website",request.user_agent)
+        flights = get_flight_results({route:route, date: date, channel:"website", user_agent_request: request.user_agent, user_id: user.id})
         index(route,date,flights)
     end
   end
 
-  def get_flight_results(route,date,channel,user_agent_request)
-    if is_bot(user_agent_request)
-        # do not search supplier, just get results from db
-        flights = get_flights(date,route,true)
+  def get_flight_results args
+    #args = {route,date,channel,user_agent_request,user_id}
+    if is_bot(args[:user_agent_request])
+      # do not search supplier, just get results from db
+      flights = get_flights(args[:date], args[:route],true)
     else
-        text = "☝️ [#{Rails.env} | #{channel}] #{route.id}, #{date} \n #{user_agent_request}"
-        UserSearchHistoryWorker.perform_async(text,route.id,date,channel) unless Rails.env.test?
-        flights = get_flights(date,route,false)
+      UserSearchHistoryWorker.perform_async(args[:route].id,args[:date],args[:channel],args[:user_id]) unless Rails.env.test?
+      flights = get_flights(args[:date],args[:route],false)
     end
     return flights
   end
@@ -99,9 +98,9 @@ class SearchResultController < ApplicationController
     render :flight_price
   end
 
-  def get_flight_price(flight,channel,request_user_agent)
-    unless is_bot(request_user_agent)
-        text = "✌️ [#{Rails.env} | #{channel}] #{flight.id} \n #{request_user_agent}"
+  def get_flight_price(flight,channel,user_agent_request)
+    unless is_bot(user_agent_request)
+        text = "✌️ [#{Rails.env} | #{channel}] #{flight.id} \n #{user_agent_request}"
         UserFlightPriceHistoryWorker.perform_async(channel,text,flight.id) unless Rails.env.test?
     end
     FlightResult.new.get_flight_price(flight)
@@ -133,6 +132,16 @@ class SearchResultController < ApplicationController
       "فردا"
     else
       date.to_date.to_parsi.strftime ' %-d %B' 
+    end
+  end
+
+  def date_to_code date
+    if date == "today"
+      date = Date.today.to_s
+    elsif date == "tomorrow"
+      date = (Date.today+1).to_s
+    else
+      date = date
     end
   end
 

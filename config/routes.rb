@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 		get 'dashboard/price_alert'
 		get 'dashboard/redirect'
 		get 'dashboard/review'
+		get 'dashboard/user'
 		post 'dashboard/supplier_control', to:'dashboard#update_supplier'
 
 		mount Sidekiq::Web => '/sidekiq'

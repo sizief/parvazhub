@@ -101,8 +101,8 @@ class ApiController < ApplicationController
       end
     end
 
-    def get_flight_price(flight,channel,request_user_agent) 
-      SearchResultController.new.get_flight_price(flight,channel,request_user_agent)
+    def get_flight_price(flight,channel,user_agent_request) 
+      SearchResultController.new.get_flight_price(flight,channel,user_agent_request)
     end
 
     def date_is_valid date
@@ -127,7 +127,9 @@ class ApiController < ApplicationController
 
     def get_flights(route,date,channel,user_agent_request)
       results = SearchResultController.new
-      results.get_flight_results(route,date,channel,user_agent_request)
+      user_id = UserController.new.get_app_user
+      args = {user_id: user.id, route: route, date: date, channel: channel, user_agnet_request: user_agent_request}
+      results.get_flight_results(args)
     end
 
     def search_params

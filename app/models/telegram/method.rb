@@ -20,17 +20,9 @@ class Telegram::Method
     #return response
   end
 
-  def register_user(telegram_id,first_name,last_name,username)
-    begin
-      Telegram::User.create(telegram_id: telegram_id, first_name: first_name, last_name: last_name, username: username)
-    rescue ActiveRecord::RecordNotUnique
-    end
-  end
-
-  def register_search_query(telegram_id, chat_id)
+  def register_search_query(user, chat_id)
      begin
-      telegram_user = Telegram::User.find_by(telegram_id: telegram_id)
-      Telegram::SearchQuery.create(telegram_user_id: telegram_user.id, chat_id: chat_id)
+      Telegram::SearchQuery.create(telegram_user_id: user.telegram_id, chat_id: chat_id)
     rescue ActiveRecord::RecordNotUnique
     end
   end
@@ -157,8 +149,6 @@ class Telegram::Method
     
   end
 
-  
-
   def send_search_result(chat)
     text = "<b> 📣 پروازهای #{chat.origin} به #{chat.destination} #{chat.date}</b> \n"
     origin_code = City.get_city_code_based_on_name chat.origin
@@ -166,10 +156,11 @@ class Telegram::Method
     date = format_date chat.date
     
     route = Route.find_by(origin:"#{origin_code}",destination:"#{destination_code}")
-    flights = SearchResultController.new.get_flight_results(route,
-                                                     date,
-                                                     "telegram",
-                                                     "telegram")
+    flights = SearchResultController.new.get_flight_results({route: route,
+                                                     date: date,
+                                                     channel: "telegram",
+                                                     user_agent_request: "telegram",
+                                                     user_id: chat.telegram_user_id})
     
     if flights.empty?
       text += "برای این مسیر در این تاریخ متاسفانه پروازی پیدا نکردم. از صفحه کلید پایین صفحه می‌تونی روزهای دیگر را درخواست کنی و یا مسیر دیگری را جستجو کنی: /start"
@@ -242,8 +233,8 @@ class Telegram::Method
 
     is_new_message = Telegram::UpdateId.create(update_id: update_id)
     if is_new_message.save
-      register_user(telegram_id,first_name,last_name,username)
-      register_search_query(telegram_id, chat_id)
+      user = create_or_find_user(telegram_id,first_name,last_name,username)
+      register_search_query(user, chat_id)
       select_answer(text,chat_id)
     end
   end
@@ -302,6 +293,17 @@ class Telegram::Method
     end
     keyboard_lines.push(["جستجوی مجدد"])
     return keyboard_lines  
+  end
+
+  private
+
+  def create_or_find_user(telegram_id,first_name,last_name,username)
+    user = UserController.new.create_or_find_user_by_telegram({telegram_id: telegram_id, 
+                                                          channel: "telegram", 
+                                                          user_agent_request: "telegram",
+                                                          first_name: first_name,
+                                                          last_name: last_name,
+                                                          user_name: username})
   end
 
 end

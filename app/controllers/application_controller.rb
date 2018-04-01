@@ -11,12 +11,20 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def is_bot(request_user_agent)
-    if request_user_agent.nil?
+  def is_bot(user_agent_request)
+    if user_agent_request.nil?
       return false 
     else
-      return ["Googlebot","yandex","MJ12bot","Baiduspider","bingbot","Yahoo!","spbot","parsijoo","CloudFlare","SafeDNSBot","Dataprovider","beambot","BLEXBot","panscient","bot","netEstate","crawler","Crawler"].any? {|word| request_user_agent.include? word}
+      return ["Googlebot","yandex","MJ12bot","Baiduspider","bingbot","Yahoo!","spbot","parsijoo","CloudFlare","SafeDNSBot","Dataprovider","beambot","BLEXBot","panscient","bot","netEstate","crawler","Crawler"].any? {|word| user_agent_request.include? word}
     end
+  end
+
+  def set_cookie user_id
+    cookies.permanent.signed[:user_id] = user_id
+  end
+
+  def read_cookie 
+    cookies.permanent.signed[:user_id]
   end
 
 end
