@@ -1,4 +1,7 @@
 class Admin::DashboardController < ApplicationController
+  before_action :authenticate_user!
+  before_action :require_admin
+
   def user_search_history
   	@ush = UserSearchHistory.order(id: :desc).first(500)
   end

@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
 
   @suppliers = Supplier.where(status: true)
 
-  
   def redirect_subdomain
     if request.host == 'www.parvazhub.com'
       redirect_to 'https://parvazhub.com' + request.fullpath, :status => 301
@@ -19,6 +18,13 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def require_admin
+    unless current_user and current_user.role == 'admin'
+      flash[:error] = "You are not an admin"
+      redirect_to root_path
+    end
+  end
+
   def set_cookie_user_id user_id
     cookies.permanent.signed[:user_id] = user_id
   end
@@ -27,17 +33,14 @@ class ApplicationController < ActionController::Base
     cookies.permanent.signed[:user_id]
   end
 
-  def login_user args
+  def automatic_login args
     user_id = read_cookie_user_id
     user = UserController.new.create_or_find_user_by_id({user_id: user_id, 
                                                         channel: args[:channel], 
                                                         user_agent_request: args[:user_agent_request]})
     set_cookie_user_id user.id
+    sign_in(:user, user)
     user
-  end
-
-  def current_user
-    User.find_by(id: read_cookie_user_id)
   end
 
 end

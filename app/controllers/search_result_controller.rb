@@ -14,8 +14,8 @@ class SearchResultController < ApplicationController
     date = date_to_code params[:date]
     channel = "website"
     route = Route.new.get_route_by_english_name(origin_name,destination_name)
-    user = login_user({channel: channel, user_agent_request: request.user_agent})
-    
+    user = automatic_login({channel: channel, user_agent_request: request.user_agent})
+
     if date < Date.today.to_s 
         redirect_to  action: 'search', origin_name: origin_name, destination_name: destination_name, date: "today"
         return
@@ -35,7 +35,8 @@ class SearchResultController < ApplicationController
       # do not search supplier, just get results from db
       flights = get_flights(args[:date], args[:route],true)
     else
-      UserSearchHistoryWorker.perform_async(args[:route].id,args[:date],args[:channel],args[:user]) unless Rails.env.test?
+      UserSearchHistory.create(route_id: args[:route].id, departure_time: args[:date], channel: args[:channel], user: args[:user]) if Rails.env.development?
+      UserSearchHistoryWorker.perform_async(args[:route].id,args[:date],args[:channel],args[:user].id) if Rails.env.production?
       flights = get_flights(args[:date],args[:route],false)
     end
     return flights
@@ -99,7 +100,8 @@ class SearchResultController < ApplicationController
 
   def get_flight_price(flight,channel,user_agent_request,user)
     unless is_bot(user_agent_request)
-        UserFlightPriceHistoryWorker.perform_async(channel,flight.id,user) unless Rails.env.test?
+        UserFlightPriceHistory.create(flight_id: flight.id,channel: channel, user: user) if Rails.env.development?
+        UserFlightPriceHistoryWorker.perform_async(channel,flight.id,user.id) if Rails.env.production?
     end
     FlightResult.new.get_flight_price(flight)
   end

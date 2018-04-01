@@ -10,6 +10,11 @@ class User < ApplicationRecord
   has_many :user_flight_price_histories, dependent: :destroy
   has_many :telegram_search_queries, class_name: "Telegram::SearchQuery",  dependent: :destroy
   has_many :redirects
+  after_initialize :set_default_role, :if => :new_record?
+
+  def set_default_role
+    self.role ||= :user
+  end
  
   def create_or_find_user_by_id args
     user = User.find_by(id: args[:user_id])
