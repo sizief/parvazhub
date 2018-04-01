@@ -157,8 +157,13 @@
   		</div>	
 	 
 	  	<div class="ui label">
-			Telegram User: <%= Telegram::User.count %>
+		  Website User: <%= User.where(channel: "website").count %>
 		</div>
+
+		<div class="ui label">
+		  Telegram User: <%= User.where(channel: "telegram").count %>
+		</div>
+		  
 		  
 		<div class="ui label">
 		  Reviews: <%= Review.count %>

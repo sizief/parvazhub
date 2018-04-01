@@ -19,12 +19,25 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def set_cookie user_id
+  def set_cookie_user_id user_id
     cookies.permanent.signed[:user_id] = user_id
   end
 
-  def read_cookie 
+  def read_cookie_user_id
     cookies.permanent.signed[:user_id]
+  end
+
+  def login_user args
+    user_id = read_cookie_user_id
+    user = UserController.new.create_or_find_user_by_id({user_id: user_id, 
+                                                        channel: args[:channel], 
+                                                        user_agent_request: args[:user_agent_request]})
+    set_cookie_user_id user.id
+    user
+  end
+
+  def current_user
+    User.find_by(id: read_cookie_user_id)
   end
 
 end

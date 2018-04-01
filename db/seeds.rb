@@ -80,7 +80,7 @@ Supplier.all.each do |supplier|
 end
 
 =end
-User.create(email: "ali@parvazhub.com")
+User.create(email: "ali@parvazhub.com", role: "admin")
 User.create(email: "bot@parvazhub.com")
 User.create(email: "job@parvazhub.com")
 User.create(email: "app@parvazhub.com")

@@ -78,7 +78,7 @@ class ApiController < ApplicationController
       flight = Flight.find_by_id(flight_price_params[:id])
   
      if flight
-        body = get_flight_price(flight,channel,user_agent_request)
+        body = get_flight_price(flight,channel,user_agent_request,current_user)
         status = true  
      else 
         body = "Flight ID is invalid or out of date or sold out." unless flight
@@ -101,8 +101,8 @@ class ApiController < ApplicationController
       end
     end
 
-    def get_flight_price(flight,channel,user_agent_request) 
-      SearchResultController.new.get_flight_price(flight,channel,user_agent_request)
+    def get_flight_price(flight,channel,user_agent_request,user) 
+      SearchResultController.new.get_flight_price(flight,channel,user_agent_request,user)
     end
 
     def date_is_valid date
@@ -127,8 +127,7 @@ class ApiController < ApplicationController
 
     def get_flights(route,date,channel,user_agent_request)
       results = SearchResultController.new
-      user_id = UserController.new.get_app_user
-      args = {user_id: user.id, route: route, date: date, channel: channel, user_agnet_request: user_agent_request}
+      args = {user: current_user, route: route, date: date, channel: channel, user_agnet_request: user_agent_request}
       results.get_flight_results(args)
     end
 
@@ -138,6 +137,10 @@ class ApiController < ApplicationController
 
     def flight_price_params
       params.permit(:id)
+    end
+    
+    def current_user
+      UserController.new.get_app_user
     end
 
 end

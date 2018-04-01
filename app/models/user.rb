@@ -6,7 +6,10 @@ class User < ApplicationRecord
   enum channel: [:website, :telegram, :app]
   enum role: [:admin, :user]
   validates :telegram_id, :uniqueness => true,  :allow_blank => true
-  has_many :user_Search_histories
+  has_many :user_search_histories, dependent: :destroy
+  has_many :user_flight_price_histories, dependent: :destroy
+  has_many :telegram_search_queries, class_name: "Telegram::SearchQuery",  dependent: :destroy
+  has_many :redirects
  
   def create_or_find_user_by_id args
     user = User.find_by(id: args[:user_id])

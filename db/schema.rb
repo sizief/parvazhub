@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180331100923) do
+ActiveRecord::Schema.define(version: 20180401144331) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -181,7 +181,9 @@ ActiveRecord::Schema.define(version: 20180331100923) do
     t.integer  "price"
     t.string   "supplier"
     t.string   "deep_link"
+    t.integer  "user_id"
     t.index ["supplier"], name: "index_redirects_on_supplier", using: :btree
+    t.index ["user_id"], name: "index_redirects_on_user_id", using: :btree
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -243,25 +245,17 @@ ActiveRecord::Schema.define(version: 20180331100923) do
   end
 
   create_table "telegram_search_queries", force: :cascade do |t|
-    t.integer "telegram_user_id"
     t.string  "origin"
     t.string  "destination"
     t.string  "date"
     t.string  "flight_price"
     t.string  "chat_id"
-    t.index ["telegram_user_id"], name: "index_telegram_search_queries_on_telegram_user_id", using: :btree
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_telegram_search_queries_on_user_id", using: :btree
   end
 
   create_table "telegram_update_ids", force: :cascade do |t|
     t.string "update_id"
-  end
-
-  create_table "telegram_users", force: :cascade do |t|
-    t.string "telegram_id"
-    t.string "first_name"
-    t.string "last_name"
-    t.string "username"
-    t.index ["telegram_id"], name: "index_telegram_users_on_telegram_id", unique: true, using: :btree
   end
 
   create_table "temp_airports", force: :cascade do |t|
@@ -289,6 +283,8 @@ ActiveRecord::Schema.define(version: 20180331100923) do
     t.string   "channel"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "user_id"
+    t.index ["user_id"], name: "index_user_flight_price_histories_on_user_id", using: :btree
   end
 
   create_table "user_search_histories", force: :cascade do |t|
@@ -314,20 +310,21 @@ ActiveRecord::Schema.define(version: 20180331100923) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
-    t.string   "telegram"
-    t.string   "first_name"
-    t.string   "last_name"
     t.string   "channel"
     t.string   "telegram_id"
     t.integer  "role"
+    t.string   "first_name"
+    t.string   "last_name"
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
   add_foreign_key "most_search_routes", "routes"
   add_foreign_key "notifications", "routes"
+  add_foreign_key "redirects", "users"
   add_foreign_key "route_days", "routes"
   add_foreign_key "search_histories", "routes"
-  add_foreign_key "telegram_search_queries", "telegram_users"
+  add_foreign_key "telegram_search_queries", "users"
+  add_foreign_key "user_flight_price_histories", "users"
   add_foreign_key "user_search_histories", "users"
 end

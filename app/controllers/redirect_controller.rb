@@ -19,7 +19,8 @@ require 'uri'
                             flight_id: flight_price.flight_id,
                             price: flight_price.price,
                             supplier: flight_price.supplier,
-                            deep_link: deep_link)                                                      
+                            deep_link: deep_link,
+                            user: current_user)                                                      
 
     unless is_bot(request.user_agent)
       redirect.save 
