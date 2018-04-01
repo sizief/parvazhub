@@ -6,15 +6,16 @@ class UserController < ApplicationController
     else
       user = User.new.create_or_find_user_by_id args
     end
-    return user
+    user
   end
 
   def create_or_find_user_by_telegram args
     if is_bot(args[:user_agent_request])
-      get_bot_user
+      user = get_bot_user
     else
-      User.new.create_or_find_user_by_telegram args
+      user = User.new.create_or_find_user_by_telegram args
     end
+    user
   end
 
   def get_app_user
