@@ -35,8 +35,7 @@ class User < ApplicationRecord
                  :channel => args[:channel], 
                  :password => password,
                  :first_name => args[:first_name],
-                 :last_name => args[:last_name],
-                 :channel => args[:channel])
+                 :last_name => args[:last_name])
   end
 
   def password
