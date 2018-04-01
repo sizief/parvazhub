@@ -2,15 +2,15 @@ class Admin::DashboardController < ApplicationController
   before_action :authenticate_user!
   before_action :require_admin
 
-  def user_search_history
+  def user_search_histories
   	@ush = UserSearchHistory.order(id: :desc).first(500)
   end
 
-  def search_history
+  def search_histories
   	@sh = SearchHistory.includes(:route).order(id: :desc).first(300)
   end
 
-  def supplier_control
+  def suppliers
   	@supplier_list = Supplier.all
   end
 
@@ -21,14 +21,10 @@ class Admin::DashboardController < ApplicationController
   	supplier[:status] = status
   	supplier.save
   	@supplier_list = Supplier.all
-  	render :supplier_control
+  	render :suppliers
   end
 
-  def price_alert
-    @subscribers = Notification.all
-  end
-
-  def review
+  def reviews
     @reviews = Review.all
   end
 
@@ -37,11 +33,11 @@ class Admin::DashboardController < ApplicationController
     @show_search_history = false
   end
 
-  def user
+  def users
     @users = User.all
   end
       
-  def redirect
+  def redirects
     today_redirects =  calculate_redirects(Date.today, Date.today+1)
     all_redirects =  calculate_redirects(Date.today-365, Date.today+1)
     this_week_redirects =  calculate_redirects(Date.today-7, Date.today+1)
@@ -60,7 +56,7 @@ class Admin::DashboardController < ApplicationController
     supplier = Hash[ supplier.sort_by { |key, val| key } ]  
   end
 
-  def user_search_stat
+  def user_search_stats
     user_search_histories = UserSearchHistory.where("created_at >?","2017-09-11")
 
     @user_search_histories_all = user_search_histories.count

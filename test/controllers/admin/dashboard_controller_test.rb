@@ -10,7 +10,7 @@ class Admin::DashboardControllerTest < ActionDispatch::IntegrationTest
   
   test "should get user_search_history" do
     @ush = UserSearchHistory.last
-    get admin_dashboard_user_search_history_url
+    get admin_user_search_histories_path
     assert_response :success
   end
 

@@ -1,0 +1,38 @@
+<% provide(:title,"Search history") %>
+<%= render 'menu' %>
+
+<div class="ui container" style="margin-top: 2em">
+	<table class="ui celled striped table ">
+		<thead>
+			<tr class="center aligned">
+				<th><h4>route</h4></th>
+				<th><h4>Departure Time</h4></th>
+				<th><h4>status</h4></th>
+				<th><h4>suplier</h4></th>
+				<th><h4>successful</h4></th>
+				<th><h4>created at</h4></th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @sh.each do |item|  %>
+			<tr class="center aligned">
+				<td><%= item.route.origin + " - " + item.route.destination %></td>
+				<td><%= item.departure_time %></td>
+				<td>
+					<% if item.successful %>
+						<span class="ui teal label"><%= item.status %></span>
+					<% else %>
+						<span class="ui orange label"><%= item.status %></span>
+					<% end %>
+					<span style="color:gray">
+						<%= (item.updated_at - item.created_at).round.to_s + "s" %>
+					</span>
+				</td>
+				<td><%= item.supplier_name %></td>
+				<td><%= item.successful %></td>
+				<td><%= time_ago_in_words(item.created_at) %></td>
+			</tr>
+			<% end %>
+		</tbody>
+	</table>
+</div>

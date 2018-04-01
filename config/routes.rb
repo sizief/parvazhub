@@ -6,16 +6,15 @@ Rails.application.routes.draw do
 	resources :routes
 
 	namespace :admin do
-		get 'dashboard', to:'dashboard#index'
-		get 'dashboard/user_search_history'
-		get 'dashboard/user_search_stat'
-		get 'dashboard/search_history'
-		get 'dashboard/supplier_control'
-		get 'dashboard/price_alert'
-		get 'dashboard/redirect'
-		get 'dashboard/review'
-		get 'dashboard/user'
-		post 'dashboard/supplier_control', to:'dashboard#update_supplier'
+		get 'dashboard', to:'dashboard#index', as: 'dashboard'
+		get 'dashboard/user_search_histories', as: 'user_search_histories'
+		get 'dashboard/user_search_stats', as: 'user_search_stats'
+		get 'dashboard/search_histories', as: 'search_histories'
+		get 'dashboard/suppliers', as: 'suppliers'
+		get 'dashboard/redirects', as: 'redirects'	
+		get 'dashboard/reviews', as: 'reviews'
+		get 'dashboard/users', as: 'users'
+		post 'dashboard/suppliers', to:'dashboard#update_supplier'
 
 		mount Sidekiq::Web => '/sidekiq'
 	end
