@@ -135,7 +135,7 @@ class Telegram::Method
       text += "به نظر می‌رسد این پرواز پر شده. لطفا پرواز دیگری انتخاب کن"
     else
       flight_prices.each do |flight_price|
-        redirect_link = "https://parvazhub.com/redirect/#{origin_name}-#{destination_name}/#{date}/#{flight_id}/#{flight_price[:id]}/telegram"
+        redirect_link = "https://parvazhub.com/redirect/#{origin_name}-#{destination_name}/#{date}/#{flight_id}/#{flight_price[:id]}/telegram/#{chat.user_id}"
         text += "🚀 <a href=\"#{redirect_link}\">لینک خرید از سایت #{flight_price[:supplier_persian_name]} به قیمت #{number_with_delimiter(flight_price[:price])} تومان </a>  \n\n" 
       end
       text += "\n\n 📣جستجوی مسیر یا تاریخ جدید: \n/start"      

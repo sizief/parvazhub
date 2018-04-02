@@ -8,11 +8,13 @@ require 'uri'
      date: params[:date],
      flight_id: params[:flight_id],
      flight_price_id: params[:flight_price_id],
-     channel: params[:channel]
+     channel: params[:channel],
+     user_id: params[:user_id]
     }
   end
 
   def save_redirect args,flight_price,deep_link,request
+    user = args[:user_id].nil? ? current_user : User.find_by(id: args[:user_id])
     redirect = Redirect.new(channel: args[:channel],
                             user_agent: request.user_agent,
                             remote_ip: request.remote_ip,
@@ -20,7 +22,7 @@ require 'uri'
                             price: flight_price.price,
                             supplier: flight_price.supplier,
                             deep_link: deep_link,
-                            user: current_user)                                                      
+                            user: user)                                                      
 
     unless is_bot(request.user_agent)
       redirect.save 
@@ -38,6 +40,13 @@ require 'uri'
     end
     deep_link += deep_link.include?("?") ? "&" : "?"
     deep_link += "utm_source=parvazhub_com&utm_medium=meta_search&utm_campaign=parvazhub_com"  
+  end
+
+  def app_redirect  
+    user_id = UserController.new.get_app_user.id
+    redirect_to  action: 'redirect', origin_name: params[:origin_name], destination_name: params[:destination_name], date: params[:date],
+                                  flight_id: params[:flight_id], flight_price_id: params[:flight_price_id], 
+                                  channel: params[:channel], user_id: user_id
   end
 
   def redirect

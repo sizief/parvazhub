@@ -42,7 +42,7 @@ class Admin::DashboardController < ApplicationController
   end
 
   def users
-    @users = User.order(id: :desc).first(300)
+    @users = User.left_joins(:user_search_histories).group(:id).order('COUNT(user_search_histories.id) DESC').limit(1000)
   end
       
   def redirects

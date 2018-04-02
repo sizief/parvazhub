@@ -34,13 +34,16 @@ class ApplicationController < ActionController::Base
   end
 
   def automatic_login args
-    user_id = read_cookie_user_id
-    user = UserController.new.create_or_find_user_by_id({user_id: user_id, 
-                                                        channel: args[:channel], 
-                                                        user_agent_request: args[:user_agent_request]})
-    set_cookie_user_id user.id
-    sign_in(:user, user)
-    user
+    unless current_user
+      user_id = read_cookie_user_id
+      user = UserController.new.create_or_find_user_by_id({user_id: user_id, 
+                                                          channel: args[:channel], 
+                                                          user_agent_request: args[:user_agent_request]})
+      set_cookie_user_id user.id
+      sign_in(:user, user)
+      user
+    end
+    current_user
   end
 
 end

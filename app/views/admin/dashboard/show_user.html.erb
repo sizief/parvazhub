@@ -1,7 +1,13 @@
-<% provide(:title, @user.id) %>
+<% provide(:title, @user.id.to_s) %>
 <%= render 'menu' %>
 
 <div class="ui container" style="margin-top: 2em">
+    <h4 class="ui horizontal divider header">
+        User Info
+    </h4>
+    <%= @user.email%> |  <%= @user.first_name %> <%= @user.last_name%>
+
+
     <h4 class="ui horizontal divider header">
         Total
     </h4>
@@ -58,16 +64,14 @@
 		Supplier Page
     </h4>
     <div class="ui relaxed divided list">
-        <% @user.user_search_histories.includes(:route).each do |search| %>
+        <% @user.user_flight_price_histories.each do |search| %>
             <div class="item">
                 <i class="large plane middle aligned icon"></i>
                 <div class="content">
                     <span class="header">
-                        <%= search.route.origin  %>
-                        <%= search.route.destination  %>    
+                        <%= search.flight_id  %>
                     </span>
                     <div class="description">
-                        <%= search.departure_time  %>  |
                         <%= search.channel  %>    |
                         <%= search.created_at  %>    
                     </div>
