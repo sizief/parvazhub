@@ -28,6 +28,10 @@ class Admin::DashboardController < ApplicationController
     @reviews = Review.all
   end
 
+  def show_user
+    @user = User.find(params[:id])
+  end
+
   def index
     @channels = ["website","telegram","android","ionic"]
   end

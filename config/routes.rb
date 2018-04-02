@@ -15,6 +15,7 @@ Rails.application.routes.draw do
 		get 'dashboard/redirects', as: 'redirects'	
 		get 'dashboard/reviews', as: 'reviews'
 		get 'dashboard/users', as: 'users'
+		get 'dashboard/users/:id', to:'dashboard#show_user', as: 'show_user'
 		post 'dashboard/suppliers', to:'dashboard#update_supplier'
 
 		mount Sidekiq::Web => '/sidekiq'
