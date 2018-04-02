@@ -24,22 +24,4 @@ module ApplicationHelper
     suppliers = Supplier.where(status: true)
   end
 
-  def eid_text index
-    case index
-      when 1
-        "آرزوی سالی رنگی"
-      when 2
-        "آرزوی سالی سبز"
-      when 3
-        "آرزوی سالی گلی"
-      when 4
-        "آرزوی سالی سیبی"
-      when 5
-        "آرزوی سالی پر پول"
-      when 6
-        "آرزوی سالی گلی"
-    end
-  end
-
-
 end

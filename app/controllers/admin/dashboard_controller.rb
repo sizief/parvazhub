@@ -30,11 +30,15 @@ class Admin::DashboardController < ApplicationController
 
   def index
     @channels = ["website","telegram","android","ionic"]
+  end
+
+  def weekly_stats
+    @channels = ["website","telegram","android","ionic"]
     @show_search_history = false
   end
 
   def users
-    @users = User.all
+    @users = User.order(id: :desc).first(300)
   end
       
   def redirects

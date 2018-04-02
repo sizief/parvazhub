@@ -2,6 +2,33 @@
 <%= render 'menu' %>
 
 <div class="ui container" style="margin-top: 2em">
+
+	<h4 class="ui horizontal divider header">
+	Reviews
+	</h4>
+	<div class="ui statistics">
+		<div class=" statistic">
+			<div class="value">
+				<%= Review.count %>
+			</div>
+			<div class="label">
+				Total review
+			</div>
+		</div>
+		<div class="yellow statistic">
+			<div class="value">
+				<%= Review.where("created_at > ?", Date.today).count %>
+			</div>
+			<div class="label">
+				Today review
+			</div>
+		</div>
+	</div>
+	
+	<h4 class="ui horizontal divider header">
+	Details
+	</h4>
+
 	<table class="ui celled striped table ">
 		
 		<tbody>

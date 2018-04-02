@@ -2,6 +2,57 @@
 <%= render 'menu' %>
 
 <div class="ui container" style="margin-top: 2em">
+
+	<h4 class="ui horizontal divider header">
+	Users
+	</h4>
+	<div class="ui statistics">
+		<div class=" statistic">
+			<div class="value">
+				<%= User.count %>
+			</div>
+			<div class="label">
+				Total user
+			</div>
+		</div>
+		<div class="grey statistic">
+			<div class="value">
+				<%= User.where(channel: "telegram").count %>
+			</div>
+			<div class="label">
+			telegram 
+			</div>
+		</div>
+		<div class="grey statistic">
+			<div class="value">
+				<%= User.where(channel: "website").count %>
+			</div>
+			<div class="label">
+				website 
+			</div>
+		</div>
+		<div class="yellow statistic">
+			<div class="value">
+				<%= User.where(channel: "website").where("created_at > ?", Date.today).count %>
+			</div>
+			<div class="label">
+				Today website 
+			</div>
+		</div>
+		<div class="yellow statistic">
+			<div class="value">
+				<%= User.where(channel: "telegram").where("created_at > ?", Date.today).count %>
+			</div>
+			<div class="label">
+				Today Telegram 
+			</div>
+		</div>
+	</div>
+
+	<h4 class="ui horizontal divider header">
+	Details
+	</h4>
+	
 	<table class="ui celled striped table ">
 		<thead>
 			<tr class="center aligned">

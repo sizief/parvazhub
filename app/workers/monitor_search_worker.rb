@@ -13,10 +13,10 @@ class MonitorSearchWorker
   
   private
   def send_user_stats
-    search_history = SearchHistory.where(created_at: (Time.now - 1.hours)..Time.now).count
-    user_search_history = UserSearchHistory.where(created_at: (Time.now - 1.hours)..Time.now).count
-    user_flight_price_history = UserFlightPriceHistory.where(created_at: (Time.now - 1.hours)..Time.now).count
-    redirect = Redirect.where(created_at: (Time.now - 1.hours)..Time.now).count  
+    search_history = SearchHistory.where("created_at > ?", Date.today).count
+    user_search_history = UserSearchHistory.where("created_at > ?", Date.today).count
+    user_flight_price_history = UserFlightPriceHistory.where("created_at > ?", Date.today).count
+    redirect = Redirect.where("created_at > ?", Date.today).count  
     text = "#{user_search_history} | #{user_flight_price_history} | #{redirect} \n total: #{search_history} \n "
     text = "👉" + text if (search_history == 0 or user_search_history == 0)
     
@@ -25,7 +25,7 @@ class MonitorSearchWorker
 
   def check_suppliers
     failed_suppliers = Array.new
-    search_history = SearchHistory.where(created_at: (Time.now - 1.hours)..Time.now)
+    search_history = SearchHistory.where("created_at > ?", Date.today)
     Supplier.new.get_active_suppliers.each do |supplier|
       supplier_search = search_history.where(supplier_name: supplier.name.downcase)
       unless supplier_search.count == 0 

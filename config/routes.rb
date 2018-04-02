@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
 	namespace :admin do
 		get 'dashboard', to:'dashboard#index', as: 'dashboard'
+		get 'dashboard/weekly_stats', to:'dashboard#weekly_stats', as: 'weekly_stats'
 		get 'dashboard/user_search_histories', as: 'user_search_histories'
 		get 'dashboard/user_search_stats', as: 'user_search_stats'
 		get 'dashboard/search_histories', as: 'search_histories'
