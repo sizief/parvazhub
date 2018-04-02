@@ -3,28 +3,6 @@
 
 <div class="ui container" style="margin-top: 2em">
 
-	
-    <div class="row" style="padding: 1em">
-		<div class="ui label">
-			User Search all: <%= user_search_history_all %>
-		</div>
-		<div class="ui label">
-			Proxy: <%= Proxy.count %>
-		</div>	
-
-		<div class="ui label">
-			Website User: <%= User.where(channel: "website").count %>
-		</div>
-
-		<div class="ui label">
-			Telegram User: <%= User.where(channel: "telegram").count %>
-		</div>
-
-
-		<div class="ui label">
-			Reviews: <%= Review.count %>
-		</div>
-	</div>
 	<div class="row" style="direction: rtl">
 		<div class="ui small seven statistics" >
 			<% 0.upto(6).each do |x| %>

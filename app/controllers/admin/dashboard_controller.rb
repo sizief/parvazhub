@@ -3,7 +3,7 @@ class Admin::DashboardController < ApplicationController
   before_action :require_admin
 
   def user_search_histories
-  	@ush = UserSearchHistory.order(id: :desc).first(500)
+  	@ush = UserSearchHistory.includes(:route).order(id: :desc).first(500)
   end
 
   def search_histories
@@ -42,7 +42,12 @@ class Admin::DashboardController < ApplicationController
   end
 
   def users
-    @users = User.left_joins(:user_search_histories).group(:id).order('COUNT(user_search_histories.id) DESC').limit(1000)
+    @channel = params[:channel]
+    if @channel.nil?
+      @users = User.left_joins(:user_search_histories).group(:id).order('COUNT(user_search_histories.id) DESC').limit(1000)
+    else
+      @users = User.where(channel: @channel).left_joins(:user_search_histories).group(:id).order('COUNT(user_search_histories.id) DESC').limit(1000)
+    end
   end
       
   def redirects

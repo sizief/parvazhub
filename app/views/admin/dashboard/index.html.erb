@@ -33,7 +33,7 @@
 		</div>
 		<div class="orange statistic">
 			<div class="value">
-				<%= User.where("created_at > ?", Date.today).count %>
+				<%= user(Date.today) %>
 			</div>
 			<div class="label">
 				User
@@ -41,7 +41,7 @@
 		</div>
 		<div class="orange statistic">
 			<div class="value">
-				<%= Review.where("created_at > ?", Date.today).count %>
+				<%= review(Date.today) %>
 			</div>
 			<div class="label">
 				Reviews

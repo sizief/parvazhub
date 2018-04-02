@@ -33,7 +33,7 @@
 		</div>
 		<div class="yellow statistic">
 			<div class="value">
-				<%= User.where(channel: "website").where("created_at > ?", Date.today).count %>
+				<%= User.where(channel: "website").where("created_at > ?", tehran_time(Date.today)).count %>
 			</div>
 			<div class="label">
 				Today website 
@@ -41,7 +41,7 @@
 		</div>
 		<div class="yellow statistic">
 			<div class="value">
-				<%= User.where(channel: "telegram").where("created_at > ?", Date.today).count %>
+				<%= User.where(channel: "telegram").where("created_at > ?", tehran_time(Date.today)).count %>
 			</div>
 			<div class="label">
 				Today Telegram 
@@ -52,7 +52,19 @@
 	<h4 class="ui horizontal divider header">
 	Details
 	</h4>
-	
+
+	<a href="?channel=telegram">
+		<div class="ui blue horizontal label">
+			telegram
+		</div>
+	</a>
+
+	<a href="<%= admin_users_path %>">
+		<div class="ui black horizontal label">
+			all
+		</div>
+	</a>
+
 	<table class="ui celled striped table ">
 		<thead>
 			<tr class="center aligned">
@@ -74,7 +86,7 @@
 				<td><%= user.email %></td>
 				<td><%= user.first_name %> <%= user.last_name %></td>
 				<td><%= user.channel %></td>
-				<td><%= time_ago_in_words(user.created_at) %></td>
+				<td><%= (user.created_at) %></td>
 			</tr>
 			<% end %>
 		</tbody>

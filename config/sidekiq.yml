@@ -86,5 +86,5 @@
 
 #hourly monitoring 
   Monitor_Search:
-    cron: '0 0 6,12,18,24 * * *'
+    cron: '0 0 5,11,17,23 * * *'
     class: MonitorSearchWorker
