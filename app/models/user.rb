@@ -1,16 +1,16 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
   enum channel: [:website, :telegram, :app]
   enum role: [:admin, :user]
+  after_initialize :set_default_role, :if => :new_record?
+
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
+
   validates :telegram_id, :uniqueness => true,  :allow_blank => true
   has_many :user_search_histories, dependent: :destroy
   has_many :user_flight_price_histories, dependent: :destroy
   has_many :telegram_search_queries, class_name: "Telegram::SearchQuery",  dependent: :destroy
   has_many :redirects
-  after_initialize :set_default_role, :if => :new_record?
 
   def set_default_role
     self.role ||= :user
