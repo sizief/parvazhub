@@ -70,9 +70,9 @@
                 <i class="large plane middle aligned icon"></i>
                 <div class="content">
                     <span class="header">
-                        <%= Airline.find_by(code: flight.airline_code).english_name %> |
+                        <%  airline = Airline.find_by(code: flight.airline_code) %>
+                        <%= airline.nil? ? flight.airline_code : airline.english_name %> |
                         <%= flight.flight_number %>
-
                         </span>
                     <div class="description">
                         <%= flight.airplane_type %> |
