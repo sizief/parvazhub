@@ -35,8 +35,7 @@ class SearchResultController < ApplicationController
       # do not search supplier, just get results from db
       flights = get_flights(args[:date], args[:route],true)
     else
-      UserSearchHistory.create(route_id: args[:route].id, departure_time: args[:date], channel: args[:channel], user: args[:user]) if Rails.env.development?
-      UserSearchHistoryWorker.perform_async(args[:route].id,args[:date],args[:channel],args[:user].id) if Rails.env.production?
+      search_background_archive args
       flights = get_flights(args[:date],args[:route],false)
     end
     return flights
@@ -99,14 +98,29 @@ class SearchResultController < ApplicationController
   end
 
   def get_flight_price(flight,channel,user_agent_request,user)
-    unless is_bot(user_agent_request)
-        UserFlightPriceHistory.create(flight_id: flight.id,channel: channel, user: user) if Rails.env.development?
-        UserFlightPriceHistoryWorker.perform_async(channel,flight.id,user.id) if Rails.env.production?
-    end
+    flight_price_background_archive(channel,flight,user)  unless is_bot(user_agent_request)
     FlightResult.new.get_flight_price(flight)
   end
 
   private
+
+  def search_background_archive args
+    if Rails.env.production?
+      UserSearchHistoryWorker.perform_async(args[:route].id,args[:date],args[:channel],args[:user].id)
+      AmplitudeWorker.perform_async(args[:user].id,"search")
+    else
+      UserSearchHistory.create(route_id: args[:route].id, departure_time: args[:date], channel: args[:channel], user: args[:user])
+    end
+  end
+
+  def flight_price_background_archive channel,flight,user
+    if Rails.env.production?
+      UserFlightPriceHistoryWorker.perform_async(channel,flight.id,user.id) 
+      AmplitudeWorker.perform_async(user.id,"supplierPage")
+    else
+      UserFlightPriceHistory.create(flight_id: flight.id,channel: channel, user: user)
+    end
+  end
 
   def get_reviews airline
     if airline.nil?

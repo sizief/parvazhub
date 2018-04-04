@@ -22,7 +22,8 @@ require 'uri'
                             price: flight_price.price,
                             supplier: flight_price.supplier,
                             deep_link: deep_link,
-                            user: user)                                                      
+                            user: user) 
+    background_archive  user.id, "redirect"                                                   
 
     unless is_bot(request.user_agent)
       redirect.save 
@@ -69,6 +70,11 @@ require 'uri'
       @method = "GET"  
       save_redirect args,@flight_price,@action_link,request
     end
+  end
+
+  private
+  def background_archive user_id, event
+    AmplitudeWorker.perform_async(user_id, event) if Rails.env.production?
   end
 
 end
