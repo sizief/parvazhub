@@ -107,7 +107,7 @@ class SearchResultController < ApplicationController
   def search_background_archive args
     if Rails.env.production?
       UserSearchHistoryWorker.perform_async(args[:route].id,args[:date],args[:channel],args[:user].id)
-      AmplitudeWorker.perform_async(args[:user].id,"search")
+      AmplitudeWorker.perform_async(args[:user].id,"search",args[:channel])
     else
       UserSearchHistory.create(route_id: args[:route].id, departure_time: args[:date], channel: args[:channel], user: args[:user])
     end
@@ -116,7 +116,7 @@ class SearchResultController < ApplicationController
   def flight_price_background_archive channel,flight,user
     if Rails.env.production?
       UserFlightPriceHistoryWorker.perform_async(channel,flight.id,user.id) 
-      AmplitudeWorker.perform_async(user.id,"supplierPage")
+      AmplitudeWorker.perform_async(user.id,"supplierPage",channel)
     else
       UserFlightPriceHistory.create(flight_id: flight.id,channel: channel, user: user)
     end

@@ -23,7 +23,7 @@ require 'uri'
                             supplier: flight_price.supplier,
                             deep_link: deep_link,
                             user: user) 
-    background_archive  user.id, "redirect"                                                   
+    background_archive  user.id, "redirect", args[:channel]                                                  
 
     unless is_bot(request.user_agent)
       redirect.save 
@@ -73,8 +73,8 @@ require 'uri'
   end
 
   private
-  def background_archive user_id, event
-    AmplitudeWorker.perform_async(user_id, event) if Rails.env.production?
+  def background_archive user_id, event, channel
+    AmplitudeWorker.perform_async(user_id, event, channel) if Rails.env.production?
   end
 
 end
