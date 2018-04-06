@@ -75,6 +75,7 @@ $(document).ready(function(){
         <% end %>     
     });
 
+
   var calnedarIsExist = document.getElementsByClassName("datepicker-plot-area-inline-view").length;
   if (calnedarIsExist == 0) {
     var today_timestamp = Math.round((new Date()).getTime() / 1000);
@@ -113,4 +114,10 @@ $(document).ready(function(){
   // fix for turbolink does not show waiting modal after first time of form submit
   $("#flight_search").submit(function( event ) {$('.ui.basic.modal.waiting').modal('show');});
   }); 
+
+  //select input values after focus
+  $(function(){
+    $(document).on('click','.tt-input',function(){ this.select(); });
+  });
+
 </script>

@@ -3,6 +3,7 @@
 
 <header>
 
+
 <div class="ui grid" id="header">
   		<div class="two column row">
     		<div class="right floated left aligned column">
@@ -42,7 +43,8 @@
     		<div class="ui huge form" >
      			<div class="two fields">
 					  <div class="field input-container">
-						<%= f.search_field :originـfield,{:class =>'origin-field typeahead dir-rtl web-font',placeholder: "مبدا (شهر فارسی یا انگلیسی)", :value => @search_parameter[:origin_persian_name]} %>						   
+
+						<%= f.text_field :originـfield,{:class =>'origin-field typeahead dir-rtl web-font',placeholder: "مبدا (شهر فارسی یا انگلیسی)", :value => @search_parameter[:origin_persian_name]} %>						   
 						<%= f.hidden_field :origin,{:id =>'origin',:value => @search_parameter[:origin_english_name]} %>
 					</div>
 					  
@@ -107,3 +109,5 @@
 
 <%= render 'layouts/searchbox-helper' %>   
 <%= render 'layouts/footer' %>
+
+
