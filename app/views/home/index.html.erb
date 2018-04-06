@@ -42,14 +42,15 @@
    		<%= form_for(:search, url: flight_search_path, method: :get, html: {id:"flight_search"}) do |f| %>
     		<div class="ui huge form" >
      			<div class="two fields">
-					  <div class="field input-container">
-
+					<div class="field input-container">
+						<label class="search-label">از</label>
 						<%= f.text_field :originـfield,{:class =>'origin-field typeahead dir-rtl web-font',placeholder: "مبدا (شهر فارسی یا انگلیسی)", :value => @search_parameter[:origin_persian_name]} %>						   
 						<%= f.hidden_field :origin,{:id =>'origin',:value => @search_parameter[:origin_english_name]} %>
 					</div>
 					  
 					  
-      				<div class="field input-container">
+					  <div class="field input-container">
+					  <label class="search-label">به</label>
 					  <%= f.text_field :destination_field,{:class =>'destination-field typeahead dir-rtl web-font',placeholder: "مقصد (شهر فارسی یا انگلیسی)", :value => @search_parameter[:destination_persian_name]} %>
 					  <%= f.hidden_field :destination,{:id =>'destination',:value => @search_parameter[:destination_english_name]} %>
       				</div> 

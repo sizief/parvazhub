@@ -357,7 +357,9 @@ header{
   color: #000000;
 }
 .twitter-typeahead{
-  width: 100%;
+  display: inline-block !important;
+	vertical-align: top;
+	width: 90% !important;
 }
 .tt-query, /* UPDATE: newer versions use tt-input instead of tt-query */
 .tt-hint {
