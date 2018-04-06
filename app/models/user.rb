@@ -11,6 +11,8 @@ class User < ApplicationRecord
   has_many :user_flight_price_histories, dependent: :destroy
   has_many :telegram_search_queries, class_name: "Telegram::SearchQuery",  dependent: :destroy
   has_many :redirects
+  has_many :reviews
+
 
   def set_default_role
     self.role ||= :user
@@ -33,7 +35,48 @@ class User < ApplicationRecord
     user
   end
 
+  def last_searches 
+    search_histories = self.user_search_histories.order("created_at DESC").limit(10)
+    routes = Hash.new
+    unless search_histories.empty?
+      search_histories.each do |search_history|
+        route_id = search_history.route_id
+        date =  search_history.departure_time
+        if routes[route_id.to_s.to_sym].nil?
+          routes[route_id.to_s.to_sym] = [date]
+        else
+          unless routes[route_id.to_s.to_sym].include? date
+            routes[route_id.to_s.to_sym] << date
+          end
+        end
+      end
+    end
+    add_hash_names routes
+    #example of output [{route_id: 1, dates: ["2017-01-12","2018-01-20"]}, {route_id: 1, dates: ["2017-01-12","2018-01-20"]}]
+  end
+
+  def last_searches_without_past_dates 
+    searches = self.last_searches
+    searches.each do |search|
+      fileterd_dates = Array.new
+      search[:dates].each do |date|
+        fileterd_dates << date if date.to_date > Date.today-1
+      end
+      fileterd_dates << (Date.today+1).to_s if fileterd_dates.empty? #add one date at least
+      search[:dates] = fileterd_dates 
+    end
+    searches
+  end
+
   private
+  def add_hash_names routes
+    results = Array.new
+    routes.keys.each do |route|
+      results << {route_id: route.to_s, dates: routes[route]}
+    end
+    results
+  end
+
   def create_guest_user args
     user = User.create(:email => "guest_#{Time.now.to_i}#{rand(100)}@parvazhub.com", 
                  :telegram_id => args[:telegram_id],

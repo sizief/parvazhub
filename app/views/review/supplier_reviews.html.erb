@@ -86,6 +86,7 @@
                 <label>از تجربه‌ی خرید بلیط‌تان از  <%= @supplier_persian_name %>   بنویسید</label>
                 <%= text_area_tag :text %>
                 <%= hidden_field_tag(:page, @page) %>
+                <%= hidden_field_tag(:category, "supplier") %>
             </div>
             <div class="field center aligned">
                 <%= submit_tag "ثبت کن", class: "ui submit web-font blue button fluid" %>

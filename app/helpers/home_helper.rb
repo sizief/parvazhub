@@ -15,4 +15,18 @@ module HomeHelper
     end
   end
 
+  def flight_page_path_by_route route_id, date
+    route = Route.find(route_id)
+    origin = City.find_by(city_code: route.origin).english_name
+    destination = City.find_by(city_code: route.destination).english_name
+    flight_result_path(origin, destination, date)
+  end
+
+  def persian_title_by_route route_id
+    route = Route.find(route_id)
+    origin = City.find_by(city_code: route.origin).persian_name
+    destination = City.find_by(city_code: route.destination).persian_name
+    "#{origin} به #{destination}"
+  end
+
 end

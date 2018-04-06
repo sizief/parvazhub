@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180401205558) do
+ActiveRecord::Schema.define(version: 20180406081057) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -193,8 +193,11 @@ ActiveRecord::Schema.define(version: 20180401205558) do
     t.integer  "rate"
     t.string   "status"
     t.integer  "reply_to"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.integer  "user_id"
+    t.integer  "category",   default: 0
+    t.index ["user_id"], name: "index_reviews_on_user_id", using: :btree
   end
 
   create_table "route_days", force: :cascade do |t|
@@ -322,6 +325,7 @@ ActiveRecord::Schema.define(version: 20180401205558) do
   add_foreign_key "most_search_routes", "routes"
   add_foreign_key "notifications", "routes"
   add_foreign_key "redirects", "users"
+  add_foreign_key "reviews", "users"
   add_foreign_key "route_days", "routes"
   add_foreign_key "search_histories", "routes"
   add_foreign_key "telegram_search_queries", "users"

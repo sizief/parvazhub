@@ -38,7 +38,29 @@
         </div>
     </div>
 
-	<h4 class="ui horizontal divider header">
+    <h4 class="ui horizontal divider header">
+		Reviews
+    </h4>
+    <div class="ui relaxed divided list">
+        <% @user.reviews.each do |review| %>
+            <div class="item">
+                <i class="large comment middle aligned icon"></i>
+                <div class="content">
+                    <span class="header">
+                        <%= review.page  %>  
+                        <%= review.rate  %>  
+                    </span>
+                    <div class="description">
+                        <%= review.text  %> | 
+                        <%= review.created_at  %>
+                    </div>    
+                </div>
+            </div>
+        <% end %>
+    </div>
+    
+    
+    <h4 class="ui horizontal divider header">
 		Searches
     </h4>
     <div class="ui relaxed divided list">

@@ -46,10 +46,8 @@
 						<label class="search-label">از</label>
 						<%= f.text_field :originـfield,{:class =>'origin-field typeahead dir-rtl web-font',placeholder: "مبدا (شهر فارسی یا انگلیسی)", :value => @search_parameter[:origin_persian_name]} %>						   
 						<%= f.hidden_field :origin,{:id =>'origin',:value => @search_parameter[:origin_english_name]} %>
-					</div>
-					  
-					  
-					  <div class="field input-container">
+					</div> 
+					<div class="field input-container">
 					  <label class="search-label">به</label>
 					  <%= f.text_field :destination_field,{:class =>'destination-field typeahead dir-rtl web-font',placeholder: "مقصد (شهر فارسی یا انگلیسی)", :value => @search_parameter[:destination_persian_name]} %>
 					  <%= f.hidden_field :destination,{:id =>'destination',:value => @search_parameter[:destination_english_name]} %>
@@ -80,6 +78,41 @@
 	</div>
 	
 </div>
+
+<% unless @user_last_searches.nil? %>
+	<div class="ui horizontal divider">
+	آخرین جستجوهای شما
+	</div>
+	<div class="ui three stackable cards" style="width:70%;margin:auto;direction:rtl">
+		<% @user_last_searches.each do |user_last_search| %>
+			<div class="card">
+				<div class="content">
+					<div class="header web-font text-right">
+						<i class=" plane icon"></i>
+						<%= persian_title_by_route user_last_search[:route_id] %>
+					</div>
+					<% user_last_search[:dates].each_with_index do |date, index| %>
+						<% if index < @user_last_searches_limit %>
+							<div class="description text-center dir-rtl" style="padding-top: 4px">
+								<a  href="<%= flight_page_path_by_route user_last_search[:route_id], date  %>">
+									<%= date.to_date.to_parsi.strftime "%A %-d %B"   %>
+									<i class="right arrow icon"></i>
+								</a>	
+							</div>
+						<% end %> 	
+					<% end %>   
+				</div>
+			</div>
+		<% end %>   
+	</div>
+
+	<div class="ui horizontal divider">
+		مسیرهای پر طرفدار
+	</div>
+
+<% end %>
+
+
 
 <div class="ui three stackable cards" style="width:70%;margin:auto;">
 	<% @routes.each do |route| %>

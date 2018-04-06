@@ -12,11 +12,13 @@ class HomeController < ApplicationController
     end
     @is_mobile = browser.device.mobile? 
     @search_parameter = user_last_search current_user
+    @user_last_searches = current_user.nil? ? nil : current_user.last_searches_without_past_dates
+    @user_last_searches_limit = 3
   end
 
   private
   def user_last_search user
-    if user.nil?
+    if user.nil? or user.user_search_histories.empty?
       params = default_search_params
     else 
       params = user_search_params user

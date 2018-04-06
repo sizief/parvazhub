@@ -84,6 +84,7 @@
                 <label>از تجربه‌ی سفرتان با  <%= @airline_name %>   بنویسید</label>
                 <%= text_area_tag :text %>
                 <%= hidden_field_tag(:page, @page) %>
+                <%= hidden_field_tag(:category, "airline") %>
             </div>
             <div class="field center aligned">
                 <%= submit_tag "ثبت کن", class: "ui submit web-font blue button fluid" %>
