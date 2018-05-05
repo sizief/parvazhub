@@ -31,7 +31,7 @@ class Suppliers::Ghasedak < Suppliers::Base
       json_response["data"].each do |flight|
 
         airline_code = get_airline_code(flight["Airline"])
-        flight_number = airline_code+flight["FlightNo"]
+        flight_number = airline_code+flight_number_correction(flight["FlightNo"],airline_code)
         departure_time = flight["FlightDate"]
         departure_time = departure_time[0..9]+" "+departure_time[11..-1]
 
@@ -71,6 +71,11 @@ class Suppliers::Ghasedak < Suppliers::Base
       "RZ"=>"SE"
 		}
 	airlines[airline_code].nil? ? airline_code : airlines[airline_code]
+  end
+
+  def flight_number_correction(flight_number,airline_code)
+    flight_number = flight_number.sub(airline_code,"")  if flight_number.include? airline_code
+    return flight_number.gsub(/[^\d,\.]/, '')        
   end
 
 

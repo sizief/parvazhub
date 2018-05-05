@@ -22,10 +22,12 @@ db/test
 .dockerignore
 .docker-compose.override.yml
 .env.production
+.env.development
 .env.production.local
-public/assets
 .env
+.cache
+
+public/assets
 abarcloud.yml
 coverage
 core
-.cache
