@@ -92,7 +92,7 @@ class SearchResultController < ApplicationController
         @prices << price
     end
     
-    @airline = Airline.find_by(code: @flight.airline_code.split(",").first)
+    @airline = Airline.find_by(code: @flight.airline_code.split(",").first) 
     @reviews = get_reviews @airline
   
     render :flight_price
