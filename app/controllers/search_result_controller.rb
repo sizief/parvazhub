@@ -14,7 +14,7 @@ class SearchResultController < ApplicationController
     date = date_to_code params[:date]
     channel = "website"
     route = Route.new.get_route_by_english_name(origin_name,destination_name)
-    user = automatic_login({channel: channel, user_agent_request: request.user_agent})
+    user = get_current_user(channel, request.user_agent) 
 
     if date < Date.today.to_s 
         redirect_to  action: 'search', origin_name: origin_name, destination_name: destination_name, date: "today"
@@ -80,6 +80,7 @@ class SearchResultController < ApplicationController
 
     date_in_human = date_to_human date #date.to_date.to_parsi.strftime '%A %d %B'   
     @flight = Flight.find(flight_id)
+    @user = get_current_user(channel, nil) 
     @search_parameter ={origin_english_name: origin.english_name, origin_persian_name: origin.persian_name, origin_code: origin.city_code,
                         destination_english_name: destination.english_name, destination_persian_name: destination.persian_name, destination_code: destination.city_code,
                         date: date, date_in_human: date_in_human}
@@ -157,6 +158,10 @@ class SearchResultController < ApplicationController
     else
       date = date
     end
+  end
+
+  def get_current_user(channel, user_agent_request) 
+    user = automatic_login({channel: channel, user_agent_request: user_agent_request})
   end
 
       

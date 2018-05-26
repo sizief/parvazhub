@@ -55,8 +55,13 @@ module SearchHelper
 		days_in_farsi[day]
 	end
 
-    def airline_name_for airline
-		name = airline.persian_name.nil? ? airline.english_name : airline.persian_name
+	def airline_name_for airline
+		if airline.nil?
+		  name = ""
+		else
+		  name = airline.persian_name.nil? ? airline.english_name : airline.persian_name
+		end
+		name
 	end
 
 	def airplane_name_for airplane_type
