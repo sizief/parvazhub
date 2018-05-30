@@ -30,8 +30,7 @@
 
 		<h1 class="ui header inverted center aligned web-font" style="line-height: 2em;font-size: 1.28rem !important;">
 			<span id="slogan-description">	
-				<b class="yellow">Free</b>	
-				Search and compare
+				Search & compare
 				<b class="yellow">  Iran </b> 
 				domestic flights 
 			</span>	
@@ -41,7 +40,7 @@
 	<div class="ui stackable one column grid centered" style="margin-top: 1em">
    		<%= form_for(:search, url: en_flight_search_path, method: :get, html: {id:"flight_search"}) do |f| %>
     		<div class="ui huge form en" >
-     			<div class="two fields">
+     			<div class="two fields" style="margin-left:12px">
 					<div class="field input-container">
 						<label class="search-label">From</label>
 						<%= f.text_field :originـfield,{:class =>'origin-field typeahead web-font en',placeholder: "origin, type city name", :value => @search_parameter[:origin_english_name]} %>						   
