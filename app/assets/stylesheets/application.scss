@@ -8,7 +8,7 @@
 @import "semantic-ui";
 @import "semantic-ui/collections/menu";
 @import "rtlcss";
-@import "persian-datepicker-0.4.5.min";
+@import "persian-datepicker-1.1.3.min";
 /* this is georgian calendar: calendar.min */
 
 @font-face{
@@ -141,6 +141,11 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
 header{
   background: #29aae1
 }
+.header-language{
+  color:white; 
+  text-decoration: underline; 
+  font-size:0.8em;
+}
 
 /* first page */
 .masthead.segment {
@@ -199,7 +204,6 @@ header{
   margin-bottom: -8px;
 }
 .footer-link{
-  display: block;
   text-decoration: none;
   line-height: 2.3em;
   font-size: 0.8em;

@@ -1,0 +1,33 @@
+<% unless date_price_is_empty prices  %>
+		<div class="city-calendar" style="margin-top:3em;">
+			<h4 class="en">
+				Price changes for  
+				<b class="yellow"><%= "#{origin}  #{destination}" %></b> route 
+			</h4>
+
+			<div style="width:90%;min-height:100%; margin:auto" >
+				<canvas id="myChart"></canvas>
+				<script>
+				var labels = <%= en_dates_for_chart prices %>;
+				var data = <%= prices_for_chart prices %>;
+				var ctx = document.getElementById("myChart").getContext('2d');
+				$(document).ready(function(){
+					var myChart = new Chart(ctx, {
+						type: 'bar',
+						data: {labels: labels,datasets: [{label: " price over time <%= origin %> به <%= destination %>", borderColor: 'rgb(54,162,235)',backgroundColor:  'rgb(54,162,235)', data: data,fill: false,lineTension: 0}]},
+						options: {
+							showLines: true,
+							scales: {
+								xAxes: [{
+									ticks: {
+										autoSkip: false
+									}
+								}]
+							}
+						}
+					});
+				});
+				</script>
+			</div>
+		</div>
+	<% end %>

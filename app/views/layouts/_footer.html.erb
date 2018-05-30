@@ -17,61 +17,41 @@
     </div>
   </div>
 
-  <div class="ui inverted vertical footer segment" style="background:#efefef; border-top:1px solid #ccc" >
-    <div class="ui five column grid centered stackable">
-      <div class="row">
-          
-        <div class="column center aligned">			
-          <div style="text-align:center; width:100%">
-            <img id='sizpfukzfukzjxlzjzpe' style='cursor:pointer' onclick='window.open("https://logo.samandehi.ir/Verify.aspx?id=96617&p=pfvlgvkagvkarfthjyoe", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")' alt='logo-samandehi' src='https://logo.samandehi.ir/logo.aspx?id=96617&p=bsiywlbqwlbqnbpdyndt'/>
-          </div>
-        </div>  
-        
-        <div class="column center aligned">			
-          <%= link_to "درباره‌ و تماس", us_path, class:"footer-link" %>
-          <%= link_to "قوانین به زبان ساده", policy_path, class:"footer-link" %>
-          <%= link_to "توسعه دهندگان", our_service_path, class:"footer-link" %>
-          <%= link_to "تمام پروازها", flight_page_path,class:"footer-link" %> 
-          <div style="color:white; width:100%; margin:auto;text-align:center;line-height: 2em;">
-          </div>   
-        </div>
-
-        <div class="column center aligned">	
-          <div style="padding:1em">
-            <a href="https://cafebazaar.ir/app/com.parvazhub.android/?l=fa">
-              <span class="telegram-announce">اپلیکیشن اندروید</span>
-              <%= image_tag "static/bazar.png",{id:"cafe-bazaar"} %>		
-            </a>
-          </div>  
-          <div>
-            <a href="https://t.me/parvazhubBot">
-                <span class="telegram-announce">بات تلگرام پروازهاب</span>
-                <%= image_tag "static/telegram.png",{class:"telegram-icon"} %>		
-            </a>
-          </div>
-        </div>  
-
-        <div class="two column center aligned" style="text-align: right;line-height: 1.9em;color: #403f3f;direction:rtl; font-size:0.8em">	
-          <div>
-            <a href="<%= supplier_review_index_page_path %>" target="_blank" style="font-size:1.2em"> 
-              <i class="comments icon"></i>
-              <b>
-                 تجربه خریدتان از سایت‌ها را با بقیه به اشتراک بگذارید.
-              </b>
-            </a>
-            <br/>
-            <a href="<%= airline_review_index_page_path %>" target="_blank" style="font-size:1.2em"> 
-              <i class="comments icon"></i>
-              <b>
-              به خطوط هوایی چه امتیازی می‌دهید؟
-              </b>
-            </a>
-          </div> 
-        </div>
-        
+  <div class="ui stackable sixteen column grid" style="background: #f1f1f1;border-bottom: #d8d8d8 1px solid;font-size: 1em;">
+      <div class="eight wide column">
+        <div class="web-font"  style="direction: rtl;text-align:center;padding: 1em 2em 1em 2em;line-height: 2em; font-size:1em">
+          <a href="<%= supplier_review_index_page_path %>" target="_blank" style="font-size:1.2em"> 
+            <i class="comments icon"></i>
+            <b>
+            تجربه خریدتان از سایت‌ها را با بقیه به اشتراک بگذارید
+            </b>
+          </a>          
+      </div>
+    </div>
+    <div class="eight wide column">
+        <div class="web-font"  style="direction: rtl;text-align:center;padding: 1em 2em 1em 2em;line-height: 2em; font-size:1em">
+          <a href="<%= airline_review_index_page_path %>" target="_blank" style="font-size:1.2em"> 
+            <i class="comments icon"></i>
+            <b>
+            به خطوط هوایی امتیازی دهید
+            </b>
+          </a>     
       </div>
     </div>
   </div>
+
+  <div class="ui stackable sixteen column grid" style="background: #f1f1f1;border-top: #eee 1px solid;font-size: 1em;">
+      <div class="sixteen wide column">
+        <div class="web-font"  style="direction: rtl;text-align:center;padding: 1em 2em 1em 2em;line-height: 2em; font-size:1em;color:gray">
+          <%= link_to "درباره‌ و تماس", us_path, class:"footer-link" %> |
+          <%= link_to "قوانین به زبان ساده", policy_path, class:"footer-link" %> |
+          <%= link_to "توسعه دهندگان", our_service_path, class:"footer-link" %> |
+          <%= link_to "تمام پروازها", flight_page_path,class:"footer-link" %> |
+          <a class="footer-link"  href="https://cafebazaar.ir/app/com.parvazhub.android/?l=fa">اپلیکیشن اندروید</a> |
+          <a class="footer-link"  href="https://t.me/parvazhubBot">بات تلگرام پروازهاب</a> 
+      </div>
+    </div>
+
 
   <div class="ui basic modal waiting" style="left: initial;text-align: center;font-size: x-large;">
     <div class="description">

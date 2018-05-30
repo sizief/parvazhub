@@ -17,6 +17,7 @@ class FlightPrice < ApplicationRecord
 		response[:id] = supplier.id
 		response[:flight_id] = supplier.flight_id
 		response[:price] = supplier.price
+		response[:price_dollar] = to_dollar(supplier.price) 
 		response[:supplier_english_name] = supplier.supplier
 		response[:created_at] = supplier.created_at
 		response[:supplier_persian_name] = supplier_persian_name supplier.supplier
@@ -34,4 +35,8 @@ class FlightPrice < ApplicationRecord
 	def supplier_persian_name(supplier_name)
 	  Supplier.new.get_persian_name supplier_name
 	end
+
+	def to_dollar amount
+    Currency.new.to_dollar amount
+  end
 end

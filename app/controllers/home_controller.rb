@@ -1,6 +1,10 @@
 class HomeController < ApplicationController
 
   def index
+    prepare_index current_user 
+  end
+
+  def prepare_index current_user
     @routes = Array.new
     routes = MostSearchRoute.new.get ENV["FIRST_PAGE_OFFERS"].to_i 
     routes.each do |route|
@@ -16,7 +20,7 @@ class HomeController < ApplicationController
     @user_last_searches_limit = 3
   end
 
-  private
+  
   def user_last_search user
     if user.nil? or user.user_search_histories.empty?
       params = default_search_params

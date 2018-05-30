@@ -15,8 +15,8 @@
 //= require turbolinks
 //= require semantic-ui
 //= require rtlcss.min
-//= require persian-date.min
-//= require persian-datepicker-0.4.5.min
+//= require persian-date-1.0.5.min
+//= require persian-datepicker-1.1.3.min
 //= require tablesort
 //= require typeahead.bundle.min
 //= require chart.min

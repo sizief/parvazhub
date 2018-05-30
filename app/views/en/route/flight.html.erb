@@ -1,0 +1,78 @@
+<%= render 'en/layouts/header' %>
+<% provide(:title,"PARVAZHUB | Iran domestic flights") %>
+<% provide(:description,"Iran flight metasearch") %>
+
+<div class="ui stackable one column grid centered" id="wide-search-box">
+    
+    <%= form_for(:search, url: flight_search_path, method: :get, html: {id:"flight_search"}) do |f| %>
+        <div class="ui huge form" >
+            <div class="two fields">
+                <div class="field input-container">
+                    <%= f.text_field :originـfield,{:class =>'origin-field typeahead  web-font',placeholder: "از مبدا (شهر یا فرودگاه)"} %>						   
+                    <%= f.hidden_field :origin,{:id =>'origin'} %>
+                </div>
+        
+                <div class="field input-container">
+                    <%= f.text_field :destination_field,{:class =>'destination-field typeahead web-font',placeholder: "to مقصد (شهر یا فرودگاه)"} %>
+                    <%= f.hidden_field :destination,{:id =>'destination'} %>
+                </div> 
+            </div>
+            <div class="field ui calendar">
+                <div class="ui input left icon">
+                    <i class="calendar icon"></i>
+                    <%= f.text_field :date_shamsi, {id: 'date-picker', class:'form-control web-font', readonly: 'readonly', autocomplete: 'false'} %>
+                    <%= f.text_field :date, {id: 'date-picker-field'} %>
+                </div>
+            </div>
+            <div class="ui center aligned basic segment">
+                <button class="ui submit massive yellow web-font fluid right labeled  icon button waiting-modal" type="submit">
+                        Search flights
+                </button>
+            </div>
+        </div>
+    <%end%>
+</div>
+
+<div class="ui container" id="search-results-container" style="padding-top: 1em">
+    
+    <div class="city-calendar" >
+    
+        <% @routes.each do |route|  %>
+            <% origin = City.find_by(city_code: route.origin)  %>
+            <% destination = City.find_by(city_code: route.destination)  %>
+            <% unless origin.nil? or destination.nil? %>
+                <%= link_to " #{origin.english_name} to  #{destination.english_name} flight", en_route_page_path(origin_name: "#{origin.english_name}",destination_name: "#{destination.english_name}") %>
+                    | 
+                <%= link_to " #{destination.english_name} to #{origin.english_name} flight ", en_route_page_path(origin_name: "#{destination.english_name}",destination_name: "#{origin.english_name}") %> 
+                | 
+            <% end %>
+        <% end %>
+    </div>
+</div>
+
+
+
+<div class="ui container" id="search-results-container" style="padding-top: 1em">
+    <div class="city-calendar" >
+        <h4>
+            <b class="yellow">
+                Tomorrow's 
+            </b> 
+            Flights
+        </h4>
+        <p>
+        <% @routes.each do |route|  %>
+            <% origin = City.find_by(city_code: route.origin)  %>
+            <% destination = City.find_by(city_code: route.destination)  %>
+            <% unless origin.nil? or destination.nil? %>
+                <%= link_to "#{origin.english_name} to  #{destination.english_name} tomorrow flight", en_flight_result_path(origin_name: "#{origin.english_name}",destination_name: "#{destination.english_name}",date:(Date.today+1).to_s) %>
+                    | 
+                <%= link_to "#{destination.english_name} to #{origin.english_name} tomorrow flight", en_flight_result_path(origin_name: "#{destination.english_name}",destination_name: "#{origin.english_name}",date:(Date.today+1).to_s) %> 
+                | 
+            <% end %>
+            <% end %>
+        </p>
+    </div>
+</div>
+<%= render 'en/layouts/searchbox-helper', date_picker_inline: false %>   
+<%= render 'en/layouts/footer' %>

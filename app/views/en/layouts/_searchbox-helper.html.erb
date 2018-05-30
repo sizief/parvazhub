@@ -1,0 +1,124 @@
+<script>
+$(document).ready(function(){ 
+  
+<% if @is_mobile %>
+  $( ".typeahead" ).click(function() {   //scroll to top  
+      $('html, body').animate({
+          scrollTop: $(this).offset().top
+      }, 1400);  
+      $("#sk-container, #sk-messenger-button").hide(); 
+  });
+  <% end %>
+
+   //typeahead
+    var cities = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+      queryTokenizer: Bloodhound.tokenizers.whitespace, 
+      identify: function(obj) { return obj.value; },
+      prefetch: { url: '<%= api_city_prefetch_suggestion_path %>',cache: false
+    },
+      remote: {
+        url: '<%= api_city_suggestion_path "QUERY" %>',
+        wildcard: 'QUERY'
+      },
+      limit: 10
+    });
+
+    function citiesWithDefaults(q, sync, async) {
+        if (q === '') {
+          sync(cities.all().slice(0, 6)); 		  
+        }else {
+            cities.search(q, sync, async);
+        }
+      }
+    cities.initialize();
+
+    $('.input-container .typeahead').typeahead({
+      hint: false,
+      highlight:false,
+      minLength: 0,
+      autoselect: true,
+      limit: 10
+      },
+      {
+          name: 'cities',
+          displayKey: 'value',
+          source: citiesWithDefaults,
+          templates: {
+            header: '<h3 class="suggestion-title">please select from the list</h3>',            
+              empty: [
+                  '<div style="font-size:0.6em">&nbsp;&nbsp;&nbsp;<i class="teal warning circle icon "></i>',
+                  'wrong name or it is not available in Parvazhub',
+                  '</div>'
+              ].join('\n'),
+              suggestion: function (i) {
+                  return '<p class="en"><i class="plane blue icon"></i>' + i.en.city + 
+                  '<span style="font-size: 0.8em;color:gray">  '+i.en.country + '</span></p>'
+              }
+          }
+      }
+  
+  );
+    $('.origin-field').on('typeahead:select', function (e, datum) {
+        $('#origin').val(datum.code); 
+        <% if @is_mobile %>
+        $('html, body').animate({scrollTop: $('.destination-field').offset().top}, 800);  
+        $('.destination-field').focus();
+        <% end %>
+
+    });
+    $('.destination-field').on('typeahead:select', function (e, datum) {
+        $('#destination').val(datum.code);
+        <% if @is_mobile %>
+        $('html, body').animate({scrollTop: $('#date-picker').offset().top}, 800);            
+        $('.destination-field').blur();   
+        <% end %>     
+    });
+
+
+  var calnedarIsExist = document.getElementsByClassName("datepicker-plot-area-inline-view").length;
+  if (calnedarIsExist == 0) {
+    var today_timestamp = Math.round((new Date()).getTime() / 1000);
+     $("#date-picker").pDatepicker({
+        calendarType: 'gregorian',
+        minDate: new persianDate().subtract('day', 0).valueOf(),
+        dayPicker: {scrollEnabled: false},
+        monthPicker: {scrollEnabled: false},
+        format : "dddd - DD MMMM",
+        altFieldFormatter : function(unix){
+            if (!unix) return '';
+            var date =  new Date(unix);
+            var day = date.getDate();
+            if(day<10) {day = '0'+day};
+            var month = date.getMonth() + 1;
+            if(month<10) {month = '0'+month} ;
+            var year = date.getFullYear();
+            return year + '-' + month + '-' + day;
+        },  
+        altField: '#date-picker-field',
+        toolbox: {enabled:false},
+        navigator: {
+            enabled: true,
+            scroll: {
+                  enabled: false
+              },
+            text: {
+                btnNextText: "<",
+                btnPrevText: ">"
+            }
+        },
+        autoClose: true,
+        inline: <%= date_picker_inline %>,
+    }); 
+   }
+  
+  // fix for turbolink does not show waiting modal after first time of form submit
+  $("#flight_search").submit(function( event ) {$('.ui.basic.modal.waiting').modal('show');});
+  }); 
+
+  //select input values after focus
+  $(function(){
+    $(document).on('focus','.tt-input',function(){ this.select(); });
+  });
+
+</script>

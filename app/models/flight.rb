@@ -12,6 +12,7 @@ class Flight < ApplicationRecord
   attr_accessor :airline_persian_name
   attr_accessor :airline_english_name
   attr_accessor :airline_rate_average
+  attr_accessor :best_price_dollar
 
   def self.create_or_find_flight(route_id,flight_number,departure_time,airline_code,airplane_type, arrival_date_time = nil ,stops = nil,trip_duration = nil)
     ActiveRecord::Base.connection_pool.with_connection do 
@@ -63,6 +64,7 @@ class Flight < ApplicationRecord
         price[:date] = selected_date
         flight = get_lowest_price(route,selected_date)
         price[:price] = flight.nil? ? nil : flight.best_price 
+        price[:price_dollar] = flight.nil? ? nil : to_dollar(flight.best_price) 
         prices << price
       end
       prices
@@ -78,6 +80,7 @@ class Flight < ApplicationRecord
       price[:date] = selected_date
       flight = get_lowest_price(route,selected_date)
       price[:price] = flight.nil? ? nil : flight.best_price 
+      price[:price_dollar] = flight.nil? ? nil : to_dollar(flight.best_price) 
       prices << price
     end
     prices
@@ -86,10 +89,11 @@ class Flight < ApplicationRecord
   def get_lowest_price(route,date)
     begin
       flight = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s).where.not(best_price:0).sort_by(&:best_price).first
+      flight.best_price_dollar = to_dollar(flight.best_price)
      rescue
       flight = nil
      end 
-      
+    flight 
   end
 
   def airline_call_sign(airline_code)
@@ -129,6 +133,7 @@ class Flight < ApplicationRecord
       response[:flight_number] = flight.flight_number
       response[:departure_time] = flight.departure_time
       response[:best_price] = flight.best_price
+      response[:best_price_dollar] = to_dollar(flight.best_price)
       response[:price_by] = flight.price_by
       response[:arrival_date_time] = flight.arrival_date_time
       response[:trip_duration] = flight.trip_duration
@@ -182,6 +187,10 @@ class Flight < ApplicationRecord
       number = nil
     end
     number
+  end
+
+  def to_dollar amount
+    Currency.new.to_dollar amount
   end
 
 end

@@ -6,22 +6,31 @@ Rails.application.routes.draw do
 	resources :routes
 
 	namespace :admin do
-		get 'dashboard', to:'dashboard#index', as: 'dashboard'
-		get 'dashboard/weekly_stats', to:'dashboard#weekly_stats', as: 'weekly_stats'
-		get 'dashboard/user_search_histories', as: 'user_search_histories'
-		get 'dashboard/user_search_stats', as: 'user_search_stats'
-		get 'dashboard/search_histories', as: 'search_histories'
-		get 'dashboard/suppliers', as: 'suppliers'
-		get 'dashboard/redirects', as: 'redirects'	
-		get 'dashboard/reviews', as: 'reviews'
-		get 'dashboard/users', as: 'users'
-		get 'dashboard/users/:id', to:'dashboard#show_user', as: 'show_user'
-		post 'dashboard/suppliers', to:'dashboard#update_supplier'
+	  get 'dashboard', to:'dashboard#index', as: 'dashboard'
+	  get 'dashboard/weekly_stats', to:'dashboard#weekly_stats', as: 'weekly_stats'
+	  get 'dashboard/user_search_histories', as: 'user_search_histories'
+	  get 'dashboard/user_search_stats', as: 'user_search_stats'
+	  get 'dashboard/search_histories', as: 'search_histories'
+	  get 'dashboard/suppliers', as: 'suppliers'
+	  get 'dashboard/redirects', as: 'redirects'	
+	  get 'dashboard/reviews', as: 'reviews'
+	  get 'dashboard/users', as: 'users'
+	  get 'dashboard/users/:id', to:'dashboard#show_user', as: 'show_user'
+	  post 'dashboard/suppliers', to:'dashboard#update_supplier'
+	  mount Sidekiq::Web => '/sidekiq'
+	end
 
-		mount Sidekiq::Web => '/sidekiq'
+	namespace :en do
+	  get '/', to:'home#index', as: 'home'
+	  get '/flights/', to: 'route#flight', as: 'flight_page'
+	  get '/flight_search', to:'search_result#flight_search', as: 'flight_search'
+	  get '/flights/:origin_name-:destination_name/:date', to:'search_result#search', as: 'flight_result'
+	  get '/flights/:origin_name-:destination_name/:date/:id', to: 'flight_price#index', as: 'flight_prices'
+	  get '/flights/:origin_name-:destination_name/', to: 'route#route', as: 'route_page'
+	  get 'redirect/:origin_name-:destination_name/:date/:flight_id/:flight_price_id/:channel/:user_id', to: 'redirect#redirect', as: 'redirect'
 	end
 	
-	get 'home/index'
+	get 'home/index', as: 'home'
 	
 	get '/flight_search', to:'search_result#flight_search', as: 'flight_search'
     
@@ -29,7 +38,7 @@ Rails.application.routes.draw do
 	get '/flights/:origin_name-:destination_name-:month/', to: 'route#route', as: 'route_by_month_page'	
 	get '/flights/:origin_name-:destination_name/', to: 'route#route', as: 'route_page'
 	get '/flights/:origin_name-:destination_name/:date', to:'search_result#search', as: 'flight_result'
-	get '/flights/:origin_name-:destination_name/:date/:id', to: 'search_result#flight_prices', as: 'flight_prices'
+	get '/flights/:origin_name-:destination_name/:date/:id', to: 'flight_price#index', as: 'flight_prices'
 	
 	get 'redirect/:origin_name-:destination_name/:date/:flight_id/:flight_price_id/:channel', to: 'redirect#app_redirect', as: 'app_redirect'
 	get 'redirect/:origin_name-:destination_name/:date/:flight_id/:flight_price_id/:channel/:user_id', to: 'redirect#redirect', as: 'redirect'
@@ -39,7 +48,6 @@ Rails.application.routes.draw do
 	get '/us', to:'static_pages#us', as: "us"
 	get '/our-service', to:'static_pages#our_service', as: 'our_service'
 	get '/policy', to:'static_pages#policy', as: 'policy'
-
 
 
 	get '/beta/telegram/update', to: 'telegram#update'

@@ -57,10 +57,10 @@ module SearchResultHelper
 		else
 			day_name = date.to_parsi.strftime("%A")
 		end
-		(search_date_dentifier(date,saerch_parameter_date)+day_name).html_safe
+		(search_date_identifier(date,saerch_parameter_date)+day_name).html_safe
 	end
 
-	def search_date_dentifier date,saerch_parameter_date
+	def search_date_identifier date,saerch_parameter_date
 		if saerch_parameter_date.to_date == date.to_date
 			"<i class='arrow down icon'></i>" 
 		else

@@ -1,0 +1,211 @@
+
+<%= render 'en/layouts/header' %>
+<% provide(:title,"Flight from #{@origin.english_name.humanize} to #{@destination.english_name.humanize} | PARVAZHUB" ) %>
+<% provide(:description,"Cheapest Iran domestic fares for #{@origin.english_name} to #{@destination.english_name}") %>
+
+<div class="ui stackable one column grid centered wide-search-box"  id="city-page-search-box">
+<h1 class="city-header">
+	<%= "#{@origin.english_name.humanize} to #{@destination.english_name.humanize} flights" %>
+</h1>
+   		<%= form_for(:search, url: flight_search_path, method: :get, html: {id:"flight_search",class:"en city-page-search-form"}) do |f| %>
+    		<div class="ui huge form" >
+     			<div class="two fields">
+					<div class="field input-container">
+					 	<label class="search-label">from</label>
+				 		<%= f.text_field :originـfield,{:value => @origin.english_name, :class =>'origin-field typeahead  web-font',placeholder: "origin city"} %>						   
+				 		<%= f.hidden_field :origin,{:id =>'origin', :value => @origin.english_name} %>
+			 		</div>
+			 
+					 <div class="field input-container">
+					 	<label class="search-label">to</label>
+				 		<%= f.text_field :destination_field,{:value => @destination.english_name, :class =>'destination-field typeahead web-font',placeholder: "destination city"} %>
+				 		<%= f.hidden_field :destination,{:id =>'destination', :value => @destination.english_name} %>
+			 		</div> 
+  				</div>
+  				<div class="field ui calendar">
+						<div class="ui input left icon">
+							<i class="calendar icon"></i>
+							<%= f.text_field :date_shamsi, {id: 'date-picker', class:'form-control web-font', readonly: 'readonly', autocomplete: 'off'} %>
+							<%= f.text_field :date, {id: 'date-picker-field'} %>
+						</div>
+					</div>
+  				<div class="ui center aligned basic segment">
+  					<button class="ui submit massive yellow web-font fluid right labeled  icon button waiting-modal" type="submit">
+							Search Flights
+					</button>
+				</div>
+			</div>
+		<%end%>
+		<div class="city-page-toggle-box">
+		Return
+		</div>
+	</div>
+
+
+	<div class="ui stackable one column grid centered wide-search-box"  id="link-dates">
+		<h1 class="city-header">
+			<%= "#{@origin.english_name.humanize} to #{@destination.english_name.humanize} flights"  %> 
+		</h1>
+		<% @calendar_view_prices.each_with_index do |price,index| %>
+			<% next if ((@link_count > 3) or (price[:date].to_date<Date.today)) %>
+			<div  class="page-button-links" >
+				<a href="<%= en_flight_result_path(@origin.english_name,@destination.english_name,price[:date]) %>" class="white">
+					<button class="ui submit big yellow web-font fluid right labeled  icon button waiting-modal link-dates-button" style="padding-left: 2.5em !important; font-size:0.9em !important;" >	
+						<%= "#{@origin.english_name.humanize} to #{@destination.english_name.humanize}" %>
+						<%=price[:date].to_date.strftime "%A %-d %B"  %>	
+						<%= "from $ #{price[:price_dollar]}" unless price[:price_dollar].nil? %>		
+					</button>
+				</a>
+			</div>	
+			<% @link_count+=1 %>				
+		<% end %>
+		<div class="city-page-toggle-box">
+			 Show search box
+			<br/>
+			<%= link_to("return flights", en_route_page_path(@destination.english_name,@origin.english_name),{style: "color:white"}) %>
+		</div>
+	</div>
+
+<div class="ui container" id="search-results-container" style="padding-top: 1em">
+	
+	<div class="city-calendar en" id="city-calendar" >
+		<h4>
+			<b class="yellow">Lowest </b>
+            fare for <%= "#{@origin.english_name} to #{@destination.english_name}" %>
+        </h4>
+		<table class="ui celled table stackable rtl">
+		  	<thead class="not-mobile">
+				<tr class="center aligned web-font">
+		  			<th class="table-header">Saturday</th>
+		  			<th class="table-header">Sunday </th>
+		  			<th class="table-header">Monday</th>
+		  			<th class="table-header">Tuesday</th>
+		  			<th class="table-header">Wednesday</th>
+		  			<th class="table-header">Thursday</th>
+		  			<th class="table-header">Friday</th>
+		  		</tr>
+		  	</thead>
+			<tbody>
+				<% @calendar_view_prices.each_with_index do |price,index|%>
+					<% if index%7 == 0 %>
+						<tr class="center aligned very basic">
+					<% end %>	
+					<%if price[:date].to_date<Date.today #date is in the past %> 
+						<td class="center aligned disable"></td>
+					<%else%>	
+						<td class="center aligned">
+							<a href="<%= en_flight_result_path(@origin.english_name,@destination.english_name,price[:date]) %>" >
+								<div class="route-calendar-box">
+									<div class="route-calendar-date" style="direction:ltr">
+										<span class="mobile-only">
+											<%= "#{@origin.english_name.humanize} to  #{@destination.english_name.humanize}" %>
+										</span>
+										<%=price[:date].to_date.strftime "%-d %B"  %>	
+									</div>
+									<div class="route-calendar-price">
+									<i class="left arrow icon yellow"></i>
+										<% if (price[:price_dollar]).nil? %>
+											search 
+										<% else %>
+											<%= "from $ #{price[:price_dollar]}"  %>	
+										<% end %>
+										
+									</div>
+								</div>
+							</a>	
+						</td>
+					<% end %>	
+
+					<% if ((index%7 == 6) || (index == 34)) %>
+						</tr>
+					<% end %>	
+							
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+
+	<%= render :partial => "en/route/price_chart", :locals => {prices: @prices, origin: @origin.english_name, destination: @destination.english_name } %>
+
+	<% unless @today_statistic[:count] == 0 %>
+		<div class="city-calendar en" >
+			<h4>
+				Flight timetable for
+				<b class="yellow"> today</b>
+				<%= "#{@origin.english_name} to #{@destination.english_name}" %> 
+			</h4>
+			<p>
+				Today, there are 
+				<%= @today_statistic[:count] %>
+				flights from 
+				<%= "#{@origin.english_name} to #{@destination.english_name}" %> 
+				available. The first departure is 
+				<%= @today_statistic[:first_flight_time] %> 
+				and last one is 
+				<%= @today_statistic[:last_flight_time] %> 
+			</p>
+		</div>
+	<% end %>
+
+	<% unless @tomorrow_statistic[:count] == 0 %>	
+		<div class="city-calendar en" >
+			<h4>
+				Flight timetable for
+				<b class="yellow"> tomorrow</b>
+				<%= "#{@origin.english_name} to #{@destination.english_name}" %> 
+			</h4>
+			<p>
+				Tomorrow, 
+				<%= @tomorrow_statistic[:date].to_date.strftime "%A %-d %B"   %>
+				there are 
+				<%= @tomorrow_statistic[:count] %>
+				flights from 
+				<%= "#{@origin.english_name} to #{@destination.english_name}" %> 
+				available. The first departure is 
+				<%= @tomorrow_statistic[:first_flight_time] %> 
+				and last one is 
+				<%= @tomorrow_statistic[:last_flight_time] %> 
+			</p>
+		</div>
+	<% end %>
+
+	<% unless @day_after_statistic[:count] == 0 %>
+		<div class="city-calendar en" >
+			<h4>
+			Flight timetable for
+			<b class="yellow"> the day after tomorrow</b>
+				<%= "#{@origin.english_name} to #{@destination.english_name}" %> 
+			</h4>
+			<p>
+				The day after tomorrow,
+				<%= @day_after_statistic[:date].to_date.strftime "%A %-d %B"   %>
+				there are 
+				<%= @day_after_statistic[:count] %>
+				flights from 
+				<%= "#{@origin.english_name} to #{@destination.english_name}" %> 
+				available. The first departure is 
+				<%= @day_after_statistic[:first_flight_time] %> 
+				and last one is 
+				<%= @day_after_statistic[:last_flight_time] %> 
+			</p>
+		</div>
+	<% end %>
+
+	<% unless @route_days.size == 0 %>
+	<div class="city-calendar en" >
+		<h4>
+			What days flights available for
+			<%= "#{@origin.english_name} to #{@destination.english_name}" %>
+		</h4>
+		<p>
+		<% @route_days.each do |day|   %>
+			<%= week_day_to_human_english day  %>
+		<% end %>
+		</p>
+	</div>
+<% end %>
+
+
+</div>
+<%= render 'en/layouts/searchbox-helper', date_picker_inline: false %>   
+<%= render 'en/layouts/footer' %>
