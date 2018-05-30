@@ -6,9 +6,9 @@ class CurrencyTest < ActiveSupport::TestCase
   end
 
   test "to dollar" do
-    amount = 20
+    amount = 200000
     dollar_amount = @currency.to_dollar amount
-    assert_equal dollar_amount, amount.to_f/ENV["DOLLAR_TO_RIAL_RATE"].to_f
+    assert_equal dollar_amount, (amount.to_f/ENV["DOLLAR_TO_RIAL_RATE"].to_f).round(1)
   end
   
 end
