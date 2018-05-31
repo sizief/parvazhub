@@ -18,26 +18,67 @@
   </div>
 
   <div class="ui stackable sixteen column grid" style="background: #f1f1f1;border-bottom: #d8d8d8 1px solid;font-size: 1em;">
-      <div class="eight wide column">
-        <div class="web-font"  style="direction: rtl;text-align:center;padding: 1em 2em 1em 2em;line-height: 2em; font-size:1em">
-          <a href="<%= supplier_review_index_page_path %>" target="_blank" style="font-size:1.2em"> 
+    <div class="two wide column"></div>
+      <div class="six wide column">
+        <div class="web-font footer-section">
+          <% review = get_last_supplier_review %>
+          <% unless review.nil? %>
+            <div class="review-card-for-footer">
+              <div style=" padding:5px; text-align:right; font-size:0.8em">
+                  <i class="comment alternate icon"></i>
+                  <b><%= review["author"] %></b>
+                  درباره  وب‌سایت
+                  <b>
+                    <a href="<%= supplier_review_page_path(property_name: review["page"])%>">
+                    <%= review["persian_name"] %>
+                    </a>
+                  </b>
+                   نوشته:
+              </div>
+              <div>
+                <%= review["text"][0..100] %><a href="<%= supplier_review_page_path(property_name: review["page"])%>/#<%= review["id"] %>">...</a>
+              </div>
+            </div>
+          <% end %>
+          <a href="<%= supplier_review_index_page_path %>" target="_blank" style="font-size:1.2em; padding-top:5px"> 
             <i class="comments icon"></i>
             <b>
-            تجربه خریدتان از سایت‌ها را با بقیه به اشتراک بگذارید
+              شما هم از تجربه خریدتان از سایت‌ها بنویسید
             </b>
           </a>          
       </div>
     </div>
-    <div class="eight wide column">
-        <div class="web-font"  style="direction: rtl;text-align:center;padding: 1em 2em 1em 2em;line-height: 2em; font-size:1em">
+
+    <div class="six wide column">
+        <div class="web-font footer-section" >
+          <% review = get_last_airline_review %>
+          <% unless review.nil? %>
+            <div class="review-card-for-footer">
+              <div style=" padding:5px; text-align:right; font-size:0.8em">
+                  <i class="comment alternate icon"></i>
+                  <b><%= review["author"] %></b>
+                  درباره خط هوایی 
+                  <b>
+                    <a href="<%= airline_review_page_path(property_name: review["page"])%>">
+                    <%= review["persian_name"] %>
+                    </a>
+                  </b>
+                   نوشته:
+              </div>
+              <div>
+                <%= review["text"][0..80] %><a href="<%= airline_review_page_path(property_name: review["page"])%>/#<%= review["id"] %>">...</a>
+              </div>
+            </div>
+          <% end %>
           <a href="<%= airline_review_index_page_path %>" target="_blank" style="font-size:1.2em"> 
             <i class="comments icon"></i>
             <b>
-            به خطوط هوایی امتیازی دهید
+            نظرتان در مورد خطوط هوایی را بنویسید
             </b>
           </a>     
       </div>
     </div>
+    <div class="two wide column"></div>
   </div>
 
   <div class="ui stackable sixteen column grid" style="background: #f1f1f1;border-top: #eee 1px solid;font-size: 1em;">
@@ -48,7 +89,8 @@
           <%= link_to "توسعه دهندگان", our_service_path, class:"footer-link" %> |
           <%= link_to "تمام پروازها", flight_page_path,class:"footer-link" %> |
           <a class="footer-link"  href="https://cafebazaar.ir/app/com.parvazhub.android/?l=fa">اپلیکیشن اندروید</a> |
-          <a class="footer-link"  href="https://t.me/parvazhubBot">بات تلگرام پروازهاب</a> 
+          <a class="footer-link"  href="https://t.me/parvazhubBot">بات تلگرام پروازهاب</a> |  
+          <a class="footer-link"  href="<%= en_home_path %>">English version</a> 
       </div>
     </div>
 

@@ -29,4 +29,14 @@ module ApplicationHelper
     suppliers = Supplier.where(status: true)
   end
 
+  def get_last_supplier_review
+    Review.new.get_last_supplier_review
+  end
+
+  def get_last_airline_review
+    Review.new.get_last_airline_review
+  end
+
+  
+
 end

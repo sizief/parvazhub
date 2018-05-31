@@ -100,5 +100,22 @@ class Admin::DashboardController < ApplicationController
     end
     @dates_count = Hash[@dates_count.sort_by{|k, v| v}.reverse]
   end
+
+  def update_review
+    review = Review.find(review_params[:id])
+    review.update(review_params)
+    #review.save
+  end
+
+  def delete_review
+    review = Review.find(review_params[:id])
+    review.destroy
+  end
+
+  private
+
+  def review_params
+    params.require(:review).permit(:id, :published)
+  end
   
 end

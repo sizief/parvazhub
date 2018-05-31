@@ -11,7 +11,7 @@ class ReviewController < ApplicationController
     @rate_average = airline.rate_average
     @rate_count ||= 0
     @rate_average ||= 0
-    @reviews = Review.where(page: @page).where.not(text:"")
+    @reviews = Review.where(page: @page).where.not(text:"").where(published: true)
     @user = current_user
     @category = "airline"
 
@@ -26,7 +26,7 @@ class ReviewController < ApplicationController
     @page = supplier.name.downcase
     @rate_count = supplier.rate_count.nil? ? 0 : supplier.rate_count
     @rate_average = supplier.rate_average.nil? ? 0 : supplier.rate_average
-    @reviews = Review.where(page: @page).where.not(text:"")
+    @reviews = Review.where(page: @page).where.not(text:"").where(published: true)
     @user = current_user
     @category = "supplier"
   end

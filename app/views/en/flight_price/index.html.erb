@@ -24,7 +24,7 @@
             </div> 
         </h5> 
         <div style="display: inline-block;float: right;">
-            <a href="<%= flight_result_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date]) %> ">
+            <a href="<%= en_flight_result_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date]) %> ">
                 <button class="ui mini right floated button web-font nm  ">
                 return to the list 
                 </button>
@@ -108,7 +108,7 @@
  
        
         
-        <a href="<%= flight_result_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date]) %> ">
+        <a href="<%= en_flight_result_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date]) %> ">
             <button class="ui button web-font fluid ">
                 <i class="right arrow icon"></i>
                 return to flight list

@@ -23,5 +23,12 @@ class Airline < ApplicationRecord
       airline.save 
     end  
   end
+
+  def get_persian_name_by_english_name english_name
+    airline = Airline.find_by(english_name: english_name)
+    persian_name = airline.nil? ? nil : airline.persian_name
+    persian_name
+  end
+
   
 end
