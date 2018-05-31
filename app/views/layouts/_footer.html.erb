@@ -66,7 +66,7 @@
                    نوشته:
               </div>
               <div>
-                <%= review["text"][0..80] %><a href="<%= airline_review_page_path(property_name: review["page"])%>/#<%= review["id"] %>">...</a>
+                <%= review["text"][0..100] %><a href="<%= airline_review_page_path(property_name: review["page"])%>/#<%= review["id"] %>">...</a>
               </div>
             </div>
           <% end %>

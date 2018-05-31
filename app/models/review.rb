@@ -6,6 +6,7 @@ class Review < ApplicationRecord
     review = get_not_null_text_review "supplier"
     unless review.nil?
       review = review.attributes
+      review["author"] = review["author"].empty? ? "ناشناس" : review["author"]
       review["persian_name"] = Supplier.new.get_persian_name review["page"]
     end
     review
@@ -15,6 +16,7 @@ class Review < ApplicationRecord
     review = get_not_null_text_review "airline"
     unless review.nil?
       review = review.attributes
+      review["author"] = review["author"].empty? ? "ناشناس" : review["author"]
       review["persian_name"] = Airline.new.get_persian_name_by_english_name review["page"]
     end
     review
