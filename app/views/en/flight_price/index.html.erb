@@ -1,7 +1,7 @@
 <%= render 'en/layouts/header' %>
 <% provide(:canonical,"<link rel=\"canonical\" href=\"http://parvazhub.com/en/flights/#{@search_parameter[:origin_english_name]}-#{@search_parameter[:destination_english_name]}\"/> ".html_safe)%>
-<% provide(:title," #{@search_parameter[:origin_english_name].humanize} to #{@search_parameter[:destination_english_name].humanize} #{@search_parameter[:date]} #{@airline.english_name.sub("-"," ").humanize} #{hour_to_human_for_en_title(@flight.departure_time.to_datetime.strftime('%H:%M'))} | PARVAZHUB" ) %>
-<% provide(:description,"#{@search_parameter[:origin_english_name]} to  #{@search_parameter[:destination_english_name]} #{@search_parameter[:date].to_date.strftime('%d %B')} #{@airline.english_name.sub("-"," ").humanize}" ) %>
+<% provide(:title," #{@search_parameter[:origin_english_name].humanize} to #{@search_parameter[:destination_english_name].humanize} #{@search_parameter[:date]} #{english_airline_name_for(@airline)} #{hour_to_human_for_en_title(@flight.departure_time.to_datetime.strftime('%H:%M'))} | PARVAZHUB" ) %>
+<% provide(:description,"#{@search_parameter[:origin_english_name]} to  #{@search_parameter[:destination_english_name]} #{@search_parameter[:date].to_date.strftime('%d %B')}  #{english_airline_name_for(@airline)}" ) %>
 
 <div class="ui container" id="search-results-container">
 
@@ -11,7 +11,7 @@
             <%= airline_logo_for @flight.airline_code %> 
             <div class="content">
                Best prices for 
-                <%=  @airline.english_name.sub("-"," ").humanize %>
+                <%=  english_airline_name_for(@airline) %>
                 <%= en_hour_to_human @flight.departure_time.to_datetime.strftime("%H:%M") %>            
                 <%= @flight.airplane_type.blank? ? " " : en_airplane_name_for(@flight.airplane_type) %>
                 

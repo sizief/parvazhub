@@ -14,4 +14,13 @@ module En::FlightPriceHelper
        	phrase
 	end
 
+	def english_airline_name_for airline
+		if airline.nil?
+		  name = ""
+		else
+		  name = airline.english_name.sub("-"," ").humanize
+		end
+		name
+	end
+
 end
