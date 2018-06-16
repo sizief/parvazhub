@@ -84,7 +84,7 @@
                                 $(document).ready(function(){
                                     var myChart = new Chart(ctx, {
                                         type: 'line',
-                                        data: {labels: labels,datasets: [{label: "Ticket price changes <%= en_hour_to_human @flight.departure_time.to_datetime.strftime('%H:%M') %> <%= @airline.english_name.humanize %> ",borderColor: 'rgb(54,162,235)',backgroundColor:  'rgb(54,162,235)', data: data,fill: false,lineTension: 0}]},
+                                        data: {labels: labels,datasets: [{label: "Ticket price changes <%= en_hour_to_human @flight.departure_time.to_datetime.strftime('%H:%M') %> <%= english_airline_name_for(@airline) %> ",borderColor: 'rgb(54,162,235)',backgroundColor:  'rgb(54,162,235)', data: data,fill: false,lineTension: 0}]},
                                         options: {
                                             showLines: true,
                                             scales: {
