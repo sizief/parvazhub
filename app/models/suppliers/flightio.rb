@@ -58,7 +58,7 @@ class Suppliers::Flightio < Suppliers::Base
     flight_id, flight_id_list = nil, nil
     flight_prices, flight_ids = Array.new(), Array.new()
       doc = Nokogiri::HTML(response[:response])
-      doc = doc.xpath('//div[@class="search-result flights-boxs depart"]')
+      doc = doc.xpath('//div[@class="search-result flights-boxs depart flat-card "]')
       update_status search_history_id, "Extracting(#{Time.now.strftime('%M:%S')})"
 
       doc.each do |flight|
