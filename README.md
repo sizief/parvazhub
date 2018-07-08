@@ -1,5 +1,8 @@
 # PARVAZHUB
-[PARVAZHUB](https://parvazhub.com) is Flight meta search for Iranian Online Travel Agencies. It is written in Ruby on Rails. 
+[PARVAZHUB](https://parvazhub.com) is a Flight meta search for Iranian Online Travel Agencies. It is written in Ruby on Rails.  
+
+See [about us](https://parvazhub.com/us) page for more information (it's in Farsi)
+
 
 ## Run it on your local 
 A. pull the repo  
