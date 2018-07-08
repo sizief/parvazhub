@@ -1,1 +1,0 @@
-[{"severity":"convention","location":{"begin_pos":0,"end_pos":5},"message":"Missing top-level class documentation comment.","cop_name":"Style/Documentation","status":"unsupported"},{"severity":"convention","location":{"begin_pos":146,"end_pos":150},"message":"Trailing whitespace detected.","cop_name":"Layout/TrailingWhitespace","status":"uncorrected"}]

@@ -1,1 +1,0 @@
-[{"severity":"convention","location":{"begin_pos":0,"end_pos":5},"message":"Missing top-level class documentation comment.","cop_name":"Style/Documentation","status":"unsupported"},{"severity":"convention","location":{"begin_pos":105,"end_pos":134},"message":"Use `%i` or `%I` for an array of symbols.","cop_name":"Style/SymbolArray","status":"uncorrected"}]
