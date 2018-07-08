@@ -31,3 +31,4 @@ public/assets
 abarcloud.yml
 coverage
 core
+.env
