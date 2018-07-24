@@ -29,3 +29,6 @@ abarcloud.yml
 coverage
 core
 .cache
+.env.development
+.vscode/
+

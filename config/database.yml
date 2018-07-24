@@ -7,9 +7,9 @@ default: &default
 
 development:
   <<: *default
-  host: db #localhost 
+  host: localhost #db 
   adapter: postgresql
-  database: db/development
+  database: <%= ENV["DB_NAME"] %>
   port: <%= ENV["DB_PORT"] %>
   username: <%= ENV["DB_USERNAME"] %> #<%= ENV["LOCAL_DB_USERNAME"] %>
   password: <%= ENV["DB_PASSWORD"] %> #<%= ENV["LOCAL_DB_PASSWORD"] %> #
@@ -26,10 +26,10 @@ test:
 
 production:
   <<: *default
-  host: <%= ENV["DB_HOST"] %> 
+  host: localhost
   adapter: postgresql
-  database: production
-  port: <%= ENV["DB_PORT"] %> 
+  database: <%= ENV["DB_NAME"] %>
+  port: <%= ENV["DB_PORT"] %>
   username: <%= ENV["DB_USERNAME"] %> 
   password: <%= ENV["DB_PASSWORD"] %>
 

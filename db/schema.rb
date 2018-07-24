@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180118084118) do
+ActiveRecord::Schema.define(version: 20180724195506) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -138,12 +138,6 @@ ActiveRecord::Schema.define(version: 20180118084118) do
     t.index ["route_id", "flight_number", "departure_time"], name: "index_flights_on_route_id_and_flight_number_and_departure_time", unique: true, using: :btree
   end
 
-  create_table "hotels", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "most_search_routes", force: :cascade do |t|
     t.integer  "route_id"
     t.integer  "count"
@@ -215,6 +209,7 @@ ActiveRecord::Schema.define(version: 20180118084118) do
   create_table "search_flight_ids", force: :cascade do |t|
     t.text   "flight_ids"
     t.string "token"
+    t.index ["token"], name: "index_search_flight_ids_on_token", using: :btree
   end
 
   create_table "search_histories", force: :cascade do |t|
@@ -236,6 +231,9 @@ ActiveRecord::Schema.define(version: 20180118084118) do
     t.boolean  "international"
     t.boolean  "domestic"
     t.boolean  "job_search_allowed"
+    t.integer  "rate_count"
+    t.integer  "rate_average"
+    t.index ["name"], name: "index_suppliers_on_name", unique: true, using: :btree
   end
 
   create_table "telegram_search_queries", force: :cascade do |t|
@@ -260,31 +258,11 @@ ActiveRecord::Schema.define(version: 20180118084118) do
     t.index ["telegram_id"], name: "index_telegram_users_on_telegram_id", unique: true, using: :btree
   end
 
-  create_table "temp_airports", force: :cascade do |t|
-    t.string "ident"
-    t.string "type_airport"
-    t.string "name"
-    t.string "latitude_deg"
-    t.string "longitude_deg"
-    t.string "elevation_ft"
-    t.string "continent"
-    t.string "iso_country"
-    t.string "iso_region"
-    t.string "municipality"
-    t.string "scheduled_service"
-    t.string "gps_code"
-    t.string "iata_code"
-    t.string "local_code"
-    t.string "home_link"
-    t.string "wikipedia_link"
-    t.string "keywords"
-  end
-
   create_table "user_flight_price_histories", force: :cascade do |t|
     t.string   "flight_id"
     t.string   "channel"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: '2018-07-24 19:39:58', null: false
+    t.datetime "updated_at", default: '2018-07-24 19:39:58', null: false
   end
 
   create_table "user_search_histories", force: :cascade do |t|
