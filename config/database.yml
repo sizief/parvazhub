@@ -32,12 +32,3 @@ production:
   port: <%= ENV["DB_PORT"] %>
   username: <%= ENV["DB_USERNAME"] %> 
   password: <%= ENV["DB_PASSWORD"] %>
-
-benchmark:
-  <<: *default
-  host: <%= ENV["DB_HOST"] %> 
-  adapter: postgresql
-  database: production
-  port: <%= ENV["DB_PORT"] %> 
-  username: <%= ENV["DB_USERNAME"] %> 
-  password: <%= ENV["DB_PASSWORD"] %>

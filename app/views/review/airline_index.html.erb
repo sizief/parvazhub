@@ -1,0 +1,24 @@
+<%= render 'layouts/header' %>
+<% provide(:title,"  لیست ایرلاین‌های ایرانی و خارجی و نظرات کاربران | پروازهاب") %>
+<% provide(:description,"لیست ایرلاین‌ها و نظرات کاربران را در پروازهاب بخوانید و نظر خودتان را ثبت کنید") %>
+
+
+<div class="ui container" id="search-results-container" style="padding-top: 1em; direction:rtl;">
+خط هوایی مورد نظرتان را انتخاب کنید:
+    <ul>
+    <% Airline.where(country_code: "IR").each do |airline|  %>
+		<div class="city-calendar" >
+            <a href="<%= airline_review_page_path airline.english_name  %>" >
+                <h4>
+                    <%= airline_logo_for airline.code,nil,false %> 
+                    خط هوایی
+                    
+                        <%=  airline.persian_name  %>
+                </h4>
+            </a>   
+		</div>
+    <% end %>
+    </ul>
+</div>
+<%= render 'layouts/searchbox-helper', date_picker_inline: false %>   
+<%= render 'layouts/footer' %>

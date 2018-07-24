@@ -29,7 +29,7 @@ class Suppliers::Iranhrc < Suppliers::Base
         response = response.body
       end
     rescue => e
-      SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
+      update_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
       return {status:false}
     end
     return {status:true,response: response}
@@ -45,11 +45,8 @@ class Suppliers::Iranhrc < Suppliers::Base
       flight_id = nil
       flight_prices, flight_ids = Array.new(), Array.new()
       prepared_response = prepare_response(response[:response])
-      json_response = JSON.parse(prepared_response)
-      
-      ActiveRecord::Base.connection_pool.with_connection do
-        SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
-      end
+      json_response = JSON.parse(prepared_response) 
+      update_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
       
       json_response[0..ENV["MAX_NUMBER_FLIGHT"].to_i].each do |flight|
         next if flight.nil?
@@ -85,17 +82,7 @@ class Suppliers::Iranhrc < Suppliers::Base
         flight_prices << FlightPrice.new(is_deep_link_url: false, flight_id: "#{flight_id}", price: "#{price}", supplier: supplier_name.downcase, flight_date:"#{date}", deep_link:"#{deeplink_url}" )
       end #end of each loop
       
-    unless flight_prices.empty?
-      ActiveRecord::Base.connection_pool.with_connection do
-        FlightPrice.import flight_prices, validate: false
-        FlightPriceArchive.archive flight_prices
-        SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
-      end
-    else
-      ActiveRecord::Base.connection_pool.with_connection do
-        SearchHistory.append_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
-      end
-    end
+    complete_import flight_prices, search_history_id
     return flight_ids
   end
 

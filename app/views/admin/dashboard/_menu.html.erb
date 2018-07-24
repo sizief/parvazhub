@@ -1,0 +1,30 @@
+<div class="ui teal inverted stackable menu web-font" style="margin-top: 0 !important;direction: rtl;">
+    <a class="item <%= 'active' if params[:action] == 'index' %>" href="<%= admin_dashboard_path %>">
+    خانه
+  </a>
+  <a class="item <%= 'active' if params[:action] == 'weekly_stats' %>" href="<%= admin_weekly_stats_path %>">
+    آمار هفتگی
+  </a>
+  <a class="item <%= 'active' if params[:action] == 'users' %>" href="<%= admin_users_path %>">
+    کاربران
+  </a>
+  <a class="item <%= 'active' if params[:action] == 'redirects' %>" href="<%= admin_redirects_path %>">
+    ریدایرکت‌ها
+  </a>
+  <a class="item <%= 'active' if params[:action] == 'reviews' %>" href="<%= admin_reviews_path %>">
+    ریویوها
+  </a>
+  <a class="item <%= 'active' if params[:action] == 'search_histories' %>" href="<%= admin_search_histories_path %>">
+    سرچ‌هیستوری
+  </a>
+  <a class="item <%= 'active' if params[:action] == 'suppliers' %>" href="<%= admin_suppliers_path %>">
+    ساپلایرها
+  </a>
+  <a class="item <%= 'active' if params[:action] == 'user_search_histories' %>" href="<%= admin_user_search_histories_path %>">
+    یوزرسرچ‌هیستوری
+  </a>
+  <a class="item <%= 'active' if params[:action] == 'user_search_stats' %>" href="<%= admin_user_search_stats_path %>">
+    آمار سرچ
+  </a>
+  
+</div>

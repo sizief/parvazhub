@@ -1,22 +1,9 @@
 module SearchResultHelper
 	
-	def delay_to_human(delay)
-		if delay.to_f < 15 or delay.nil?
-			return nil
-	  elsif delay.to_f >= 15 and delay.to_f < 25
-			number = 20
-		elsif delay.to_f >= 25 and delay.to_f < 35
-			number = 30
-		elsif delay.to_f >= 35 and delay.to_f < 45
-			number = 40
-		elsif delay.to_f >= 45 and delay.to_f < 55
-			number = 50
-		elsif delay.to_f >= 55 and delay.to_f < 85
-			number = 80
-		elsif delay.to_f >= 85 
-			number = 120 #delay.to_f
+	def delay_to_human delay
+		unless delay.nil?
+			return "<i class=\"warning circle yellow icon\"></i>احتمال  #{delay} دقیقه تاخیر".html_safe
 		end
-		return "<i class=\"warning circle yellow icon\"></i>احتمال  #{number} دقیقه تاخیر".html_safe
 	end
 
 	def trip_duration_to_human total_minute
@@ -32,13 +19,12 @@ module SearchResultHelper
 	end
 
 	def stop_to_human stops
-		stops = stops.split(",")
-		if stops.count == 1
+		if stops.nil?
 			message = "بدون توقف" 
 		else
-			message = "#{stops.count-1} توقف در "
-		    stops.each_with_index do |stop, index|
-				next if stops.count == index+1
+			stops = stops.split(",")
+			message = "#{stops.count} توقف در "
+		  stops.each_with_index do |stop, index|
 				message += " و " if index >= 1
 				message += stop
 			end
@@ -71,10 +57,10 @@ module SearchResultHelper
 		else
 			day_name = date.to_parsi.strftime("%A")
 		end
-		(search_date_dentifier(date,saerch_parameter_date)+day_name).html_safe
+		(search_date_identifier(date,saerch_parameter_date)+day_name).html_safe
 	end
 
-	def search_date_dentifier date,saerch_parameter_date
+	def search_date_identifier date,saerch_parameter_date
 		if saerch_parameter_date.to_date == date.to_date
 			"<i class='arrow down icon'></i>" 
 		else

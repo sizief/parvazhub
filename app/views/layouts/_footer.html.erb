@@ -1,74 +1,99 @@
-<div style="margin-top:2em">
-  <div>
-    <p id="what-we-do" class="web-font"  style="    background: #fafafa;direction: rtl;border-top: 1px solid #eee;padding: 1em 4em 1em 4em;line-height: 2em; font-size:0.8em">
-    پروازهاب موتور جستجو و مقایسه پرواز است. ما پروازهای سیستمی و چارتری را از سایت‌های معتبر فروش بلیط جمع‌آوری می‌کنیم و در اختیار شما می‌گذاریم. از طریق پروازهاب می‌توانید مناسب‌ترین زمان پرواز یا ارزان‌ترین بلیط هواپیما را به سادگی پیدا کنید. مسئولیت اطلاعات فراهم شده در اینجا به عهده‌ی سایت‌ فروشنده است و پروازهاب هیچ مسئولیتی در قبال خرید از هیچ‌کدام از سایت‌ها ندارد.<br/> ممنونیم که از پروازهاب استفاده می‌کنید.  
-    استفاده از پروازهاب کاملا رایگان است. کمک کنید سرویس‌مان را بهتر کنیم:
-    <a href="https://goo.gl/forms/qgBkmzkN7CQCpI9Y2" target="_blank"> 
-    جواب دادن به چهار سوال در نظرسنجی
-    </a>
-    </p>
-  </div>
-  <div class="ui inverted vertical footer segment" style="background:#efefef" >
-      <div class="ui five column grid centered stackable">
-        
-        <div class="row">
-         
-          <div class="column center aligned">			
-            <%= link_to "پروازهای تهران به مشهد امروز", flight_result_path(origin_name: "tehran",destination_name: "mashhad",date:Date.today.to_s),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به دبی امروز", flight_result_path(origin_name: "tehran",destination_name: "dubai",date:Date.today.to_s),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به استانبول امروز", flight_result_path(origin_name: "tehran",destination_name: "istanbul",date:Date.today.to_s),class:"footer-link" %>
-            <%= link_to "پروازهای تهران به اهواز امروز", flight_result_path(origin_name: "tehran",destination_name: "ahvaz",date:Date.today.to_s),class:"footer-link" %>
-            <%= link_to "تمام پروازها", flight_page_path,class:"footer-link" %> 
+  <div style="margin-top:2em">
+    <div class="ui stackable sixteen column grid" style="background: #fafafa;border-top: #eee 1px solid;font-size: 1em;">
+      <div class="sixteen wide column">
+        <div id="what-we-do" class="web-font"  style="direction: rtl;text-align:center;padding: 1em 2em 1em 2em;line-height: 2em; font-size:1em">
+        پروازهاب تمام سایت‌های معتبر پرواز را برای یافتن ارزان‌ترین و بهترین زمان سفر جستجو می‌کند.
+          <div style="margin-top: 1em">
+            <% suppliers_list.each do |supplier| %>
+              <span style="margin: 20px">
+                <a href="<%= supplier_review_page_path supplier.name.downcase  %>" class="grayscale footer-suppliers" >
+                  <%= supplier_logo_for(supplier.name.downcase, false) %>
+                </a>
+              </span>
+            <% end %>
           </div>
-          
-          <div class="column center aligned">			
-            <%= link_to "پروازهای مشهد به تهران ", route_page_path(origin_name: "mashhad",destination_name: "tehran"),class:"footer-link" %>
-            <%= link_to "پروازهای شیراز به تهران ", route_page_path(origin_name: "shiraz",destination_name: "tehran"),class:"footer-link" %>
-            <%= link_to "پروازهای کیش به تهران ", route_page_path(origin_name: "kish",destination_name: "tehran"),class:"footer-link" %>
-            <%= link_to "پروازهای استانبول به تهران " , route_page_path(origin_name: "istanbul",destination_name: "tehran"),class:"footer-link" %>
-            <%= link_to "پروازهای اهواز به تهران ", route_page_path(origin_name: "ahvaz",destination_name: "tehran"),class:"footer-link" %>
-          </div>
-
-          <div class="column center aligned">			
-            <div style="text-align:center; width:100%">
-              <img id='sizpfukzfukzjxlzjzpe' style='cursor:pointer' onclick='window.open("https://logo.samandehi.ir/Verify.aspx?id=96617&p=pfvlgvkagvkarfthjyoe", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")' alt='logo-samandehi' src='https://logo.samandehi.ir/logo.aspx?id=96617&p=bsiywlbqwlbqnbpdyndt'/>
-            </div>
-          </div>
-
-          <div class="two column center aligned" style="text-align: right;line-height: 1.9em;color: #403f3f;direction:rtl; font-size:0.8em">	
-            <div>
-              پذیرایی داخل پرواز خوب نبود؟ هواپیما تمیز نبود؟ پرواز تاخیر زیادی داشت؟
-              <br/>
-              <a href="/review" target="_blank" style="font-size:1.3em"> 
-                <i class="comments icon"></i>
-                <b>
-                تجربه سفرتان را به بقیه بگویید و به ایرلاین امتیاز دهید.
-                </b>
-              </a>
-              </div> 
-            </div>
-        </div>
-
-        <div class="five column row center aligned">
-          <div style="color:white; width:100%; margin:auto;text-align:center;line-height: 2em;border-top: 1px #cccccc solid;width: 80%;padding: 1em;">
-            <a href="https://www.linkedin.com/company/parvazhub"><i class="linkedin square icon large"></i></a>
-            <a href="https://twitter.com/Parvazhub_com"><i class="twitter icon large"></i></a>  
-            <a href="https://www.facebook.com/parvazhub/"><i class="facebook icon large"></i></a>  
-          </div>    
-          <p style="color:#403f3f; direction:rtl; font-size:0.9em;line-height:1.8em;">
-                تمام حقوق مادی و معنوی برای پروازهاب محفوظ است. از طریق ایمیل salam@parvazhub.com و 
-                <a href="https://t.me/parvazhub_com"> تلگرام </a>
-              همیشه در دسترس هستیم.
-          </p>
-          <p style="color:#424040; direction:ltr; font-size:0.8em;line-height:1em;width:100%">
-          <%= Time.current.year %>  - V.1.4 
-          <br/>
-           
-          </p>
-        </div>
-
+        </div>	
       </div>
     </div>
+  </div>
+
+  <div class="ui stackable sixteen column grid" style="background: #f1f1f1;border-bottom: #d8d8d8 1px solid;font-size: 1em;">
+    <div class="two wide column"></div>
+      <div class="six wide column">
+        <div class="web-font footer-section">
+          <% review = get_last_supplier_review %>
+          <% unless review.nil? %>
+            <div class="review-card-for-footer">
+              <div style=" padding:5px; text-align:right; font-size:0.8em">
+                  <i class="comment alternate icon"></i>
+                  <b><%= review["author"] %></b>
+                  درباره  وب‌سایت
+                  <b>
+                    <a href="<%= supplier_review_page_path(property_name: review["page"])%>">
+                    <%= review["persian_name"] %>
+                    </a>
+                  </b>
+                   نوشته:
+              </div>
+              <div>
+                <%= review["text"][0..100] %><a href="<%= supplier_review_page_path(property_name: review["page"])%>/#<%= review["id"] %>">...</a>
+              </div>
+            </div>
+          <% end %>
+          <a href="<%= supplier_review_index_page_path %>" target="_blank" style="font-size:1.2em; padding-top:5px"> 
+            <i class="comments icon"></i>
+            <b>
+              شما هم از تجربه خریدتان از سایت‌ها بنویسید
+            </b>
+          </a>          
+      </div>
+    </div>
+
+    <div class="six wide column">
+        <div class="web-font footer-section" >
+          <% review = get_last_airline_review %>
+          <% unless review.nil? %>
+            <div class="review-card-for-footer">
+              <div style=" padding:5px; text-align:right; font-size:0.8em">
+                  <i class="comment alternate icon"></i>
+                  <b><%= review["author"] %></b>
+                  درباره خط هوایی 
+                  <b>
+                    <a href="<%= airline_review_page_path(property_name: review["page"])%>">
+                    <%= review["persian_name"] %>
+                    </a>
+                  </b>
+                   نوشته:
+              </div>
+              <div>
+                <%= review["text"][0..100] %><a href="<%= airline_review_page_path(property_name: review["page"])%>/#<%= review["id"] %>">...</a>
+              </div>
+            </div>
+          <% end %>
+          <a href="<%= airline_review_index_page_path %>" target="_blank" style="font-size:1.2em"> 
+            <i class="comments icon"></i>
+            <b>
+            نظرتان در مورد خطوط هوایی را بنویسید
+            </b>
+          </a>     
+      </div>
+    </div>
+    <div class="two wide column"></div>
+  </div>
+
+  <div class="ui stackable sixteen column grid" style="background: #f1f1f1;border-top: #eee 1px solid;font-size: 1em;">
+      <div class="sixteen wide column">
+        <div class="web-font"  style="direction: rtl;text-align:center;padding: 1em 2em 1em 2em;line-height: 2em; font-size:1em;color:gray">
+          <%= link_to "درباره‌ و تماس", us_path, class:"footer-link" %> |
+          <%= link_to "قوانین به زبان ساده", policy_path, class:"footer-link" %> |
+          <%= link_to "توسعه دهندگان", our_service_path, class:"footer-link" %> |
+          <%= link_to "تمام پروازها", flight_page_path,class:"footer-link" %> |
+          <a class="footer-link"  href="https://cafebazaar.ir/app/com.parvazhub.android/?l=fa">اپلیکیشن اندروید</a> |
+          <a class="footer-link"  href="https://t.me/parvazhubBot">بات تلگرام پروازهاب</a> |  
+          <a class="footer-link"  href="<%= en_home_path %>">English version</a> 
+      </div>
+    </div>
+
 
   <div class="ui basic modal waiting" style="left: initial;text-align: center;font-size: x-large;">
     <div class="description">

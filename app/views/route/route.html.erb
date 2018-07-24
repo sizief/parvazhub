@@ -1,7 +1,7 @@
 
 <%= render 'layouts/header' %>
-<% provide(:title,"پروازهاب: جستجو و مقایسه پرواز  #{@origin.persian_name} به #{@destination.persian_name} ") %>
-<% provide(:description,"جستجو و مقایسه قیمت پرواز #{@origin.persian_name} به #{@destination.persian_name}") %>
+<% provide(:title,"بلیط #{@destination.persian_name} | پرواز #{@origin.persian_name} #{@destination.persian_name} | پروازهاب" ) %>
+<% provide(:description,"ارزان‌ترین بلیط #{@destination.persian_name}. تمام پروازهای چارتری و سیستمی #{@origin.persian_name} به #{@destination.persian_name}  در پروازهاب") %>
 
 <div class="ui stackable one column grid centered wide-search-box"  id="city-page-search-box">
 <h1 class="city-header">
@@ -10,14 +10,16 @@
    		<%= form_for(:search, url: flight_search_path, method: :get, html: {id:"flight_search",class:"city-page-search-form"}) do |f| %>
     		<div class="ui huge form" >
      			<div class="two fields">
-				 	<div class="field input-container">
-				 		<%= f.text_field :originـfield,{:class =>'origin-field typeahead dir-rtl web-font',placeholder: "از مبدا (شهر یا فرودگاه)"} %>						   
-				 		<%= f.hidden_field :origin,{:id =>'origin'} %>
+					<div class="field input-container">
+					 	<label class="search-label">از</label>
+				 		<%= f.text_field :originـfield,{:value => @origin.persian_name, :class =>'origin-field typeahead dir-rtl web-font',placeholder: "از مبدا (شهر یا فرودگاه)"} %>						   
+				 		<%= f.hidden_field :origin,{:id =>'origin', :value => @origin.english_name} %>
 			 		</div>
 			 
-			 		<div class="field input-container">
-				 		<%= f.text_field :destination_field,{:class =>'destination-field typeahead dir-rtl web-font',placeholder: "به مقصد (شهر یا فرودگاه)"} %>
-				 		<%= f.hidden_field :destination,{:id =>'destination'} %>
+					 <div class="field input-container">
+					 	<label class="search-label">به</label>
+				 		<%= f.text_field :destination_field,{:value => @destination.persian_name, :class =>'destination-field typeahead dir-rtl web-font',placeholder: "به مقصد (شهر یا فرودگاه)"} %>
+				 		<%= f.hidden_field :destination,{:id =>'destination', :value => @destination.english_name} %>
 			 		</div> 
   				</div>
   				<div class="field ui calendar">
@@ -50,7 +52,7 @@
 			<div  class="page-button-links" >
 				<a href="<%= search_link_builder(@origin.english_name,@destination.english_name,price[:date]) %>" class="white">
 					<button class="ui submit big yellow web-font fluid right labeled  icon button waiting-modal link-dates-button" style="padding-left: 2.5em !important; font-size:0.9em !important;" >	
-					 پرواز 
+					 بلیط 
 						<%= "#{@origin.persian_name} به #{@destination.persian_name}" %>
 						<%=price[:date].to_date.to_parsi.strftime "%A %-d %B"  %>	
 						<%= "از #{number_with_delimiter(price[:price])} تومان" unless price[:price].nil? %>		
@@ -74,7 +76,7 @@
 	<div class="city-calendar" id="city-calendar" >
 		<h4>
 			<b class="yellow">کمترین</b>
-            هزینه پرواز <%= "#{@origin.persian_name} به #{@destination.persian_name}" %> برای یک نفر
+            قیمت بلیط <%= "#{@origin.persian_name} به #{@destination.persian_name}" %> برای یک نفر
         </h4>
 		<table class="ui celled table stackable rtl">
 		  	<thead class="not-mobile">
@@ -101,7 +103,7 @@
 								<div class="route-calendar-box">
 									<div class="route-calendar-date">
 										<span class="mobile-only">پرواز 
-											<%= "#{@origin.persian_name} به #{@destination.persian_name}" %>
+											<%= "#{@origin.persian_name}  #{@destination.persian_name}" %>
 											<%=price[:date].to_date.to_parsi.strftime "%A"  %>	
 										</span>
 										<%=price[:date].to_date.to_parsi.strftime "%-d %B"  %>	
@@ -213,5 +215,5 @@
 
 
 </div>
-<%= render 'layouts/searchbox-helper' %> 
+<%= render 'layouts/searchbox-helper', date_picker_inline: false %>   
 <%= render 'layouts/footer' %>

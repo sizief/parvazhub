@@ -1,1 +1,0 @@
-[{"severity":"convention","location":{"begin_pos":111,"end_pos":116},"message":"Line is too long. [85/80]","cop_name":"Metrics/LineLength","status":"unsupported"},{"severity":"convention","location":{"begin_pos":1744,"end_pos":1745},"message":"Extra empty line detected at block body end.","cop_name":"Layout/EmptyLinesAroundBlockBody","status":"uncorrected"}]

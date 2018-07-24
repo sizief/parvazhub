@@ -18,7 +18,7 @@ class Suppliers::Hipotrip < Suppliers::Base
 
     def register_search 
         begin
-          url = "https://rest.hipotrip.com/api/search/flight"
+          url = "https://rest.hipotrip.ir/api/search/flight"
           if Rails.env.test?
             response = {"request_id":"2473e8fcbacf4722","estimated_delay_time":5,"interval":2}
           else
@@ -30,7 +30,7 @@ class Suppliers::Hipotrip < Suppliers::Base
             response = JSON.parse response.body
           end
         rescue => e
-          SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
+          update_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
           raise "first request error"
         end
         return response
@@ -42,7 +42,7 @@ class Suppliers::Hipotrip < Suppliers::Base
       sleep results["estimated_delay_time"].to_f
       begin
         request_id = results["request_id"]
-        url = "https://rest.hipotrip.com/api/search/flight?request_id=#{request_id}"
+        url = "https://rest.hipotrip.ir/api/search/flight?request_id=#{request_id}"
         if Rails.env.test?
           response = mock_results
         else
@@ -52,7 +52,7 @@ class Suppliers::Hipotrip < Suppliers::Base
           response = response.body
         end
       rescue => e
-        SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
+        update_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
         return {status:false}
       end
       return {status:true,response: response}
@@ -61,13 +61,10 @@ class Suppliers::Hipotrip < Suppliers::Base
     def import_flights(response,route_id,origin,destination,date,search_history_id)
       flight_id = nil
       flight_prices, flight_ids = Array.new(), Array.new()
-     
       json_response = JSON.parse(response[:response])
       request_id = json_response["request_id"]
-      
-      ActiveRecord::Base.connection_pool.with_connection do        
-        SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
-      end
+      update_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
+
       json_response["flights"][0..ENV["MAX_NUMBER_FLIGHT"].to_i].each do |flight|
         leg_data = flight_id = nil
         leg_data = prepare flight["origin_destination"][0]["segments"]
@@ -104,21 +101,7 @@ class Suppliers::Hipotrip < Suppliers::Base
   
       end #end of each loop
         
-      unless flight_prices.empty?
-        ActiveRecord::Base.connection_pool.with_connection do 
-          SearchHistory.append_status(search_history_id,"p done(#{Time.now.strftime('%M:%S')})")        
-          
-          FlightPrice.import flight_prices, validate: false
-          SearchHistory.append_status(search_history_id,"fp(#{Time.now.strftime('%M:%S')})")
-          
-          FlightPriceArchive.archive flight_prices
-          SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
-        end
-      else
-        ActiveRecord::Base.connection_pool.with_connection do        
-          SearchHistory.append_status(search_history_id,"empty (#{Time.now.strftime('%M:%S')})")
-        end
-      end
+      complete_import flight_prices, search_history_id
       return flight_ids
     end
 
@@ -128,7 +111,7 @@ class Suppliers::Hipotrip < Suppliers::Base
       trip_duration = 0
       flight_legs.each do |leg|
         airline_code = code_correction leg["airline"]["iata"]
-        flight_number = (leg["airline"]["flight_number"].include? airline_code) ? leg["airline"]["flight_number"] : airline_code+leg["airline"]["flight_number"]
+        flight_number =  airline_code + flight_number_correction(leg["airline"]["flight_number"],airline_code)
   
         flight_numbers << flight_number 
         airline_codes << airline_code
@@ -168,7 +151,12 @@ class Suppliers::Hipotrip < Suppliers::Base
     end
   
     def get_deeplink request_id, result_id
-      "https://hipotrip.com/flight/book/#{request_id}/#{result_id}"
+      "https://hipotrip.ir/flight/book/#{request_id}/#{result_id}"
+    end
+
+    def flight_number_correction(flight_number,airline_code)
+      flight_number = flight_number.sub(airline_code,"")  if flight_number.include? airline_code
+      return flight_number.gsub(/[^\d,\.]/, '')        
     end
 
   end

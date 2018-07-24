@@ -1,0 +1,141 @@
+<% provide(:title,"PARVZHUB | Iranian flight search") %>
+<% provide(:description,"All Iranian domestic flights from the best Iranian online travel agencies in on place") %>
+
+<header>
+
+
+<div class="ui grid" id="header">
+  		<div class="two column row">
+			<div class="right floated left aligned column">
+				<a class="header-language" href="<%= home_path %>">
+					فارسی
+				</a>
+    		</div>
+    		<div class="left floated right aligned column">
+    			<%#= render 'devise/menu/login_items' %>
+    			<%#= render 'devise/menu/registration_items' %>
+       		</div>
+  		</div>
+	</div>
+</header>
+
+<div class="ui vertical masthead segment" id="cover-photo" style="direction: rtl; margin-bottom: 2em;">  
+	<div class="ui container text center aligned header" id="slogan">
+		<a href="/">
+    		<div class="item" id="slogan-text">
+      			<!--<i class="circle notched icon" style="color: white"></i>-->
+      			<span id="company-name">PARVAZHUB</span>
+    		</div>
+		  </a>
+
+		<h1 class="ui header inverted center aligned web-font" style="line-height: 2em;font-size: 1.28rem !important;">
+			<span id="slogan-description">	
+				Search & compare
+				<b class="yellow">  Iran </b> 
+				domestic flights 
+			</span>	
+		</h1>
+	</div>
+
+	<div class="ui stackable one column grid centered" style="margin-top: 1em">
+   		<%= form_for(:search, url: en_flight_search_path, method: :get, html: {id:"flight_search"}) do |f| %>
+    		<div class="ui huge form en" >
+     			<div class="two fields" style="margin-left:12px">
+					<div class="field input-container">
+						<label class="search-label">From</label>
+						<%= f.text_field :originـfield,{:class =>'origin-field typeahead web-font en',placeholder: "origin, type city name", :value => @search_parameter[:origin_english_name]} %>						   
+						<%= f.hidden_field :origin,{:id =>'origin',:value => @search_parameter[:origin_english_name]} %>
+					</div> 
+					<div class="field input-container">
+					  <label class="search-label">To</label>
+					  <%= f.text_field :destination_field,{:class =>'destination-field typeahead web-font',placeholder: "destination, type city name", :value => @search_parameter[:destination_english_name]} %>
+					  <%= f.hidden_field :destination,{:id =>'destination',:value => @search_parameter[:destination_english_name]} %>
+      				</div> 
+  				</div>
+  				<div id="date-picker" style="height: 10em; font-family: samim;">
+						<%= f.text_field :date, {id: 'date-picker-field', value: @search_parameter[:date]} %>
+      			</div>
+  				<div class="ui center aligned basic segment" style="margin-top: 50px;">
+  					<button class="ui submit massive yellow web-font fluid left labeled waiting-modal icon button" type="submit">
+							Search Flights
+					</button>
+  				</div>
+			</div>
+		<%end%>
+	</div>
+	
+	<div>
+		<h4 class="home-calendar-title">
+		<i class="checked calendar icon"></i>
+			Don't decided on dates yet? check prices on calendar<br><br>
+			<%= link_to "Tehran to Shiraz", en_route_page_path(origin_name:  "tehran",destination_name: "shiraz"),class:"city-page-link" %> | 
+			<%= link_to "Tehran to Yazd", en_route_page_path(origin_name:  "tehran",destination_name: "yazd"),class:"city-page-link" %> | 
+			<%= link_to "Tehran to Isfahan", en_route_page_path(origin_name:  "tehran",destination_name: "isfahan"),class:"city-page-link" %>	
+		</h4>
+	</div>
+	
+</div>
+
+<% unless @user_last_searches.nil? %>
+	<div class="ui horizontal divider">
+	Recent searches
+	</div>
+	<div class="ui three stackable cards en" style="width:70%;margin:auto">
+		<% @user_last_searches.each do |user_last_search| %>
+			<div class="card">
+				<div class="content">
+					<div class="header web-font text-left" style="color: #7b7777">
+						<i class=" plane icon"></i>
+						<%= en_title_by_route user_last_search[:route_id] %>
+					</div>
+					<% user_last_search[:dates].each_with_index do |date, index| %>
+						<% if index < @user_last_searches_limit %>
+							<div class="description text-center en" style="padding-top: 4px">
+								<a  href="<%= en_flight_page_path_by_route user_last_search[:route_id], date  %>">
+									<%= date.to_date.strftime "%A %-d %B"   %>
+									<i class="left arrow icon"></i>
+								</a>	
+							</div>
+						<% end %> 	
+					<% end %>   
+				</div>
+			</div>
+		<% end %>   
+	</div>
+<% end %>
+
+<div class="ui horizontal divider">
+	iran popular destinations
+</div>
+
+<div class="ui three stackable cards" style="width:70%;margin:auto;">
+	<% @routes.each do |route| %>
+		<div class="card">
+			<div class="content">
+				<div class="header web-font text-center">
+					<a  href="<%= en_flight_result_path(route[:details][:origin][:english_name], route[:details][:destination][:english_name], "tomorrow") %>">
+						<%= route[:details][:origin][:english_name].humanize %>
+							to
+						<%= route[:details][:destination][:english_name].humanize %>
+					</a>
+				</div>
+				<div class="description text-center dir-rtl">
+					<a  href="<%= en_flight_result_path(route[:details][:origin][:english_name], route[:details][:destination][:english_name], "tomorrow") %>">
+						<%= tomorrow_price_by_dollar route[:route] %>	
+					</a>	
+				</div>
+			</div>
+			<a style="color:white" href="<%= en_flight_result_path(route[:details][:origin][:english_name], route[:details][:destination][:english_name], "tomorrow") %>">
+				<div class="ui bottom attached button yellow web-font dir-rtl">
+					<i class="left arrow icon"></i>	
+					tomorrow flights			
+				</div>
+			</a>
+		</div>
+	<% end %>   
+</div>
+
+<%= render 'en/layouts/searchbox-helper', date_picker_inline: true %>   
+<%= render 'en/layouts/footer' %>
+
+

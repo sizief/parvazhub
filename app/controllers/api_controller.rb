@@ -1,15 +1,28 @@
 class ApiController < ApplicationController
+  after_filter :cors_set_access_control_headers
+
+
+  def cors_set_access_control_headers
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Allow-Methods'] = 'POST, GET'
+    headers['Access-Control-Allow-Headers'] = '*'
+    headers['Access-Control-Request-Method'] = '*'
+    headers['Access-Control-Max-Age'] = "1728000"
+  end
+  
     
     def city_prefetch_suggestion
       city_list = Array.new
       country_list = Country.select(:country_code,:persian_name,:english_name).all.to_a
-      #cities = City.where(country_code: "IR").order(:priority)
       cities = City.where("priority <?",100).order("priority")
     
       cities.each do |city|
         country_object = country_list.detect {|c| c.country_code == city.country_code}
         country_value = country_object.persian_name.nil? ? country_object.english_name : country_object.persian_name
-        city_list << {'code': city.english_name, 'value': city.persian_name, 'country': country_value}
+        city_list << {'code': city.english_name,
+                      'value': city.persian_name, 
+                      'country': country_value, 
+                      'en': english_result(city.english_name, country_object.english_name)}
       end
       render json: city_list  
     end
@@ -27,8 +40,10 @@ class ApiController < ApplicationController
             
         city_value = city.persian_name.nil? ? english_name : persian_name
         country_value = country_object.persian_name.nil? ? country_object.english_name : country_object.persian_name
-
-        city_list << {'code': english_name, 'value': city_value , 'country': country_value}
+        city_list << {'code': english_name, 
+                      'value': city_value , 
+                      'country': country_value, 
+                      'en': english_result(english_name, country_object.english_name)}
       end
       render json: city_list  
     end
@@ -44,8 +59,8 @@ class ApiController < ApplicationController
     end
 
     def flights
-      channel = "application" 
-      user_agent_request = "application"
+      channel = search_params[:channel].nil? ? "android" : search_params[:channel]
+      user_agent_request = channel
       date = search_params[:date]
       route = get_route search_params[:origin_name], search_params[:destination_name] 
 
@@ -62,11 +77,12 @@ class ApiController < ApplicationController
     end
 
     def suppliers
-      channel, user_agent_request = "application"
+      channel = search_params[:channel].nil? ? "android" : search_params[:channel]
+      user_agent_request = channel
       flight = Flight.find_by_id(flight_price_params[:id])
   
      if flight
-        body = get_flight_price(flight,channel,user_agent_request)
+        body = get_flight_price(flight,channel,user_agent_request,current_user)
         status = true  
      else 
         body = "Flight ID is invalid or out of date or sold out." unless flight
@@ -76,6 +92,10 @@ class ApiController < ApplicationController
     end
   
   private
+
+    def english_result city, country
+      {'city': city.humanize, 'country': country.humanize}
+    end
 
     def api_search_params route,date
       unless route.nil?
@@ -89,8 +109,8 @@ class ApiController < ApplicationController
       end
     end
 
-    def get_flight_price(flight,channel,request_user_agent) 
-      SearchResultController.new.get_flight_price(flight,channel,request_user_agent)
+    def get_flight_price(flight,channel,user_agent_request,user) 
+      FlightPriceController.new.get_flight_price(flight,channel,user_agent_request,user)
     end
 
     def date_is_valid date
@@ -115,15 +135,20 @@ class ApiController < ApplicationController
 
     def get_flights(route,date,channel,user_agent_request)
       results = SearchResultController.new
-      results.get_flight_results(route,date,channel,user_agent_request)
+      args = {user: current_user, route: route, date: date, channel: channel, user_agnet_request: user_agent_request}
+      results.get_flight_results(args)
     end
 
     def search_params
-      params.permit(:origin_name,:destination_name,:date)
+      params.permit(:origin_name,:destination_name,:date,:channel)
     end
 
     def flight_price_params
       params.permit(:id)
+    end
+    
+    def current_user
+      UserController.new.get_app_user
     end
 
 end

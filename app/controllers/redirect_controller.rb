@@ -8,23 +8,27 @@ require 'uri'
      date: params[:date],
      flight_id: params[:flight_id],
      flight_price_id: params[:flight_price_id],
-     channel: params[:channel]
+     channel: params[:channel],
+     user_id: params[:user_id]
     }
   end
 
   def save_redirect args,flight_price,deep_link,request
+    user = args[:user_id].nil? ? current_user : User.find_by(id: args[:user_id])
     redirect = Redirect.new(channel: args[:channel],
                             user_agent: request.user_agent,
                             remote_ip: request.remote_ip,
                             flight_id: flight_price.flight_id,
                             price: flight_price.price,
                             supplier: flight_price.supplier,
-                            deep_link: deep_link)                                                      
+                            deep_link: deep_link,
+                            user: user) 
+    background_archive  user.id, "redirect", args[:channel]                                                  
 
     unless is_bot(request.user_agent)
       redirect.save 
-      text="👊 [#{Rails.env}] #{request.user_agent} #{request.remote_ip} \n #{@flight_price.supplier}"
-      TelegramMonitoringWorker.perform_async(text)
+      #text="👊 [#{Rails.env}] #{request.user_agent} #{request.remote_ip} \n #{@flight_price.supplier}"
+      #TelegramMonitoringWorker.perform_async(text)
     end
   end
 
@@ -39,6 +43,13 @@ require 'uri'
     deep_link += "utm_source=parvazhub_com&utm_medium=meta_search&utm_campaign=parvazhub_com"  
   end
 
+  def app_redirect  
+    user_id = UserController.new.get_app_user.id
+    redirect_to  action: 'redirect', origin_name: params[:origin_name], destination_name: params[:destination_name], date: params[:date],
+                                  flight_id: params[:flight_id], flight_price_id: params[:flight_price_id], 
+                                  channel: params[:channel], user_id: user_id
+  end
+
   def redirect
     args = define_args
     
@@ -47,7 +58,6 @@ require 'uri'
     rescue
       @flight_price = nil
     end
-    
     
     @flight_price_link = flight_prices_path(args[:origin_name], 
                                             args[:destination_name], 
@@ -60,6 +70,11 @@ require 'uri'
       @method = "GET"  
       save_redirect args,@flight_price,@action_link,request
     end
+  end
+
+  private
+  def background_archive user_id, event, channel
+    AmplitudeWorker.perform_async(user_id, event, channel) if Rails.env.production?
   end
 
 end

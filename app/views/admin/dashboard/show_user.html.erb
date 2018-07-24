@@ -1,0 +1,134 @@
+<% provide(:title, @user.id.to_s) %>
+<%= render 'menu' %>
+
+<div class="ui container" style="margin-top: 2em">
+    <h4 class="ui horizontal divider header">
+        User Info
+    </h4>
+    <%= @user.email%> |  <%= @user.first_name %> <%= @user.last_name%>
+
+
+    <h4 class="ui horizontal divider header">
+        Total
+    </h4>
+    <div class="ui statistics">
+		<div class="orange statistic">
+			<div class="value">
+				<%= @user.user_search_histories.count  %>
+			</div>
+			<div class="label">
+                Searches 
+			</div>
+        </div>
+        <div class="orange statistic">
+			<div class="value">
+				<%= @user.user_flight_price_histories.count  %>
+			</div>
+			<div class="label">
+				Suppliers 
+			</div>
+        </div>
+        <div class="orange statistic">
+			<div class="value">
+				<%= @user.redirects.count  %>
+			</div>
+			<div class="label">
+				Redirects 
+			</div>
+        </div>
+    </div>
+
+    <h4 class="ui horizontal divider header">
+		Reviews
+    </h4>
+    <div class="ui relaxed divided list">
+        <% @user.reviews.each do |review| %>
+            <div class="item">
+                <i class="large comment middle aligned icon"></i>
+                <div class="content">
+                    <span class="header">
+                        <%= review.page  %>  
+                        <%= review.rate  %>  
+                    </span>
+                    <div class="description">
+                        <%= review.text  %> | 
+                        <%= review.created_at  %>
+                    </div>    
+                </div>
+            </div>
+        <% end %>
+    </div>
+    
+    
+    <h4 class="ui horizontal divider header">
+		Searches
+    </h4>
+    <div class="ui relaxed divided list">
+        <% @user.user_search_histories.includes(:route).each do |search| %>
+            <div class="item">
+                <i class="large plane middle aligned icon"></i>
+                <div class="content">
+                    <span class="header">
+                        <%= search.route.origin  %>
+                        <%= search.route.destination  %>    
+                    </span>
+                    <div class="description">
+                        <%= search.departure_time  %>  |
+                        <%= search.channel  %>    |
+                        <%= time_ago_in_words search.created_at  %> 
+                    </div>
+                </div>
+            </div>
+        <% end %>
+    </div>
+
+    <h4 class="ui horizontal divider header">
+		Supplier Page
+    </h4>
+    <div class="ui relaxed divided list">
+        <% @user.user_flight_price_histories.each do |search| %>
+            <% flight = Flight.find(search.flight_id)  %>
+            <div class="item">
+                <i class="large plane middle aligned icon"></i>
+                <div class="content">
+                    <span class="header">
+                        <%  airline = Airline.find_by(code: flight.airline_code) %>
+                        <%= airline.nil? ? flight.airline_code : airline.english_name %> |
+                        <%= flight.flight_number %>
+                        </span>
+                    <div class="description">
+                        <%= flight.airplane_type %> |
+                        <%= flight.price_by %> |
+                        <%= flight.best_price %> |
+                        <%= search.channel  %>    |
+                        <%= time_ago_in_words search.created_at  %>    
+                    </div>
+                </div>
+            </div>
+        <% end %>
+    </div>
+
+    <h4 class="ui horizontal divider header">
+		Redirects 
+    </h4>
+    <div class="ui relaxed divided list">
+        <% @user.redirects.each do |redirect| %>
+            <div class="item">
+                <i class="large plane middle aligned icon"></i>
+                <div class="content">
+                    <span class="header">
+                        <%= redirect.flight_id  %>
+                        <%= redirect.supplier  %>    
+                    </span>
+                    <div class="description">
+                        <%= redirect.user_agent  %>   |
+                        <%= redirect.channel  %>    |
+                        <%= time_ago_in_words redirect.created_at  %>    
+                    </div>
+                </div>
+            </div>
+        <% end %>
+    </div>
+	
+
+</div>

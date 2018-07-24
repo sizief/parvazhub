@@ -1,0 +1,94 @@
+<% provide(:title,"کاربران") %>
+<%= render 'menu' %>
+
+<div class="ui container" style="margin-top: 2em">
+
+	<h4 class="ui horizontal divider header">
+	Users
+	</h4>
+	<div class="ui statistics">
+		<div class=" statistic">
+			<div class="value">
+				<%= User.count %>
+			</div>
+			<div class="label">
+				Total user
+			</div>
+		</div>
+		<div class="grey statistic">
+			<div class="value">
+				<%= User.where(channel: "telegram").count %>
+			</div>
+			<div class="label">
+			telegram 
+			</div>
+		</div>
+		<div class="grey statistic">
+			<div class="value">
+				<%= User.where(channel: "website").count %>
+			</div>
+			<div class="label">
+				website 
+			</div>
+		</div>
+		<div class="yellow statistic">
+			<div class="value">
+				<%= User.where(channel: "website").where("created_at > ?", tehran_time(Date.today)).count %>
+			</div>
+			<div class="label">
+				Today website 
+			</div>
+		</div>
+		<div class="yellow statistic">
+			<div class="value">
+				<%= User.where(channel: "telegram").where("created_at > ?", tehran_time(Date.today)).count %>
+			</div>
+			<div class="label">
+				Today Telegram 
+			</div>
+		</div>
+	</div>
+
+	<h4 class="ui horizontal divider header">
+	Details
+	</h4>
+
+	<a href="?channel=telegram">
+		<div class="ui blue horizontal label">
+			telegram
+		</div>
+	</a>
+
+	<a href="<%= admin_users_path %>">
+		<div class="ui black horizontal label">
+			all
+		</div>
+	</a>
+
+	<table class="ui celled striped table ">
+		<thead>
+			<tr class="center aligned">
+				<th><h4>Id</h4></th>
+				<th><h4>Email</h4></th>
+				<th><h4>Name</h4></th>
+				<th><h4>Channel</h4></th>
+				<th><h4>Created at</h4></th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @users.each do |user|  %>
+			<tr class="center aligned">
+				<td>
+					<a href="<%= admin_show_user_path(user.id) %>">
+						<%= user.id %>
+					</a>
+				</td>
+				<td><%= user.email %></td>
+				<td><%= user.first_name %> <%= user.last_name %></td>
+				<td><%= user.channel %></td>
+				<td><%= (user.created_at) %></td>
+			</tr>
+			<% end %>
+		</tbody>
+</table>
+</div>

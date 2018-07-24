@@ -29,7 +29,7 @@ class Suppliers::Flytoday < Suppliers::Base
       response = response.body
     end
     rescue => e
-      SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
+      update_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
       return {status:false}
     end
     return {status:true,response: response}
@@ -38,16 +38,15 @@ class Suppliers::Flytoday < Suppliers::Base
   def import_flights(response,route_id,origin,destination,date,search_history_id)
     flight_id = nil
     flight_prices, flight_ids = Array.new(), Array.new()
-   
     json_response = JSON.parse(response[:response])
-    ActiveRecord::Base.connection_pool.with_connection do        
-      SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
-    end
+    update_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
+
     json_response["PricedItineraries"][0..ENV["MAX_NUMBER_FLIGHT"].to_i].each do |flight|
       leg_data = flight_id = nil
       leg_data = prepare flight["FlightSegments"]
       
-      next if leg_data.nil?      
+      next if leg_data.nil? 
+      stops = leg_data[:stop].empty? ? nil : leg_data[:stop].join(",")        
       ActiveRecord::Base.connection_pool.with_connection do        
           flight_id = Flight.create_or_find_flight(route_id,
           leg_data[:flight_number].join(","),
@@ -55,7 +54,7 @@ class Suppliers::Flytoday < Suppliers::Base
           leg_data[:airline_code].join(","),
           leg_data[:airplane_type].join(","),
           leg_data[:arrival_date_time].last,
-          leg_data[:stop].join(","),
+          stops,
           leg_data[:trip_duration])
       end
       flight_ids << flight_id      
@@ -80,28 +79,14 @@ class Suppliers::Flytoday < Suppliers::Base
 
     end #end of each loop
       
-    unless flight_prices.empty?
-      ActiveRecord::Base.connection_pool.with_connection do 
-        SearchHistory.append_status(search_history_id,"p done(#{Time.now.strftime('%M:%S')})")        
-        
-        FlightPrice.import flight_prices, validate: false
-        SearchHistory.append_status(search_history_id,"fp(#{Time.now.strftime('%M:%S')})")
-        
-        FlightPriceArchive.archive flight_prices
-        SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
-      end
-    else
-      ActiveRecord::Base.connection_pool.with_connection do        
-        SearchHistory.append_status(search_history_id,"empty (#{Time.now.strftime('%M:%S')})")
-      end
-    end
+    complete_import flight_prices, search_history_id
     return flight_ids
   end
 
   def prepare flight_legs
     flight_numbers, airline_codes, airplane_types, departure_date_times, arrival_date_times, stops = Array.new, Array.new, Array.new, Array.new, Array.new, Array.new
     trip_duration = 0
-    flight_legs.each do |leg|
+    flight_legs.each_with_index do |leg,index|
       airline_code = leg["OperatingAirline"]
       flight_number = (leg["FlightNumber"].include? airline_code) ? leg["FlightNumber"] : airline_code+leg["FlightNumber"]
 
@@ -110,7 +95,7 @@ class Suppliers::Flytoday < Suppliers::Base
       airplane_types << leg["OperatingEquipment"]
       departure_date_times << parse_date(leg["DepartureDateTime"]).utc.to_datetime + ENV["IRAN_ADDITIONAL_TIMEZONE"].to_f.minutes # add 4:30 hours because flytoday date time is in iran time zone #.strftime("%H:%M")
       arrival_date_times << parse_date(leg["ArrivalDateTime"]).utc.to_datetime + ENV["IRAN_ADDITIONAL_TIMEZONE"].to_f.minutes
-      stops << leg["ArrivalAirport"]
+      stops << leg["ArrivalAirport"] unless flight_legs.count == index+1 #we dont need last stops
       trip_duration += to_minutes leg["JourneyDuration"]
     end
     

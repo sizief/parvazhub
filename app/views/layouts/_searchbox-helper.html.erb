@@ -75,16 +75,17 @@ $(document).ready(function(){
         <% end %>     
     });
 
+
   var calnedarIsExist = document.getElementsByClassName("datepicker-plot-area-inline-view").length;
   if (calnedarIsExist == 0) {
     var today_timestamp = Math.round((new Date()).getTime() / 1000);
      $("#date-picker").pDatepicker({
-          maxDate: new persianDate().subtract('day', 1).valueOf(),
+          minDate: new persianDate().subtract('day', 0).valueOf(),
           dayPicker: {scrollEnabled: false},
-          monthPicker: {scrollEnabled: false},
+          monthPicker: {scrollEnabled: false, enabled: false},
+          yearPicker: {scrollEnabled: false, enabled: false},
           persianDigit: true,
           format : "dddd - DD MMMM",
-          /* format : "YYYY - MM - DD", */
           altFieldFormatter : function(unix){
               if (!unix) return '';
               var date =  new Date(unix);
@@ -95,22 +96,40 @@ $(document).ready(function(){
               var year = date.getFullYear();
               return year + '-' + month + '-' + day;
           },
-          
           altField: '#date-picker-field',
-          toolbox: {enabled:false},
+          toolbox: {enabled: false},
           navigator: {
               enabled: true,
+              scroll: {
+                  enabled: false
+              },
               text: {
                   btnNextText: ">",
                   btnPrevText: "<"
               }
           },
           autoClose: true,
-          inline: false
+          inline: <%= date_picker_inline %>,
+          calendar: {
+              persian: {
+                  locale: "fa",
+                  showHint: true,
+                  leapYearMode: "algorithmic"
+                },
+              gregorian: {
+                  locale: "en",
+                }
+            },
       }); 
    }
   
   // fix for turbolink does not show waiting modal after first time of form submit
   $("#flight_search").submit(function( event ) {$('.ui.basic.modal.waiting').modal('show');});
   }); 
+
+  //select input values after focus
+  $(function(){
+    $(document).on('focus','.tt-input',function(){ this.select(); });
+  });
+
 </script>

@@ -1,0 +1,55 @@
+<%= render 'en/layouts/header' %>
+<% provide(:title,"PARVAZHUB") %>
+<% provide(:description,"Search and Compare fare prices") %>
+
+<% if @flight_price.nil? %>
+    <h1 style="text-align: center;padding: 3em;direction: rtl;">
+        Sorry, the seat was taken. Please search again.
+    <br><br>
+    <a href="<%= @flight_price_link  %>">
+        Return
+    </a>
+    </h1>
+<% else %>
+    
+
+    <h1 style="text-align: center;padding: 1em;direction: rtl;">
+        Transferring you to
+        <br><br>
+        <%= supplier_logo_for(@supplier,false,"small") %>
+    </h1>
+
+    <h3 style="line-height:1.9em;width:70%;margin:Auto;text-align: center;padding: 1em;direction: rtl;border-top:1px solid #ccc;margin-top:1em">
+        <br/><br/>
+        <a href="<%= supplier_review_page_path(@supplier.downcase) %>" target="_blank">
+           Please note purchasing from this website requires an Iranian bank account
+        </a>
+    </h3>
+
+    <div style="text-align: center;padding: 3em;direction: rtl;line-height: 1.5em;">
+        
+        <% if @method == "POST" %>
+            <form method="post" action="<%= @action_link %>">
+                <% @parameters.each do |parameter| %>
+                    <input type="hidden" name="<%= parameter[0] %>" value="<%= parameter[1] %>">
+                <% end %>
+                Please click on below link if you are not automatically redirected
+                <br/><br/>
+                <input type="submit" value="go to seller website" />
+            </form>
+        <% end %>
+
+        <% if @method == "GET" %>
+        Please click on below link if you are not automatically redirected
+            <br/>
+                <a href="<%= @action_link %>" rel="nofollow">go to seller website </a>
+                <script>
+                setTimeout(function(){
+                 window.location.href = "<%= @action_link.html_safe %>"; 
+                }, 7000);
+                </script>
+        <% end %>
+
+    </div>
+<% end %>
+

@@ -1,0 +1,25 @@
+<% provide(:title,"User Search history") %>
+<%= render 'menu' %>
+
+<div class="ui container" style="margin-top: 2em">
+	<table class="ui celled striped table ">
+		<thead>
+			<tr class="center aligned">
+				<th><h4>id</h4></th>
+				<th><h4>route</h4></th>
+				<th><h4>Departure Time</h4></th>
+				<th><h4>created at</h4></th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @ush.each do |item|  %>
+			<tr class="center aligned">
+				<td><%= item.id %></td>
+				<td><%= item.route.origin + " - " + item.route.destination %></td>
+				<td><%= item.departure_time %></td>
+				<td><%= time_ago_in_words(item.created_at) %></td>
+			</tr>
+			<% end %>
+		</tbody>
+	</table>
+</div>

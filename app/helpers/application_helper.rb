@@ -5,6 +5,11 @@ module ApplicationHelper
    return days[index]
   end
 
+  def week_day_to_human_english index
+    days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
+    return days[index]
+   end
+
   def get_star_icon(total,amount,color,size)
     markup_delivery = " "
     markup_colored = "<i class=\"star icon #{color} #{size}\"></i>"
@@ -20,6 +25,18 @@ module ApplicationHelper
     return markup_delivery
   end
 
+  def suppliers_list
+    suppliers = Supplier.where(status: true)
+  end
 
+  def get_last_supplier_review
+    Review.new.get_last_supplier_review
+  end
+
+  def get_last_airline_review
+    Review.new.get_last_airline_review
+  end
+
+  
 
 end

@@ -1,8 +1,8 @@
 <%= render 'layouts/header' %>
 <% provide(:canonical,"<link rel=\"canonical\" href=\"http://parvazhub.com/flights/#{@search_parameter[:origin_english_name]}-#{@search_parameter[:destination_english_name]}\"/> ".html_safe)%>
 
-<% provide(:title,"پروازهاب:‌ پرواز #{@search_parameter[:origin_persian_name]} به #{@search_parameter[:destination_persian_name]}  #{@search_parameter[:date_in_human]} ")%>
-<% provide(:description,"لیست پروازهای #{@search_parameter[:origin_persian_name]} به #{@search_parameter[:destination_persian_name]}  #{@search_parameter[:date_in_human]}") %>
+<% provide(:title,"بلیط  #{@search_parameter[:destination_persian_name]} | پرواز #{@search_parameter[:origin_persian_name]} #{@search_parameter[:destination_persian_name]} #{@search_parameter[:date_in_human]} | پروازهاب")%>
+<% provide(:description,"لیست ارزان‌ترین قیمت‌های بلیط #{@search_parameter[:destination_persian_name]}. تمام پروازهای چارتری و سیستمی پرواز #{@search_parameter[:origin_persian_name]} به #{@search_parameter[:destination_persian_name]}  #{@search_parameter[:date_in_human]} سایت‌های معتبر را در پروازهاب ببینید") %>
 
 <div class="ui container" id="search-results-container">
 	<div class="ui grid" id="results-message">
@@ -23,8 +23,8 @@
 					<a class="light-yellow" href="<%= route_page_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name]) %>">
 						<i class="yellow line chart icon"></i> مقایسه قیمت در تمام ماه
 					</a>
-					
-					<a class="light-yellow" href="<%= flight_result_path(@search_parameter[:destination_english_name], @search_parameter[:origin_english_name],@search_parameter[:date]) %>">
+					     
+					<a style="margin-right:12px;"class="light-yellow" href="<%= flight_result_path(@search_parameter[:destination_english_name], @search_parameter[:origin_english_name],@search_parameter[:date]) %>">
 						<i class="yellow exchange icon"></i> مشاهده پروازهای برگشت
 					</a>
 				</div>
@@ -38,12 +38,12 @@
 			<div class="ui form">
 				<div class="four fields">
 					<div class="field input-container">
+						<label class="search-label">از</label>
 						<%= f.text_field :originـfield,{:class =>'origin-field typeahead dir-rtl web-font',placeholder: "مبدا (شهر فارسی یا انگلیسی)", value:@search_parameter[:origin_persian_name]} %>			
 						<%= f.hidden_field :origin,{:id =>'origin',value:@search_parameter[:origin_english_name]} %>
 					</div>
-					
-					
 					<div class="field input-container">
+						<label class="search-label">به</label>
 						<%= f.text_field :destination_field,{:class =>'destination-field typeahead dir-rtl web-font',placeholder: "مقصد (شهر فارسی یا انگلیسی)",value:@search_parameter[:destination_persian_name]} %>
 						<%= f.hidden_field :destination,{:id =>'destination',value:@search_parameter[:destination_english_name]} %>
 					</div>
@@ -109,7 +109,7 @@
 								</div>
 								<div class="field">
 									<div class="mini ui basic  web-font rate-button dir-rtl text-right" data-content="امتیاز کاربران به <%= flight[:airline_persian_name] %>. برای ثبت کلیک کنید" >
-										<a href="<%= property_page_path(flight[:airline_english_name]) %>" >
+										<a href="<%= airline_review_page_path(flight[:airline_english_name]) %>" >
 											<%= get_star_icon(5,flight[:airline_rate_average],"green","small").html_safe %>
 										</a>
 									</div>	
@@ -161,7 +161,7 @@
 							
 							<div class="suppliers-count">	
 								<a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight[:id]) %>" data-remote="false" style="color:black">	
-									مشاهده‌ ارزان‌ترین قیمت از <b><%= flight[:supplier_count] %></b> سایت 
+									 ارزان‌ترین قیمت بلیط از <b><%= flight[:supplier_count] %></b> سایت 
 								</a>
 							</div>
 						</td>
@@ -231,5 +231,5 @@
 	$('table').tablesort();
 	$('.rate-button').popup();
 </script>
-<%= render 'layouts/searchbox-helper' %> 
+<%= render 'layouts/searchbox-helper', date_picker_inline: false %>   
 <%= render 'layouts/footer' %>

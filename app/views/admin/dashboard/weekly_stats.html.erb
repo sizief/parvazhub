@@ -1,0 +1,153 @@
+<% provide(:title,"آمار هفتگی") %>
+<%= render 'menu' %>
+
+<div class="ui container" style="margin-top: 2em">
+
+	<div class="row" style="direction: rtl">
+		<div class="ui small seven statistics" >
+			<% 0.upto(6).each do |x| %>
+				<div class=" green statistic" >
+					<div class="value ">
+						<%= user_search_history(Date.today-x) %>
+					</div>
+					<div class="label web-font">
+						<%= (Date.today-x).to_parsi.strftime "%A %d "  %>
+					</div>
+				</div>
+			<% end %>
+		</div>
+	</div>
+
+	<% @channels.each do |channel| %>
+		<div class="row" style="padding: 1em">
+			<div class="ui label">
+			<%= channel %>: <%= user_search_history_all(channel) %>
+			</div>
+		</div>
+		<div class="row" style="direction: rtl">
+			<div class="ui mini seven statistics" >
+				<% 0.upto(6).each do |x| %>
+					<div class=" grey statistic" >
+						<div class="value ">
+							<%= user_search_history(Date.today-x,channel) %>
+						</div>
+					</div>
+				<% end %>
+			</div>
+		</div>
+	<% end %>
+
+
+	<div class="ui divider"></div>
+	  
+	<div class="row" style="padding: 1em">
+	  <div class="ui label">
+		  Suppliers page: <%= user_flight_price_history_all %>
+	  </div>
+	</div>
+	<div class="row" style="direction: rtl">
+	  <div class="ui small seven statistics" >
+		  <% 0.upto(6).each do |x| %>
+			  <div class=" green statistic" >
+				  <div class="value ">
+					  <%= user_flight_price_history(Date.today-x) %>
+				  </div>
+				  <div class="label web-font">
+					  <%= (Date.today-x).to_parsi.strftime "%A %d "  %>
+				  </div>
+			  </div>
+		  <% end %>
+	  </div>
+  </div>
+
+  <% @channels.each do |channel| %>
+	<div class="row" style="padding: 1em">
+		<div class="ui label">
+		<%= channel %>:  <%= user_flight_price_history_all(channel) %>
+		</div>
+	</div>
+	<div class="row" style="direction: rtl">
+		<div class="ui mini seven statistics" >
+		<% 0.upto(6).each do |x| %>
+			<div class=" grey statistic" >
+				<div class="value ">
+					<%= user_flight_price_history(Date.today-x,channel) %>
+				</div>
+			</div>
+		<% end %>
+		</div>
+	</div>
+  <% end %>
+
+
+	<div class="ui divider"></div>
+
+  	<div class="row" style="padding: 1em">
+  		<div class="ui label">
+  			Redirect all: <%= redirect_all %>
+		</div>
+	</div>
+	<div class="row" style="direction: rtl">
+		<div class="ui small seven statistics" >
+  			<% 0.upto(6).each do |x| %>
+	  			<div class=" teal statistic" >
+		  			<div class="value ">
+	  					<%= redirect Date.today-x %>
+	  				</div>
+		  			<div class="label web-font">
+	  					<%= (Date.today-x).to_parsi.strftime "%A %d "  %>
+	  				</div>
+	  			</div>
+  			<% end %>
+  		</div>
+	</div>
+	  
+	<% @channels.each do |channel| %>
+		<div class="row" style="padding: 1em">
+			<div class="ui label">
+			<%= channel %>: <%= redirect_all(channel) %>
+			</div>
+		</div>
+		<div class="row" style="direction: rtl">
+			<div class="ui mini seven statistics" >
+				<% 0.upto(6).each do |x| %>
+					<div class=" grey statistic" >
+						<div class="value ">
+							<%= redirect(Date.today-x,channel) %>
+						</div>
+					</div>
+				<% end %>
+			</div>
+		</div>
+	<% end %>
+
+  	<div class="ui divider"></div>
+
+	<% if @show_search_history %>  
+		<div class="row" style="padding: 1em">
+			<div class="ui label">
+				Search History: <%= search_history_all %>
+			</div>
+		</div>
+		<div class="row" style="direction: rtl">
+			<div class="ui small seven statistics" >
+				<% 0.upto(6).each do |x| %>
+					<div class="orange statistic" >
+						<div class="value ">
+							<%= search_history Date.today-x %>
+						</div>
+						<div class="label web-font">
+							<%= (Date.today-x).to_parsi.strftime "%A %d "  %>
+						</div>
+					</div>
+				<% end %>
+			</div>
+		</div>
+
+		<div class="ui divider"></div>
+	<% end %>
+
+
+
+
+</div>

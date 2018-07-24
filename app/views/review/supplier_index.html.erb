@@ -1,0 +1,23 @@
+<%= render 'layouts/header' %>
+<% provide(:title," لیست وب‌سایت‌های معتبر فروش بلیط و نظرات کاربران | پروازهاب") %>
+<% provide(:description,"  لیست آژانس‌های فروش آنلاین بلیط و نظرات کاربران") %>
+
+
+<div class="ui container" id="search-results-container" style="padding-top: 1em; direction:rtl;">
+وب‌سایت مورد نظرتان را انتخاب کنید:
+    <ul>
+    <% Supplier.all.each do |supplier|  %>
+		<div class="city-calendar" >
+            <a href="<%= supplier_review_page_path supplier.name.downcase  %>" >
+                <h4>
+                <%= supplier_logo_for supplier.name.downcase, false %>
+                وب‌سایت
+                    <%=  supplier_farsi_name_for supplier.name.downcase  %>
+                </h4>
+            </a>   
+		</div>
+    <% end %>
+    </ul>
+</div>
+<%= render 'layouts/searchbox-helper', date_picker_inline: false %>   
+<%= render 'layouts/footer' %>

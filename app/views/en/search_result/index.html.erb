@@ -1,0 +1,231 @@
+<%= render 'en/layouts/header' %>
+<% provide(:canonical,"<link rel=\"canonical\" href=\"http://parvazhub.com/flights/en/#{@search_parameter[:origin_english_name]}-#{@search_parameter[:destination_english_name]}\"/> ".html_safe)%>
+
+<% provide(:title,"#{@search_parameter[:destination_english_name].humanize} flight ticket |  #{@search_parameter[:origin_english_name]} #{@search_parameter[:destination_english_name]} #{@search_parameter[:date_in_human]} Flight | PARVAZHUB")%>
+<% provide(:description,"cheapest fare for #{@search_parameter[:destination_english_name]}.  #{@search_parameter[:origin_english_name]} to #{@search_parameter[:destination_english_name]}  #{@search_parameter[:date_in_human]} ") %>
+
+<div class="ui container" id="search-results-container">
+	<div class="ui grid" id="results-message">
+  		<div class="one column row">
+    		<div class="column en">
+				<div class="results-header">
+					<i class="plane icon"></i> 
+					<%= @search_parameter[:origin_english_name].humanize %>
+				  	to	 
+					 <%= @search_parameter[:destination_english_name].humanize %> 
+					 |
+					<%= @search_parameter[:date].to_date.strftime "%A %-d %B"   %>  
+					<a class="light-yellow ui primary basic blue" onclick="$('#search-box-inner').transition('slide');" style="cursor:pointer; padding-left:5px; font-size:0.8em;">
+						<i class="yellow chevron down icon"></i> search again
+					</a>
+				</div>
+				<div style="font-size:0.8em">
+					<a class="light-yellow" href="<%= en_route_page_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name]) %>">
+						<i class="yellow line chart icon"></i> show prices on calnedar
+					</a>
+					     
+					<a style="margin-right:12px;"class="light-yellow" href="<%= en_flight_result_path(@search_parameter[:destination_english_name], @search_parameter[:origin_english_name],@search_parameter[:date]) %>">
+						<i class="yellow exchange icon"></i> return flight
+					</a>
+				</div>
+
+		 	</div>
+		</div> 	
+	</div>
+
+	<div class="ui" id="search-box-inner">
+		<%= form_for(:search, url: en_flight_search_path, method: :get, html: {id:"flight_search"}) do |f| %>
+			<div class="ui form">
+				<div class="four fields en">
+					<div class="field input-container">
+						<label class="search-label" style="margin-left:8px">from</label>
+						<%= f.text_field :originـfield,{:class =>'origin-field typeahead web-font',placeholder: "origin city", value:@search_parameter[:origin_english_name]} %>			
+						<%= f.hidden_field :origin,{:id =>'origin',value:@search_parameter[:origin_english_name]} %>
+					</div>
+					<div class="field input-container">
+						<label class="search-label">to</label>
+						<%= f.text_field :destination_field,{:class =>'destination-field typeahead web-font',placeholder: "destination city",value:@search_parameter[:destination_english_name]} %>
+						<%= f.hidden_field :destination,{:id =>'destination',value:@search_parameter[:destination_english_name]} %>
+					</div>
+					<div class="field ui calendar">
+						<div class="ui input left icon">
+							<i class="calendar icon"></i>
+							<%= f.text_field :date_shamsi, {id: 'date-picker', class:'form-control web-font', value: @search_parameter[:date], readonly: 'readonly', autocomplete: 'off'} %>
+							<%= f.text_field :date, {id: 'date-picker-field'} %>
+						</div>
+					</div>
+					<div class="field center aligned">
+						<%= f.submit "search", class: "ui submit web-font yellow button  fluid waiting-modal" %>
+					</div>
+				</div>
+			</div>
+		<%end%>
+	</div>
+
+	<div class="ui mini five statistics" id="flight-price-table" >
+	  <% @flight_dates.each do |flight_date|%>
+	  	<div class=" grey statistic">
+		  <div class="valuee">
+			  <%= link_to(en_price_to_human(flight_date[:price_dollar]), en_flight_result_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],flight_date[:date]))   %> 
+		  </div>
+		  <div class="label statistic-label  web-font">
+		  	<%= link_to(en_day_name(flight_date[:date],@search_parameter[:date]), en_flight_result_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],flight_date[:date]))   %>
+		  </div>
+	   	</div>
+	  <% end %>
+	</div>
+
+	<% unless @flights.empty? %>
+	<table class="ui blue table unstackable sortable" id="flight-prices">
+	  	<thead>
+			<tr class="center aligned web-font">
+	  			<th class="table-header">Airline</th>
+	  			<th class="table-header">Time </th>
+	  			<th class="table-header nm">Airplane</th>
+	  			<th class="table-header sorted ascending">Price</th>
+	  		</tr>
+	  	</thead>
+		<tbody>
+			<% @flights.each do |flight|  %>
+				<% unless ((flight[:best_price] == 0) or (flight[:supplier_count] == 0))  %>
+					<tr class="center aligned very basic" >
+						<td class="right aligned">
+							<div class="two fields">
+								<div class="field">
+									<a href="<%= en_flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight[:id]) %>" data-remote="false">														
+										<h5 class="ui image header web-font">
+											<%= airline_logo_for flight[:airline_code] %> 
+											<span class="content" style="font-size:0.9em">
+												<%= flight[:airline_english_name].sub("-"," ").humanize %>
+												<span class="ui tiny rating en"></span>
+												<span class="sub header" style="margin-top: 7px">
+													<span class="nm"><%= flight[:flight_number].split(",").first %></span>
+													<span class="mobile-only"><%= flight[:airplane_type].blank? ? "" : en_airplane_name_for(flight[:airplane_type]) %></span>													
+												</span>
+											</span>
+										</h5>
+									</a>
+								</div>
+								<div class="field">
+									<div class="mini ui basic  web-font rate-button text-left" data-content="User rating to <%= flight[:airline_english_name] %>" >
+										<a href="<%= airline_review_page_path(flight[:airline_english_name]) %>" >
+											<%= get_star_icon(5,flight[:airline_rate_average],"green","small").html_safe %>
+										</a>
+									</div>	
+								</div>
+							</div>
+							<% if @search_parameter[:international] %>
+								<div style="font-size: 0.8em;color: #797777;">
+									<i class="ticket icon"></i>
+									<%= en_stop_to_human flight[:stops]  %>
+								</div>
+							<% end %>	
+						</td>
+						<td>
+							<div class="content" style="font-size: 0.9em;color: #1d1c1c;">
+								<i class="plane grey icon"></i>	
+								<%= en_hour_to_human flight[:departure_time].to_datetime.strftime("%H:%M") %>  
+								<% unless flight[:arrival_date_time].nil? %>
+									<div style="width:100%; margin-top:5px;border-top: 1px dashed #eee;padding-top:6px;">
+										<i class="vertically flipped plane  grey icon"></i>
+										<%= en_hour_to_human flight[:arrival_date_time].to_datetime.strftime("%H:%M")  %>
+									</div>
+								<% end %>
+				            	<div class="sub header" style="margin-top: 7px;color: gray;font-size: 0.8em;">
+									<%= (en_delay_to_human flight[:delay]) %>
+				          		</div>
+							</div>
+							<% if @search_parameter[:international] %>
+							<div style="font-size: 0.8em;color: #797777;">
+								<i class="wait icon"></i>
+								overall trip time: <%= trip_duration_to_human flight[:trip_duration] %>
+							</div>
+						<% end %>	
+						</td>
+						<td class="nm">
+							<%= flight[:airplane_type].blank? ? "-" : en_airplane_name_for(flight[:airplane_type]) %>
+						</td>
+						<td>
+							<div class="hide">
+								<%= number_with_zero(flight[:best_price_dollar]) %>
+							</div>
+							<a href="<%= en_flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight[:id]) %>" data-remote="false">	
+								<button class="ui submit yellow web-font fluid right labeled icon button flight-price-button" style="padding-right: 0 !important;">
+									
+									<span class="white"><%= "$ #{number_with_delimiter(flight[:best_price_dollar])}" %></span>
+									<i class="left arrow icon"></i> 
+								</button>
+							</a>
+							
+							<div class="suppliers-count">	
+								<a href="<%= en_flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight[:id]) %>" data-remote="false" style="color:black">	
+									 from <b><%= flight[:supplier_count] %></b> websites 
+								</a>
+							</div>
+						</td>
+					</tr>
+					
+				<% end %>	
+			<% end %>
+		</tbody>
+	</table>
+	<% end %>
+
+	<% if @flights.empty? %>
+	  	<div class="standard-text en" style="background:white;padding-top:2em;margin:2em;">
+		
+			<i class="blue info circle  icon big"></i>	
+			<% if @search_parameter[:date].to_date < Date.today %>
+				Today is 
+				<%= Date.today.to_date.strftime "%A %-d %B"   %> 
+				. Please select one of the following dates:
+			<% else %>
+			There is no seat available at 
+			<%= @search_parameter[:date].to_date.strftime "%A %-d %B"   %> 
+			. Please select one of the following dates:
+			<% end %>
+			
+			<ul>
+				<% @flight_dates.each do |flight_date|%>
+					<% unless flight_date[:date] == @search_parameter[:date].to_s %>
+					<li>
+						<% link_text = "Flights for #{@search_parameter[:origin_english_name]} to #{@search_parameter[:destination_english_name]} "+flight_date[:date].to_date.strftime("%A %-d %B ") %>
+						<%= link_to(link_text, en_flight_result_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],flight_date[:date]))   %>
+					</li>
+					<% end %>
+				<% end %>
+			</ul>
+			also you can check calendar page for
+			<%= link_to "flights from #{@search_parameter[:origin_english_name]} to #{@search_parameter[:destination_english_name]}", route_page_path(origin_name:  @search_parameter[:origin_english_name],destination_name: @search_parameter[:destination_english_name], :anchor => "city-calendar"),class:"city-page-link" %>.
+
+			<h5 class="web-font">
+			<i class="blue info circle  icon big"></i>	
+			
+				what days
+				<%= " #{@search_parameter[:origin_english_name]} to  #{@search_parameter[:destination_english_name]}" %> 
+				have flights?
+			</h5>
+			<% unless @route_days.empty? %>
+				<% @route_days.each do |day|   %>
+					<%= week_day_to_human_english day  %>
+				<% end %>
+			<% else %>
+				There is no flight available for this route.
+			<% end %>
+			<br><br><br><br><br><br><br><br><br>
+		</div>	
+	<% end %>
+
+	<%= render :partial => "en/route/price_chart", :locals => {prices: @prices, origin: @search_parameter[:origin_english_name], destination: @search_parameter[:destination_english_name] } %>
+
+</div>
+
+<div class="ui basic modal prices">
+      <p id="prices-modal-content"></p>
+</div>
+<script>
+	$('table').tablesort();
+	$('.rate-button').popup();
+</script>
+<%= render 'en/layouts/searchbox-helper', date_picker_inline: false %>   
+<%= render 'en/layouts/footer' %>

@@ -31,7 +31,8 @@ class Suppliers::Flightio < Suppliers::Base
                "FPass": "Pw4FlightioAppAndroid" }
     response = Excon.post(get_flight_url,
                           :body => request_params.to_json,
-                          :headers => headers)
+                          :headers => headers,
+                          :proxy => Proxy.new_proxy)
     return JSON.parse(response.body)
   end
   
@@ -46,7 +47,7 @@ class Suppliers::Flightio < Suppliers::Base
       search_flight_url = "https://flightio.com/fa/FlightResult/ListTable?FSL_Id="+ request_id
       deep_link = "https://flightio.com/fa/FlightPreview/Detail?FSL_Id=" + request_id + "&CombinationID="
       headers = {"FUser": "FlightioAppAndroid", "FPass": "Pw4FlightioAppAndroid" }
-      response = Excon.get(search_flight_url,:headers => headers)
+      response = Excon.get(search_flight_url,:headers => headers,:proxy => Proxy.new_proxy)
     rescue => e
       return {status:false}
     end
@@ -57,10 +58,9 @@ class Suppliers::Flightio < Suppliers::Base
     flight_id, flight_id_list = nil, nil
     flight_prices, flight_ids = Array.new(), Array.new()
       doc = Nokogiri::HTML(response[:response])
-      doc = doc.xpath('//div[@class="search-result flights-boxs depart"]')
-      ActiveRecord::Base.connection_pool.with_connection do 
-        SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
-      end
+      doc = doc.xpath('//div[@class="search-result flights-boxs depart flat-card "]')
+      update_status search_history_id, "Extracting(#{Time.now.strftime('%M:%S')})"
+
       doc.each do |flight|
         price = flight['amount']
         airline_code = flight['airline'].tr(",","")
@@ -97,19 +97,10 @@ class Suppliers::Flightio < Suppliers::Base
         flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier: supplier_name.downcase , flight_date:"#{date}", deep_link:"#{deeplink_url}")
         
       end #end of each loop
-      
-    unless flight_prices.empty?
-      ActiveRecord::Base.connection_pool.with_connection do
-        FlightPrice.import flight_prices, validate: false
-        FlightPriceArchive.archive flight_prices
-        SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
-      end
-    else
-      ActiveRecord::Base.connection_pool.with_connection do
-        SearchHistory.append_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
-      end
-    end
+    complete_import flight_prices, search_history_id
     return flight_ids    
   end
+
+ 
 
 end

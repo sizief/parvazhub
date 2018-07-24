@@ -6,6 +6,7 @@
     <%= favicon_link_tag 'favicon.ico' %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <meta name="theme-color" content="#FBBD08">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="<%= yield(:description) %>">
     <meta property="og:title" content="<%= yield(:title) %>" />
@@ -18,7 +19,7 @@
 
   <body> 
 
-  <div class="nag-box"> 
+  <!-- <div class="nag-box" style="display:none"> 
     <div class="nag-close">
         <i class="close icon" id="nag-close"></i>
     </div>
@@ -28,11 +29,12 @@
         <a href="http://iwmf.ir/website/parvazhub.com" class="white" target="_blank" id="nag-text">
         از سرویس پروازهاب راضی هستید؟  در رای‌گیری مردمی جشنواره وب
         <span style="text-decoration:underline; color:blue;">به پروازهاب رای دهید </span>
-        </a>
-          
+        </a> 
       </div>
     </div >
   </div>
+
+  -->
 
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P93NTB5"
@@ -47,10 +49,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
    })(window,document,'script','dataLayer','GTM-P93NTB5');</script>
 
+  <!--
    <script>
    $("#nag-close, #nag-text").click(function() {$(".nag-box").transition('fly left');localStorage.setItem("nag", true);});
    if (localStorage.getItem("nag") === null) {$(".nag-box").show();}
   </script>
-
+-->
    </body>
 </html>

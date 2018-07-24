@@ -15,8 +15,8 @@ class Suppliers::Base
     flight_ids = nil
     ActiveRecord::Base.connection_pool.with_connection do       
       FlightPrice.delete_old_flight_prices(supplier_name.downcase,route.id,date)
-      SearchHistory.append_status(search_history_id,"delete(#{Time.now.strftime('%M:%S')})")
     end
+    update_status(search_history_id,"delete(#{Time.now.strftime('%M:%S')})")
     
     response = search_supplier
     if response[:status] == true
@@ -50,6 +50,38 @@ class Suppliers::Base
     duration
   end
 
+  private
+  def update_status search_history_id, text
+    if Rails.env.development?        
+      ActiveRecord::Base.connection_pool.with_connection do 
+        SearchHistory.append_status(search_history_id,text)
+      end
+    end
+  end
+
+  def successful_search search_history_id
+    ActiveRecord::Base.connection_pool.with_connection do 
+      SearchHistory.find(search_history_id).update(successful: true)
+    end
+  end
+
+  def complete_import flight_prices, search_history_id
+    unless flight_prices.empty?
+      ActiveRecord::Base.connection_pool.with_connection do
+        update_status(search_history_id,"p done(#{Time.now.strftime('%M:%S')})")       
+        FlightPrice.import flight_prices, validate: false
+        update_status(search_history_id,"fp(#{Time.now.strftime('%M:%S')})") 
+        FlightPriceArchive.archive flight_prices
+        update_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})") 
+      end
+      update_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
+    else
+      update_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
+    end
+    successful_search search_history_id
+  end
+
+  
   
 end
     

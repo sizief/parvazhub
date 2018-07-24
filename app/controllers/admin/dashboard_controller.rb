@@ -1,13 +1,16 @@
 class Admin::DashboardController < ApplicationController
-  def user_search_history
-  	@ush = UserSearchHistory.order(id: :desc).first(500)
+  before_action :authenticate_user!
+  before_action :require_admin
+
+  def user_search_histories
+  	@ush = UserSearchHistory.includes(:route).order(id: :desc).first(500)
   end
 
-  def search_history
+  def search_histories
   	@sh = SearchHistory.includes(:route).order(id: :desc).first(300)
   end
 
-  def supplier_control
+  def suppliers
   	@supplier_list = Supplier.all
   end
 
@@ -18,21 +21,36 @@ class Admin::DashboardController < ApplicationController
   	supplier[:status] = status
   	supplier.save
   	@supplier_list = Supplier.all
-  	render :supplier_control
+  	render :suppliers
   end
 
-  def price_alert
-    @subscribers = Notification.all
-  end
-
-  def review
+  def reviews
     @reviews = Review.all
   end
 
+  def show_user
+    @user = User.find(params[:id])
+  end
+
   def index
+    @channels = ["website","telegram","android","ionic"]
+  end
+
+  def weekly_stats
+    @channels = ["website","telegram","android","ionic"]
+    @show_search_history = false
+  end
+
+  def users
+    @channel = params[:channel]
+    if @channel.nil?
+      @users = User.left_joins(:user_search_histories).group(:id).order('COUNT(user_search_histories.id) DESC').limit(1000)
+    else
+      @users = User.where(channel: @channel).left_joins(:user_search_histories).group(:id).order('COUNT(user_search_histories.id) DESC').limit(1000)
+    end
   end
       
-  def redirect
+  def redirects
     today_redirects =  calculate_redirects(Date.today, Date.today+1)
     all_redirects =  calculate_redirects(Date.today-365, Date.today+1)
     this_week_redirects =  calculate_redirects(Date.today-7, Date.today+1)
@@ -51,7 +69,7 @@ class Admin::DashboardController < ApplicationController
     supplier = Hash[ supplier.sort_by { |key, val| key } ]  
   end
 
-  def user_search_stat
+  def user_search_stats
     user_search_histories = UserSearchHistory.where("created_at >?","2017-09-11")
 
     @user_search_histories_all = user_search_histories.count
@@ -81,6 +99,23 @@ class Admin::DashboardController < ApplicationController
       end
     end
     @dates_count = Hash[@dates_count.sort_by{|k, v| v}.reverse]
+  end
+
+  def update_review
+    review = Review.find(review_params[:id])
+    review.update(review_params)
+    #review.save
+  end
+
+  def delete_review
+    review = Review.find(review_params[:id])
+    review.destroy
+  end
+
+  private
+
+  def review_params
+    params.require(:review).permit(:id, :published)
   end
   
 end

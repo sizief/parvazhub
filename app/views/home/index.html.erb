@@ -1,13 +1,16 @@
-<% provide(:title,"پروازهاب: جستجو و مقایسه بلیط پرواز داخلی و خارجی") %>
-<% provide(:description,"جستجو و مقایسه قیمت بلیط پرواز داخلی و خارجی") %>
+<% provide(:title,"مقایسه و خرید بلیط هواپیما | پروازهاب") %>
+<% provide(:description,"ارزان‌ترین فروشنده بلیط پرواز داخلی یا خارجی را در پروازهاب به راحتی پیدا کنید.") %>
 
 <header>
 
 <div class="ui grid" id="header">
   		<div class="two column row">
-    		<div class="right floated left aligned column">
+			<div class="right floated left aligned column">
     		</div>
-    		<div class="left floated right aligned column">
+			<div class="left floated right aligned column">
+				<a class="header-language" href="<%= en_home_path %>">
+					English
+				</a>
     			<%#= render 'devise/menu/login_items' %>
     			<%#= render 'devise/menu/registration_items' %>
        		</div>
@@ -22,7 +25,8 @@
       			<!--<i class="circle notched icon" style="color: white"></i>-->
       			<span id="company-name">پروازهاب</span>
     		</div>
-  		</a>
+		  </a>
+
 		<h1 class="ui header inverted center aligned web-font" style="line-height: 2em;font-size: 1.28rem !important;">
 			<span id="slogan-description">
 					
@@ -40,19 +44,19 @@
    		<%= form_for(:search, url: flight_search_path, method: :get, html: {id:"flight_search"}) do |f| %>
     		<div class="ui huge form" >
      			<div class="two fields">
-      				<div class="field input-container">
-						   <%= f.text_field :originـfield,{:class =>'origin-field typeahead dir-rtl web-font',placeholder: "مبدا (شهر فارسی یا انگلیسی)"} %>						   
-						   <%= f.hidden_field :origin,{:id =>'origin',:value =>'tehran'} %>
-					  </div>
-					  
-					  
-      				<div class="field input-container">
-					  <%= f.text_field :destination_field,{:class =>'destination-field typeahead dir-rtl web-font',placeholder: "مقصد (شهر فارسی یا انگلیسی)"} %>
-					  <%= f.hidden_field :destination,{:id =>'destination',:value =>'mashhad'} %>
+					<div class="field input-container">
+						<label class="search-label">از</label>
+						<%= f.text_field :originـfield,{:class =>'origin-field typeahead dir-rtl web-font',placeholder: "مبدا (شهر فارسی یا انگلیسی)", :value => @search_parameter[:origin_persian_name]} %>						   
+						<%= f.hidden_field :origin,{:id =>'origin',:value => @search_parameter[:origin_english_name]} %>
+					</div> 
+					<div class="field input-container">
+					  <label class="search-label">به</label>
+					  <%= f.text_field :destination_field,{:class =>'destination-field typeahead dir-rtl web-font',placeholder: "مقصد (شهر فارسی یا انگلیسی)", :value => @search_parameter[:destination_persian_name]} %>
+					  <%= f.hidden_field :destination,{:id =>'destination',:value => @search_parameter[:destination_english_name]} %>
       				</div> 
   				</div>
   				<div id="date-picker" style="height: 10em; font-family: samim;">
-						<%= f.text_field :date, {id: 'date-picker-field'} %>
+						<%= f.text_field :date, {id: 'date-picker-field', value: @search_parameter[:date]} %>
       			</div>
   				<div class="ui center aligned basic segment" style="margin-top: 50px;">
   					<button class="ui submit massive yellow web-font fluid right labeled waiting-modal icon button" type="submit">
@@ -77,61 +81,59 @@
 	
 </div>
 
-<div style="width:100%;padding: 1.5em 0 2.5em 0;">      
-	<div class="ui five column grid centered stackable">
-		<div class="row">
-			<div class="column center aligned">
-			</div>
-			<div class="column center aligned home-text">	
-				<span class="home-title"> صرفه‌جویی در زمان‌</span>
-					سایت‌های مختلف را نگردید. پروازهاب قیمت تمام سایت‌های معتبر فروش بلیط را برای‌تان لیست می‌کند.
-			</div>
-			<div class="column center aligned home-text">	
-				<span class="home-title">سفر مطمئن</span>
-				از هر آژانسی خرید نکنید. از بین سایت‌های معتبر در پروازهاب بلیط پرواز بخرید تا با خیال راحت سفر کنید.
-			</div>
-			<div class="column center aligned home-text">
-				<span class="home-title">مقایسه قیمت</span>
-				در پروازهاب قیمت‌ بلیط پرواز سایت‌های معتبر را مقایسه کنید تا با خیال راحت ارزان‌ترین بلیط پرواز را بیابید.
-			</div>
-			<div class="column center aligned"></div>
-		</div>
+<% unless @user_last_searches.nil? %>
+	<div class="ui horizontal divider">
+	آخرین جستجوهای شما
 	</div>
-</div>
-
-<div class="telegram-container">      
-	<div class="ui one column grid centered stackable">
-		<div class="row">
-			<div class="column center aligned home-text">	
-				بات تلگرام پروازهاب سریع‌تر از هر زمانی پرواز مورد نظرتان را پیدا می‌کند. همین الان عضو شوید:
-				<a href="https://t.me/parvazhubBot">
-					<button class="ui blue button telegram-button">				
-						<span class="telegram-announce">Telegram</span>
-						<%= image_tag "static/telegram.png",{class:"telegram-icon"} %>		
-					</button>  
-				</a>
+	<div class="ui three stackable cards" style="width:70%;margin:auto;direction:rtl">
+		<% @user_last_searches.each do |user_last_search| %>
+			<div class="card">
+				<div class="content">
+					<div class="header web-font text-right" style="color: #7b7777">
+						<i class=" plane icon"></i>
+						<%= persian_title_by_route user_last_search[:route_id] %>
+					</div>
+					<% user_last_search[:dates].each_with_index do |date, index| %>
+						<% if index < @user_last_searches_limit %>
+							<div class="description text-center dir-rtl" style="padding-top: 4px">
+								<a  href="<%= flight_page_path_by_route user_last_search[:route_id], date  %>">
+									<%= date.to_date.to_parsi.strftime "%A %-d %B"   %>
+									<i class="right arrow icon"></i>
+								</a>	
+							</div>
+						<% end %> 	
+					<% end %>   
+				</div>
 			</div>
-		</div>
+		<% end %>   
 	</div>
-</div>
+
+	<div class="ui horizontal divider">
+		مسیرهای پر سفر
+	</div>
+
+<% end %>
 
 
-<div class="ui four stackable cards" style="width:80%;margin:auto;">
+
+<div class="ui three stackable cards" style="width:70%;margin:auto;">
 	<% @routes.each do |route| %>
 		<div class="card">
 			<div class="content">
 				<div class="header web-font text-center">
-					<a  href="<%= flight_result_path(route[:details][:origin][:english_name], route[:details][:destination][:english_name], Date.today+1) %>">
+					<a  href="<%= flight_result_path(route[:details][:origin][:english_name], route[:details][:destination][:english_name], "tomorrow") %>">
 						<%= route[:details][:origin][:persian_name] %>
 							به
 						<%= route[:details][:destination][:persian_name] %>
 					</a>
 				</div>
 				<div class="description text-center dir-rtl">
-					<%= tomorrow_price(route[:route]) %>	
+					<a  href="<%= flight_result_path(route[:details][:origin][:english_name], route[:details][:destination][:english_name], "tomorrow") %>">
+						<%= tomorrow_price_by_rial route[:route] %>	
+					</a>	
 				</div>
 			</div>
-			<a style="color:white" href="<%= flight_result_path(route[:details][:origin][:english_name], route[:details][:destination][:english_name], Date.today+1) %>">
+			<a style="color:white" href="<%= flight_result_path(route[:details][:origin][:english_name], route[:details][:destination][:english_name], "tomorrow") %>">
 				<div class="ui bottom attached button yellow web-font dir-rtl">
 					نمایش پروازهای فردا
 					<i class="right arrow icon"></i>				
@@ -141,5 +143,7 @@
 	<% end %>   
 </div>
 
-<%= render 'layouts/searchbox-helper' %>   
+<%= render 'layouts/searchbox-helper', date_picker_inline: true %>   
 <%= render 'layouts/footer' %>
+
+

@@ -71,10 +71,9 @@ class Suppliers::Trip < Suppliers::Base
     def import_flights(response,route_id,origin,destination,date,search_history_id)
       flight_id = nil
       flight_prices, flight_ids = Array.new(), Array.new()
-      ActiveRecord::Base.connection_pool.with_connection do
-        SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
-      end
+      update_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
       response = JSON.parse(response[:response])
+      
       response["flights"][0..ENV["MAX_NUMBER_FLIGHT"].to_i].each do |flight|
         leg_data = flight_id = nil
         leg_data = prepare flight["legs"]
@@ -83,6 +82,7 @@ class Suppliers::Trip < Suppliers::Base
         deeplink_url = get_deep_link(id)
         
         next if leg_data.nil?
+        stops = leg_data[:stop].empty? ? nil : leg_data[:stop].join(",")   
         ActiveRecord::Base.connection_pool.with_connection do        
           flight_id = Flight.create_or_find_flight(route_id,
           leg_data[:flight_number].join(","),
@@ -90,7 +90,7 @@ class Suppliers::Trip < Suppliers::Base
           leg_data[:airline_code].join(","),
           leg_data[:airplane_type].join(","),
           leg_data[:arrival_date_time].last,
-          leg_data[:stop].join(","),
+          stops,
           leg_data[:trip_duration])
         end
         flight_ids << flight_id
@@ -110,28 +110,14 @@ class Suppliers::Trip < Suppliers::Base
         flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier: supplier_name.downcase, flight_date:"#{date}", deep_link:"#{deeplink_url}" )
       end #end of each loop
 
-      unless flight_prices.empty?
-        ActiveRecord::Base.connection_pool.with_connection do
-          SearchHistory.append_status(search_history_id,"p done(#{Time.now.strftime('%M:%S')})")                  
-          
-          FlightPrice.import flight_prices, validate: false
-          SearchHistory.append_status(search_history_id,"fp(#{Time.now.strftime('%M:%S')})")
-          
-          FlightPriceArchive.archive flight_prices #todo: change it to job
-          SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
-        end
-      else
-        ActiveRecord::Base.connection_pool.with_connection do
-          SearchHistory.append_status(search_history_id,"empty (#{Time.now.strftime('%M:%S')})")
-        end
-      end
+      complete_import flight_prices, search_history_id
       return flight_ids
     end
   
   def prepare flight_legs
     flight_numbers, airline_codes, airplane_types, departure_date_times, arrival_date_times, stops = Array.new, Array.new, Array.new, Array.new, Array.new, Array.new    
     trip_duration = 0
-    flight_legs.each do |leg|
+    flight_legs.each_with_index do |leg,index|
       airline_code = get_airline_code(leg["operatorCode"])
       return nil if airline_code.nil?
       airline_codes << airline_code
@@ -145,7 +131,7 @@ class Suppliers::Trip < Suppliers::Base
       arrival_date_time += ":00" if arrival_date_time.size == 16 
       arrival_date_times << arrival_date_time.to_datetime
 
-      stops << leg["arrivalAirport"]
+      stops << leg["arrivalAirport"] unless flight_legs.count == index+1 #we dont need last stops
       trip_duration += leg["duration"]
     end
     

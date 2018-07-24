@@ -18,9 +18,7 @@ class Suppliers::Zoraq < Suppliers::Base
   	    params = {'OrginLocationIata' => "#{origin.upcase}", 'DestLocationIata' => "#{destination.upcase}", 'DepartureGo' => "#{date}", 'Passengers[0].Type' =>'ADT', 'Passengers[0].Quantity'=>'1'}
         response = RestClient::Request.execute(method: :post, url: "#{URI.parse(url)}",headers: {params: params}, proxy: nil)
       rescue => e
-        ActiveRecord::Base.connection_pool.with_connection do        
-          SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
-        end
+        update_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
         return {status:false}
       end
       return {status:true,response: response.body}
@@ -31,17 +29,16 @@ class Suppliers::Zoraq < Suppliers::Base
     flight_prices, flight_ids = Array.new(), Array.new()
     origin_object = City.find_by(city_code: origin)
     destination_object = City.find_by(city_code: destination)
+    json_response = JSON.parse(response[:response])       
+    update_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
 
-    json_response = JSON.parse(response[:response])
-    ActiveRecord::Base.connection_pool.with_connection do        
-      SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
-    end
     json_response["PricedItineraries"][0..ENV["MAX_NUMBER_FLIGHT"].to_i].each do |flight|
       leg_data = flight_id = nil
       flight_legs = flight["OriginDestinationOptions"][0]["FlightSegments"]
       leg_data = prepare flight_legs
       
-      next if leg_data.nil?      
+      next if leg_data.nil?   
+      stops = leg_data[:stop].empty? ? nil : leg_data[:stop].join(",")   
       ActiveRecord::Base.connection_pool.with_connection do        
           flight_id = Flight.create_or_find_flight(route_id,
           leg_data[:flight_number].join(","),
@@ -49,7 +46,7 @@ class Suppliers::Zoraq < Suppliers::Base
           leg_data[:airline_code].join(","),
           leg_data[:airplane_type].join(","),
           leg_data[:arrival_date_time].last,
-          leg_data[:stop].join(","),
+          stops,
           leg_data[:trip_duration])
       end
       flight_ids << flight_id      
@@ -71,31 +68,16 @@ class Suppliers::Zoraq < Suppliers::Base
       end
 
       flight_prices << FlightPrice.new(flight_id: "#{flight_id}", price: "#{price}", supplier: supplier_name.downcase, flight_date:"#{departure_date}", deep_link:"#{deeplink_url}" )
-
     end #end of each loop
       
-    unless flight_prices.empty?
-      ActiveRecord::Base.connection_pool.with_connection do 
-        SearchHistory.append_status(search_history_id,"p done(#{Time.now.strftime('%M:%S')})")        
-        
-        FlightPrice.import flight_prices, validate: false
-        SearchHistory.append_status(search_history_id,"fp(#{Time.now.strftime('%M:%S')})")
-        
-        FlightPriceArchive.archive flight_prices
-        SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
-      end
-    else
-      ActiveRecord::Base.connection_pool.with_connection do        
-        SearchHistory.append_status(search_history_id,"empty (#{Time.now.strftime('%M:%S')})")
-      end
-    end
+    complete_import flight_prices, search_history_id
     return flight_ids
   end
 
   def prepare flight_legs
     flight_numbers, airline_codes, airplane_types, departure_date_times, arrival_date_times, stops = Array.new, Array.new, Array.new, Array.new, Array.new, Array.new
     trip_duration = 0
-    flight_legs.each do |leg|
+    flight_legs.each_with_index do |leg,index|
       airline_code = airline_code_correction(leg["OperatingAirline"]["Code"])
       flight_number = (leg["FlightNumber"].include? airline_code) ? leg["FlightNumber"] : airline_code+leg["FlightNumber"]
       flight_number = flight_number.tr('.','') #sometimes zoraq responses with "." in start or end of a flight number
@@ -105,7 +87,7 @@ class Suppliers::Zoraq < Suppliers::Base
       airplane_types << leg["OperatingAirline"]["Equipment"]
       departure_date_times << parse_date(leg["DepartureDateTime"]).utc.to_datetime + ENV["IRAN_ADDITIONAL_TIMEZONE"].to_f.minutes # add 4:30 hours because zoraq date time is in iran time zone #.strftime("%H:%M")
       arrival_date_times << parse_date(leg["ArrivalDateTime"]).utc.to_datetime + ENV["IRAN_ADDITIONAL_TIMEZONE"].to_f.minutes
-      stops << leg["ArrivalAirportLocationCode"]
+      stops << leg["ArrivalAirportLocationCode"] unless flight_legs.count == index+1 #we dont need last stops
       trip_duration += leg["JourneyDuration"]
     end
     

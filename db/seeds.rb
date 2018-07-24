@@ -74,5 +74,11 @@ iranian_airlines =[{code: "W5", persian_name: "ماهان", english_name:"mahan"
 City.create(english_name: "saint petersburg",persian_name: "سن‌پترزبورگ", country_code: "RU", city_code: "led", status: true)
 
 
+=end
+User.create(email: "bot@parvazhub.com")
+User.create(email: "job@parvazhub.com")
+User.create(email: "app@parvazhub.com")
+
+
 
 

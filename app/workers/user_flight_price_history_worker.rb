@@ -2,14 +2,11 @@ require 'sidekiq-scheduler'
 
 class UserFlightPriceHistoryWorker
   include Sidekiq::Worker
-  sidekiq_options :retry => false, :backtrace => true, :queue => 'critical'
+  sidekiq_options :retry => false, :backtrace => true, :queue => 'low'
  
-  def perform(channel,text,flight_id)
+  def perform(channel,flight_id,user_id)
     Timeout.timeout(60) do
-     # telegram = Telegram::Monitoring.new
-     # telegram.send({text:text})
-      TelegramMonitoringWorker.perform_async(text)      
-      UserFlightPriceHistory.create(flight_id: flight_id,channel: channel) 
+      UserFlightPriceHistory.create(flight_id: flight_id,channel: channel, user_id: user_id) 
     end
   end
 

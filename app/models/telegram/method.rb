@@ -16,21 +16,11 @@ class Telegram::Method
     get_update_url = "https://api.telegram.org/#{@@token}/getupdates?offset=#{last_update_id.to_i+1}"
     response = RestClient::Request.execute(method: :get, url: "#{URI.parse(get_update_url)}")
     return response.body
-    #response = File.read("test/fixtures/files/telegram-updates.log") 
-    #return response
   end
 
-  def register_user(telegram_id,first_name,last_name,username)
-    begin
-      Telegram::User.create(telegram_id: telegram_id, first_name: first_name, last_name: last_name, username: username)
-    rescue ActiveRecord::RecordNotUnique
-    end
-  end
-
-  def register_search_query(telegram_id, chat_id)
+  def register_search_query(user, chat_id)
      begin
-      telegram_user = Telegram::User.find_by(telegram_id: telegram_id)
-      Telegram::SearchQuery.create(telegram_user_id: telegram_user.id, chat_id: chat_id)
+      Telegram::SearchQuery.create(user: user, chat_id: chat_id)
     rescue ActiveRecord::RecordNotUnique
     end
   end
@@ -121,7 +111,6 @@ class Telegram::Method
         send answer_step_2(chat,text,false)
       end
     
-
     #Step 4
     elsif(text.include? "/flight")
       answer_step_4(chat,text.tr("/flight",""),true)  
@@ -133,22 +122,20 @@ class Telegram::Method
   def send_suppliers(flight_id,chat)
     flight = Flight.find(flight_id)
     origin_code = City.get_city_code_based_on_name chat.origin
-    #origin_name = City.list[origin_code.to_sym][:en]    
     origin_name = City.find_by(city_code: origin_code).english_name 
     
     destination_code = City.get_city_code_based_on_name chat.destination
-    #destination_name = City.list[destination_code.to_sym][:en]    
     destination_name = City.find_by(city_code: destination_code).english_name 
     date = format_date chat.date
 
     text = "<b>پرواز شماره #{flight.flight_number} از #{chat.origin} به #{chat.destination} #{hour_to_human(flight.departure_time.to_datetime.strftime("%H:%M"))}  </b>"
     text += "<a href=\"https://parvazhub.com/flights/#{origin_name}-#{destination_name}/#{date}\" > | پروازهاب</a>\n\n" 
-    flight_prices = SearchResultController.new.get_flight_price(Flight.find(flight_id),"telegram","telegram")
+    flight_prices = FlightPriceController.new.get_flight_price(Flight.find(flight_id),"telegram","telegram", chat.user)
     if flight_prices.empty?
       text += "به نظر می‌رسد این پرواز پر شده. لطفا پرواز دیگری انتخاب کن"
     else
       flight_prices.each do |flight_price|
-        redirect_link = "https://parvazhub.com/redirect/#{origin_name}-#{destination_name}/#{date}/#{flight_id}/#{flight_price[:id]}/telegram"
+        redirect_link = "https://parvazhub.com/redirect/#{origin_name}-#{destination_name}/#{date}/#{flight_id}/#{flight_price[:id]}/telegram/#{chat.user_id}"
         text += "🚀 <a href=\"#{redirect_link}\">لینک خرید از سایت #{flight_price[:supplier_persian_name]} به قیمت #{number_with_delimiter(flight_price[:price])} تومان </a>  \n\n" 
       end
       text += "\n\n 📣جستجوی مسیر یا تاریخ جدید: \n/start"      
@@ -157,8 +144,6 @@ class Telegram::Method
     
   end
 
-  
-
   def send_search_result(chat)
     text = "<b> 📣 پروازهای #{chat.origin} به #{chat.destination} #{chat.date}</b> \n"
     origin_code = City.get_city_code_based_on_name chat.origin
@@ -166,10 +151,11 @@ class Telegram::Method
     date = format_date chat.date
     
     route = Route.find_by(origin:"#{origin_code}",destination:"#{destination_code}")
-    flights = SearchResultController.new.get_flight_results(route,
-                                                     date,
-                                                     "telegram",
-                                                     "telegram")
+    flights = SearchResultController.new.get_flight_results({route: route,
+                                                     date: date,
+                                                     channel: "telegram",
+                                                     user_agent_request: "telegram",
+                                                     user: chat.user})
     
     if flights.empty?
       text += "برای این مسیر در این تاریخ متاسفانه پروازی پیدا نکردم. از صفحه کلید پایین صفحه می‌تونی روزهای دیگر را درخواست کنی و یا مسیر دیگری را جستجو کنی: /start"
@@ -242,8 +228,8 @@ class Telegram::Method
 
     is_new_message = Telegram::UpdateId.create(update_id: update_id)
     if is_new_message.save
-      register_user(telegram_id,first_name,last_name,username)
-      register_search_query(telegram_id, chat_id)
+      user = create_or_find_user(telegram_id,first_name,last_name,username)
+      register_search_query(user, chat_id)
       select_answer(text,chat_id)
     end
   end
@@ -302,6 +288,17 @@ class Telegram::Method
     end
     keyboard_lines.push(["جستجوی مجدد"])
     return keyboard_lines  
+  end
+
+  private
+
+  def create_or_find_user(telegram_id,first_name,last_name,username)
+    user = UserController.new.create_or_find_user_by_telegram({telegram_id: telegram_id, 
+                                                          channel: "telegram", 
+                                                          user_agent_request: "telegram",
+                                                          first_name: first_name,
+                                                          last_name: last_name,
+                                                          user_name: username})
   end
 
 end

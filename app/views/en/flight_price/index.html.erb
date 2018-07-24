@@ -1,0 +1,125 @@
+<%= render 'en/layouts/header' %>
+<% provide(:canonical,"<link rel=\"canonical\" href=\"http://parvazhub.com/en/flights/#{@search_parameter[:origin_english_name]}-#{@search_parameter[:destination_english_name]}\"/> ".html_safe)%>
+<% provide(:title," #{@search_parameter[:origin_english_name].humanize} to #{@search_parameter[:destination_english_name].humanize} #{@search_parameter[:date]} #{english_airline_name_for(@airline)} #{hour_to_human_for_en_title(@flight.departure_time.to_datetime.strftime('%H:%M'))} | PARVAZHUB" ) %>
+<% provide(:description,"#{@search_parameter[:origin_english_name]} to  #{@search_parameter[:destination_english_name]} #{@search_parameter[:date].to_date.strftime('%d %B')}  #{english_airline_name_for(@airline)}" ) %>
+
+<div class="ui container" id="search-results-container">
+
+    <div class="row en-flight-price-route en">
+        
+        <h5 class="ui image header web-font en">
+            <%= airline_logo_for @flight.airline_code %> 
+            <div class="content">
+               Best prices for 
+                <%=  english_airline_name_for(@airline) %>
+                <%= en_hour_to_human @flight.departure_time.to_datetime.strftime("%H:%M") %>            
+                <%= @flight.airplane_type.blank? ? " " : en_airplane_name_for(@flight.airplane_type) %>
+                
+                <div class="sub header" style="margin-top: 7px">
+                    <%= @search_parameter[:origin_english_name].humanize %>
+                    to 
+                    <%= @search_parameter[:destination_english_name].humanize %> 
+                    <%= @search_parameter[:date].to_date.strftime "%A %d %B"   %>
+                </div>
+            </div> 
+        </h5> 
+        <div style="display: inline-block;float: right;">
+            <a href="<%= en_flight_result_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date]) %> ">
+                <button class="ui mini right floated button web-font nm  ">
+                return to the list 
+                </button>
+            </a>
+        </div>
+        
+    </div>
+ 
+        <table class="ui  table" style="width:97% !important">
+            <tbody>
+                <% @flight_prices.each_with_index do |flight_price,index|  %>
+                    <tr class="center aligned very basic">
+                        <td width="1%">
+                            <% if index==0 %>	
+                                <span class="ui red tiny label"><i class="checkmark icon"></i>Cheapest</span>
+                            <% end %>
+                        </td>
+                        <td>
+                            <a style="color:black" href="<%= en_redirect_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],@flight.id,flight_price[:id],'website', user_id:  @user.id) %>"  target= "_blank" rel="nofollow">                    
+                                <%= supplier_logo_for flight_price[:supplier_english_name], false %>
+                                 <%= flight_price[:supplier_english_name].humanize %> 
+                            </a>
+                        </td>
+                        <td>
+                            <div class="suppliers-count">	
+                                <b>$<%= flight_price[:price_dollar] %></b>
+                            </div>
+                        
+                            <a href="<%= en_redirect_path(origin_name: @search_parameter[:origin_english_name],destination_name: @search_parameter[:destination_english_name], date: @search_parameter[:date],flight_id: @flight.id,flight_price_id: flight_price[:id],channel: 'website', user_id: @user.id) %>" class="ui green label  flight-price"  target= "_blank" rel="nofollow">
+                                <i class="external icon"></i> Purchase from  <%= flight_price[:supplier_english_name] %>  
+                            </a>
+                            <!--<span style="font-size:x-small"><%=  time_ago_in_words(flight_price[:created_at]) %> ago</span>-->
+                        </td>
+                        <td width="10%">
+                        </td>
+                    </tr>
+                <% end %>
+                <% if @flight_prices.empty?  %>
+                    <tr class="center aligned very basic">
+                        <td>
+                            <p>
+                                Please return to flight list and select again. This price is changed.  
+                            </p>
+                        </td>
+                    </tr>
+                <% end %>
+                <% if @prices.count > 1 %>
+                    <tr>
+                        <td colspan="6">
+                            <div style="width:90%;min-height:100%; margin:auto" >
+                                <canvas id="myChart"></canvas>
+
+                                <script>
+                                var labels = <%= raw @georgian_dates %>;
+                                var data = <%= @prices %>;
+                                var ctx = document.getElementById("myChart").getContext('2d');
+                                $(document).ready(function(){
+                                    var myChart = new Chart(ctx, {
+                                        type: 'line',
+                                        data: {labels: labels,datasets: [{label: "Ticket price changes <%= en_hour_to_human @flight.departure_time.to_datetime.strftime('%H:%M') %> <%= english_airline_name_for(@airline) %> ",borderColor: 'rgb(54,162,235)',backgroundColor:  'rgb(54,162,235)', data: data,fill: false,lineTension: 0}]},
+                                        options: {
+                                            showLines: true,
+                                            scales: {
+                                                xAxes: [{
+                                                    ticks: {
+                                                        autoSkip: false
+                                                    }
+                                                }]
+                                            }
+                                        }
+                                    });
+                                });
+                                </script>
+                            </div>
+                        </td>
+                    </tr>
+                <% end %>
+            </tbody>		
+        </table>
+
+ 
+       
+        
+        <a href="<%= en_flight_result_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date]) %> ">
+            <button class="ui button web-font fluid ">
+                <i class="right arrow icon"></i>
+                return to flight list
+                <%= @search_parameter[:origin_english_name] %>
+                to 
+                <%= @search_parameter[:destination_english_name] %> 
+            </button>
+        </a>
+          
+</div>    
+
+<%= render 'en/layouts/searchbox-helper', date_picker_inline: false %>   
+<%= render 'en/layouts/footer' %>
+    

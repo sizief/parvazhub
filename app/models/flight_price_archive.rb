@@ -25,7 +25,6 @@ class FlightPriceArchive < ApplicationRecord
   end
 
   def self.archive(flight_prices)
-
     flight_prices.each do |flight_price|
       flight_price.deep_link = nil
 
@@ -38,9 +37,7 @@ class FlightPriceArchive < ApplicationRecord
           FlightPriceArchive.import Array.new(1,flight_price)
         end
       end  
-
     end
-
   end
 
 end

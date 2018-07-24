@@ -175,7 +175,9 @@ ActiveRecord::Schema.define(version: 20180724195506) do
     t.integer  "price"
     t.string   "supplier"
     t.string   "deep_link"
+    t.integer  "user_id"
     t.index ["supplier"], name: "index_redirects_on_supplier", using: :btree
+    t.index ["user_id"], name: "index_redirects_on_user_id", using: :btree
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -183,10 +185,13 @@ ActiveRecord::Schema.define(version: 20180724195506) do
     t.string   "page"
     t.text     "text"
     t.integer  "rate"
-    t.string   "status"
     t.integer  "reply_to"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "user_id"
+    t.integer  "category",   default: 0
+    t.boolean  "published",  default: true
+    t.index ["user_id"], name: "index_reviews_on_user_id", using: :btree
   end
 
   create_table "route_days", force: :cascade do |t|
@@ -219,6 +224,8 @@ ActiveRecord::Schema.define(version: 20180724195506) do
     t.datetime "updated_at",     null: false
     t.string   "departure_time"
     t.string   "status"
+    t.boolean  "successful"
+    t.index ["created_at", "supplier_name"], name: "index_search_histories_on_created_at_and_supplier_name", using: :btree
     t.index ["route_id"], name: "index_search_histories_on_route_id", using: :btree
   end
 
@@ -237,32 +244,46 @@ ActiveRecord::Schema.define(version: 20180724195506) do
   end
 
   create_table "telegram_search_queries", force: :cascade do |t|
-    t.integer "telegram_user_id"
     t.string  "origin"
     t.string  "destination"
     t.string  "date"
     t.string  "flight_price"
     t.string  "chat_id"
-    t.index ["telegram_user_id"], name: "index_telegram_search_queries_on_telegram_user_id", using: :btree
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_telegram_search_queries_on_user_id", using: :btree
   end
 
   create_table "telegram_update_ids", force: :cascade do |t|
     t.string "update_id"
   end
 
-  create_table "telegram_users", force: :cascade do |t|
-    t.string "telegram_id"
-    t.string "first_name"
-    t.string "last_name"
-    t.string "username"
-    t.index ["telegram_id"], name: "index_telegram_users_on_telegram_id", unique: true, using: :btree
+  create_table "temp_airports", force: :cascade do |t|
+    t.string "ident"
+    t.string "type_airport"
+    t.string "name"
+    t.string "latitude_deg"
+    t.string "longitude_deg"
+    t.string "elevation_ft"
+    t.string "continent"
+    t.string "iso_country"
+    t.string "iso_region"
+    t.string "municipality"
+    t.string "scheduled_service"
+    t.string "gps_code"
+    t.string "iata_code"
+    t.string "local_code"
+    t.string "home_link"
+    t.string "wikipedia_link"
+    t.string "keywords"
   end
 
   create_table "user_flight_price_histories", force: :cascade do |t|
     t.string   "flight_id"
     t.string   "channel"
-    t.datetime "created_at", default: '2018-07-24 19:39:58', null: false
-    t.datetime "updated_at", default: '2018-07-24 19:39:58', null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "user_id"
+    t.index ["user_id"], name: "index_user_flight_price_histories_on_user_id", using: :btree
   end
 
   create_table "user_search_histories", force: :cascade do |t|
@@ -271,6 +292,8 @@ ActiveRecord::Schema.define(version: 20180724195506) do
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.string   "channel"
+    t.integer  "user_id"
+    t.index ["user_id"], name: "index_user_search_histories_on_user_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -286,13 +309,22 @@ ActiveRecord::Schema.define(version: 20180724195506) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.string   "telegram_id"
+    t.integer  "role"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.integer  "channel"
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
   add_foreign_key "most_search_routes", "routes"
   add_foreign_key "notifications", "routes"
+  add_foreign_key "redirects", "users"
+  add_foreign_key "reviews", "users"
   add_foreign_key "route_days", "routes"
   add_foreign_key "search_histories", "routes"
-  add_foreign_key "telegram_search_queries", "telegram_users"
+  add_foreign_key "telegram_search_queries", "users"
+  add_foreign_key "user_flight_price_histories", "users"
+  add_foreign_key "user_search_histories", "users"
 end

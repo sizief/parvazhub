@@ -2,14 +2,14 @@ require 'sidekiq-scheduler'
 
 class UserSearchHistoryWorker
   include Sidekiq::Worker
-  sidekiq_options :retry => false, :backtrace => true, :queue => 'critical'
+  sidekiq_options :retry => true, :backtrace => true, :queue => 'low'
  
-  def perform(text,route_id,date,channel)
+  def perform(route_id,date,channel,user_id)
     Timeout.timeout(60) do
-      #telegram = Telegram::Monitoring.new
-      #telegram.send({text:text})
-      TelegramMonitoringWorker.perform_async(text)      
-      UserSearchHistory.create(route_id:route_id,departure_time:"#{date}",channel:channel) #save user search to show in admin panel      
+      UserSearchHistory.create(route_id:route_id,
+                               departure_time:"#{date}",
+                               channel:channel,
+                               user_id: user_id) #save user search to show in admin panel      
     end
   end
 

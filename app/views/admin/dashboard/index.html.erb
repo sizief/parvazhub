@@ -1,235 +1,52 @@
-<% provide(:title,"Admin dashboard") %>
+<% provide(:title,"خانه") %>
+<%= render 'menu' %>
+
 <div class="ui container" style="margin-top: 2em">
-	<div class="row" style="padding: 1em">
-		<div class="ui label">
-			User Search all: <%= user_search_history_all %>
-		</div>
-		</div>
-		<div class="row" style="direction: rtl">
-		<div class="ui small seven statistics" >
-			<% 0.upto(6).each do |x| %>
-				<div class=" green statistic" >
-					<div class="value ">
-						<%= user_search_history(Date.today-x) %>
-					</div>
-					<div class="label web-font">
-						<%= (Date.today-x).to_parsi.strftime "%A %d "  %>
-					</div>
-				</div>
-			<% end %>
-		</div>
-	</div>
 
-	<div class="row" style="padding: 1em">
-		<div class="ui label">
-			User Search website: <%= user_search_history_all("website") %>
-		</div>
-	</div>
-	<div class="row" style="direction: rtl">
-		<div class="ui mini seven statistics" >
-			<% 0.upto(6).each do |x| %>
-				<div class=" grey statistic" >
-					<div class="value ">
-						<%= user_search_history(Date.today-x,"website") %>
-					</div>
-				</div>
-			<% end %>
-		</div>
-  	</div>
-
-	<div class="row" style="padding: 1em">
-		<div class="ui label">
-		User Search telegram: <%= user_search_history_all("telegram") %>
-		</div>
-	</div>
-	<div class="row" style="direction: rtl">
-		<div class="ui mini seven statistics" >
-		<% 0.upto(6).each do |x| %>
-			<div class=" grey statistic" >
-				<div class="value ">
-					<%= user_search_history(Date.today-x,"telegram") %>
-				</div>
+	<h4 class="ui horizontal divider header">
+		Today
+	</h4>
+	<div class="ui statistics">
+		<div class="orange statistic">
+			<div class="value">
+				<%= user_search_history(Date.today)  %>
 			</div>
-		<% end %>
+			<div class="label">
+				Search 
+			</div>
+		</div>
+		<div class="orange statistic">
+			<div class="value">
+				<%= user_flight_price_history(Date.today) %>
+			</div>
+			<div class="label">
+				Supplier
+			</div>
+		</div>
+		<div class="orange statistic">
+			<div class="value">
+				<%= redirect(Date.today) %>
+			</div>
+			<div class="label">
+				Redirect
+			</div>
+		</div>
+		<div class="orange statistic">
+			<div class="value">
+				<%= user(Date.today) %>
+			</div>
+			<div class="label">
+				User
+			</div>
+		</div>
+		<div class="orange statistic">
+			<div class="value">
+				<%= review(Date.today) %>
+			</div>
+			<div class="label">
+				Reviews
+			</div>
 		</div>
 	</div>
-
-	  <div class="ui divider"></div>
-	  
-	  <div class="row" style="padding: 1em">
-	  <div class="ui label">
-		  Flight Price all: <%= user_flight_price_history_all %>
-	  </div>
-	  </div>
-	  <div class="row" style="direction: rtl">
-	  <div class="ui small seven statistics" >
-		  <% 0.upto(6).each do |x| %>
-			  <div class=" green statistic" >
-				  <div class="value ">
-					  <%= user_flight_price_history(Date.today-x) %>
-				  </div>
-				  <div class="label web-font">
-					  <%= (Date.today-x).to_parsi.strftime "%A %d "  %>
-				  </div>
-			  </div>
-		  <% end %>
-	  </div>
-  </div>
-
-  <div class="row" style="padding: 1em">
-	  <div class="ui label">
-	  Flight Price website: <%= user_flight_price_history_all("website") %>
-	  </div>
-  </div>
-  <div class="row" style="direction: rtl">
-	  <div class="ui mini seven statistics" >
-		  <% 0.upto(6).each do |x| %>
-			  <div class=" grey statistic" >
-				  <div class="value ">
-					  <%= user_flight_price_history(Date.today-x,"website") %>
-				  </div>
-			  </div>
-		  <% end %>
-	  </div>
-	</div>
-
-  <div class="row" style="padding: 1em">
-	  <div class="ui label">
-	  Flight Price telegram: <%= user_flight_price_history_all("telegram") %>
-	  </div>
-  </div>
-  <div class="row" style="direction: rtl">
-	  <div class="ui mini seven statistics" >
-	  <% 0.upto(6).each do |x| %>
-		  <div class=" grey statistic" >
-			  <div class="value ">
-				  <%= user_flight_price_history(Date.today-x,"telegram") %>
-			  </div>
-		  </div>
-	  <% end %>
-	  </div>
-  </div>
-
-	<div class="ui divider"></div>
-
-  	<div class="row" style="padding: 1em">
-  		<div class="ui label">
-  			Redirect all: <%= redirect_all %>
-		</div>
-	</div>
-	<div class="row" style="direction: rtl">
-		<div class="ui small seven statistics" >
-  			<% 0.upto(6).each do |x| %>
-	  			<div class=" teal statistic" >
-		  			<div class="value ">
-	  					<%= redirect Date.today-x %>
-	  				</div>
-		  			<div class="label web-font">
-	  					<%= (Date.today-x).to_parsi.strftime "%A %d "  %>
-	  				</div>
-	  			</div>
-  			<% end %>
-  		</div>
-	</div>
-	  
-	<div class="row" style="padding: 1em">
-		<div class="ui label">
-		  Redirect website: <%= redirect_all("website") %>
-		</div>
-	</div>
-	<div class="row" style="direction: rtl">
-		<div class="ui mini seven statistics" >
-			<% 0.upto(6).each do |x| %>
-				<div class=" grey statistic" >
-					<div class="value ">
-						<%= redirect(Date.today-x,"website") %>
-					</div>
-				</div>
-			<% end %>
-		</div>
-	</div>
-
-	<div class="row" style="padding: 1em">
-		<div class="ui label">
-		Redirect telegram: <%= redirect_all("telegram") %>
-		</div>
-	</div>
-	<div class="row" style="direction: rtl">
-		<div class="ui mini seven statistics" >
-			<% 0.upto(6).each do |x| %>
-				<div class=" grey statistic" >
-					<div class="value ">
-						<%= redirect(Date.today-x,"telegram") %>
-					</div>
-				</div>
-			<% end %>
-		</div>
-	</div>
-
-
-  	<div class="ui divider"></div>
-
-  	<div class="row" style="padding: 1em">
-  		<div class="ui label">
-  			Notification: <%= notification_all %>
-		</div>
-	</div>
-	<div class="row" style="direction: rtl">
-		<div class="ui small seven statistics" >
-  			<% 0.upto(6).each do |x| %>
-	  			<div class=" yellow statistic" >
-		  			<div class="value ">
-	  					<%= notification Date.today-x %>
-	  				</div>
-		  			<div class="label web-font">
-	  					<%= (Date.today-x).to_parsi.strftime "%A %d "  %>
-	  				</div>
-	  			</div>
-  			<% end %>
-  		</div>
-  	</div>
-
-  	<div class="ui divider"></div>
-
-  	<div class="row" style="padding: 1em">
-  		<div class="ui label">
-  			Search History: <%= search_history_all %>
-		</div>
-	</div>
-	<div class="row" style="direction: rtl">
-		<div class="ui small seven statistics" >
-  			<% 0.upto(6).each do |x| %>
-	  			<div class="orange statistic" >
-		  			<div class="value ">
-	  					<%= search_history Date.today-x %>
-	  				</div>
-		  			<div class="label web-font">
-	  					<%= (Date.today-x).to_parsi.strftime "%A %d "  %>
-	  				</div>
-	  			</div>
-  			<% end %>
-  		</div>
-  	</div>
-
-	<div class="ui divider"></div>
-
-  	<div class="row" style="padding: 1em">
-  		<div class="ui label">
-  			Proxy all: <%= Proxy.count %>
-		</div>
-
-		<div class="ui label">
-  			Proxy active: <%= Proxy.where(status:"active").count %>
-		</div>
-
-		<div class="ui label">
-			Telegram User: <%= Telegram::User.count %>
-		</div>
-		  
-		<div class="ui label">
-		  Reviews: <%= Review.count %>
-		</div>
-	</div>
-
 
 </div>

@@ -1,0 +1,40 @@
+  <div style="margin-top:2em">
+    <div class="ui stackable sixteen column grid" style="background: #fafafa;border-top: #eee 1px solid;font-size: 1em;">
+      <div class="sixteen wide column">
+        <div id="what-we-do" class="web-font"  style="direction: rtl;text-align:center;padding: 1em 2em 1em 2em;line-height: 2em; font-size:1em">
+          We search best online Iranian travel agencies to find cheapest fare
+          <div style="margin-top: 1em">
+            <% suppliers_list.each do |supplier| %>
+              <span style="margin: 20px">
+                  <%= supplier_logo_for(supplier.name.downcase, false) %>
+              </span>
+            <% end %>
+          </div>
+        </div>	
+      </div>
+    </div>
+  </div>
+
+  <div class="ui inverted vertical footer segment" style="background:#efefef; border-top:1px solid #ccc; color: black; padding:2em;" >
+    <div class="ui five column grid centered stackable">
+      <div class="row">
+        <a href="<%= en_flight_page_path %>">All flights</a> | 
+        Contact us at salam[at]parvazhub[dot]com | 
+        All Rights reserved for PARVAZHUB -2018
+      </div>
+    </div>
+  </div>
+
+  <div class="ui basic modal waiting" style="left: initial;text-align: center;font-size: x-large;">
+    <div class="description">
+      <div class="sk-folding-cube">
+        <div class="sk-cube1 sk-cube"></div>
+        <div class="sk-cube2 sk-cube"></div>
+        <div class="sk-cube4 sk-cube"></div>
+        <div class="sk-cube3 sk-cube"></div>
+      </div>
+        <p style="margin-top:2em;"> Searching</p>  
+        <p >Please wait</p>
+    </div>   
+  </div>
+</div>

@@ -15,9 +15,7 @@ class Suppliers::Ghasedak < Suppliers::Base
     begin
       response = RestClient::Request.execute(method: :get, url: "#{URI.parse(url+params)}", proxy: nil,payload: params)
     rescue => e
-      ActiveRecord::Base.connection_pool.with_connection do
-        SearchHistory.append_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
-      end
+      update_status(search_history_id,"failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
       return {status:false}
     end
     return {status:true,response: response.body}
@@ -28,14 +26,12 @@ class Suppliers::Ghasedak < Suppliers::Base
       flight_id = nil
       flight_prices, flight_ids = Array.new(), Array.new()
       json_response = JSON.parse(response[:response])
-      ActiveRecord::Base.connection_pool.with_connection do
-        SearchHistory.append_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
-      end
+      update_status(search_history_id,"Extracting(#{Time.now.strftime('%M:%S')})")
       
       json_response["data"].each do |flight|
 
         airline_code = get_airline_code(flight["Airline"])
-        flight_number = airline_code+flight["FlightNo"]
+        flight_number = airline_code+flight_number_correction(flight["FlightNo"],airline_code)
         departure_time = flight["FlightDate"]
         departure_time = departure_time[0..9]+" "+departure_time[11..-1]
 
@@ -64,17 +60,7 @@ class Suppliers::Ghasedak < Suppliers::Base
 
       end #end of each loop
       
-    unless flight_prices.empty?
-      ActiveRecord::Base.connection_pool.with_connection do
-        FlightPrice.import flight_prices, validate: false
-        FlightPriceArchive.archive flight_prices
-        SearchHistory.append_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
-      end
-    else
-      ActiveRecord::Base.connection_pool.with_connection do
-        SearchHistory.append_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
-      end
-    end
+    complete_import flight_prices, search_history_id
     return flight_ids
   end
 
@@ -85,6 +71,11 @@ class Suppliers::Ghasedak < Suppliers::Base
       "RZ"=>"SE"
 		}
 	airlines[airline_code].nil? ? airline_code : airlines[airline_code]
+  end
+
+  def flight_number_correction(flight_number,airline_code)
+    flight_number = flight_number.sub(airline_code,"")  if flight_number.include? airline_code
+    return flight_number.gsub(/[^\d,\.]/, '')        
   end
 
 

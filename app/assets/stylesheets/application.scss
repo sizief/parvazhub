@@ -8,7 +8,7 @@
 @import "semantic-ui";
 @import "semantic-ui/collections/menu";
 @import "rtlcss";
-@import "persian-datepicker-0.4.5.min";
+@import "persian-datepicker-1.1.3.min";
 /* this is georgian calendar: calendar.min */
 
 @font-face{
@@ -21,6 +21,7 @@
   font-url("samim.ttf") format('svg');
 }
 /* helper */
+
 .standard-text{
   direction: rtl;
   line-height: 2em;
@@ -61,6 +62,16 @@
 }
 .light-yellow{
   color: #f7efc3;
+}
+.grayscale{
+  -webkit-filter: grayscale(95%); 
+  filter: grayscale(95%);
+}
+
+.footer-suppliers:hover{
+  -webkit-filter: grayscale(1%); 
+  filter: grayscale(1%);
+
 }
 
 /* general */
@@ -130,6 +141,11 @@ table.ui.very.basic.striped.table > thead > tr > td > h4{
 header{
   background: #29aae1
 }
+.header-language{
+  color:white; 
+  text-decoration: underline; 
+  font-size:0.8em;
+}
 
 /* first page */
 .masthead.segment {
@@ -182,22 +198,32 @@ header{
 
 
 /* Footer links */
+
+#cafe-bazaar{
+  width: 25px;
+  margin-bottom: -8px;
+}
 .footer-link{
-  display: block;
   text-decoration: none;
-  color: #eaae00;
   line-height: 2.3em;
   font-size: 0.8em;
+}
+.footer-section{
+  direction: rtl;
+  text-align:center;
+  padding: 1em 2em 1em 2em;
+  line-height: 2em; 
+  font-size:1em;
 }
 
 /* telegram */
 .telegram-icon{
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
+  margin-bottom: -8px;
 }
 .telegram-announce{
   vertical-align: text-top;
-  color:white;
 }
 .telegram-container{
   padding: 2.5em 0 2.5em 0;
@@ -343,7 +369,9 @@ header{
   color: #000000;
 }
 .twitter-typeahead{
-  width: 100%;
+  display: inline-block !important;
+	vertical-align: top;
+	width: 90% !important;
 }
 .tt-query, /* UPDATE: newer versions use tt-input instead of tt-query */
 .tt-hint {
