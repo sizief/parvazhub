@@ -2,7 +2,7 @@ supplier_list = [{"id":7,"name":"Trip","class_name":"Suppliers::Trip","status":f
 
 supplier_list.each do |supplier|
   Supplier.create(name: supplier[:name],
-                  class_name: supplier[:class],
+                  class_name: supplier[:class_name],
                   status: supplier[:status],
                   international: supplier[:international],
                   domestic: supplier[:domestic],
@@ -73,12 +73,6 @@ iranian_airlines =[{code: "W5", persian_name: "ماهان", english_name:"mahan"
 
 City.create(english_name: "saint petersburg",persian_name: "سن‌پترزبورگ", country_code: "RU", city_code: "led", status: true)
 
-
-=end
 User.create(email: "bot@parvazhub.com")
 User.create(email: "job@parvazhub.com")
 User.create(email: "app@parvazhub.com")
-
-
-
-

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180724195506) do
+ActiveRecord::Schema.define(version: 20180724195507) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -257,31 +257,11 @@ ActiveRecord::Schema.define(version: 20180724195506) do
     t.string "update_id"
   end
 
-  create_table "temp_airports", force: :cascade do |t|
-    t.string "ident"
-    t.string "type_airport"
-    t.string "name"
-    t.string "latitude_deg"
-    t.string "longitude_deg"
-    t.string "elevation_ft"
-    t.string "continent"
-    t.string "iso_country"
-    t.string "iso_region"
-    t.string "municipality"
-    t.string "scheduled_service"
-    t.string "gps_code"
-    t.string "iata_code"
-    t.string "local_code"
-    t.string "home_link"
-    t.string "wikipedia_link"
-    t.string "keywords"
-  end
-
   create_table "user_flight_price_histories", force: :cascade do |t|
     t.string   "flight_id"
     t.string   "channel"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: '2018-07-24 21:02:04', null: false
+    t.datetime "updated_at", default: '2018-07-24 21:02:04', null: false
     t.integer  "user_id"
     t.index ["user_id"], name: "index_user_flight_price_histories_on_user_id", using: :btree
   end
