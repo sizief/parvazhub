@@ -24,6 +24,7 @@ gem 'rollbar'
 gem 'browser'
 gem 'excon'
 gem 'rbzip2', '0.3.0'
+gem 'foreman', '~> 0.82.0'
 
 
 group :development do
@@ -35,7 +36,6 @@ group :development do
   gem 'simplecov', :require => false, :group => :test
   gem 'rubocop', require: false
   gem 'bullet'
-  gem 'rack-mini-profiler'
 end
 
 group :test do

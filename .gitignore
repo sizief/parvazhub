@@ -10,7 +10,11 @@ db/test
 
 # Ignore all logfiles and tempfiles.
 /log/*
-/tmp/*
+/tmp/cache/*
+/tmp/miniprofiler/*
+/tmp/log/*
+/tmp/pids/*
+
 !/log/.keep
 !/tmp/.keep
 
@@ -31,9 +35,5 @@ public/assets
 abarcloud.yml
 coverage
 core
-.env
-.env.development
-.cache
-.env.development
 .vscode/
 
