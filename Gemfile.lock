@@ -148,7 +148,7 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    puma (3.6.0)
+    puma (3.7.0)
     rack (2.0.1)
     rack-protection (2.0.0)
       rack
@@ -311,7 +311,7 @@ DEPENDENCIES
   minitest-reporters (= 1.1.9)
   parsi-date (~> 0.3.1)
   pg (~> 0.18.4)
-  puma (= 3.6.0)
+  puma (= 3.7.0)
   rails (= 5.0.0.1)
   rails-controller-testing (= 0.1.1)
   rbzip2 (= 0.3.0)
