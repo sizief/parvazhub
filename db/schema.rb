@@ -260,8 +260,8 @@ ActiveRecord::Schema.define(version: 20180724195507) do
   create_table "user_flight_price_histories", force: :cascade do |t|
     t.string   "flight_id"
     t.string   "channel"
-    t.datetime "created_at", default: '2018-07-24 21:02:04', null: false
-    t.datetime "updated_at", default: '2018-07-24 21:02:04', null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer  "user_id"
     t.index ["user_id"], name: "index_user_flight_price_histories_on_user_id", using: :btree
   end
