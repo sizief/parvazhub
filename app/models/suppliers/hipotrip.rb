@@ -70,7 +70,10 @@ class Suppliers::Hipotrip < Suppliers::Base
         leg_data = prepare flight["origin_destination"][0]["segments"]
         
         next if leg_data.nil?  
-        next if leg_data[:airline_code].nil?      
+        next if leg_data[:airline_code].nil? 
+        next if leg_data[:airline_code] == "" 
+        next if leg_data[:airline_code]empty?
+            
         ActiveRecord::Base.connection_pool.with_connection do        
             flight_id = Flight.create_or_find_flight(route_id,
             leg_data[:flight_number].join(","),

@@ -125,6 +125,7 @@ class Flight < ApplicationRecord
                               .where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s)
                               .where.not(best_price:0)
                               .where.not(airline_code: nil)
+                              .where.not(airline_code: "")
                               .where('updated_at >= ?', result_time_to_live)
                               .order(:best_price)
                   
