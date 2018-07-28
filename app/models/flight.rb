@@ -124,6 +124,7 @@ class Flight < ApplicationRecord
     flight_list = route.flights.includes(:flight_info)
                               .where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s)
                               .where.not(best_price:0)
+                              .where.not(airline_code: nil)
                               .where('updated_at >= ?', result_time_to_live)
                               .order(:best_price)
                   
@@ -143,6 +144,8 @@ class Flight < ApplicationRecord
       response[:delay] = normalize_delay(flight.flight_info.delay) unless flight.flight_info.nil?
       response[:airline_code] = flight.airline_code.split(",")[0]
       flight.airline_code = flight.airline_code.split(",").first #get first flight for multipart flights
+      
+      #temp_airline_code = flight.airline_code.nil? ? "empty" : flight.airline_code
       unless airline_list[flight.airline_code.to_sym].nil? 
         response[:airline_english_name] = airline_list[flight.airline_code.to_sym][:english_name]
         response[:airline_persian_name] = airline_list[flight.airline_code.to_sym][:persian_name] 

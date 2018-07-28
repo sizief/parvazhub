@@ -20,17 +20,3 @@ Sidekiq.configure_server do |config|
     chain.add Sidekiq::Status::ClientMiddleware, expiration: 30.minutes # default
   end
 end
-
-
-=begin
-	
-Sidekiq.configure_server do |config|
-  config.redis = { url: ENV['REDIS'], password: ENV["REDIS_PASSWORD"]}
-end
-
-Sidekiq.configure_client do |config|
-  config.redis = { url: ENV['REDIS'], password: ENV["REDIS_PASSWORD"]}
-end
-
-	
-=end
