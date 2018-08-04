@@ -51,10 +51,6 @@ Rails.application.routes.draw do
 	get '/our-service', to:'static_pages#our_service', as: 'our_service'
 	get '/policy', to:'static_pages#policy', as: 'policy'
 
-
-	get '/beta/telegram/update', to: 'telegram#update'
-	post '/beta/telegram/webhook', to: 'telegram#webhook'
-
 	get '/airline-review/', to: 'review#airline_index', as: 'airline_review_index_page'	
 	get '/airline-review/:property_name', to: 'review#airline_reviews', as: 'airline_review_page'
 	get '/supplier-review/', to: 'review#supplier_index', as: 'supplier_review_index_page'	
