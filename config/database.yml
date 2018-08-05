@@ -16,7 +16,7 @@ development:
 
 test:
   <<: *default
-  host: db #localhost
+  host: localhost
   adapter: sqlite3
   database: db/test
   port: 5432
