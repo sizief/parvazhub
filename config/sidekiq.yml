@@ -42,13 +42,13 @@
 
 #proxy
   proxy_update:
-    cron: '0 /60 * * * *'
+    cron: '0 50 * * * *'
     class: ProxyUpdateWorker
 
 
 #flightPrice remover 
   flight_price_remover:
-    cron: '0 /30 * * * *'
+    cron: '0 29,59 * * * *'
     class: FlightPriceRemoveWorker
 
 #flightinfo worker 
@@ -63,7 +63,7 @@
 
 #airline routes worker
   review_rate_worker:
-    cron: '0 /15 * * * *'
+    cron: '0 15,30,45,58 * * * *'
     class: ReviewRateWorker
 
 #update most search routes

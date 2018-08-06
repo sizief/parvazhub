@@ -1,9 +1,9 @@
 # Change these
-server '<%= ENV["SSH_IP"] %>', port: <%= ENV["SSH_PORT"] %>, roles: [:web, :app, :db], primary: true
+server ENV["SSH_IP"], port: ENV["SSH_PORT"], roles: [:web, :app, :db], primary: true
 
 set :repo_url,        'git@github.com:sizief/parvazhub.git'
 set :application,     'parvazhub'
-set :user,            <%= ENV["SSH_USER"] %>
+set :user,            ENV["sizief"]
 #set :puma_threads,    [4, 16]
 #set :puma_workers,    0
 
@@ -30,7 +30,7 @@ set :ssh_options,     { forward_agent: true, user: fetch(:user), keys: %w(~/.ssh
 # set :keep_releases, 5
 
 ## Linked Files & Directories (Default None):
-set :linked_files, %w{.env .en.production}
+set :linked_files, %w{.env .env.production}
 set :linked_dirs,  %w{log tmp/pids tmp/cache tmp/sockets vendor/assets }
 
 
@@ -64,7 +64,7 @@ namespace :deploy do
   before :starting,     :check_revision
   after  :finishing,    :compile_assets
   after  :finishing,    :cleanup
-  after  :finishing,    :restart
+  #after  :finishing,    :restart
 end
 
 # ps aux | grep puma    # Get puma pid

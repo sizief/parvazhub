@@ -1,5 +1,5 @@
 class Telegram::Monitoring 
-    @@token = "bot336864690:AAHI2TIiSfvf2r-Bue5t9pRTbc3jwoNgYpE"
+    @@token = ENV["TELEGRAM"]
 
     def send(answer)
         text = answer[:text]

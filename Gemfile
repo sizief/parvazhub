@@ -1,14 +1,14 @@
 source 'https://rubygems.org'
 
 gem 'dotenv-rails', groups: [:development,:test,:production,:local]
-gem 'rails',        '5.0.0.1'
+gem 'rails',        '5.2.0'
 gem 'puma',         '3.7.0'
-gem 'sass-rails',   '5.0.6'
+gem 'sass-rails'
 gem 'uglifier',     '3.0.0'
-gem 'coffee-rails', '4.2.1'
-gem 'jquery-rails', '4.1.1'
+gem 'coffee-rails'
+gem 'jquery-rails'
 gem 'turbolinks',   '5.0.1'
-gem 'jbuilder',     '2.4.1'
+gem 'jbuilder'
 gem 'bcrypt',         '3.1.11'
 gem 'parsi-date', '~> 0.3.1'
 gem 'rest-client'
@@ -25,17 +25,26 @@ gem 'browser'
 gem 'excon'
 gem 'rbzip2', '0.3.0'
 gem 'foreman', '~> 0.82.0'
+gem 'nokogiri', '~> 1.8.2'
+
 
 
 group :development do
-  gem 'web-console',           '3.1.1'
-  gem 'listen',                '3.0.8'
+  gem 'web-console'
+  gem 'listen'
   gem 'spring',                '1.7.2'
   gem 'spring-watcher-listen', '2.0.0'
   gem 'byebug',  '9.0.0', platform: :mri
   gem 'simplecov', :require => false, :group => :test
   gem 'rubocop', require: false
   gem 'bullet'
+  gem 'capistrano', '~> 3.10', require: false
+  gem 'capistrano-rails', '~> 1.3', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rbenv', '~> 2.1'
+  gem 'capistrano-env-config'
+
+    #gem 'capistrano3-puma',   require: false
 end
 
 group :test do
