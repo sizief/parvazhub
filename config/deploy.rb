@@ -4,16 +4,8 @@ lock "~> 3.11.0"
 set :application, "parvazhub"
 set :repo_url, "git@github.com:sizief/parvazhub.git"
 
-set :rbenv_type, :user # or :user, depends on your rbenv setup
 set :rbenv_ruby, '2.3.1'
-#set :rbenv_custom_path, "/usr/bin/rbenv"
 
-# in case you want to set ruby version from the file:
-# set :rbenv_ruby, File.read('.ruby-version').strip
-
-set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
-set :rbenv_map_bins, %w{rake gem bundle ruby rails}
-set :rbenv_roles, :all # default value
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp

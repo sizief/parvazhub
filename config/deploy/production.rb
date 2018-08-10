@@ -3,7 +3,7 @@ server ENV["SSH_IP"], port: ENV["SSH_PORT"], roles: [:web, :app, :db], primary: 
 
 set :repo_url,        'git@github.com:sizief/parvazhub.git'
 set :application,     'parvazhub'
-set :user,            ENV["sizief"]
+set :user,            ENV["SSH_USER"]
 #set :puma_threads,    [4, 16]
 #set :puma_workers,    0
 
@@ -31,7 +31,7 @@ set :ssh_options,     { forward_agent: true, user: fetch(:user), keys: %w(~/.ssh
 
 ## Linked Files & Directories (Default None):
 set :linked_files, %w{.env .env.production}
-set :linked_dirs,  %w{log tmp/pids tmp/cache tmp/sockets vendor/assets }
+set :linked_dirs,  %w{log tmp/pids tmp/cache tmp/sockets .bundle }
 
 
 namespace :deploy do
