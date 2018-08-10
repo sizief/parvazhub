@@ -46,61 +46,57 @@ namespace :deploy do
     end
   end
 
-  desc 'Restart application'
-  task :restart do
-    on roles(:app), in: :sequence, wait: 5 do
-      invoke 'puma:restart'
-    end
-  end
+  # desc 'Restart application'
+  # task :restart do
+  #   on roles(:app), in: :sequence, wait: 5 do
+  #     invoke 'puma:restart'
+  #   end
+  # end
 
-  before :starting,     :check_revision
-  after  :finishing,    :compile_assets
-  after  :finishing,    :cleanup
-  #after  :finishing,    :restart
-end
-
-namespace :foreman do
   desc "Export the Procfile to Ubuntu's systemd scripts"
-  task :export do
+  task :foreman_export do
     on roles(:app) do
-      run "cd /var/www/parvazhub/current && sudo foreman export --app parvazhub --user sizief systemd /etc/systemd/system/"
+      execute "cd /var/www/parvazhub/current && sudo foreman export --app parvazhub --user sizief systemd /etc/systemd/system/"
     end
   end
   
   desc "Start the application services"
-  task :start do
+  task :application_start do
     on roles(:app) do
-      sudo "sudo systemctl start parvazhub.target"
+      execute "sudo systemctl start parvazhub.target"
     end
   end
 
   desc "Stop the application services"
-  task :stop do
+  task :application_stop do
     on roles(:app) do
-      sudo "sudo systemctl stop parvazhub.target"
+      execute "sudo systemctl stop parvazhub.target"
     end
   end
 
   desc "Restart the server services"
   task :systemd_restart do
     on roles(:app) do
-      run "systemctl daemon-reload"
+      execute "sudo systemctl daemon-reload"
     end
   end
 
   desc "Restart the server nginx"
   task :nginx_restart do
     on roles(:app) do
-      run "sudo systemctl restart nginx.service"
+      execute "sudo systemctl restart nginx.service"
     end
   end
-end
 
-after "deploy:update", "foreman:export"
-after "deploy:update", "foreman:systemd_restart"
-after "deploy:update", "foreman:stop"
-after "deploy:update", "foreman:start"
-after "deploy:update", "foreman:nginx_restart"
+  before :starting,     :check_revision
+  after  :finishing,    :compile_assets
+  after  :finishing,    :cleanup
+  after  :finishing,    :foreman_export
+  after  :finishing,    :systemd_restart
+  after  :finishing,    :application_stop
+  after  :finishing,    :application_start
+  after  :finishing,    :nginx_restart
+end
 
 # ps aux | grep puma    # Get puma pid
 # kill -s SIGUSR2 pid   # Restart puma
