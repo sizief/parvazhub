@@ -9,7 +9,7 @@ set :use_sudo,        false
 set :stage,           :production
 set :deploy_via,      :remote_cache
 set :deploy_to,       "/var/www/#{fetch(:application)}"
-set :ssh_options,     { forward_agent: true, user: fetch(:user), keys: %w(~/.ssh/id_rsa.pub) }
+#set :ssh_options,     { forward_agent: true, user: fetch(:user)} #, keys: %w(~/.ssh/id_rsa.pub) }
 set :ssh_options,     keys: ["config/deploy_id_rsa"] if File.exist?("config/deploy_id_rsa")
 
 #set :puma_bind,       "unix://#{shared_path}/tmp/sockets/#{fetch(:application)}-puma.sock"
