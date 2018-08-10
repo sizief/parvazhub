@@ -1,4 +1,8 @@
-<a href="https://codeclimate.com/github/sizief/parvazhub/maintainability"><img src="https://api.codeclimate.com/v1/badges/82b1750afce7d8a317d0/maintainability" /></a>  
+[![Maintainability](https://api.codeclimate.com/v1/badges/82b1750afce7d8a317d0/maintainability)](https://codeclimate.com/github/sizief/parvazhub/maintainability)
+
+[![Build Status](https://travis-ci.org/sizief/parvazhub.svg?branch=master)](https://travis-ci.org/sizief/parvazhub) 
+
+[![Test Coverage](https://api.codeclimate.com/v1/badges/82b1750afce7d8a317d0/test_coverage)](https://codeclimate.com/github/sizief/parvazhub/test_coverage)
   
   
 # PARVAZHUB
