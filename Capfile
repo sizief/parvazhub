@@ -10,7 +10,7 @@ require "capistrano/deploy"
 require "capistrano/rbenv"
 require 'capistrano/rails'
 require 'capistrano/bundler'
-require 'capistrano/puma'
+#require 'capistrano/puma'
 require "capistrano/rails/assets"
 
 # config/deploy.rb
