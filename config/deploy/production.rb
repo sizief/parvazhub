@@ -61,28 +61,38 @@ end
 
 namespace :foreman do
   desc "Export the Procfile to Ubuntu's systemd scripts"
-  task :export, :roles => :app do
-    run "cd /var/www/parvazhub/current && sudo foreman export --app parvazhub --user sizief systemd /etc/systemd/system/"
+  task :export do
+    on roles(:app) do
+      run "cd /var/www/parvazhub/current && sudo foreman export --app parvazhub --user sizief systemd /etc/systemd/system/"
+    end
   end
   
   desc "Start the application services"
-  task :start, :roles => :app do
-    sudo "sudo systemctl start parvazhub.target"
+  task :start do
+    on roles(:app) do
+      sudo "sudo systemctl start parvazhub.target"
+    end
   end
 
   desc "Stop the application services"
-  task :stop, :roles => :app do
-    sudo "sudo systemctl stop parvazhub.target"
+  task :stop do
+    on roles(:app) do
+      sudo "sudo systemctl stop parvazhub.target"
+    end
   end
 
   desc "Restart the server services"
-  task :systemd_restart, :roles => :app do
-    run "systemctl daemon-reload"
+  task :systemd_restart do
+    on roles(:app) do
+      run "systemctl daemon-reload"
+    end
   end
 
   desc "Restart the server nginx"
-  task :nginx_restart, :roles => :app do
-    run "sudo systemctl restart nginx.service"
+  task :nginx_restart do
+    on roles(:app) do
+      run "sudo systemctl restart nginx.service"
+    end
   end
 end
 
