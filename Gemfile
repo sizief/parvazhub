@@ -26,7 +26,11 @@ gem 'excon'
 gem 'rbzip2', '0.3.0'
 gem 'foreman', '~> 0.82.0'
 gem 'nokogiri', '~> 1.8.2'
-
+gem 'capistrano', '~> 3.10', require: false
+gem 'capistrano-rails', '~> 1.3', require: false
+gem 'capistrano-bundler', require: false
+gem 'capistrano-rbenv', '~> 2.1'
+gem 'capistrano-env-config'
 
 
 group :development do
@@ -38,13 +42,6 @@ group :development do
   gem 'simplecov', :require => false, :group => :test
   gem 'rubocop', require: false
   gem 'bullet'
-  gem 'capistrano', '~> 3.10', require: false
-  gem 'capistrano-rails', '~> 1.3', require: false
-  gem 'capistrano-bundler', require: false
-  gem 'capistrano-rbenv', '~> 2.1'
-  gem 'capistrano-env-config'
-
-    #gem 'capistrano3-puma',   require: false
 end
 
 group :test do
@@ -57,6 +54,3 @@ end
 
 group :production do
 end
-
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-#gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
