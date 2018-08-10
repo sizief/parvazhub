@@ -1,15 +1,19 @@
 env:
   global:
-    - CC_TEST_REPORTER_ID=11204d37f66a611021f5b19b4ed934af452f1998edad215126b1ee7e4388bff6
+  - CC_TEST_REPORTER_ID=11204d37f66a611021f5b19b4ed934af452f1998edad215126b1ee7e4388bff6
+  - secure: yO8vlWwobz+iJMj3PdS4M9xTNHT3Hina0mvk7V68gP/dxnNMv+kQAS06vXgW8nMBQnzUuzOLfJaiIuIarXh4GPhAE+uwCWSs3c7uzxB9YuE9ZwGP7vMXDZ7vXt2qqwK/CWMTiUgoMI4FaWhXNaFVfXFNdFpEIVR5N4gJcKoqpJhkZnRrh71eDF7Bm2agVPyqFPOr3BgIImMIBXGZ2DwCJRH5mSdBtTTEHDHQiUd6kqtXWqtngC5ZfHJ+kXX/VsMhaHsJCt+X0ER5YBZKfzR7PSgBICnox67rbjflSK3q5D7q9FC5pnKAjBwqylMlb1r/9zSY0M6V5v7hIuXisnHBxHJALd+0uPcOFACNyPPV3/V0Fvh2uzZi3JsEO/Y3tqnsiQ7tUBEPk6pv1LWBh2BZ21Ku91R9m4b9oQTfT/Ol8wESTFgFgQlwaQ0dp6H/4U/PU9AXdz6DVJl/tO5hdCbPDzPIEYOEg931koqHEczxeDn0q94SAbrs6EhI597E2alP0I5jGxgFfkRwYJwz5X/p6e8dHApjxPBnMwuAKexVhMBQKqceoXBLyXEJUT5a7DNvQfwz9X5b/1WGA/qHLF+2VF+CRzvMViVkp2u10f8vzbnTK794PfhzdQ1Tg1dCv9MuIbhSfCSDXQpC9OHWXR3fVx+R93QAecrJTkG3xmbAfXQ=
 before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
+- curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+- chmod +x ./cc-test-reporter
+- "./cc-test-reporter before-build"
 language: ruby
 rvm:
-  - 2.3.1
+- 2.3.1
 script:
-  - bundle exec rails db:migrate RAILS_ENV=test
-  - bundle exec rails test
+- bundle exec rails db:migrate RAILS_ENV=test
+- bundle exec rails test
 after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+- "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
+after_success:
+  - "openssl aes-256-cbc -k $DEPLOY_KEY -in config/deploy/deploy_id_rsa_enc_travis -d -a -out config/deploy_id_rsa"
+  - "bundle exec cap production deploy"
