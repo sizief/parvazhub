@@ -14,8 +14,7 @@ db/test
 /tmp/cache/*
 /tmp/miniprofiler/*
 /tmp/log/*
-/tmp/pids/puma.state
-/tmp/pids/puma.sock
+/tmp/pids/puma*
 
 !/log/.keep
 !/tmp/.keep

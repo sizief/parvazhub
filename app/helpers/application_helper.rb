@@ -37,6 +37,13 @@ module ApplicationHelper
     Review.new.get_last_airline_review
   end
 
-  
+  def github_link
+    if File.exist?("git_last_commit")
+      json_data = File.read("git_last_commit")
+      data = JSON.parse(json_data)
+      text = "Last update: " + time_ago_in_words(data["date"].to_datetime) + " ago"
+      link_to text, data["url"]
+    end
+  end
 
 end

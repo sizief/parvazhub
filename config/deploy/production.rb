@@ -89,9 +89,17 @@ namespace :deploy do
     end
   end
 
+  desc "update the git version"
+  task :update_version do
+    on roles(:app) do
+      execute "cd /var/www/parvazhub/current && ruby config/version_updater.rb "
+    end
+  end
+
   before :starting,     :check_revision
   after  :finishing,    :compile_assets
   after  :finishing,    :cleanup
+  after  :finishing,    :update_version
   after  :finishing,    :foreman_export
   after  :finishing,    :systemd_restart
   after  :finishing,    :application_stop
