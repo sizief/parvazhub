@@ -41,7 +41,7 @@ class Suppliers::Hipotrip < Suppliers::Base
       
       begin
         request_id = results["request_id"]
-        url =  ENV["URL_HIPO_SEARCH"] + "#{request_id}" #"https://rest.hipotrip.ir/api/search/flight?request_id=#{request_id}"
+        url =  ENV["URL_HIPO_SEARCH"] + "#{request_id}" 
         if Rails.env.test?
           response = mock_results
         else
