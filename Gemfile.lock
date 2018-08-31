@@ -52,6 +52,8 @@ GEM
     bcrypt (3.1.11)
     bindex (0.5.0)
     browser (2.5.3)
+    bugsnag (6.8.0)
+      concurrent-ruby (~> 1.0)
     builder (3.2.3)
     bullet (5.7.5)
       activesupport (>= 3.0.0)
@@ -347,6 +349,7 @@ DEPENDENCIES
   activerecord-import (>= 0.2.0)
   bcrypt (= 3.1.11)
   browser
+  bugsnag (~> 6.8)
   bullet
   byebug (= 9.0.0)
   capistrano (~> 3.10)

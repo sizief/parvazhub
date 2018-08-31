@@ -10,12 +10,12 @@ See [about us](https://parvazhub.com/us) page for more information (it's in Fars
 ## Run it on your local 
 A. pull the repo  
 B. copy .env.production.local and docker-compose.override.yml to root  
-C. run docker-compose run app db:create db:migrate db:seed
-D. run docker-compose build  
-E. run docker-compose up  
+C. `run docker-compose & run app db:create db:migrate db:seed`
+D. `run docker-compose build`  
+E. `run docker-compose up`  
 
   
-Or simply run foreman start
+Or simply run `foreman start`
 
 ## Copyright
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
