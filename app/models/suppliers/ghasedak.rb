@@ -3,7 +3,7 @@ class Suppliers::Ghasedak < Suppliers::Base
     require "rest-client"
 
   def search_supplier
-    url = "https://ghasedak24.com/api/GetAllFlights/?"
+    url = ENV["URL_GHASEDAK_SEARCH"]
     search_date = date.to_date.to_s.gsub("-","/")  
     params = "from=#{origin.upcase}&to=#{destination.upcase}&fromDate=#{search_date}&toDate=#{search_date}&userName=sepehr&password=1234&cs=1"
     

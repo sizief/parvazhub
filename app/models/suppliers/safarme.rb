@@ -2,7 +2,7 @@ class Suppliers::Safarme < Suppliers::Base
   require "uri"
   require "rest-client"
 
-  @@api_site_id = "0c8e9eaa-417c-4862-baa9-c28ffa1f6ac9"
+  @@api_site_id = ENV["URL_SAFARME_KEY"]
     
   def get_params
     prepared_date = date.to_date.strftime "%Y/%m/%d"        
@@ -18,7 +18,7 @@ class Suppliers::Safarme < Suppliers::Base
 
   def search_supplier 
     begin
-      url = "http://parvazhubsafarmewebapi.safariran.ir/api/FlightReservationApi/SearchFlightData"
+      url = ENV["URL_SAFARME_SEARCH"] 
       if Rails.env.test?
         response = mock_results
       else
@@ -128,7 +128,7 @@ class Suppliers::Safarme < Suppliers::Base
   end
 
   def self.create_deep_link data
-    url = "http://parvazhubsafarmewebapi.safariran.ir/api/FlightReservationApi/ReserveFlight"
+    url = ENV["URL_SAFARME_DEEPLINK"] 
     json_data = JSON.parse(data)[0]
     params = {'SessionId' => json_data["session_id"], 
               'FlightInDateId' => json_data["flight_in_date_id"], 

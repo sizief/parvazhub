@@ -27,13 +27,13 @@ class Suppliers::Trip < Suppliers::Base
       "chd": 0,
       "inf": 0
     }
-    url = "https://www.trip.ir/flex/search"
+    url = ENV["URL_TRIP_SEARCH"]
     response = send_request("post",url,params)
     return JSON.parse(response)
   end
 
   def is_search_complete(id)
-    url = "https://www.trip.ir/flex/progress"
+    url = ENV["URL_TRIP_PROGRESS"]
     if Rails.env.test?
       response = "{\"success\": true,\"val\": 100}"
     else
@@ -45,7 +45,7 @@ class Suppliers::Trip < Suppliers::Base
 
   def search_supplier
     search_id = register_request(origin,destination,date)["sid"]
-    url = "https://www.trip.ir/flex/results"
+    url = ENV["URL_TRIP_RESULTS"]
     params = {
       "sid": search_id,
       "itemPerPage": 1000	
@@ -158,7 +158,7 @@ class Suppliers::Trip < Suppliers::Base
   end
 
   def get_deep_link(id)
-    "https://www.trip.ir/flex/register?depFlight=#{id}&channel=parvazhub"
+    ENV["URL_TRIP_DEEPLINK"]
   end
 
   def flight_number_correction(flight_number,airline_code)

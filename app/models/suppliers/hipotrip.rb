@@ -18,7 +18,7 @@ class Suppliers::Hipotrip < Suppliers::Base
 
     def register_search 
         begin
-          url = "https://rest.hipotrip.ir/api/search/flight"
+          url = ENV["URL_HIPO_GET"] 
           if Rails.env.test?
             response = {"request_id":"2473e8fcbacf4722","estimated_delay_time":5,"interval":2}
           else
@@ -39,13 +39,13 @@ class Suppliers::Hipotrip < Suppliers::Base
     def search_supplier 
       results = register_search 
       
-      sleep results["estimated_delay_time"].to_f
       begin
         request_id = results["request_id"]
-        url = "https://rest.hipotrip.ir/api/search/flight?request_id=#{request_id}"
+        url =  ENV["URL_HIPO_SEARCH"] + "#{request_id}" #"https://rest.hipotrip.ir/api/search/flight?request_id=#{request_id}"
         if Rails.env.test?
           response = mock_results
         else
+          sleep results["estimated_delay_time"].to_f
           response = RestClient::Request.execute(method: :get, 
                                                 url: "#{URI.parse(url)}",
                                                 proxy: nil)
@@ -155,7 +155,7 @@ class Suppliers::Hipotrip < Suppliers::Base
     end
   
     def get_deeplink request_id, result_id
-      "https://hipotrip.ir/flight/book/#{request_id}/#{result_id}"
+      ENV["URL_HIPO_DEEPLINK"] + "#{request_id}/#{result_id}" 
     end
 
     def flight_number_correction(flight_number,airline_code)

@@ -5,7 +5,7 @@ class Suppliers::Safarestan < Suppliers::Base
 
     
     def get_params
-      {"apikey":"c9672995-2d2d-11e7-bc7a-001c429a2edb",
+      {"apikey":ENV["URL_SAFARESTAN_KEY"],
         "uid":"",
         "clientVersion":4,
         "productType":"localFlight",
@@ -31,7 +31,7 @@ class Suppliers::Safarestan < Suppliers::Base
   
     def search_supplier 
       begin
-        url = "http://mobileapp.safarestan.com/api/search"
+        url = ENV["URL_SAFARESTAN_SEARCH"]
         if Rails.env.test?
           response = mock_results
         else

@@ -3,7 +3,7 @@ class Suppliers::Flightio < Suppliers::Base
   require "uri"
 
   def register_request(origin,destination,date)
-    get_flight_url = "http://api.flightio.com/api/SearchFlight"
+    get_flight_url = ENV["URL_FLIGHTIO_GET"]
     date_time_string = date + "T00:00:00"
     params = {"ADT": 1, 
               "CHD": 0,
@@ -44,8 +44,8 @@ class Suppliers::Flightio < Suppliers::Base
 
     begin
       request_id = register_request(origin,destination,date)["Data"]
-      search_flight_url = "https://flightio.com/fa/FlightResult/ListTable?FSL_Id="+ request_id
-      deep_link = "https://flightio.com/fa/FlightPreview/Detail?FSL_Id=" + request_id + "&CombinationID="
+      search_flight_url = ENV["URL_FLIGHTIO_SEARCH"]+ request_id
+      deep_link = ENV["URL_FLIGHTIO_DEEPLINK"] + request_id + "&CombinationID="
       headers = {"FUser": "FlightioAppAndroid", "FPass": "Pw4FlightioAppAndroid" }
       response = Excon.get(search_flight_url,:headers => headers,:proxy => Proxy.new_proxy)
     rescue => e

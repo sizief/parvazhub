@@ -18,7 +18,7 @@ class Suppliers::Flytoday < Suppliers::Base
 
   def search_supplier 
     begin
-      url = "https://www.flytoday.ir/flight/search/deeplinksearch"
+      url = ENV["URL_FLYTODAY_SEARCH"]
     if Rails.env.test?
       response = mock_results
     else
@@ -122,7 +122,7 @@ class Suppliers::Flytoday < Suppliers::Base
   end
 
   def get_deeplink(fare_source_code)
-    "https://flytoday.ir/flight/book?fsc=#{fare_source_code}"
+    ENV["URL_FLYTODAY_DEEPLINK"] + fare_source_code
   end
 
 end

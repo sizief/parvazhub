@@ -14,7 +14,7 @@ class Suppliers::Zoraq < Suppliers::Base
       end
 
       begin
-        url = "http://zoraq.com/Flight/DeepLinkSearch"
+        url = ENV["URL_ZORAQ_SEARCH"]
   	    params = {'OrginLocationIata' => "#{origin.upcase}", 'DestLocationIata' => "#{destination.upcase}", 'DepartureGo' => "#{date}", 'Passengers[0].Type' =>'ADT', 'Passengers[0].Quantity'=>'1'}
         response = RestClient::Request.execute(method: :post, url: "#{URI.parse(url)}",headers: {params: params}, proxy: nil)
       rescue => e
