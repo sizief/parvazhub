@@ -45,8 +45,9 @@ class Suppliers::Hipotrip < Suppliers::Base
         if Rails.env.test?
           response = mock_results
         else
-          sleep results["estimated_delay_time"].to_f
-          response = RestClient::Request.execute(method: :get, 
+          delay = results["estimated_delay_time"].to_f == 0 ? 5 :  results["estimated_delay_time"].to_f           
+          sleep delay
+	  response = RestClient::Request.execute(method: :get, 
                                                 url: "#{URI.parse(url)}",
                                                 proxy: nil)
           response = response.body
