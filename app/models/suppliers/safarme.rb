@@ -122,7 +122,8 @@ class Suppliers::Safarme < Suppliers::Base
   def get_airline_code(airline_code)
     airlines ={
       "0"=>"SE",
-      "SPN"=>"SR"
+      "SPN"=>"SR",
+      "VR"=>"VA"
     		}
 	airlines[airline_code].nil? ? airline_code : airlines[airline_code]
   end

@@ -63,7 +63,7 @@ class Suppliers::Flightio < Suppliers::Base
 
       doc.each do |flight|
         price = flight['amount']
-        airline_code = flight['airline'].tr(",","")
+        airline_code = get_airline_code(flight['airline'].tr(",",""))
         combination_id = flight['combinationid']
         deeplink_url = response[:deeplink]+combination_id
         departure_hour = flight['sourcedeparttime']
@@ -99,6 +99,13 @@ class Suppliers::Flightio < Suppliers::Base
       end #end of each loop
     complete_import flight_prices, search_history_id
     return flight_ids    
+  end
+
+  def get_airline_code(airline_code)
+    airlines ={
+      "IS"=>"SR"
+		}
+	airlines[airline_code].nil? ? airline_code : airlines[airline_code]
   end
 
  

@@ -13,7 +13,7 @@ module ApplicationHelper
   def get_star_icon(total,amount,color,size)
     markup_delivery = " "
     markup_colored = "<i class=\"star icon #{color} #{size}\"></i>"
-    markup = "<i class=\"empty grey star icon #{size}\"></i>"
+    markup = "<i class=\"grey star outline icon #{size}\"></i>"
     0.upto(amount-1) do
       markup_delivery += markup_colored
     end
