@@ -14,8 +14,7 @@ db/test
 /tmp/cache/*
 /tmp/miniprofiler/*
 /tmp/log/*
-/tmp/pids/puma*
-
+/tmp/pids/*
 !/log/.keep
 !/tmp/.keep
 
@@ -37,4 +36,3 @@ abarcloud.yml
 coverage
 core
 .vscode/
-

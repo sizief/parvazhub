@@ -37,16 +37,12 @@ Rails.application.configure do
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
 
-  # Debug mode disables concatenation and preprocessing of assets.
-  # This option may cause significant delays in view rendering with a large
-  # number of complex assets.
+  # Assets
   config.assets.debug = true
-
-  # Suppress logger output for asset requests.
-  config.assets.quiet = true
+  config.assets.quiet = false
   config.assets.compile = true
-
-
+  config.public_file_server.enabled = true #ENV['RAILS_SERVE_STATIC_FILES'].present?
+  
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
@@ -60,15 +56,12 @@ Rails.application.configure do
   logger.formatter = config.log_formatter
   config.logger = ActiveSupport::TaggedLogging.new(logger)
 
-   config.action_mailer.raise_delivery_errors = true
-   config.action_mailer.default_url_options = { host: "localhost", port:3000  }
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.default_url_options = { host: "localhost", port:3000  }
 
-   #config.action_controller.asset_host = "localhost"
-   config.action_mailer.asset_host = "http://parvazhub.com"
+  #config.active_record.default_timezone = "Asia/Tehran"
 
-   #config.active_record.default_timezone = "Asia/Tehran"
-
-   config.after_initialize do
+  config.after_initialize do
     Bullet.enable = true
     Bullet.alert = true
     Bullet.bullet_logger = true
@@ -79,7 +72,7 @@ Rails.application.configure do
     Bullet.bugsnag = false
     Bullet.airbrake =false
     Bullet.add_footer = true
-    
   end
+
 end
 
