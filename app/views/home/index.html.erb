@@ -97,7 +97,7 @@
 						<% if index < @user_last_searches_limit %>
 							<div class="description text-center dir-rtl" style="padding-top: 4px">
 								<a  href="<%= flight_page_path_by_route user_last_search[:route_id], date  %>">
-									<%= date.to_date.to_parsi.strftime "%A %-d %B"   %>
+									<%= JalaliDate.new(date.to_date).strftime "%A %d %b"   %>
 									<i class="right arrow icon"></i>
 								</a>	
 							</div>

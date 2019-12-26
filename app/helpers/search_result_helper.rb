@@ -47,17 +47,17 @@ module SearchResultHelper
 	  number_with_zero
 	end
 
-	def day_name date,saerch_parameter_date
-		date = date.to_date
-		day_name = nil
-		if date == Date.today 
-			day_name = "امروز"
-		elsif date == (Date.today+1) 
-			day_name = "فردا"
-		else
-			day_name = date.to_parsi.strftime("%A")
-		end
-		(search_date_identifier(date,saerch_parameter_date)+day_name).html_safe
+	def day_name date,search_parameter_date
+	  date = date.to_date
+	  day_name = nil
+	  if date == Date.today 
+	    day_name = "امروز"
+	  elsif date == (Date.today+1) 
+	    day_name = "فردا"
+	  else
+            day_name = JalaliDate.new(date).strftime("%A")
+	  end
+	  (search_date_identifier(date,search_parameter_date)+day_name).html_safe
 	end
 
 	def search_date_identifier date,saerch_parameter_date

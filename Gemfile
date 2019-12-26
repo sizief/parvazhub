@@ -10,11 +10,12 @@ gem 'jquery-rails'
 gem 'turbolinks',   '5.0.1'
 gem 'jbuilder'
 gem 'bcrypt',         '3.1.11'
-gem 'parsi-date', '~> 0.3.1'
+gem 'jalalidate'
 gem 'rest-client'
 gem 'semantic-ui-sass', '~> 2.2', '>= 2.2.1.1'
 gem 'pg', '~> 0.18.4'
 gem "activerecord-import", ">= 0.2.0"
+gem "activerecord"
 gem 'sidekiq'
 gem 'redis-rails'
 gem 'sidekiq-scheduler'
@@ -33,13 +34,9 @@ gem 'capistrano-env-config'
 
 group :development do
   gem 'web-console'
-  gem 'listen'
-  gem 'spring',                '1.7.2'
-  gem 'spring-watcher-listen', '2.0.0'
-  gem 'byebug',  '9.0.0', platform: :mri
   gem 'simplecov', :require => false, :group => :test
-  gem 'rubocop', require: false
-  gem 'bullet'
+  gem 'pry', '~> 0.12.2'
+  gem 'pry-nav'
 end
 
 group :test do

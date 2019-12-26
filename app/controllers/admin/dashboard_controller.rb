@@ -56,7 +56,17 @@ class Admin::DashboardController < ApplicationController
     this_week_redirects =  calculate_redirects(Date.today-7, Date.today+1)
     week_before_redirects =  calculate_redirects(Date.today-14, Date.today-7)
     week_before_that_redirects =  calculate_redirects(Date.today-21, Date.today-14)
-    this_month_redirects = calculate_redirects((Date.today-(Date.today.to_date.to_parsi.strftime("%-d")).to_i), Date.today+1)
+    this_month_redirects = calculate_redirects(
+      (
+        Date.today -
+        (
+          JalaliDate.new(
+            Date.today.to_date
+          )
+        .strftime("%d")
+        ).to_i
+      ), Date.today+1
+    )
     @results = {this_month: this_month_redirects, today:today_redirects,all:all_redirects,this_week:this_week_redirects,week_before:week_before_redirects,week_before_that:week_before_that_redirects} 
   end
 

@@ -1,7 +1,7 @@
 module RouteHelper
 
   def dates_for_chart price_dates
-    raw price_dates.map{|item| ((item[:date].to_date == Date.today)? "امروز" : item[:date].to_date.to_parsi.strftime("%A %-d %B")) }
+    raw price_dates.map{|item| ((item[:date].to_date == Date.today)? "امروز" : JalaliDate.new(item[:date].to_date).strftime("%A %d %b")) }
   end
 
   def prices_for_chart price_dates

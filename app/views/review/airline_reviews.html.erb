@@ -43,7 +43,7 @@
                         <%= review.author %>
                     <% end %>
                 </div>
-                <div class="review-date"><%= review.created_at.to_date.to_parsi.strftime " %-d %B %y"  %></div>
+                <div class="review-date"><%= JalaliDate.new(review.created_at.to_date).strftime " %d %b %y"  %></div>
                 <% unless review.rate.nil? %>
                     <div class="review-rate"><%= get_star_icon(5,review.rate,"yellow","small").html_safe %></div>
                 <% end %>

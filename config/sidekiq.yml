@@ -2,66 +2,23 @@
   - critical
   - default
   - low
-:concurrency: 50
+:concurrency: 5
 :schedule:
-  # flight_search_today: #every 10 minutes 720 times
-  #   cron: '0 0,10,20,30,40,50 6-24 * * *'
-  #   args: [date_offset: 0]
-  #   class: BackgroundSearchWorker
-
-  # flight_search_tomorrow: #every 10 minutes 720 times
-  #   cron: '0 5,15,25,35,45,55 6-24 * * *'
-  #   args: [date_offset: 1]
-  #   class: BackgroundSearchWorker
-
-  # flight_search_dayafter: #every 120 minutes 60
-  #   cron: '0 55 0,6,8,10,12,14,16,18,20,22 * * *'
-  #   args: [date_offset: 2]
-  #   class: BackgroundSearchWorker
-
-  # flight_search_restofweek_1: #every 120 minutes 60
-  #   cron: '0 35 1,7,9,11,13,15,17,19,21,23 * * *'
-  #   args: [date_offset: 3]
-  #   class: BackgroundSearchWorker
-
-  # flight_search_restofweek_2: #every 120 minutes 60
-  #   cron: '0 55 1,7,9,11,13,15,17,19,21,23 * * *'
-  #   args: [date_offset: 4]
-  #   class: BackgroundSearchWorker
-
   # flight_search_restofweek_3: #every 120 minutes 60
   #   cron: '0 35 0,6,8,10,12,14,16,18,20,22 * * *'
   #   args: [date_offset: 5]
   #   class: BackgroundSearchWorker
-
-
-#airport search worker
-  get_airport_data:
-    cron: '0 0 0,12 * * *'
-    class: AirportSearchWorker
-
-#proxy
-  proxy_update:
-    cron: '0 50 * * * *'
-    class: ProxyUpdateWorker
-
 
 #flightPrice remover 
   flight_price_remover:
     cron: '0 29,59 * * * *'
     class: FlightPriceRemoveWorker
 
-#flightinfo worker 
-  flight_info_worker:
-    cron: '0 45 0,12 * * *'
-    class: FlightInfoWorker
-
 #route day worker
-  route_day_worker:
+    route_day_worker:
     cron: '0 55 0,12 * * *'
     class: RouteDayWorker
 
-#airline routes worker
   review_rate_worker:
     cron: '0 15,30,45,58 * * * *'
     class: ReviewRateWorker

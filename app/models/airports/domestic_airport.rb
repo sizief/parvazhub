@@ -126,8 +126,11 @@ class Airports::DomesticAirport
 
 
   def convert_to_gregorian shamsi_date
-    date = Parsi::DateTime.parse shamsi_date
-    date = date.to_gregorian.to_date.to_s
+    date = JalaliDate.new(
+      shamsi_date[0..3].to_i, 
+      shamsi_date[5..6].to_i, 
+      shamsi_date[8..9].to_i
+    ).to_g.to_date.to_s
     date += " "+shamsi_date[11..-1]
     date.to_datetime
   end

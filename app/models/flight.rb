@@ -7,7 +7,6 @@ class Flight < ApplicationRecord
   has_many :flight_prices
   has_one :flight_info
 
-  attr_accessor :delay
   attr_accessor :suppliers_count
   attr_accessor :airline_persian_name
   attr_accessor :airline_english_name
@@ -142,7 +141,6 @@ class Flight < ApplicationRecord
       response[:stops] = flight.stops
 
       response[:supplier_count] = flight.flight_prices_count
-      response[:delay] = normalize_delay(flight.flight_info.delay) unless flight.flight_info.nil?
       response[:airline_code] = flight.airline_code.split(",")[0]
       flight.airline_code = flight.airline_code.split(",").first #get first flight for multipart flights
       
@@ -174,24 +172,6 @@ class Flight < ApplicationRecord
   end
 
   private
-  def normalize_delay delay
-	  if delay.to_f >= 15 and delay.to_f < 25
-			number = 20
-		elsif delay.to_f >= 25 and delay.to_f < 35
-			number = 30
-		elsif delay.to_f >= 35 and delay.to_f < 45
-			number = 40
-		elsif delay.to_f >= 45 and delay.to_f < 55
-			number = 50
-		elsif delay.to_f >= 55 and delay.to_f < 85
-			number = 80
-		elsif delay.to_f >= 85 
-      number = 120 #delay.to_f
-    else
-      number = nil
-    end
-    number
-  end
 
   def to_dollar amount
     Currency.new.to_dollar amount

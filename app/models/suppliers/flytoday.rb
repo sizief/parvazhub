@@ -3,7 +3,7 @@ class Suppliers::Flytoday < Suppliers::Base
   require "rest-client"
   
   def get_params
-    shamsi_date = date.to_date.to_parsi.strftime "%Y-%m-%d"        
+    shamsi_date = JalaliDate.new(date.to_date).strftime "%Y-%m-%d"        
     params = {'OriginLocationCodes[0]' => "#{origin.upcase}", 
               'DestinationLocationCodes[0]' => "#{destination.upcase}", 
               'DepartureDateTimes[0]' => "#{shamsi_date}", 

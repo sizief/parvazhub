@@ -13,7 +13,7 @@
 					<%= @search_parameter[:origin_persian_name] %>
 				  	به	 
 				 	<%= @search_parameter[:destination_persian_name] %> 
-					 <%= @search_parameter[:date].to_date.to_parsi.strftime "%A %-d %B"   %>
+					 <%= JalaliDate.new(@search_parameter[:date].to_date).strftime "%A %e %b"   %>
 					   
 					<a class="light-yellow ui primary basic blue" onclick="$('#search-box-inner').transition('slide');" style="cursor:pointer; padding-left:5px; font-size:0.8em;">
 						<i class="yellow chevron down icon"></i> تغییر شهر/تاریخ
@@ -133,7 +133,6 @@
 									</div>
 								<% end %>
 				            	<div class="sub header" style="margin-top: 7px;color: gray;font-size: 0.8em;">
-									<%= (delay_to_human flight[:delay]) %>
 				          		</div>
 							</div>
 							<% if @search_parameter[:international] %>
@@ -179,11 +178,11 @@
 			<i class="blue info circle  icon big"></i>	
 			<% if @search_parameter[:date].to_date < Date.today %>
 				امروز 
-				<%= Date.today.to_date.to_parsi.strftime "%A %-d %B"   %> 
+				<%= JalaliDate.new(Date.today.to_date).strftime "%A %d %b"   %> 
 				است. تاریخ پرواز را از لینک‌های پایین انتخاب کنید:
 			<% else %>
 			پروازی در روز 
-			<%= @search_parameter[:date].to_date.to_parsi.strftime "%A %-d %B"   %> 
+			<%= JalaliDate.new(@search_parameter[:date].to_date).strftime "%A %d %b"   %> 
 			موجود نیست. و یا ظرفیت پرواز پر شده است.
 			پرواز برای تاریخ‌های زیر را چک کنید:	
 			<% end %>
@@ -193,7 +192,7 @@
 					<% unless flight_date[:date] == @search_parameter[:date].to_s %>
 					
 					<li>
-						<% link_text = "جستجوی پرواز #{@search_parameter[:origin_persian_name]} به #{@search_parameter[:destination_persian_name]} "+flight_date[:date].to_date.to_parsi.strftime("%A %-d %B ") %>
+						<% link_text = "جستجوی پرواز #{@search_parameter[:origin_persian_name]} به #{@search_parameter[:destination_persian_name]} "+JalaliDate.new(flight_date[:date].to_date).strftime("%A %d %b") %>
 						<%= link_to(link_text, search_link_builder(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],flight_date[:date]))   %>
 					</li>
 					<% end %>

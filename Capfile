@@ -13,9 +13,9 @@ require "capistrano/rails/assets"
 
 # config/deploy.rb
 set :rbenv_type, :user # or :system, depends on your rbenv setup
-set :rbenv_ruby, '2.3.1'
+set :rbenv_ruby, '2.6.5'
 set :rbenv_path, '/home/sizief/.rbenv/' #/usr/bin/rbenv
-set :bundle_path, '/home/sizief/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0'   
+set :bundle_path, '/home/sizief/.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0'   
 
 # in case you want to set ruby version from the file:
 set :rbenv_ruby, File.read('.ruby-version').strip

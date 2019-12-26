@@ -1,4 +1,5 @@
 require 'simplecov'
+require 'active_record'
 SimpleCov.start 'rails'
 ActiveRecord::Migration.maintain_test_schema!
 

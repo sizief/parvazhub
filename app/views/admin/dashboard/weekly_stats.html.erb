@@ -11,7 +11,7 @@
 						<%= user_search_history(Date.today-x) %>
 					</div>
 					<div class="label web-font">
-						<%= (Date.today-x).to_parsi.strftime "%A %d "  %>
+						<%= JalaliDate.new(Date.today-x).strftime "%A %d "  %>
 					</div>
 				</div>
 			<% end %>
@@ -53,7 +53,7 @@
 					  <%= user_flight_price_history(Date.today-x) %>
 				  </div>
 				  <div class="label web-font">
-					  <%= (Date.today-x).to_parsi.strftime "%A %d "  %>
+					  <%= JalaliDate.new(Date.today-x).strftime "%A %d "  %>
 				  </div>
 			  </div>
 		  <% end %>
@@ -95,7 +95,7 @@
 	  					<%= redirect Date.today-x %>
 	  				</div>
 		  			<div class="label web-font">
-	  					<%= (Date.today-x).to_parsi.strftime "%A %d "  %>
+	  					<%= JalaliDate.new(Date.today-x).strftime "%A %d "  %>
 	  				</div>
 	  			</div>
   			<% end %>
@@ -137,7 +137,7 @@
 							<%= search_history Date.today-x %>
 						</div>
 						<div class="label web-font">
-							<%= (Date.today-x).to_parsi.strftime "%A %d "  %>
+							<%= JalaliDate.new(Date.today-x).strftime "%A %d "  %>
 						</div>
 					</div>
 				<% end %>
