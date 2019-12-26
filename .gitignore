@@ -36,3 +36,4 @@ abarcloud.yml
 coverage
 core
 .vscode/
+*.swp
