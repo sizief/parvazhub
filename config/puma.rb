@@ -16,7 +16,7 @@ pidfile "#{shared_dir}/pids/puma.pid"
 state_path "#{shared_dir}/pids/puma.state"
 activate_control_app
 
-threads_count = ENV.fetch("RAILS_MAX_THREADS") { 5 }.to_i
+threads_count = ENV["RAILS_ENV"]=="development" ? 1 : ENV.fetch("RAILS_MAX_THREADS") { 16 }.to_i
 threads threads_count, threads_count
 
 # Specifies the `port` that Puma will listen on to receive requests, default is 3000.
@@ -24,7 +24,7 @@ threads threads_count, threads_count
 port        ENV.fetch("PORT") { 3000 }
 
 
- workers ENV.fetch("WEB_CONCURRENCY") { 4 }
+ workers ENV["RAILS_ENV"]=="development" ? 1 : ENV.fetch("WEB_CONCURRENCY") { 16 }
 
  preload_app!
 

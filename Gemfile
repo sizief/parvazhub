@@ -30,14 +30,12 @@ gem 'capistrano-rails', '~> 1.3', require: false
 gem 'capistrano-bundler', require: false
 gem 'capistrano-rbenv', '~> 2.1'
 gem 'capistrano-env-config'
-gem "bugsnag", "~> 6.8"
 
 group :development do
   gem 'web-console'
   gem 'listen'
   gem 'spring',                '1.7.2'
   gem 'spring-watcher-listen', '2.0.0'
-  gem 'byebug',  '9.0.0', platform: :mri
   gem 'simplecov', :require => false, :group => :test
   gem 'rubocop', require: false
   gem 'bullet'
