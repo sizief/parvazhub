@@ -93,7 +93,7 @@ class SearchResultController < ApplicationController
     elsif date == (Date.today+1) 
       "فردا"
     else
-      date.to_date.to_parsi.strftime ' %-d %B' 
+      JalaliDate.new(date.to_date).strftime ' %d %b' 
     end
   end
 

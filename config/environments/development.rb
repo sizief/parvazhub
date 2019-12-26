@@ -69,7 +69,6 @@ Rails.application.configure do
     Bullet.growl = false
     Bullet.rails_logger = true
     Bullet.honeybadger = false
-    Bullet.bugsnag = false
     Bullet.airbrake =false
     Bullet.add_footer = true
   end

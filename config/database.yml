@@ -11,8 +11,8 @@ development:
   adapter: postgresql
   database: <%= ENV["DB_NAME"] %>
   port: <%= ENV["DB_PORT"] %>
-  username: <%= ENV["DB_USERNAME"] %> #<%= ENV["LOCAL_DB_USERNAME"] %>
-  password: <%= ENV["DB_PASSWORD"] %> #<%= ENV["LOCAL_DB_PASSWORD"] %> #
+  username: <%= ENV["DB_USERNAME"] %> 
+  password: <%= ENV["DB_PASSWORD"] %> 
 
 test:
   <<: *default

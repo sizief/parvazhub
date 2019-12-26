@@ -130,6 +130,7 @@ GEM
       domain_name (~> 0.5)
     i18n (1.7.0)
       concurrent-ruby (~> 1.0)
+    jalalidate (0.3.6)
     jaro_winkler (1.5.4)
     jbuilder (2.9.1)
       activesupport (>= 4.2.0)
@@ -178,7 +179,6 @@ GEM
     parallel (1.19.1)
     parser (2.6.5.0)
       ast (~> 2.4.0)
-    parsi-date (0.3.1)
     pg (0.18.4)
     pry (0.12.2)
       coderay (~> 1.1.0)
@@ -356,12 +356,12 @@ DEPENDENCIES
   foreman (~> 0.82.0)
   guard (= 2.13.0)
   guard-minitest (= 2.4.4)
+  jalalidate
   jbuilder
   jquery-rails
   listen
   minitest-reporters (= 1.1.9)
   nokogiri (~> 1.8.2)
-  parsi-date (~> 0.3.1)
   pg (~> 0.18.4)
   puma (= 3.7.0)
   rails (= 5.2.0)
