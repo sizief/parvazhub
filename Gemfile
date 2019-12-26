@@ -30,7 +30,6 @@ gem 'capistrano-rails', '~> 1.3', require: false
 gem 'capistrano-bundler', require: false
 gem 'capistrano-rbenv', '~> 2.1'
 gem 'capistrano-env-config'
-gem "bugsnag", "~> 6.8"
 
 group :development do
   gem 'web-console'

@@ -10,6 +10,7 @@ bind "unix://#{shared_dir}/sockets/puma.sock"
 
 # Logging
 #stdout_redirect "log/puma.stdout.log", "log/puma.stderr.log", true
+stdout_redirect "log/puma.stderr.log", true
 
 # Set master PID and state locations
 pidfile "#{shared_dir}/pids/puma.pid"
