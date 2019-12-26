@@ -8,7 +8,7 @@ before_script:
 - "./cc-test-reporter before-build"
 language: ruby
 rvm:
-- 2.3.1
+- 2.6.5
 script:
 - bundle exec rails db:migrate RAILS_ENV=test
 - bundle exec rails test
