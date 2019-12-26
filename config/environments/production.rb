@@ -18,13 +18,6 @@ Rails.application.configure do
   # Apache or NGINX already handles this.
   config.public_file_server.enabled = true #ENV['RAILS_SERVE_STATIC_FILES'].present?
 
-  # Compress JavaScripts and CSS.
-  config.assets.js_compressor = :uglifier
-  #config.assets.css_compressor = :sass
-
-  # Do not fallback to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = true
-  #Rails.application.config.assets.precompile += %w( *.js ^[^_]*.css *.css.erb )  
 
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
@@ -88,13 +81,18 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
   
-  # adding following lkine to solve the issue with images define in css does not show in page
   config.serve_static_assets = false
-  # Compress JavaScripts and CSS  
   config.assets.compress = true
-  # Generate digests for assets URLs  
   config.assets.digest = true
+  config.assets.js_compressor = :uglifier
+  config.assets.css_compressor = :sass
+  config.assets.compile = true
+  Rails.application.config.assets.precompile += %w( *.js ^[^_]*.css *.css.erb )  
 
+  config.assets.debug = false
+  config.assets.quiet = false
+  #config.public_file_server.enabled = true #ENV['RAILS_SERVE_STATIC_FILES'].present?
+  
   config.action_mailer.default_url_options = { host: 'parvazhub.com', port: 3000 }
   config.action_mailer.asset_host = "http://parvazhub.com"
   end
