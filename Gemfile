@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'dotenv-rails', groups: [:development,:test,:production,:local]
 gem 'rails',        '5.2.0'
-gem 'puma',         '3.7.0'
+gem 'puma',         '3.12.2'
 gem 'sass-rails'
 gem 'uglifier',     '3.0.0'
 gem 'coffee-rails'
