@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'dotenv-rails', groups: [:development,:test,:production,:local]
 gem 'rails',        '5.2.0'
-gem 'puma',         '3.7.0'
+gem 'puma',         '3.12.2'
 gem 'sass-rails'
 gem 'uglifier',     '3.0.0'
 gem 'coffee-rails'
@@ -25,7 +25,7 @@ gem 'browser'
 gem 'excon'
 gem 'rbzip2', '0.3.0'
 gem 'foreman', '~> 0.82.0'
-gem 'nokogiri', '~> 1.8.2'
+gem 'nokogiri', '~> 1.10.4'
 gem 'capistrano', '~> 3.10', require: false
 gem 'capistrano-rails', '~> 1.3', require: false
 gem 'capistrano-bundler', require: false

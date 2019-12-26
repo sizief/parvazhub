@@ -9,7 +9,7 @@ environment rails_env
 bind "unix://#{shared_dir}/sockets/puma.sock"
 
 # Logging
-stdout_redirect "log/puma.stdout.log", "log/puma.stderr.log", true if rails_env == 'production'
+#stdout_redirect "log/puma.stdout.log", "log/puma.stderr.log", true if rails_env == 'production'
 
 # Set master PID and state locations
 pidfile "#{shared_dir}/pids/puma.pid"
