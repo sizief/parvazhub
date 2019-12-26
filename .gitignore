@@ -37,3 +37,4 @@ coverage
 core
 .vscode/
 *.swp
+tags

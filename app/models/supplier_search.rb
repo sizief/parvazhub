@@ -11,7 +11,7 @@ class SupplierSearch
     @search_flight = SearchFlightId.create(token: DateTime.now.strftime('%Q'))
   end
 
-	def search
+  def search
     search_supplier_in_threads
     #search_supplier_in_series
   end

@@ -54,7 +54,7 @@
 					<button class="ui submit big yellow web-font fluid right labeled  icon button waiting-modal link-dates-button" style="padding-left: 2.5em !important; font-size:0.9em !important;" >	
 					 بلیط 
 						<%= "#{@origin.persian_name} به #{@destination.persian_name}" %>
-						<%=price[:date].to_date.to_parsi.strftime "%A %-d %B"  %>	
+						<%= JalaliDate.new(price[:date].to_date).strftime "%A %e %b"  %>	
 						<%= "از #{number_with_delimiter(price[:price])} تومان" unless price[:price].nil? %>		
 					
 						<i class="right arrow icon"></i>
@@ -104,9 +104,9 @@
 									<div class="route-calendar-date">
 										<span class="mobile-only">پرواز 
 											<%= "#{@origin.persian_name}  #{@destination.persian_name}" %>
-											<%=price[:date].to_date.to_parsi.strftime "%A"  %>	
+											<%= JalaliDate.new(price[:date].to_date).strftime "%A"  %>	
 										</span>
-										<%=price[:date].to_date.to_parsi.strftime "%-d %B"  %>	
+										<%= JalaliDate.new(price[:date].to_date).strftime "%e %b"  %>	
 									</div>
 									<div class="route-calendar-price">
 										<% if number_with_delimiter(price[:price]).nil? %>
@@ -141,7 +141,7 @@
 			</h4>
 			<p>
 				امروز
-				<%= @today_statistic[:date].to_date.to_parsi.strftime "%A %-d %B"   %>
+				<%= JalaliDate.new(@today_statistic[:date].to_date).strftime "%A %e %b"   %>
 				<%= @today_statistic[:count] %>
 				پرواز  در مسیر 
 				<%= "#{@origin.persian_name} به #{@destination.persian_name}" %> 
@@ -163,7 +163,7 @@
 			</h4>
 			<p>
 				فردا
-				<%= @tomorrow_statistic[:date].to_date.to_parsi.strftime "%A %-d %B"   %>
+				<%= JalaliDate.new(@tomorrow_statistic[:date].to_date).strftime "%A %d %b"   %>
 				<%= @tomorrow_statistic[:count] %>
 				پرواز  در مسیر 
 				<%= "#{@origin.persian_name} به #{@destination.persian_name}" %> 
@@ -185,7 +185,7 @@
 			</h4>
 			<p>
 				پس‌فردا
-				<%= @day_after_statistic[:date].to_date.to_parsi.strftime "%A %-d %B"   %>
+				<%= JalaliDate.new(@day_after_statistic[:date].to_date).strftime "%A %d %b"   %>
 				<%= @day_after_statistic[:count] %>
 				پرواز  در مسیر 
 				<%= "#{@origin.persian_name} به #{@destination.persian_name}" %> 

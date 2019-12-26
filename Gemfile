@@ -33,12 +33,9 @@ gem 'capistrano-env-config'
 
 group :development do
   gem 'web-console'
-  gem 'listen'
-  gem 'spring',                '1.7.2'
-  gem 'spring-watcher-listen', '2.0.0'
   gem 'simplecov', :require => false, :group => :test
-  gem 'rubocop', require: false
-  gem 'bullet'
+  gem 'pry', '~> 0.12.2'
+  gem 'pry-nav'
 end
 
 group :test do

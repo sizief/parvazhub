@@ -11,6 +11,7 @@ See [about us](https://parvazhub.com/us) page for more information (it's in Fars
 - Install Ruby 2.6.5
 - Install Postgress and sqlite
 - `cp .env.example .env` 
+- You need to get end point URLs from suppliers and update the env file
 - `bundle'
 - `bundle exec rails db:migrate`, `bundle exec rails db:seed`
 - Install Redis

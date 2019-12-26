@@ -11,7 +11,7 @@ class FlightPriceController < ApplicationController
     origin = City.find_by(english_name: origin_name.downcase) 
     destination = City.find_by(english_name: destination_name.downcase)
 
-    date_in_human = date_to_human date #date.to_date.to_parsi.strftime '%A %d %B'   
+    date_in_human = date_to_human date 
     @flight = Flight.find(flight_id)
     @user = get_current_user(channel, nil) 
     @search_parameter ={origin_english_name: origin.english_name, origin_persian_name: origin.persian_name, origin_code: origin.city_code,
@@ -21,8 +21,8 @@ class FlightPriceController < ApplicationController
     @flight_prices = get_flight_price(@flight,channel,request.user_agent, current_user)
     @flight_price_over_time = FlightPriceArchive.flight_price_over_time(flight_id,date)
     @flight_price_over_time.each do |date,price|
-        @georgian_dates <<  date.to_s.to_date.strftime("%A %d %B")
-        @dates <<  date.to_s.to_date.to_parsi.strftime("%A %d %B")
+      @georgian_dates <<  date.to_s.to_date.strftime("%A %d %B")
+      @dates <<  JalaliDate.new(date.to_s.to_date).strftime("%A %d %b")
         @prices << price
     end
     
@@ -63,7 +63,7 @@ class FlightPriceController < ApplicationController
     elsif date == (Date.today+1) 
       "فردا"
     else
-      date.to_date.to_parsi.strftime ' %-d %B' 
+      JalaliDate.new(date.to_date).strftime ' %d %b' 
     end
   end
 
