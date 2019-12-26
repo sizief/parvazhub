@@ -25,7 +25,7 @@ gem 'browser'
 gem 'excon'
 gem 'rbzip2', '0.3.0'
 gem 'foreman', '~> 0.82.0'
-gem 'nokogiri', '~> 1.8.2'
+gem 'nokogiri', '~> 1.10.4'
 gem 'capistrano', '~> 3.10', require: false
 gem 'capistrano-rails', '~> 1.3', require: false
 gem 'capistrano-bundler', require: false
