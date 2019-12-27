@@ -4,15 +4,7 @@
     <title><%= yield(:title) %></title>
     <%= csrf_meta_tags %>
     <%= favicon_link_tag 'favicon.ico' %>
-    <%= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track': "reload" %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<script>
-  (adsbygoogle = window.adsbygoogle || []).push({
-    google_ad_client: "ca-pub-9389102963026313",
-    enable_page_level_ads: true
-  });
-</script>
     <meta name="theme-color" content="#FBBD08">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="<%= yield(:description) %>">
@@ -26,41 +18,15 @@
 
   <body> 
 
-  <!-- <div class="nag-box" style="display:none"> 
-    <div class="nag-close">
-        <i class="close icon" id="nag-close"></i>
-    </div>
-    <div class="nag-text">
-      <div class="title">
-      <i class="green heart icon"></i>
-        <a href="http://iwmf.ir/website/parvazhub.com" class="white" target="_blank" id="nag-text">
-        از سرویس پروازهاب راضی هستید؟  در رای‌گیری مردمی جشنواره وب
-        <span style="text-decoration:underline; color:blue;">به پروازهاب رای دهید </span>
-        </a> 
-      </div>
-    </div >
-  </div>
-
-  -->
-
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P93NTB5"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
-
     <%= yield %>
-   <%#= debug(params) if Rails.env.development? %>
-   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    
+    <%= debug(params) if Rails.env.development? %>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
    })(window,document,'script','dataLayer','GTM-P93NTB5');</script>
 
-  <!--
-   <script>
-   $("#nag-close, #nag-text").click(function() {$(".nag-box").transition('fly left');localStorage.setItem("nag", true);});
-   if (localStorage.getItem("nag") === null) {$(".nag-box").show();}
-  </script>
--->
    </body>
+    <%= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track': "reload"  %>
 </html>
