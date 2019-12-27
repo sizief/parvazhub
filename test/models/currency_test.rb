@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class CurrencyTest < ActiveSupport::TestCase
@@ -5,10 +7,9 @@ class CurrencyTest < ActiveSupport::TestCase
     @currency = Currency.new
   end
 
-  test "to dollar" do
-    amount = 200000
+  test 'to dollar' do
+    amount = 200_000
     dollar_amount = @currency.to_dollar amount
-    assert_equal dollar_amount, (amount.to_f/ENV["DOLLAR_TO_RIAL_RATE"].to_f).round(1)
+    assert_equal dollar_amount, (amount.to_f / ENV['DOLLAR_TO_RIAL_RATE'].to_f).round(1)
   end
-  
 end

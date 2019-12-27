@@ -1,17 +1,18 @@
-# config valid for current version and patch releases of Capistrano
-lock "~> 3.11.0"
+# frozen_string_literal: true
 
-set :application, "parvazhub"
-set :repo_url, "git@github.com:sizief/parvazhub.git"
+# config valid for current version and patch releases of Capistrano
+lock '~> 3.11.0'
+
+set :application, 'parvazhub'
+set :repo_url, 'git@github.com:sizief/parvazhub.git'
 
 set :rbenv_ruby, '2.3.1'
-
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-#set :deploy_to, "/var/www/parvazhub/"
+# set :deploy_to, "/var/www/parvazhub/"
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh

@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class Suppliers::Base
   attr_reader :origin, :destination, :date, :search_history_id, :supplier_name, :route, :search_flight_token, :supplier_name
 
-  def initialize args
+  def initialize(args)
     @origin = args[:origin]
     @destination = args[:destination]
     @date = args[:date]
@@ -13,75 +15,75 @@ class Suppliers::Base
 
   def search
     flight_ids = nil
-    ActiveRecord::Base.connection_pool.with_connection do       
-      FlightPrice.delete_old_flight_prices(supplier_name.downcase,route.id,date)
+    ActiveRecord::Base.connection_pool.with_connection do
+      FlightPrice.delete_old_flight_prices(supplier_name.downcase, route.id, date)
     end
-    update_status(search_history_id,"delete(#{Time.now.strftime('%M:%S')})")
-    
+    update_status(search_history_id, "delete(#{Time.now.strftime('%M:%S')})")
+
     response = search_supplier
     if response[:status] == true
-      Log.new(log_name: supplier_name, content: response[:response]).save if Rails.env.development?        
-      flight_ids = import_flights(response,route.id,origin,destination,date,search_history_id)
+      if Rails.env.development?
+        Log.new(log_name: supplier_name, content: response[:response]).save
+      end
+      flight_ids = import_flights(response, route.id, origin, destination, date, search_history_id)
       save_flight_ids flight_ids
     end
   end
 
-  def save_flight_ids flight_ids
-    SearchFlightId.create(token: search_flight_token, flight_ids: flight_ids) 
+  def save_flight_ids(flight_ids)
+    SearchFlightId.create(token: search_flight_token, flight_ids: flight_ids)
   end
 
   def mock_results
-    if route.international
-      file = "international-#{supplier_name.downcase}.log"
-    else
-      file = "domestic-#{supplier_name.downcase}.log"
-    end
-    response = File.read("test/fixtures/files/"+file)
+    file = if route.international
+             "international-#{supplier_name.downcase}.log"
+           else
+             "domestic-#{supplier_name.downcase}.log"
+           end
+    response = File.read('test/fixtures/files/' + file)
   end
 
-  def calculate_stopover_duration (departures,arrivals)
-    duration = 0    
+  def calculate_stopover_duration(departures, arrivals)
+    duration = 0
     if departures.count > 1
-      departures.each_with_index do |departure,index|
+      departures.each_with_index do |departure, index|
         next if index == 0
-        duration += ((departure - arrivals[index-1])*24*60).to_i        
+
+        duration += ((departure - arrivals[index - 1]) * 24 * 60).to_i
       end
     end
     duration
   end
 
   private
-  def update_status search_history_id, text
-    if Rails.env.development?        
-      ActiveRecord::Base.connection_pool.with_connection do 
-        SearchHistory.append_status(search_history_id,text)
+
+  def update_status(search_history_id, text)
+    if Rails.env.development?
+      ActiveRecord::Base.connection_pool.with_connection do
+        SearchHistory.append_status(search_history_id, text)
       end
     end
   end
 
-  def successful_search search_history_id
-    ActiveRecord::Base.connection_pool.with_connection do 
+  def successful_search(search_history_id)
+    ActiveRecord::Base.connection_pool.with_connection do
       SearchHistory.find(search_history_id).update(successful: true)
     end
   end
 
-  def complete_import flight_prices, search_history_id
-    unless flight_prices.empty?
-      ActiveRecord::Base.connection_pool.with_connection do
-        update_status(search_history_id,"p done(#{Time.now.strftime('%M:%S')})")       
-        FlightPrice.import flight_prices, validate: false
-        update_status(search_history_id,"fp(#{Time.now.strftime('%M:%S')})") 
-        FlightPriceArchive.archive flight_prices
-        update_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})") 
-      end
-      update_status(search_history_id,"Success(#{Time.now.strftime('%M:%S')})")
+  def complete_import(flight_prices, search_history_id)
+    if flight_prices.empty?
+      update_status(search_history_id, "empty response(#{Time.now.strftime('%M:%S')})")
     else
-      update_status(search_history_id,"empty response(#{Time.now.strftime('%M:%S')})")
+      ActiveRecord::Base.connection_pool.with_connection do
+        update_status(search_history_id, "p done(#{Time.now.strftime('%M:%S')})")
+        FlightPrice.import flight_prices, validate: false
+        update_status(search_history_id, "fp(#{Time.now.strftime('%M:%S')})")
+        FlightPriceArchive.archive flight_prices
+        update_status(search_history_id, "Success(#{Time.now.strftime('%M:%S')})")
+      end
+      update_status(search_history_id, "Success(#{Time.now.strftime('%M:%S')})")
     end
     successful_search search_history_id
   end
-
-  
-  
 end
-    

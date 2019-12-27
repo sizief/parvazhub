@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -41,15 +43,15 @@ Rails.application.configure do
   config.assets.debug = true
   config.assets.quiet = false
   config.assets.compile = true
-  config.public_file_server.enabled = true #ENV['RAILS_SERVE_STATIC_FILES'].present?
-  
+  config.public_file_server.enabled = true # ENV['RAILS_SERVE_STATIC_FILES'].present?
+
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
-  
+
   config.log_level = :debug
   config.logger = Logger.new(STDOUT)
   logger = ActiveSupport::Logger.new(STDOUT)
@@ -57,8 +59,7 @@ Rails.application.configure do
   config.logger = ActiveSupport::TaggedLogging.new(logger)
 
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.default_url_options = { host: "localhost", port:3000  }
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 
-  #config.active_record.default_timezone = "Asia/Tehran"
+  # config.active_record.default_timezone = "Asia/Tehran"
 end
-

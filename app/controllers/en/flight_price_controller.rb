@@ -1,4 +1,5 @@
+# frozen_string_literal: true
+
 class En::FlightPriceController < FlightPriceController
-  layout "en/layouts/application"
-  
+  layout 'en/layouts/application'
 end

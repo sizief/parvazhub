@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class CreateAirports < ActiveRecord::Migration[5.0]
   def change
     create_table :airports do |t|
       t.string :airport_type
       t.string :english_name
-      t.string :persian_name 
+      t.string :persian_name
       t.string :latitude_deg
       t.string :longitude_deg
       t.string :elevation_ft
@@ -18,12 +20,3 @@ class CreateAirports < ActiveRecord::Migration[5.0]
     end
   end
 end
-
-
-
-
-
-
-
-
-

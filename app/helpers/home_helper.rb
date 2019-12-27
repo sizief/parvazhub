@@ -1,18 +1,19 @@
-module HomeHelper
+# frozen_string_literal: true
 
-  def tomorrow_price_by_rial route
-    flight = Flight.new.get_lowest_price(route,Date.today+1)
+module HomeHelper
+  def tomorrow_price_by_rial(route)
+    flight = Flight.new.get_lowest_price(route, Date.today + 1)
     prepare_price_message flight
   end
 
-  def flight_page_path_by_route route_id, date
+  def flight_page_path_by_route(route_id, date)
     route = Route.find(route_id)
     origin = City.find_by(city_code: route.origin).english_name
     destination = City.find_by(city_code: route.destination).english_name
     flight_result_path(origin, destination, date)
   end
 
-  def persian_title_by_route route_id
+  def persian_title_by_route(route_id)
     route = Route.find(route_id)
     origin = City.find_by(city_code: route.origin).persian_name
     destination = City.find_by(city_code: route.destination).persian_name
@@ -20,13 +21,13 @@ module HomeHelper
   end
 
   private
-  def prepare_price_message flight
+
+  def prepare_price_message(flight)
     if flight.nil?
-      message = "پر شد"
+      message = 'پر شد'
     else
       message = number_with_delimiter flight.best_price
-      message +=" تومان"
+      message += ' تومان'
     end
   end
-
 end

@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class AddAirplane < ActiveRecord::Migration[5.0]
   def change
-  	add_column :flights, :airplane_type, :string
+    add_column :flights, :airplane_type, :string
   end
 end

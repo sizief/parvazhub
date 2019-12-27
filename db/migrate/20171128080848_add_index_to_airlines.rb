@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class AddIndexToAirlines < ActiveRecord::Migration[5.0]
   def change
-    add_index :airlines, [:code],  unique: true    
+    add_index :airlines, [:code], unique: true
   end
 end

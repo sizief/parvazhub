@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sidekiq-scheduler'
 
 class FlightInfoWorker
@@ -9,5 +11,4 @@ class FlightInfoWorker
       x.calculate_info
     end
   end
-
 end

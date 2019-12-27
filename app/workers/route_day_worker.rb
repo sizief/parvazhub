@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sidekiq-scheduler'
 
 class RouteDayWorker
@@ -9,5 +11,4 @@ class RouteDayWorker
       route_day.calculate_all
     end
   end
-
 end

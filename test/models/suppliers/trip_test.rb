@@ -1,113 +1,113 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class SuppliersTripTest < ActiveSupport::TestCase
-
   def setup
-    @origin = "thr"
-    @destination = "mhd"
-    @date = "2017-12-20"
-    @search_history_id= 1
-    @route=Route.find_by(origin: @origin, destination: @destination)
+    @origin = 'thr'
+    @destination = 'mhd'
+    @date = '2017-12-20'
+    @search_history_id = 1
+    @route = Route.find_by(origin: @origin, destination: @destination)
     @search_flight_token = 1
-    @supplier_name = "Trip"
-    @trip_obj=Suppliers::Trip.new(origin: @origin,
-                              destination: @destination, 
-                              route: @route, 
-                              date: @date, 
-                              search_history_id: @search_history_id, 
-                              search_flight_token: @search_flight_token, 
-                              supplier_name: @supplier_name)
-    @int_destination = "ist"
+    @supplier_name = 'Trip'
+    @trip_obj = Suppliers::Trip.new(origin: @origin,
+                                    destination: @destination,
+                                    route: @route,
+                                    date: @date,
+                                    search_history_id: @search_history_id,
+                                    search_flight_token: @search_flight_token,
+                                    supplier_name: @supplier_name)
+    @int_destination = 'ist'
     @params = {
-      "src": @origin.upcase,		
-      "isCityCodeSrc": true,	
+      "src": @origin.upcase,
+      "isCityCodeSrc": true,
       "dst": @destination.upcase,
       "isCityCodeDst": true,
-      "class": "e",
+      "class": 'e',
       "depDate": @date,
-      "retDate": "",
+      "retDate": '',
       "adt": 1,
       "chd": 0,
       "inf": 0
-  }
-    @request_type = "post"    
+    }
+    @request_type = 'post'
   end
-    
-  test "send request for register" do
-    url = "https://www.trip.ir/flex/search"
-    response = @trip_obj.send_request(@request_type,url,@params)
+
+  test 'send request for register' do
+    url = 'https://www.trip.ir/flex/search'
+    response = @trip_obj.send_request(@request_type, url, @params)
     assert response.is_a? String
-    assert_equal JSON.parse(response)["success"], true
+    assert_equal JSON.parse(response)['success'], true
   end
 
-  test "register request" do
-    response = @trip_obj.register_request(@origin,@destination,@date)
+  test 'register request' do
+    response = @trip_obj.register_request(@origin, @destination, @date)
     assert response.is_a? Hash
-    assert response["sid"].is_a? String
+    assert response['sid'].is_a? String
   end
 
-  test "is search complete" do
+  test 'is search complete' do
     id = 1
     response = @trip_obj.is_search_complete(id)
     assert_equal response, true
   end
 
-  test "trip search should return Hash" do
+  test 'trip search should return Hash' do
     response = @trip_obj.search_supplier
     assert response.is_a? Hash
     assert_not response[:response].empty?
   end
 
-  test "Save flights to database" do
+  test 'Save flights to database' do
     response = @trip_obj.search_supplier
-    route = Route.find_by(origin:@origin, destination: @destination)
+    route = Route.find_by(origin: @origin, destination: @destination)
     assert_difference 'Flight.count', 47 do
-      @trip_obj.import_flights(response,route.id,@origin,@destination,@date,@search_history_id)
+      @trip_obj.import_flights(response, route.id, @origin, @destination, @date, @search_history_id)
     end
   end
 
-  test "Save international flights to database" do
-    route = Route.find_by(origin:"thr", destination: "ist")    
-    response = Suppliers::Trip.new(origin: "thr",
-                                  destination: "ist", 
-                                  route: route, 
-                                  date: @date, 
-                                  search_history_id: @search_history_id, 
-                                  search_flight_token: @search_flight_token, 
-                                  supplier_name: @supplier_name).search_supplier
+  test 'Save international flights to database' do
+    route = Route.find_by(origin: 'thr', destination: 'ist')
+    response = Suppliers::Trip.new(origin: 'thr',
+                                   destination: 'ist',
+                                   route: route,
+                                   date: @date,
+                                   search_history_id: @search_history_id,
+                                   search_flight_token: @search_flight_token,
+                                   supplier_name: @supplier_name).search_supplier
     assert_difference 'Flight.count', 127 do
-      @trip_obj.import_flights(response,route.id,@origin,@destination,@date,@search_history_id)
+      @trip_obj.import_flights(response, route.id, @origin, @destination, @date, @search_history_id)
     end
   end
 
-  test "Save international flight prices to database" do
-    route = Route.find_by(origin:"thr", destination: "ist")    
-    response = Suppliers::Trip.new(origin: "thr",
-                                  destination: "ist", 
-                                  route: route, 
-                                  date: @date, 
-                                  search_history_id: @search_history_id, 
-                                  search_flight_token: @search_flight_token, 
-                                  supplier_name: @supplier_name).search_supplier
+  test 'Save international flight prices to database' do
+    route = Route.find_by(origin: 'thr', destination: 'ist')
+    response = Suppliers::Trip.new(origin: 'thr',
+                                   destination: 'ist',
+                                   route: route,
+                                   date: @date,
+                                   search_history_id: @search_history_id,
+                                   search_flight_token: @search_flight_token,
+                                   supplier_name: @supplier_name).search_supplier
     assert_difference 'FlightPrice.count', 127 do
-      @trip_obj.import_flights(response,route.id,@origin,@destination,@date,@search_history_id)
+      @trip_obj.import_flights(response, route.id, @origin, @destination, @date, @search_history_id)
     end
   end
 
-  test "Save flight prices to database" do
+  test 'Save flight prices to database' do
     response = @trip_obj.search_supplier
-    route = Route.find_by(origin:@origin, destination: @destination)
+    route = Route.find_by(origin: @origin, destination: @destination)
     assert_difference 'FlightPrice.count', 47 do
-      @trip_obj.import_flights(response,route.id,@origin,@destination,@date,@search_history_id)
+      @trip_obj.import_flights(response, route.id, @origin, @destination, @date, @search_history_id)
     end
   end
 
-  test "calculate stop overs" do
-    arrivals = ["2017-11-19 18:00:00".to_datetime,"2017-11-19 20:00:00".to_datetime,"2017-11-19 23:00:00".to_datetime]
-    departures = ["2017-11-19 14:00:00".to_datetime,"2017-11-19 19:00:00".to_datetime,"2017-11-19 22:00:00".to_datetime]
-    
-    assert_equal  @trip_obj.calculate_stopover_duration(["2017-11-19 18:00:00".to_datetime],["2017-11-19 18:00:00".to_datetime]),0 
-    assert_equal  @trip_obj.calculate_stopover_duration(departures,arrivals),180
+  test 'calculate stop overs' do
+    arrivals = ['2017-11-19 18:00:00'.to_datetime, '2017-11-19 20:00:00'.to_datetime, '2017-11-19 23:00:00'.to_datetime]
+    departures = ['2017-11-19 14:00:00'.to_datetime, '2017-11-19 19:00:00'.to_datetime, '2017-11-19 22:00:00'.to_datetime]
 
+    assert_equal  @trip_obj.calculate_stopover_duration(['2017-11-19 18:00:00'.to_datetime], ['2017-11-19 18:00:00'.to_datetime]), 0
+    assert_equal  @trip_obj.calculate_stopover_duration(departures, arrivals), 180
   end
 end

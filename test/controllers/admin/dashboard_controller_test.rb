@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::DashboardControllerTest < ActionDispatch::IntegrationTest
@@ -5,13 +7,12 @@ class Admin::DashboardControllerTest < ActionDispatch::IntegrationTest
   fixtures :all
 
   def setup
-    sign_in users(:one)  
+    sign_in users(:one)
   end
-  
-  test "should get user_search_history" do
+
+  test 'should get user_search_history' do
     @ush = UserSearchHistory.last
     get admin_user_search_histories_path
     assert_response :success
   end
-
 end

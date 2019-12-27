@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class CreateCityTable < ActiveRecord::Migration[5.0]
   def change
     create_table :cities do |t|
       t.string :english_name
-      t.string :persian_name 
+      t.string :persian_name
       t.string :latitude_deg
       t.string :longitude_deg
       t.string :country_code
@@ -16,6 +18,3 @@ class CreateCityTable < ActiveRecord::Migration[5.0]
     end
   end
 end
-
-
-

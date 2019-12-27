@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UpdateForeignKeyOnRedirects < ActiveRecord::Migration[5.0]
   def change
     remove_foreign_key :redirects, :flight_prices
