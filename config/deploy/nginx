@@ -1,0 +1,52 @@
+upstream app {
+    server unix:/var/www/parvazhub/current/tmp/sockets/puma.sock fail_timeout=0;
+}
+
+server {
+    server_name parvazhub.com www.parvazhub.com;
+    gzip on;
+    gzip_types text/plain text/css application/javascript;
+    gzip_proxied no-cache no-store private expired auth;
+    
+    root /var/www/parvazhub/current/public;
+
+    try_files $uri/index.html $uri @app;
+
+    location @app {
+        proxy_pass http://app;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_set_header  Host $host;
+        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Proto $scheme;
+        proxy_set_header  X-Forwarded-Ssl on; # Optional
+        proxy_set_header  X-Forwarded-Port $server_port;
+        proxy_set_header  X-Forwarded-Host $host;
+    }
+
+    error_page 500 502 503 504 /500.html;
+    client_max_body_size 4G;
+    keepalive_timeout 10;
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/parvazhub.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/parvazhub.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+
+server {
+    if ($host = www.parvazhub.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+    if ($host = parvazhub.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+    listen 80;
+    server_name parvazhub.com www.parvazhub.com;
+    return 404; # managed by Certbot
+}
+
