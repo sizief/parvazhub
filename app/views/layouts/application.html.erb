@@ -15,6 +15,7 @@
     <meta property="og:image" content="https://www.parvazhub.com/logo.jpg" />
     <%= yield(:canonical) %>    
     <meta name="google-site-verification" content="whIYozl54Dyn0zmidp97ERdhDtAp4DU2AiUDZoizQ-I" />
+    <%= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track': "reload"  %>
   </head>
 
   <body> 
@@ -29,5 +30,4 @@
    })(window,document,'script','dataLayer','GTM-P93NTB5');</script>
 
    </body>
-    <%= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track': "reload"  %>
 </html>
