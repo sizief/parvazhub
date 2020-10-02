@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/sizief/parvazhub.svg?branch=master)](https://travis-ci.org/sizief/parvazhub) [![Maintainability]  
+[![Build Status](https://travis-ci.org/sizief/parvazhub.svg?branch=master)](https://travis-ci.org/sizief/parvazhub)  
   
 # PARVAZHUB
 [PARVAZHUB](https://parvazhub.com) is a domestic Iranian flight metasearch website.  

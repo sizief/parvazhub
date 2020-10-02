@@ -40,6 +40,7 @@ group :development do
   gem 'pry-nav'
   gem 'simplecov', require: false, group: :test
   gem 'web-console'
+  gem 'listen'
 end
 
 group :test do

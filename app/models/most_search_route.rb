@@ -10,7 +10,7 @@ class MostSearchRoute < ApplicationRecord
 
   def perform
     max_number_of_routes = 30
-    user_search_histories = UserSearchHistory.where('created_at >?', '2017-09-11')
+    user_search_histories = UserSearchHistory.where('created_at >?', '2019-09-11')
     routes = user_search_histories.group(:route_id).order('count_id desc').count('id')
 
     routes.each_with_index do |route, index|
