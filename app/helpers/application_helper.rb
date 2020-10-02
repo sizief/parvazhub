@@ -42,8 +42,7 @@ module ApplicationHelper
     if File.exist?('git_last_commit')
       json_data = File.read('git_last_commit')
       data = JSON.parse(json_data)
-      text = 'Last update: ' + time_ago_in_words(data['date'].to_datetime) + ' ago'
-      link_to text, data['url']
+      'Last update: ' + time_ago_in_words(data['date'].to_datetime) + ' ago'
     end
   end
 end
