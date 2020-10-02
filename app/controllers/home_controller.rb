@@ -10,6 +10,8 @@ class HomeController < ApplicationController
     routes = MostSearchRoute.new.get ENV['FIRST_PAGE_OFFERS'].to_i
     routes.each do |route|
       route = Route.find(route[:route_id])
+      # TODO: Hackish way to remove IST from the first page
+      next if route.international?
       @routes << { route: route, details: Route.route_detail(route) }
     rescue StandardError
     end
