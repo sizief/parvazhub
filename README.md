@@ -1,12 +1,8 @@
-[![Build Status](https://travis-ci.org/sizief/parvazhub.svg?branch=master)](https://travis-ci.org/sizief/parvazhub) [![Maintainability](https://api.codeclimate.com/v1/badges/82b1750afce7d8a317d0/maintainability)](https://codeclimate.com/github/sizief/parvazhub/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/82b1750afce7d8a317d0/test_coverage)](https://codeclimate.com/github/sizief/parvazhub/test_coverage)
-  
+[![Build Status](https://travis-ci.org/sizief/parvazhub.svg?branch=master)](https://travis-ci.org/sizief/parvazhub) [![Maintainability]  
   
 # PARVAZHUB
-[PARVAZHUB](https://parvazhub.com) is a Flight meta search for Iranian Online Travel Agencies. It is written in Ruby on Rails.  
-
-See [about us](https://parvazhub.com/us) page for more information (it's in Farsi)
-
-
+[PARVAZHUB](https://parvazhub.com) is a domestic Iranian flight metasearch website.  
+  
 ## Run it on your local 
 - Install Ruby 2.6.5
 - Install Postgress and sqlite
