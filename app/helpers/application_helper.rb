@@ -9,7 +9,7 @@ module ApplicationHelper
   def week_day_to_human_english(index)
     days = %w[Sunday Monday Tuesday Wednesday Thursday Friday Saturday]
     days[index]
-   end
+  end
 
   def get_star_icon(total, amount, color, size)
     markup_delivery = ' '
@@ -27,7 +27,7 @@ module ApplicationHelper
   end
 
   def suppliers_list
-    suppliers = Supplier.where(status: true)
+    Supplier.where(status: true)
   end
 
   def get_last_supplier_review
@@ -39,10 +39,10 @@ module ApplicationHelper
   end
 
   def github_link
-    if File.exist?('git_last_commit')
-      json_data = File.read('git_last_commit')
-      data = JSON.parse(json_data)
-      'Last update: ' + time_ago_in_words(data['date'].to_datetime) + ' ago'
-    end
+    return unless File.exist?('git_last_commit')
+
+    json_data = File.read('git_last_commit')
+    data = JSON.parse(json_data)
+    "updated #{time_ago_in_words(data['date'].to_datetime)} ago"
   end
 end
