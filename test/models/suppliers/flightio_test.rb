@@ -34,7 +34,7 @@ class SuppliersFlightioTest < ActiveSupport::TestCase
     response = @flightio_obj.search_supplier
     route = Route.find_by(origin: @origin, destination: @destination)
     assert_difference 'FlightPrice.count', 0 do
-      @flightio_obj.import_flights(response, route.id, @origin, @destination, @date, @search_history_id)
+      @flightio_obj.import_flights(response)
     end
   end
 end

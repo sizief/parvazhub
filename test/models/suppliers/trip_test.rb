@@ -63,7 +63,7 @@ class SuppliersTripTest < ActiveSupport::TestCase
     response = @trip_obj.search_supplier
     route = Route.find_by(origin: @origin, destination: @destination)
     assert_difference 'Flight.count', 47 do
-      @trip_obj.import_flights(response, route.id, @origin, @destination, @date, @search_history_id)
+      @trip_obj.import_flights(response)
     end
   end
 
@@ -77,7 +77,7 @@ class SuppliersTripTest < ActiveSupport::TestCase
                                    search_flight_token: @search_flight_token,
                                    supplier_name: @supplier_name).search_supplier
     assert_difference 'Flight.count', 127 do
-      @trip_obj.import_flights(response, route.id, @origin, @destination, @date, @search_history_id)
+      @trip_obj.import_flights(response)
     end
   end
 
@@ -91,7 +91,7 @@ class SuppliersTripTest < ActiveSupport::TestCase
                                    search_flight_token: @search_flight_token,
                                    supplier_name: @supplier_name).search_supplier
     assert_difference 'FlightPrice.count', 127 do
-      @trip_obj.import_flights(response, route.id, @origin, @destination, @date, @search_history_id)
+      @trip_obj.import_flights(response)
     end
   end
 
@@ -99,7 +99,7 @@ class SuppliersTripTest < ActiveSupport::TestCase
     response = @trip_obj.search_supplier
     route = Route.find_by(origin: @origin, destination: @destination)
     assert_difference 'FlightPrice.count', 47 do
-      @trip_obj.import_flights(response, route.id, @origin, @destination, @date, @search_history_id)
+      @trip_obj.import_flights(response)
     end
   end
 

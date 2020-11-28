@@ -30,7 +30,7 @@ class SuppliersSafarmeTest < ActiveSupport::TestCase
     response = @safarme_obj.search_supplier
     route = Route.find_by(origin: @origin, destination: @destination)
     assert_difference 'Flight.count', 38 do
-      @safarme_obj.import_flights(response, route.id, @origin, @destination, @date, @search_history_id)
+      @safarme_obj.import_flights(response)
     end
   end
 
@@ -38,7 +38,7 @@ class SuppliersSafarmeTest < ActiveSupport::TestCase
     response = @safarme_obj.search_supplier
     route = Route.find_by(origin: @origin, destination: @destination)
     assert_difference 'FlightPrice.count', 38 do
-      @safarme_obj.import_flights(response, route.id, @origin, @destination, @date, @search_history_id)
+      @safarme_obj.import_flights(response)
     end
   end
 

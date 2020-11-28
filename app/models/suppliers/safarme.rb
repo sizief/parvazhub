@@ -60,7 +60,7 @@ class Suppliers::Safarme < Suppliers::Base
       next if leg_data.nil?
 
       ActiveRecord::Base.connection_pool.with_connection do
-        flight_id = Flight.create_or_find_flight(route_id,
+        flight_id = Flight.create_or_find_flight(route.id,
                                                  leg_data[:flight_number].join(','),
                                                  leg_data[:departure_date_time].first,
                                                  leg_data[:airline_code].join(','),
