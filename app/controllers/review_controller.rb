@@ -65,7 +65,6 @@ class ReviewController < ApplicationController
   def review_background_jobs(page, author, text, rate, user, channel)
     if Rails.env.production?
       TelegramMonitoringWorker.perform_async("📣 #{page}, #{author}, #{text}, #{rate}")
-      AmplitudeWorker.perform_async(user.id, 'review', channel)
     end
   end
 

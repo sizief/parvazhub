@@ -14,8 +14,8 @@ class SupplierSearch
   end
 
   def search
-    #search_supplier_in_threads
-    search_supplier_in_series
+    search_supplier_in_threads
+    #search_supplier_in_series
   end
 
   def search_supplier_in_threads

@@ -47,7 +47,6 @@ class FlightPriceController < ApplicationController
   def flight_price_background_archive(channel, flight, user)
     if Rails.env.production?
       UserFlightPriceHistoryWorker.perform_async(channel, flight.id, user.id)
-      AmplitudeWorker.perform_async(user.id, 'supplierPage', channel)
     else
       UserFlightPriceHistory.create(flight_id: flight.id, channel: channel, user: user)
     end

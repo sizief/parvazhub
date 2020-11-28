@@ -25,7 +25,6 @@ class RedirectController < ApplicationController
                             supplier: flight_price.supplier,
                             deep_link: deep_link,
                             user: user)
-    background_archive user.id, 'redirect', args[:channel]
 
     unless is_bot(request.user_agent)
       redirect.save
@@ -75,10 +74,4 @@ class RedirectController < ApplicationController
   end
 
   private
-
-  def background_archive(user_id, event, channel)
-    if Rails.env.production?
-      AmplitudeWorker.perform_async(user_id, event, channel)
-      end
-  end
 end
