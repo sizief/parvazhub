@@ -1,0 +1,23 @@
+AllCops:
+  NewCops: enable
+  Exclude:
+    - 'bin/bundle'
+    - 'node_modules/**/*'
+    - 'vendor/**/*'
+    - 'db/schema.rb'
+Metrics/MethodLength:
+  Enabled: true
+  Max: 18
+Metrics/AbcSize:
+  Enabled: true
+  Max: 28
+Metrics/CyclomaticComplexity:
+  Enabled: true
+  Max: 10
+Metrics/PerceivedComplexity:
+  Enabled: true
+  Max: 10
+Style/Documentation:
+   Enabled: false
+Metrics/ClassLength:
+  Enabled: false

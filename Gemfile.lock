@@ -48,7 +48,7 @@ GEM
       sshkit (>= 1.6.1, != 1.7.0)
     ansi (1.5.0)
     arel (9.0.0)
-    bcrypt (3.1.11)
+    bcrypt (3.1.12)
     bindex (0.8.1)
     browser (2.7.1)
     builder (3.2.4)
@@ -323,7 +323,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord
   activerecord-import (>= 0.2.0)
-  bcrypt (= 3.1.11)
+  bcrypt (= 3.1.12)
   browser
   capistrano (~> 3.10)
   capistrano-bundler

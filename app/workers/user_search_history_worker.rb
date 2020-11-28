@@ -8,10 +8,12 @@ class UserSearchHistoryWorker
 
   def perform(route_id, date, channel, user_id)
     Timeout.timeout(60) do
-      UserSearchHistory.create(route_id: route_id,
-                               departure_time: date.to_s,
-                               channel: channel,
-                               user_id: user_id) # save user search to show in admin panel
+      UserSearchHistory.create(
+        route_id: route_id,
+        departure_time: date.to_s,
+        channel: channel,
+        user_id: user_id
+      ) # save user search to show in admin panel
     end
   end
 end

@@ -134,9 +134,9 @@ class ApiController < ApplicationController
   end
 
   def get_flights(route, date, channel, user_agent_request)
-    results = SearchResultController.new
-    args = { user: current_user, route: route, date: date, channel: channel, user_agnet_request: user_agent_request }
-    results.get_flight_results(args)
+    SearchResultController
+      .new
+      .flight_results(route, date, user_agent_request, current_user)
   end
 
   def search_params

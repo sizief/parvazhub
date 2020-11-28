@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 
 gem 'activerecord'
 gem 'activerecord-import', '>= 0.2.0'
-gem 'bcrypt', '3.1.11'
+gem 'bcrypt', '3.1.12'
 gem 'browser'
 gem 'capistrano', '~> 3.10', require: false
 gem 'capistrano-bundler', require: false
