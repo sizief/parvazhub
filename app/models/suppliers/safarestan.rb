@@ -48,7 +48,7 @@ class Suppliers::Safarestan < Suppliers::Base
     { status: true, response: response }
   end
 
-  def import_flights(response, route_id, _origin, _destination, date, search_history_id)
+  def import_flights(response)
     flight_id = nil
     flight_prices = []
     flight_ids = []
@@ -58,7 +58,7 @@ class Suppliers::Safarestan < Suppliers::Base
     json_response[0..ENV['MAX_NUMBER_FLIGHT'].to_i].each do |flight|
       leg_data = flight_id = nil
       leg_data = prepare flight
-      flight_id = find_flight_id leg_data, route_id
+      flight_id = find_flight_id leg_data, route.id
 
       next if leg_data.nil? || flight_id.nil?
 

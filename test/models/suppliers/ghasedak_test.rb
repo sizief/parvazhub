@@ -40,7 +40,7 @@ class SuppliersGhasedakTest < ActiveSupport::TestCase
     response = @ghasedak_obj.search_supplier
     route = Route.find_by(origin: @origin, destination: @destination)
     assert_difference 'Flight.count', 22 do
-      @ghasedak_obj.import_flights(response, route.id, @origin, @destination, @date, @search_history_id)
+      @ghasedak_obj.import_flights(response)
     end
   end
 
@@ -48,7 +48,7 @@ class SuppliersGhasedakTest < ActiveSupport::TestCase
     response = @ghasedak_obj.search_supplier
     route = Route.find_by(origin: @origin, destination: @destination)
     assert_difference 'FlightPrice.count', 22 do
-      @ghasedak_obj.import_flights(response, route.id, @origin, @destination, @date, @search_history_id)
+      @ghasedak_obj.import_flights(response)
     end
   end
 end

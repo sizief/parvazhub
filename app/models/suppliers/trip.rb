@@ -71,7 +71,7 @@ class Suppliers::Trip < Suppliers::Base
     raw_response
   end
 
-  def import_flights(response, route_id, _origin, _destination, date, search_history_id)
+  def import_flights(response)
     flight_id = nil
     flight_prices = []
     flight_ids = []

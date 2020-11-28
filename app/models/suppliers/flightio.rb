@@ -55,7 +55,7 @@ class Suppliers::Flightio < Suppliers::Base
     { status: true, response: response.body, deeplink: deep_link }
   end
 
-  def import_flights(response, route_id, _origin, _destination, date, search_history_id)
+  def import_flights(response)
     flight_id = nil
     flight_id_list = nil
     flight_prices = []

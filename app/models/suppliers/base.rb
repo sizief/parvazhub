@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Suppliers::Base
-  attr_reader :origin, :destination, :date, :search_history_id, :supplier_name, :route, :search_flight_token, :supplier_name
+  attr_reader :origin, :destination, :date, :search_history_id, :supplier_name, :route, :search_flight_token
 
   def initialize(args)
     @origin = args[:origin]
@@ -14,7 +14,6 @@ class Suppliers::Base
   end
 
   def search
-    flight_ids = nil
     ActiveRecord::Base.connection_pool.with_connection do
       FlightPrice.delete_old_flight_prices(supplier_name.downcase, route.id, date)
     end
@@ -25,7 +24,7 @@ class Suppliers::Base
       if Rails.env.development?
         Log.new(log_name: supplier_name, content: response[:response]).save
       end
-      flight_ids = import_flights(response, route.id, origin, destination, date, search_history_id)
+      flight_ids = import_flights(response)
       save_flight_ids flight_ids
     end
   end

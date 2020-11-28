@@ -23,7 +23,7 @@ class Suppliers::Ghasedak < Suppliers::Base
     { status: true, response: response.body }
   end
 
-  def import_flights(response, route_id, _origin, _destination, date, search_history_id)
+  def import_flights(response)
     flight_id = nil
     flight_prices = []
     flight_ids = []
@@ -38,7 +38,7 @@ class Suppliers::Ghasedak < Suppliers::Base
 
       airplane_type = flight['Airplane']
       ActiveRecord::Base.connection_pool.with_connection do
-        flight_id = Flight.create_or_find_flight(route_id, flight_number, departure_time, airline_code, airplane_type)
+        flight_id = Flight.create_or_find_flight(route.id, flight_number, departure_time, airline_code, airplane_type)
       end
       flight_ids << flight_id
 
@@ -67,8 +67,10 @@ end
   def get_airline_code(airline_code)
     airlines = {
       'RV' => 'IV',
-      'ZZ' => 'SE',
-      'RZ' => 'SE'
+      'ZZ' => 'SR',
+      'RZ' => 'SR',
+      'IS' => 'SR',
+      'SE' => 'SR'
     }
     airlines[airline_code].nil? ? airline_code : airlines[airline_code]
   end

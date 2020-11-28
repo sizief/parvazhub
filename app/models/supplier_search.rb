@@ -14,8 +14,8 @@ class SupplierSearch
   end
 
   def search
-    search_supplier_in_threads
-    # search_supplier_in_series
+    #search_supplier_in_threads
+    search_supplier_in_series
   end
 
   def search_supplier_in_threads
@@ -94,7 +94,7 @@ class SupplierSearch
         status: "#{search_initiator}(#{Time.now.strftime('%M:%S')})"
       )
     end
-    supplier = supplier_class.constantize.new(
+    supplier_class.constantize.new(
       origin: origin,
       destination: destination,
       route: route,
@@ -102,8 +102,7 @@ class SupplierSearch
       search_history_id: search_history.id,
       search_flight_token: search_flight.token,
       supplier_name: supplier_name
-    )
-    supplier.search
+    ).search
   end
 
   def update_flight_best_price

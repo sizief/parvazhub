@@ -78,3 +78,4 @@ Airline.create(code: 'PY', persian_name: 'پویا', english_name: 'pouya', coun
 
 Airline.find_by(code: 'VR').update(persian_name: 'وارش', english_name: 'varesh', country_code: 'IR')
 Airline.find_by(code: 'SA').update(persian_name: 'ساها', english_name: 'Saha', country_code: 'IR')
+Airline.find_by(code: 'FP').update(persian_name: 'فلای پرشیا', english_name: 'Fly Persia', country_code: 'IR')
