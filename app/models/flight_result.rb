@@ -10,10 +10,12 @@ class FlightResult
 
   def get
     result_time_to_live = allow_response_time date
-    response_available = SearchHistory.where(route_id: route.id, departure_time: date.to_s)
-                                      .where('created_at >= ?', result_time_to_live)
-                                      .count
-    if (response_available == 0) && (date >= Date.today.to_s)
+    response_available = SearchHistory
+                         .where(route_id: route.id, departure_time: date.to_s)
+                         .where('created_at >= ?', result_time_to_live)
+                         .count
+
+    if response_available.zero? && (date >= Date.today.to_s)
       timeout = route.international? ? ENV['TIMEOUT_INTERNATIONAL'].to_i : ENV['TIMEOUT_DOMESTIC'].to_i
       SupplierSearch.new(origin: route.origin,
                          destination: route.destination,
