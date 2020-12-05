@@ -37,7 +37,7 @@ class Suppliers::Flytoday < Suppliers::Base
     { status: true, response: response }
   end
 
-  def import_flights(response, route_id, _origin, _destination, date, search_history_id)
+  def import_flights(response)
     flight_id = nil
     flight_prices = []
     flight_ids = []
@@ -52,7 +52,7 @@ class Suppliers::Flytoday < Suppliers::Base
 
       stops = leg_data[:stop].empty? ? nil : leg_data[:stop].join(',')
       ActiveRecord::Base.connection_pool.with_connection do
-        flight_id = Flight.create_or_find_flight(route_id,
+        flight_id = Flight.create_or_find_flight(route.id,
                                                  leg_data[:flight_number].join(','),
                                                  leg_data[:departure_date_time].first,
                                                  leg_data[:airline_code].join(','),

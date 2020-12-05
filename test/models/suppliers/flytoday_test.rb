@@ -46,14 +46,14 @@ class SuppliersFlytodayTest < ActiveSupport::TestCase
   test 'import flights' do
     response = @flytoday_obj.search_supplier
     assert_difference 'Flight.count', 267 do
-      @flytoday_obj.import_flights(response, @route.id, @origin, @destination, @date, @search_history_id)
+      @flytoday_obj.import_flights(response)
     end
   end
 
   test 'save flight prices' do
     response = @flytoday_obj.search_supplier
     assert_difference 'FlightPrice.count', 267 do
-      @flytoday_obj.import_flights(response, @route.id, @origin, @destination, @date, @search_history_id)
+      @flytoday_obj.import_flights(response)
     end
   end
 end

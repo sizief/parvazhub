@@ -45,11 +45,20 @@ class Suppliers::Flightio < Suppliers::Base
 
     begin
       request_id = register_request(origin, destination, date)['Data']
-      search_flight_url = ENV['URL_FLIGHTIO_SEARCH'] + request_id
       deep_link = ENV['URL_FLIGHTIO_DEEPLINK'] + request_id + '&CombinationID='
-      headers = { "FUser": 'FlightioAppAndroid', "FPass": 'Pw4FlightioAppAndroid' }
-      response = Excon.get(search_flight_url, headers: headers, proxy: Proxy.new_proxy)
-    rescue StandardError => e
+      headers = {
+        "FUser": 'FlightioAppAndroid',
+        "FPass": 'Pw4FlightioAppAndroid'
+        # "FSession": '078ee89c-0cdd-43c8-b414-a4fe1113079a',
+        # "Host": 'api.flightio.com',
+        # "User-Agent": 'Dalvik/2.1.0 (Linux; U; Android 10; E6883 Build/QQ3A.200805.001)',
+        # "Content-Type": 'application/json; charset=UTF-8',
+        # "connection": 'close',
+        # "Accept-Encoding": 'gzip'
+      }
+      value = "/?value={%22FSL_Id%22:%22#{request_id}%22,%22PagingModel%22:{%22Page%22:1,%22Size%22:30,%22SortColumn%22:%22TotalChargeable%22,%22SortDirection%22:%220%22}}"
+      response = Excon.get(ENV['URL_FLIGHTIO_GET'] + value, headers: headers)
+    rescue StandardError
       return { status: false }
     end
     { status: true, response: response.body, deeplink: deep_link }
@@ -57,55 +66,43 @@ class Suppliers::Flightio < Suppliers::Base
 
   def import_flights(response)
     flight_id = nil
-    flight_id_list = nil
     flight_prices = []
     flight_ids = []
-    doc = Nokogiri::HTML(response[:response])
-    doc = doc.xpath('//div[@class="search-result flights-boxs depart flat-card "]')
     update_status search_history_id, "Extracting(#{Time.now.strftime('%M:%S')})"
 
-    doc.each do |flight|
-      price = flight['amount']
-      airline_code = get_airline_code(flight['airline'].tr(',', ''))
-      combination_id = flight['combinationid']
-      deeplink_url = response[:deeplink] + combination_id
-      departure_hour = flight['sourcedeparttime']
+    JSON.parse(response[:response])['ResultModel']['ItemList'].each do |flight_item|
+      flight = flight_item['Items'].first["Segments"].first
+      airline_code = get_airline_code(flight['OperatingAirlineCode'])
+      flight_number = airline_code + flight['FlightNumber']
+      departure_time = "#{flight['DepartTime'][0..9]} #{flight['DepartTime'][11..]}"
 
-      departure_time_from = date + ' ' + departure_hour[0..1] + ':' + departure_hour[2..3] + ':00'
-      departure_time_to = (departure_time_from.to_datetime + 0.04).strftime('%Y-%m-%d  %H:%M:%S').to_s
-
+      airplane_type = flight['AircraftName']
       ActiveRecord::Base.connection_pool.with_connection do
-        flight_id_list = Flight.where(route_id: route_id).where(airline_code: airline_code.to_s).where(departure_time: departure_time_from.to_s..departure_time_to.to_s)
+        flight_id = Flight.create_or_find_flight(route.id, flight_number, departure_time, airline_code, airplane_type)
       end
-
-      if flight_id_list.first.nil? # if true, then it means this flight is not available in our flight table
-        next
-      else
-        flight_id = flight_id_list.first[:id]
-      end
-
       flight_ids << flight_id
 
-      # to prevent duplicate flight prices we compare flight prices before insert into database
-      flight_price_so_far = flight_prices.select { |flight_price| flight_price.flight_id == flight_id }
-      unless flight_price_so_far.empty? # check to see a flight price for given flight is exists
-        if flight_price_so_far.first.price.to_i <= price.to_i # exist price is cheaper or equal to new price so ignore it
-          next
-        else
-          flight_price_so_far.first.price = price # new price is cheaper, so update the old price and go to next price
-          flight_price_so_far.first.deep_link = deeplink_url
-          next
-        end
-      end
+      price = flight_item['TotalChargeable'].to_f / 10
+      deeplink_url = response[:deeplink] + flight_item['CombinationID']
 
+      flight_price_so_far = flight_prices.select { |flight_price| flight_price.flight_id == flight_id }
+      unless flight_price_so_far.empty?
+        next if flight_price_so_far.first.price.to_i <= price.to_i
+
+        flight_price_so_far.first.price = price
+        flight_price_so_far.first.deep_link = deeplink_url
+        next
+      end
       flight_prices << FlightPrice.new(flight_id: flight_id.to_s, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: deeplink_url.to_s)
-    end # end of each loop
+    end
+
     complete_import flight_prices, search_history_id
     flight_ids
   end
 
   def get_airline_code(airline_code)
     airlines = {
+      'RV' => 'IV',
       'IS' => 'SR'
     }
     airlines[airline_code].nil? ? airline_code : airlines[airline_code]

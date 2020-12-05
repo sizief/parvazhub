@@ -82,7 +82,6 @@ class Suppliers::Alibaba < Suppliers::Base
     response[:response].each do |flight|
       airline_code = flight['airlineCode']
       flight_number = airline_code + flight['flightNumber']
-      departure_time = flight['leaveDateTime']
       departure_time = "#{flight['leaveDateTime'][0..9]} #{flight['leaveDateTime'][11..]}"
 
       airplane_type = flight['aircraft']
