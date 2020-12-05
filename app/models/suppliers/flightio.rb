@@ -4,33 +4,13 @@ class Suppliers::Flightio < Suppliers::Base
   require 'open-uri'
   require 'uri'
 
-  def register_request(origin, destination, date)
-    get_flight_url = ENV['URL_FLIGHTIO_GET']
-    date_time_string = date + 'T00:00:00'
-    params = { "ADT": 1,
-               "CHD": 0,
-               "INF": 0,
-               "CabinType": '1',
-               "flightType": '2',
-               "tripMode": '1',
-               "DestinationInformationList": [
-                 {
-                   "DepartureDate": date_time_string.to_s,
-                   "DestinationLocationAirPortCode": destination.upcase.to_s,
-                   "DestinationLocationAllAirport": true,
-                   "DestinationLocationCityCode": destination.upcase.to_s,
-                   "Index": 1,
-                   "OriginLocationAirPortCode": origin.upcase.to_s,
-                   "OriginLocationAllAirport": true,
-                   "OriginLocationCityCode": origin.upcase.to_s
-                 }
-               ] }
+  def register_request
     request_params = { "ValueObject": params.to_json.to_s }
     headers = { "Content-Type": 'application/json',
                 "FUser": 'FlightioAppAndroid',
                 "FApiVersion": '1.1',
                 "FPass": 'Pw4FlightioAppAndroid' }
-    response = Excon.post(get_flight_url,
+    response = Excon.post(ENV['URL_FLIGHTIO_GET'],
                           body: request_params.to_json,
                           headers: headers,
                           proxy: Proxy.new_proxy)
@@ -44,7 +24,7 @@ class Suppliers::Flightio < Suppliers::Base
     end
 
     begin
-      request_id = register_request(origin, destination, date)['Data']
+      request_id = register_request['Data']
       deep_link = ENV['URL_FLIGHTIO_DEEPLINK'] + request_id + '&CombinationID='
       headers = {
         "FUser": 'FlightioAppAndroid',
@@ -106,5 +86,29 @@ class Suppliers::Flightio < Suppliers::Base
       'IS' => 'SR'
     }
     airlines[airline_code].nil? ? airline_code : airlines[airline_code]
+  end
+
+  def params
+    date_time_string = "#{date}T00:00:00"
+    {
+      "ADT": 1,
+      "CHD": 0,
+      "INF": 0,
+      "CabinType": '1',
+      "flightType": '2',
+      "tripMode": '1',
+      "DestinationInformationList": [
+        {
+          "DepartureDate": date_time_string.to_s,
+          "DestinationLocationAirPortCode": destination.upcase.to_s,
+          "DestinationLocationAllAirport": true,
+          "DestinationLocationCityCode": destination.upcase.to_s,
+          "Index": 1,
+          "OriginLocationAirPortCode": origin.upcase.to_s,
+          "OriginLocationAllAirport": true,
+          "OriginLocationCityCode": origin.upcase.to_s
+        }
+      ]
+    }
   end
 end

@@ -14,8 +14,11 @@ class SupplierSearch
   end
 
   def search
-    #search_supplier_in_threads
-    search_supplier_in_series
+    if Rails.env.development?
+      search_supplier_in_series
+    else
+      search_supplier_in_threads
+    end
   end
 
   def search_supplier_in_threads
