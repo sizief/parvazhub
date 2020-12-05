@@ -5,16 +5,13 @@ class Suppliers::Flightio < Suppliers::Base
   require 'uri'
 
   def register_request
-    request_params = { "ValueObject": params.to_json.to_s }
-    headers = { "Content-Type": 'application/json',
-                "FUser": 'FlightioAppAndroid',
-                "FApiVersion": '1.1',
-                "FPass": 'Pw4FlightioAppAndroid' }
-    response = Excon.post(ENV['URL_FLIGHTIO_GET'],
-                          body: request_params.to_json,
-                          headers: headers,
-                          proxy: Proxy.new_proxy)
-    JSON.parse(response.body)
+    JSON.parse(
+      Excon.post(
+        ENV['URL_FLIGHTIO_GET'],
+        body: { "ValueObject": params.to_json.to_s }.to_json,
+        headers: headers
+      ).body
+    )
   end
 
   def search_supplier
@@ -26,16 +23,6 @@ class Suppliers::Flightio < Suppliers::Base
     begin
       request_id = register_request['Data']
       deep_link = ENV['URL_FLIGHTIO_DEEPLINK'] + request_id + '&CombinationID='
-      headers = {
-        "FUser": 'FlightioAppAndroid',
-        "FPass": 'Pw4FlightioAppAndroid'
-        # "FSession": '078ee89c-0cdd-43c8-b414-a4fe1113079a',
-        # "Host": 'api.flightio.com',
-        # "User-Agent": 'Dalvik/2.1.0 (Linux; U; Android 10; E6883 Build/QQ3A.200805.001)',
-        # "Content-Type": 'application/json; charset=UTF-8',
-        # "connection": 'close',
-        # "Accept-Encoding": 'gzip'
-      }
       value = "/?value={%22FSL_Id%22:%22#{request_id}%22,%22PagingModel%22:{%22Page%22:1,%22Size%22:30,%22SortColumn%22:%22TotalChargeable%22,%22SortDirection%22:%220%22}}"
       response = Excon.get(ENV['URL_FLIGHTIO_GET'] + value, headers: headers)
     rescue StandardError
@@ -109,6 +96,21 @@ class Suppliers::Flightio < Suppliers::Base
           "OriginLocationCityCode": origin.upcase.to_s
         }
       ]
+    }
+  end
+
+  def headers
+    {
+      "FUser": 'FlightioAppAndroid',
+      "FPass": 'Pw4FlightioAppAndroid',
+      "FApiVersion": '1.1',
+      "Content-Type": 'application/json'
+      # "FSession": '078ee89c-0cdd-43c8-b414-a4fe1113079a',
+      # "Host": 'api.flightio.com',
+      # "User-Agent": 'Dalvik/2.1.0 (Linux; U; Android 10; E6883 Build/QQ3A.200805.001)',
+      # "Content-Type": 'application/json; charset=UTF-8',
+      # "connection": 'close',
+      # "Accept-Encoding": 'gzip'
     }
   end
 end
