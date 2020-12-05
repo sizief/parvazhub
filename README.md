@@ -13,6 +13,13 @@
 - Install Redis
 - `rails s` or `foreman start` 
 
+To search on console:  
+```
+x=Suppliers::Ghasedak.new(origin: "thr",destination: "mhd",date: (Date.today+1).to_s,timeout: 10,search_history: SearchHistory.last,route: Route.find_by(origin: origin, destination: destination),search_flight: SearchFlightId.last,supplier_name: "flightio")
+x.search_supplier
+x.register_request # for the ones that has two level RQ/RS
+```
+
 ## Production
 Use `forman start` in `/var/www/parvazhub` to see output log. Also a puma service is availale and running in bckground: `sudo systemctl start/stop/restart parvazhub.target`
   

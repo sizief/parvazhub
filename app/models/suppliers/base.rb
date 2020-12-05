@@ -39,7 +39,7 @@ class Suppliers::Base
            else
              "domestic-#{supplier_name.downcase}.log"
            end
-    response = File.read('test/fixtures/files/' + file)
+    File.read('test/fixtures/files/' + file)
   end
 
   def calculate_stopover_duration(departures, arrivals)
