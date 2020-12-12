@@ -34,6 +34,7 @@ gem 'sidekiq-status'
 gem 'turbolinks', '5.0.1'
 gem 'uglifier', '3.0.0'
 gem "rack", ">= 2.1.4"
+gem 'webpacker'
 
 group :development do
   gem 'pry', '~> 0.12.2'

@@ -183,6 +183,8 @@ GEM
     rack (2.2.3)
     rack-protection (2.0.7)
       rack
+    rack-proxy (0.6.5)
+      rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (5.2.0)
@@ -263,6 +265,7 @@ GEM
       tilt
     semantic-ui-sass (2.4.2.0)
       sass (>= 3.2)
+    semantic_range (2.3.1)
     shellany (0.0.1)
     sidekiq (6.0.4)
       connection_pool (>= 2.2.2)
@@ -313,6 +316,11 @@ GEM
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
       railties (>= 5.0)
+    webpacker (5.2.1)
+      activesupport (>= 5.2)
+      rack-proxy (>= 0.6.1)
+      railties (>= 5.2)
+      semantic_range (>= 2.3.0)
     websocket-driver (0.7.1)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.4)
@@ -363,6 +371,7 @@ DEPENDENCIES
   turbolinks (= 5.0.1)
   uglifier (= 3.0.0)
   web-console
+  webpacker
 
 BUNDLED WITH
    1.17.2
