@@ -67,4 +67,5 @@ Rails.application.routes.draw do
   get '/review/:property_name', to: redirect('/airline-review/%{property_name}', status: 301)
 
   root 'home#index'
+  get '/flights/react/:origin_name-:destination_name/:date', to: 'search_result#single_page', as: 'single_page'
 end

@@ -1,0 +1,10 @@
+<%= javascript_tag do %>
+  var params = <%= raw({
+    origin: @parameters.route.origin,
+    destination: @parameters.route.destination,
+    date: @parameters.date,
+    suppliers: @suppliers
+  }.to_json) %>
+<% end %>
+
+<%= javascript_pack_tag 'results' %>

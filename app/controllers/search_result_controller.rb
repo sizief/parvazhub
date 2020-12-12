@@ -1,6 +1,19 @@
 # frozen_string_literal: true
 
 class SearchResultController < ApplicationController
+  def single_page
+    parameters = Struct.new(:route, :date, keyword_init: true)
+    @parameters = parameters.new(
+      route: Route.new.get_route_by_english_name(
+        params[:origin_name].downcase,
+        params[:destination_name].downcase
+      ),
+      date: date_to_code(params[:date])
+    )
+
+    @suppliers = Supplier.where(status: true, domestic: true).map(&:name)
+  end
+
   def flight_search
     origin = params[:search][:origin].downcase
     destination = params[:search][:destination].downcase
