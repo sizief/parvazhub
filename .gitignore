@@ -38,3 +38,4 @@ core
 .vscode/
 *.swp
 tags
+node_modules
