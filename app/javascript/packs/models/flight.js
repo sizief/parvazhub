@@ -1,5 +1,5 @@
 export default class Flight {
-  constructor(id, flightNumber, departure, arrival, price, supplier, deepLink) {
+  constructor({id, flightNumber, departure, arrival, price, supplier, deepLink, slug} = {}) {
     this.id = id
     this.flightNumber = flightNumber
     this.departure = departure
@@ -7,5 +7,6 @@ export default class Flight {
     this.price = price
     this.supplier = supplier
     this.deepLink = deepLink
+    this.slug = slug
   }
 }

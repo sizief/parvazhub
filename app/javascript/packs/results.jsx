@@ -6,10 +6,13 @@ import Flightio from './suppliers/flightio'
 
 document.addEventListener('DOMContentLoaded', () => {
   const data = window.params
-  const suppliersClasses = {
+  const suppliersClass = {
     flightio: Flightio
   }
-  const suppliers = data.suppliers.map(supplier=> suppliersClasses[supplier])
+  const suppliers = data.suppliers.map(supplier=> {
+    supplier['class'] = suppliersClass[supplier.name]
+    return supplier
+  })
 
   ReactDOM.render(
     <SearchResult

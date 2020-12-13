@@ -1,23 +1,32 @@
 import Flight from '../models/flight'
+import Base from './base'
 
-export default class Flightio {
-  constructor(origin, destination, date) {
-    this.origin = origin
-    this.destination = destination
-    this.date = date
-  }
+const supplier_name = 'flightio'
+
+export default class Flightio extends Base{
 
   delay (ms) {
     return new Promise(res => setTimeout(res, ms));
   }
 
   async search(){
-    const resultsModel = [
-      new Flight(null, null, null, null, 1000, 'flightio', null)
+    const results = [
+      new Flight(
+        {
+          id: null,
+          flightNumber: null,
+          departure: null,
+          arrival: null,
+          price: 100,
+          supplier: supplier_name,
+          deepLink: null,
+          slug: 1
+        }
+      )
     ]
 
     console.log("Waited 5s");
     await this.delay(5000);
-    return resultsModel 
+    return results
   }
 }

@@ -3,6 +3,32 @@
 class Supplier < ApplicationRecord
   validates :name, uniqueness: true
 
+  FLIGHTIO = 'flightio'
+  ALIBABA = 'alibaba'
+  GHASEDAK = 'ghasedak'
+  SAFARESTAN = 'safarestan'
+
+  def url_register
+    case name
+    when FLIGHTIO
+      ENV['URL_FLIGHTIO_GET']
+    end
+  end
+
+  def url_search
+    case name
+    when FLIGHTIO
+      ENV['URL_FLIGHTIO_GET']
+    end
+  end
+
+  def url_deeplink
+    case name
+    when FLIGHTIO
+      ENV['URL_FLIGHTIO_DEEPLINK']
+    end
+  end
+
   def get_persian_name(supplier_name)
     case supplier_name
     when 'zoraq'

@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class SearchResultController < ApplicationController
+  PARAMETERS = Struct.new(:route, :date, keyword_init: true)
+
   def single_page
-    parameters = Struct.new(:route, :date, keyword_init: true)
-    @parameters = parameters.new(
+    @parameters = PARAMETERS.new(
       route: Route.new.get_route_by_english_name(
         params[:origin_name].downcase,
         params[:destination_name].downcase
@@ -11,7 +12,14 @@ class SearchResultController < ApplicationController
       date: date_to_code(params[:date])
     )
 
-    @suppliers = Supplier.where(status: true, domestic: true).map(&:name)
+    @suppliers = Supplier.where(status: true, domestic: true).map do |sp|
+      {
+        name: sp.name,
+        url_register: sp.url_register,
+        url_search: sp.url_search,
+        url_deeplink: sp.url_deeplink
+      }
+    end
   end
 
   def flight_search
