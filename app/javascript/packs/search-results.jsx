@@ -13,9 +13,9 @@ const SearchResult = props => {
     origin: props.origin,
     destination: props.destination,
     date: props.date,
-    urlRegister: supplier.urlRegister,
-    urlSearch: supplier.urlSearch,
-    urlDeeplink: supplier.urlDeeplink
+    urlRegister: supplier.url_register,
+    urlSearch: supplier.url_search,
+    urlDeeplink: supplier.url_deeplink
   })
 
   useEffect(() => {
