@@ -7,6 +7,7 @@
 Providers are blocking Parvazhub constantly. We have two optins:
 - Search providers in the browser, client side. This is not working for moste websites because of CORS.
 - Search through proxies. This increases costs. Also causes slow search.
+- [reviews backup](./backup_reviews.csv)
 
 ## Run it on your local 
 - Install Ruby 2.6.5
