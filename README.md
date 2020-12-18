@@ -3,6 +3,11 @@
 # PARVAZHUB
 [PARVAZHUB](https://parvazhub.com) is a domestic Iranian flight metasearch website.  
   
+## Last status
+Providers are blocking Parvazhub constantly. We have two optins:
+- Search providers in the browser, client side. This is not working for moste websites because of CORS.
+- Search through proxies. This increases costs. Also causes slow search.
+
 ## Run it on your local 
 - Install Ruby 2.6.5
 - Install Postgress and sqlite
