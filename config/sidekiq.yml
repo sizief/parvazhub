@@ -4,18 +4,13 @@
   - low
 :concurrency: 5
 :schedule:
-  # flight_search_restofweek_3: #every 120 minutes 60
-  #   cron: '0 35 0,6,8,10,12,14,16,18,20,22 * * *'
-  #   args: [date_offset: 5]
-  #   class: BackgroundSearchWorker
-
 #flightPrice remover 
   flight_price_remover:
     cron: '0 29,59 * * * *'
     class: FlightPriceRemoveWorker
 
 #route day worker
-    route_day_worker:
+  route_day_worker:
     cron: '0 55 0,12 * * *'
     class: RouteDayWorker
 
@@ -29,12 +24,12 @@
     class: MostSearchRouteWorker
 
 #daily background search
-  daily_background_search:
-    cron: '0 0 4 * * *'
-    args: ["type": "daily"]
-    class: BackgroundSearchWorker
+#  daily_background_search:
+#    cron: '0 0 4 * * *'
+#    args: ["type": "daily"]
+#    class: BackgroundSearchWorker
 
 #hourly monitoring 
-  Monitor_Search:
-    cron: '0 0 5,11,17,23 * * *'
-    class: MonitorSearchWorker
+#  Monitor_Search:
+#    cron: '0 0 5,11,17,23 * * *'
+#    class: MonitorSearchWorker

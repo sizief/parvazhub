@@ -1,122 +1,54 @@
 # frozen_string_literal: true
 
 class Proxy < ApplicationRecord
-  validates :ip, uniqueness: { scope: :port,
-                               message: 'already saved' }
+  validates :ip, uniqueness: {
+    scope: :port,
+    message: 'already saved'
+  }
+  scope :enabled, -> { where(enable: true) }
+  serialize :metadata, Hash
+  before_create :add_metadata
 
-  def self.new_proxy
-    active_proxies = Proxy.where(status: 'active')
-    random_proxy = active_proxies[rand(active_proxies.count)]
-    if random_proxy.nil?
-      nil
-    else
-      proxy_url = 'https://' + random_proxy.ip.to_s + ':' + random_proxy.port.to_s
-    end
+  GAP = 5
+
+  def self.fetch_path(supplier)
+    proxy = Proxy.new.upread(supplier)
+    return nil if proxy.nil?
+
+    "https://#{proxy.ip}:#{proxy.port}"
   end
 
-  def self.set_status(proxy_url, status)
-    ip = proxy_url.split(':')[1][2..-1]
-    port = proxy_url.split(':')[2]
-    proxy = Proxy.find_by(ip: ip, port: port)
-    unless proxy.nil?
-      proxy.status = status
-      proxy.save
-    end
-  end
+  # Each proxy should be used once in GAP second for each supplier
+  # For example we can not use any proxy twice in under GAP seconds
+  # when connecting to Ghasedak. So here we put a lock on select, we
+  # find the random one which it's last use is under GAP seconds.
+  # Name is the combination of update + read :D
+  def upread(supplier)
+    Proxy.transaction do
+      proxies = Proxy.lock.enabled
+      return nil if proxies.empty?
 
-  def check_validity(ip, port)
-    proxy = 'https://' + ip.to_s + ':' + port.to_s
-    begin
-      RestClient::Request.execute(method: :get, url: 'http://api.ipify.org?format=json',
-                                  timeout: 4, proxy: proxy)
-    rescue StandardError
-      return false
-    end
-    true
-  end
+      proxies.shuffle.each do |proxy|
+        next if proxy.metadata[slug_for(supplier)] + GAP.seconds > Time.now
 
-  def update_proxy
-    import_free_proxy_list
-    import_ssl_proxies
-    # import_proxynova
+        proxy.metadata[slug_for(supplier)] = Time.now
+        proxy.save
+        return proxy
+      end
+
+      nil # all proxies are used in last GAP seconds ago for this supplier
+    end
   end
 
   private
 
-  def import_proxynova
-    proxy_list_page = 'https://www.proxynova.com/proxy-server-list/'
-    # response = RestClient.get("#{URI.parse(proxy_list_page)}")
-    response = RestClient::Request.execute(method: :get, url: URI.parse(proxy_list_page).to_s, timeout: 10)
-    html_page = Nokogiri::HTML(response)
-    doc = html_page.xpath('//*[@id="tbl_proxy_list"]/tbody[1]/tr')
-    doc.each do |row|
-      ip = row.css('td[1]').text
-      unless ip.include? 'document'
-        next
-        end # there is some row that did not contain ips
-
-      ip.remove!("document.write('")
-      ip.remove!("'.substr(2) + '")
-      ip.remove!("');")
-      ip = ip[2..-1]
-
-      port = if row.css('td[2] a').text.empty?
-               row.css('td[2]').text.gsub(/[^0-9]/, '')
-             else
-               row.css('td[2] a').text
-             end
-
-      next unless check_validity(ip, port)
-
-      new_proxy = Proxy.new
-      new_proxy.ip = ip
-      new_proxy.port = port
-      new_proxy.status = 'active'
-      new_proxy.save
+  def add_metadata
+    self.metadata = Supplier.all.each_with_object({}) do |sp, hsh|
+      hsh[sp.name] = Time.now
     end
   end
 
-  def import_free_proxy_list
-    proxy_list_page = 'https://free-proxy-list.net/'
-    response = RestClient::Request.execute(method: :get, url: URI.parse(proxy_list_page).to_s, timeout: 10)
-    html_page = Nokogiri::HTML(response)
-    doc = html_page.xpath('//*[@id="proxylisttable"]/tbody/tr')
-
-    doc.each_with_index do |row, index|
-      ip = row.css('td[1]').text
-      port = row.css('td[2]').text
-      https = row.css('td[7]').text
-
-      if check_validity(ip, port) && (https == 'yes')
-        new_proxy = Proxy.new
-        new_proxy.ip = ip
-        new_proxy.port = port
-        new_proxy.status = 'active'
-        new_proxy.save
-      end
-      break if index > 30 # there are too many proxies on their list
-    end
-  end
-
-  def import_ssl_proxies
-    proxy_list_page = 'https://www.sslproxies.org/'
-    # response = RestClient.get("#{URI.parse(proxy_list_page)}")
-    response = RestClient::Request.execute(method: :get, url: URI.parse(proxy_list_page).to_s, timeout: 10)
-    html_page = Nokogiri::HTML(response)
-    doc = html_page.xpath('//*[@id="proxylisttable"]/tbody/tr')
-
-    doc.each_with_index do |row, index|
-      ip = row.css('td[1]').text
-      port = row.css('td[2]').text
-
-      if check_validity(ip, port)
-        new_proxy = Proxy.new
-        new_proxy.ip = ip
-        new_proxy.port = port
-        new_proxy.status = 'active'
-        new_proxy.save
-      end
-      break if index > 30 # there are too many proxies on their list
-    end
+  def slug_for(supplier)
+    supplier.name
   end
 end

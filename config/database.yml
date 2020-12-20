@@ -17,9 +17,9 @@ development:
 test:
   <<: *default
   host: localhost
-  adapter: sqlite3
-  database: db/test
-  port: 5432
+  adapter: postgresql
+  database: parvazhub_test
+  port: <%= ENV["DB_PORT"] %>
   username: <%= ENV["DB_USERNAME"] %> 
   password: <%= ENV["DB_PASSWORD"] %>
   timeout: 5000
