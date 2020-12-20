@@ -19,7 +19,7 @@ test:
   host: localhost
   adapter: postgresql
   database: parvazhub_test
-  port: 543
+  port: <%= ENV["DB_PORT"] %>
   username: <%= ENV["DB_USERNAME"] %> 
   password: <%= ENV["DB_PASSWORD"] %>
   timeout: 5000
