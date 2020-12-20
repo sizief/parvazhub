@@ -21,7 +21,7 @@ class Proxy < ApplicationRecord
   # Each proxy should be used once in GAP second for each supplier
   # For example we can not use any proxy twice in under GAP seconds
   # when connecting to Ghasedak. So here we put a lock on select, we
-  # find the random one which it's last use is under GAP seconds.
+  # find the random one which its last use is under GAP seconds.
   # Name is the combination of update + read :D
   def upread(supplier)
     Proxy.transaction do
@@ -42,6 +42,9 @@ class Proxy < ApplicationRecord
 
   private
 
+  # Metadata is a hash
+  # key: name of each supplier
+  # value: the last time this supplier uses that proxy
   def add_metadata
     self.metadata = Supplier.all.each_with_object({}) do |sp, hsh|
       hsh[sp.name] = Time.now
