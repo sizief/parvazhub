@@ -6,7 +6,7 @@ class SuppliersGhasedakTest < ActiveSupport::TestCase
   def setup
     @origin = 'thr'
     @destination = 'mhd'
-    @date = '2017-12-20'
+    @date = '2021-01-01'
     @search_history_id = 1
     @route = Route.find_by(origin: @origin, destination: @destination)
     @search_flight_token = 1
@@ -21,10 +21,12 @@ class SuppliersGhasedakTest < ActiveSupport::TestCase
   end
 
   test 'Ghasdak search should return Hash' do
-    response = @ghasedak_obj.search_supplier
-    assert response.is_a? Hash
-    assert response[:response].is_a? String
-    assert_not response[:response].empty?
+    VCR.use_cassette('ghasedak') do
+      response = @ghasedak_obj.search_supplier
+      assert response.is_a? Hash
+      assert response[:response].is_a? String
+      assert_not response[:response].empty?
+    end
   end
 
   test 'Ghasdak get_airline_code should return airline code' do
@@ -37,16 +39,16 @@ class SuppliersGhasedakTest < ActiveSupport::TestCase
   end
 
   test 'Save flights to database' do
-    response = @ghasedak_obj.search_supplier
-    route = Route.find_by(origin: @origin, destination: @destination)
-    assert_difference 'Flight.count', 22 do
-      @ghasedak_obj.import_flights(response)
+    VCR.use_cassette('ghasedak') do
+      response = @ghasedak_obj.search_supplier
+      assert_difference 'Flight.count', 22 do
+        @ghasedak_obj.import_flights(response)
+      end
     end
   end
 
   test 'Save flight prices to database' do
     response = @ghasedak_obj.search_supplier
-    route = Route.find_by(origin: @origin, destination: @destination)
     assert_difference 'FlightPrice.count', 22 do
       @ghasedak_obj.import_flights(response)
     end

@@ -2,17 +2,23 @@
 
 require 'simplecov'
 require 'active_record'
-SimpleCov.start 'rails'
-ActiveRecord::Migration.maintain_test_schema!
-
-ENV['RAILS_ENV'] ||= 'test'
+require 'rubygems'
+require 'test/unit'
+require 'vcr'
 require File.expand_path('../config/environment', __dir__)
 require 'rails/test_help'
 
+ENV['RAILS_ENV'] ||= 'test'
+
+SimpleCov.start 'rails'
+ActiveRecord::Migration.maintain_test_schema!
+
 class ActiveSupport::TestCase
-  # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
   ENV['MAX_NUMBER_FLIGHT'] = '1000'
 
-  # Add more helper methods to be used by all tests here...
 end
+  VCR.configure do |config|
+    config.cassette_library_dir = "test/fixtures/vcr_cassettes"
+    config.hook_into :webmock
+  end

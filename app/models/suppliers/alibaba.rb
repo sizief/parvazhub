@@ -35,6 +35,7 @@ class Suppliers::Alibaba < Suppliers::Base
       is_completed = result['result']['isCompleted']
       timeout_for_alibaba += 5
       break if ENV['TIMEOUT_DOMESTIC'].to_i <= timeout_for_alibaba
+
       sleep 5 unless is_completed
     end
 

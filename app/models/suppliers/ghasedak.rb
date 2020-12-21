@@ -8,12 +8,7 @@ class Suppliers::Ghasedak < Suppliers::Base
     url = ENV['URL_GHASEDAK_SEARCH']
     search_date = date.to_date.to_s.gsub('-', '/')
     params = "from=#{origin.upcase}&to=#{destination.upcase}&fromDate=#{search_date}&toDate=#{search_date}&userName=sepehr&password=1234&cs=1"
-
-    if Rails.env.test?
-      response = File.read('test/fixtures/files/domestic-ghasedak.log')
-      return { response: response }
-    end
-
+    binding.pry
     begin
       response = RestClient::Request.execute(method: :get, url: URI.parse(url + params).to_s, proxy: nil, payload: params)
     rescue StandardError => e
