@@ -48,9 +48,11 @@ class SuppliersGhasedakTest < ActiveSupport::TestCase
   end
 
   test 'Save flight prices to database' do
-    response = @ghasedak_obj.search_supplier
-    assert_difference 'FlightPrice.count', 22 do
-      @ghasedak_obj.import_flights(response)
+    VCR.use_cassette('ghasedak') do
+      response = @ghasedak_obj.search_supplier
+      assert_difference 'FlightPrice.count', 22 do
+        @ghasedak_obj.import_flights(response)
+      end
     end
   end
 end
