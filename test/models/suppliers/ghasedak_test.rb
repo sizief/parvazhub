@@ -11,47 +11,29 @@ class SuppliersGhasedakTest < ActiveSupport::TestCase
     @route = Route.find_by(origin: @origin, destination: @destination)
     @search_flight_token = 1
     @supplier_name = 'Ghasedak'
-    @ghasedak_obj = Suppliers::Ghasedak.new(origin: @origin,
-                                            destination: @destination,
-                                            route: @route,
-                                            date: @date,
-                                            search_history_id: @search_history_id,
-                                            search_flight_token: @search_flight_token,
-                                            supplier_name: @supplier_name)
-  end
-
-  test 'Ghasdak search should return Hash' do
-    VCR.use_cassette('ghasedak') do
-      response = @ghasedak_obj.search_supplier
-      assert response.is_a? Hash
-      assert response[:response].is_a? String
-      assert_not response[:response].empty?
-    end
+    @ghasedak = Suppliers::Ghasedak.new(origin: @origin,
+                                        destination: @destination,
+                                        route: @route,
+                                        date: @date,
+                                        search_history_id: @search_history_id,
+                                        search_flight_token: @search_flight_token,
+                                        supplier_name: @supplier_name)
   end
 
   test 'Ghasdak get_airline_code should return airline code' do
-    mahan_code = @ghasedak_obj.get_airline_code('W5')
-    caspian_code = @ghasedak_obj.get_airline_code('RV')
-    unknown_code = @ghasedak_obj.get_airline_code('ali')
+    mahan_code = @ghasedak.get_airline_code('W5')
+    caspian_code = @ghasedak.get_airline_code('RV')
+    unknown_code = @ghasedak.get_airline_code('ali')
     assert_equal mahan_code, 'W5'
     assert_equal caspian_code, 'IV'
     assert_equal unknown_code, 'ali'
   end
 
-  test 'Save flights to database' do
-    VCR.use_cassette('ghasedak') do
-      response = @ghasedak_obj.search_supplier
-      assert_difference 'Flight.count', 22 do
-        @ghasedak_obj.import_flights(response)
-      end
-    end
-  end
-
   test 'Save flight prices to database' do
     VCR.use_cassette('ghasedak') do
-      response = @ghasedak_obj.search_supplier
-      assert_difference 'FlightPrice.count', 22 do
-        @ghasedak_obj.import_flights(response)
+      response = @ghasedak.search_supplier
+      assert_difference 'FlightPrice.count', 40 do
+        @ghasedak.import_flights(response)
       end
     end
   end

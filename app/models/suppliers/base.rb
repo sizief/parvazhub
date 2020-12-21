@@ -3,6 +3,16 @@
 class Suppliers::Base
   attr_reader :origin, :destination, :date, :search_history_id, :supplier_name, :route, :search_flight_token
 
+  HTTP_ERRORS = [
+    EOFError,
+    Errno::ECONNRESET,
+    Errno::EINVAL,
+    Net::HTTPBadResponse,
+    Net::HTTPHeaderSyntaxError,
+    Net::ProtocolError,
+    Timeout::Error
+  ]
+
   def initialize(args)
     @origin = args[:origin]
     @destination = args[:destination]

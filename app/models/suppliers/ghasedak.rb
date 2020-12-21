@@ -9,13 +9,12 @@ class Suppliers::Ghasedak < Suppliers::Base
     search_date = date.to_date.to_s.gsub('-', '/')
     params = "from=#{origin.upcase}&to=#{destination.upcase}&fromDate=#{search_date}&toDate=#{search_date}&userName=sepehr&password=1234&cs=1"
 
-    begin
-      response = RestClient::Request.execute(method: :get, url: URI.parse(url + params).to_s, proxy: nil, payload: params)
-    rescue StandardError => e
-      update_status(search_history_id, "failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
-      return { status: false }
-    end
+
+    response = RestClient::Request.execute(method: :get, url: URI.parse(url + params).to_s, proxy: nil, payload: params)
     { status: true, response: response.body }
+#  rescue *HTTP_ERRORS => error
+#    update_status(search_history_id, error.message)
+#    { status: false }
   end
 
   def import_flights(response)

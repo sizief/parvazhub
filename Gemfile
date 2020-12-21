@@ -48,7 +48,7 @@ group :test do
   gem 'rails-controller-testing', '0.1.1'
   gem 'test-unit', '~> 3.1', '>= 3.1.8'
   gem 'vcr', '~> 6.0'
-  gem 'webmock', '~> 2.1'
+  gem 'webmock', '~> 3.11'
 end
 
 group :test, :development do
