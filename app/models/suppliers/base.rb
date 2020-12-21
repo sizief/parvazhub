@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Suppliers::Base
-  attr_reader :origin, :destination, :date, :search_history_id, :supplier_name, :route, :search_flight_token
+  attr_reader :origin, :destination, :date, :search_history, :supplier_name, :route, :search_flight_token
 
   HTTP_ERRORS = [
     EOFError,
@@ -17,7 +17,7 @@ class Suppliers::Base
     @origin = args[:origin]
     @destination = args[:destination]
     @date = args[:date]
-    @search_history_id = args[:search_history_id]
+    @search_history = SearchHistory.find(args[:search_history_id])
     @search_flight_token = args[:search_flight_token]
     @supplier_name = args[:supplier_name]
     @route = args[:route]
@@ -27,16 +27,12 @@ class Suppliers::Base
     ActiveRecord::Base.connection_pool.with_connection do
       FlightPrice.delete_old_flight_prices(supplier_name.downcase, route.id, date)
     end
-    update_status(search_history_id, "delete(#{Time.now.strftime('%M:%S')})")
 
     response = search_supplier
-    if response[:status] == true
-      if Rails.env.development?
-        Log.new(log_name: supplier_name, content: response[:response]).save
-      end
-      flight_ids = import_flights(response)
-      save_flight_ids flight_ids
-    end
+    return unless response[:status]
+
+    flight_ids = import_flights(response)
+    save_flight_ids flight_ids
   end
 
   def save_flight_ids(flight_ids)
@@ -56,7 +52,7 @@ class Suppliers::Base
     duration = 0
     if departures.count > 1
       departures.each_with_index do |departure, index|
-        next if index == 0
+        next if index.zero?
 
         duration += ((departure - arrivals[index - 1]) * 24 * 60).to_i
       end
@@ -66,33 +62,23 @@ class Suppliers::Base
 
   private
 
-  def update_status(search_history_id, text)
-    if Rails.env.development?
-      ActiveRecord::Base.connection_pool.with_connection do
-        SearchHistory.append_status(search_history_id, text)
-      end
-    end
-  end
-
-  def successful_search(search_history_id)
+  def update_status(status)
     ActiveRecord::Base.connection_pool.with_connection do
-      SearchHistory.find(search_history_id).update(successful: true)
+      search_history.append(status)
     end
   end
 
-  def complete_import(flight_prices, search_history_id)
+  def complete_import(flight_prices)
     if flight_prices.empty?
-      update_status(search_history_id, "empty response(#{Time.now.strftime('%M:%S')})")
+      update_status("empty response(#{Time.now.strftime('%M:%S')})")
     else
       ActiveRecord::Base.connection_pool.with_connection do
-        update_status(search_history_id, "p done(#{Time.now.strftime('%M:%S')})")
         FlightPrice.import flight_prices, validate: false
-        update_status(search_history_id, "fp(#{Time.now.strftime('%M:%S')})")
         FlightPriceArchive.archive flight_prices
-        update_status(search_history_id, "Success(#{Time.now.strftime('%M:%S')})")
       end
-      update_status(search_history_id, "Success(#{Time.now.strftime('%M:%S')})")
     end
-    successful_search search_history_id
+    ActiveRecord::Base.connection_pool.with_connection do
+      search_history.set_success
+    end
   end
 end

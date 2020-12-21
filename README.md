@@ -27,7 +27,7 @@ x.register_request # for the ones that has two level RQ/RS
 ```
 
 Grep  
-`grep -r proxy ./ --exclude-dir={node_modules,public,vendor} --exclude=tags`
+`grep -r proxy ./ --exclude-dir={node_modules,public,vendor,log,coverage} --exclude=tags`
 
 ## Production
 Use `forman start` in `/var/www/parvazhub` to see output log. Also a puma service is availale and running in bckground: `sudo systemctl start/stop/restart parvazhub.target`

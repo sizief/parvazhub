@@ -14,10 +14,10 @@ class SupplierSearch
   end
 
   def search
-    if Rails.env.development?
-      search_supplier_in_series
-    else
+    if Rails.env.production?
       search_supplier_in_threads
+    else
+      search_supplier_in_series
     end
   end
 
@@ -94,7 +94,7 @@ class SupplierSearch
         route_id: route.id,
         departure_time: date,
         successful: false,
-        status: "#{search_initiator}(#{Time.now.strftime('%M:%S')})"
+        status: Time.now.strftime('%M:%S').to_s
       )
     end
     supplier_class.constantize.new(
