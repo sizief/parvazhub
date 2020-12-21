@@ -29,10 +29,28 @@ class SuppliersGhasedakTest < ActiveSupport::TestCase
     assert_equal unknown_code, 'ali'
   end
 
+  test 'Ghasdak search should return Hash' do
+    VCR.use_cassette('ghasedak') do
+      response = @ghasedak.search_supplier
+      assert response.is_a? Hash
+      assert response[:response].is_a? String
+      assert_not response[:response].empty?
+    end
+  end
+
+  test 'Save flights to database' do
+    VCR.use_cassette('ghasedak') do
+      response = @ghasedak.search_supplier
+      assert_difference 'Flight.count', 18 do
+        @ghasedak.import_flights(response)
+      end
+    end
+  end
+
   test 'Save flight prices to database' do
     VCR.use_cassette('ghasedak') do
       response = @ghasedak.search_supplier
-      assert_difference 'FlightPrice.count', 40 do
+      assert_difference 'FlightPrice.count', 18 do
         @ghasedak.import_flights(response)
       end
     end

@@ -11,7 +11,7 @@ class Suppliers::Base
     Net::HTTPHeaderSyntaxError,
     Net::ProtocolError,
     Timeout::Error
-  ]
+  ].freeze
 
   def initialize(args)
     @origin = args[:origin]
