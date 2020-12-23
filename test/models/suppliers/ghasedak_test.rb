@@ -4,20 +4,22 @@ require 'test_helper'
 
 class SuppliersGhasedakTest < ActiveSupport::TestCase
   def setup
-    @origin = 'thr'
-    @destination = 'mhd'
-    @date = '2021-01-01'
-    @search_history_id = 1
-    @route = Route.find_by(origin: @origin, destination: @destination)
-    @search_flight_token = 1
-    @supplier_name = 'Ghasedak'
-    @ghasedak = Suppliers::Ghasedak.new(origin: @origin,
-                                        destination: @destination,
-                                        route: @route,
-                                        date: @date,
-                                        search_history_id: @search_history_id,
-                                        search_flight_token: @search_flight_token,
-                                        supplier_name: @supplier_name)
+    origin = 'thr'
+    destination = 'mhd'
+    date = '2021-01-01'
+    supplier_name = 'Ghasedak'
+    route = Route.find_or_create_by(origin: origin, destination: destination)
+    search_history = SearchHistory.create(supplier_name: supplier_name, route: route)
+    search_flight_token = 1
+    @ghasedak = Suppliers::Ghasedak.new(
+      origin: origin,
+      destination: destination,
+      route: route,
+      date: date,
+      search_history_id: search_history.id,
+      search_flight_token: search_flight_token,
+      supplier_name: supplier_name
+    )
   end
 
   test 'Ghasdak get_airline_code should return airline code' do
