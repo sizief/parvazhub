@@ -46,14 +46,14 @@ class SuppliersHipotripTest < ActiveSupport::TestCase
   test 'import flights' do
     response = @hipotrip_obj.search_supplier
     assert_difference 'Flight.count', 27 do
-      @hipotrip_obj.import_flights(response, @route.id, @origin, @destination, @date, @search_history_id)
+      @hipotrip_obj.import_flights(response)
     end
   end
 
   test 'save flight prices' do
     response = @hipotrip_obj.search_supplier
     assert_difference 'FlightPrice.count', 27 do
-      @hipotrip_obj.import_flights(response, @route.id, @origin, @destination, @date, @search_history_id)
+      @hipotrip_obj.import_flights(response)
     end
   end
 end

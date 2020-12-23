@@ -31,7 +31,7 @@ class Suppliers::Safarme < Suppliers::Base
         response = response.body
       end
     rescue StandardError => e
-      update_status(search_history_id, "failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
+      update_status(e.message)
       return { status: false }
     end
     { status: true, response: response }
@@ -49,7 +49,6 @@ class Suppliers::Safarme < Suppliers::Base
     flight_ids = []
     prepared_response = prepare_response(response[:response])
     json_response = JSON.parse(prepared_response)
-    update_status(search_history_id, "Extracting(#{Time.now.strftime('%M:%S')})")
 
     json_response[0..ENV['MAX_NUMBER_FLIGHT'].to_i].each do |flight|
       next if flight.nil?
@@ -87,7 +86,7 @@ class Suppliers::Safarme < Suppliers::Base
       flight_prices << FlightPrice.new(is_deep_link_url: false, flight_id: flight_id.to_s, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: deeplink_url.to_s)
     end # end of each loop
 
-    complete_import flight_prices, search_history_id
+    complete_import(flight_prices)
     flight_ids
 end
 

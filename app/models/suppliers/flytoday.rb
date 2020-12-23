@@ -31,7 +31,7 @@ class Suppliers::Flytoday < Suppliers::Base
         response = response.body
       end
     rescue StandardError => e
-      update_status(search_history_id, "failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
+      update_status(e.message)
       return { status: false }
     end
     { status: true, response: response }
@@ -42,7 +42,6 @@ class Suppliers::Flytoday < Suppliers::Base
     flight_prices = []
     flight_ids = []
     json_response = JSON.parse(response[:response])
-    update_status(search_history_id, "Extracting(#{Time.now.strftime('%M:%S')})")
 
     json_response['PricedItineraries'][0..ENV['MAX_NUMBER_FLIGHT'].to_i].each do |flight|
       leg_data = flight_id = nil
@@ -82,7 +81,7 @@ class Suppliers::Flytoday < Suppliers::Base
       flight_prices << FlightPrice.new(flight_id: flight_id.to_s, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: deeplink_url.to_s)
     end # end of each loop
 
-    complete_import flight_prices, search_history_id
+    complete_import(flight_prices)
     flight_ids
   end
 

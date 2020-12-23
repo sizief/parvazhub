@@ -75,7 +75,6 @@ class Suppliers::Trip < Suppliers::Base
     flight_id = nil
     flight_prices = []
     flight_ids = []
-    update_status(search_history_id, "Extracting(#{Time.now.strftime('%M:%S')})")
     response = JSON.parse(response[:response])
 
     response['flights'][0..ENV['MAX_NUMBER_FLIGHT'].to_i].each do |flight|
@@ -115,7 +114,7 @@ class Suppliers::Trip < Suppliers::Base
       flight_prices << FlightPrice.new(flight_id: flight_id.to_s, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: deeplink_url.to_s)
     end # end of each loop
 
-    complete_import flight_prices, search_history_id
+    complete_import(flight_prices)
     flight_ids
   end
 

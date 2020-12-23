@@ -30,7 +30,7 @@ class Suppliers::Hipotrip < Suppliers::Base
         response = JSON.parse response.body
       end
     rescue StandardError => e
-      update_status(search_history_id, "failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
+      update_status(e.message)
       raise 'first request error'
     end
     response
@@ -53,19 +53,18 @@ class Suppliers::Hipotrip < Suppliers::Base
         response = response.body
       end
     rescue StandardError => e
-      update_status(search_history_id, "failed:(#{Time.now.strftime('%M:%S')}) #{e.message}")
+      update_status(e.message)
       return { status: false }
     end
     { status: true, response: response }
   end
 
-  def import_flights(response, route_id, _origin, _destination, date, search_history_id)
+  def import_flights(response)
     flight_id = nil
     flight_prices = []
     flight_ids = []
     json_response = JSON.parse(response[:response])
     request_id = json_response['request_id']
-    update_status(search_history_id, "Extracting(#{Time.now.strftime('%M:%S')})")
 
     json_response['flights'][0..ENV['MAX_NUMBER_FLIGHT'].to_i].each do |flight|
       leg_data = flight_id = nil
@@ -77,7 +76,7 @@ class Suppliers::Hipotrip < Suppliers::Base
       next if leg_data[:airline_code].empty?
 
       ActiveRecord::Base.connection_pool.with_connection do
-        flight_id = Flight.create_or_find_flight(route_id,
+        flight_id = Flight.create_or_find_flight(route.id,
                                                  leg_data[:flight_number].join(','),
                                                  leg_data[:departure_date_time].first,
                                                  leg_data[:airline_code].join(','),
@@ -106,7 +105,7 @@ class Suppliers::Hipotrip < Suppliers::Base
       flight_prices << FlightPrice.new(flight_id: flight_id.to_s, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: deeplink_url.to_s)
     end # end of each loop
 
-    complete_import flight_prices, search_history_id
+    complete_import(flight_prices)
     flight_ids
   end
 
