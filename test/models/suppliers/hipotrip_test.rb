@@ -4,16 +4,16 @@ require 'test_helper'
 
 class SuppliersHipotripTest < ActiveSupport::TestCase
   def setup
-    @origin = 'thr'
-    @destination = 'mhd'
+    origin = 'thr'
+    destination = 'mhd'
     date = '2017-12-20'
     supplier_name = 'Hipotrip'
-    route = Route.find_or_create_by(origin: @origin, destination: @destination)
+    route = Route.find_or_create_by(origin: origin, destination: destination)
     search_history = SearchHistory.create(supplier_name: supplier_name, route: route)
     search_flight_token = 1
     @hipotrip = Suppliers::Hipotrip.new(
-      origin: @origin,
-      destination: @destination,
+      origin: origin,
+      destination: destination,
       route: route,
       date: date,
       search_history_id: search_history.id,
