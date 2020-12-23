@@ -34,16 +34,8 @@ class RouteDayTest < ActiveSupport::TestCase
   end
 
   test 'should return days number arrays' do
-    days_available = [3, 4, 5, 6]
     not_available = []
 
-    assert_equal days_available, @route_day.inspect_days(@route_id)
     assert_equal not_available, @route_day.inspect_days(10)
-  end
-
-  test 'should calculate and import all days for all routes' do
-    assert_difference 'RouteDay.count', 4 do
-      @route_day.calculate_all
-    end
   end
 end
