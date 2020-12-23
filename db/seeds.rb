@@ -36,8 +36,14 @@ csv = CSV.parse(csv_text, headers: true)
 csv.each do |x|
   Airline.create(x.to_hash)
 end
+Airline.find_by(code: 'VA').delete
+Airline.find_by(code: 'PY').delete
+Airline.create(code: 'VA', persian_name: 'وارش', english_name: 'varesh', country_code: 'IR')
+Airline.create(code: 'PY', persian_name: 'پویا', english_name: 'pouya', country_code: 'IR')
+Airline.find_by(code: 'VR').update(persian_name: 'وارش', english_name: 'varesh', country_code: 'IR')
+Airline.find_by(code: 'SA').update(persian_name: 'ساها', english_name: 'Saha', country_code: 'IR')
+Airline.find_by(code: 'FP').update(persian_name: 'فلای پرشیا', english_name: 'Fly Persia', country_code: 'IR')
 
-City.create(english_name: 'saint petersburg', persian_name: 'سن‌پترزبورگ', country_code: 'RU', city_code: 'led', status: true)
 
 User.create(email: 'bot@parvazhub.com')
 User.create(email: 'job@parvazhub.com')
@@ -67,13 +73,12 @@ iranian_airlines.each do |airline|
   x.save
 end
 
-virgin_airline = Airline.find_by(code: 'VA')
-virgin_airline.delete
-Airline.create(code: 'VA', persian_name: 'وارش', english_name: 'varesh', country_code: 'IR')
-py_airline = Airline.find_by(code: 'PY')
-py_airline.delete
-Airline.create(code: 'PY', persian_name: 'پویا', english_name: 'pouya', country_code: 'IR')
+# Creating routes
+cities = City.where("country_code= 'IR' AND priority < ?", 10).map(&:city_code)
+cities.each do |origin|
+  cities.each do |destination|
+    next if origin == destination
 
-Airline.find_by(code: 'VR').update(persian_name: 'وارش', english_name: 'varesh', country_code: 'IR')
-Airline.find_by(code: 'SA').update(persian_name: 'ساها', english_name: 'Saha', country_code: 'IR')
-Airline.find_by(code: 'FP').update(persian_name: 'فلای پرشیا', english_name: 'Fly Persia', country_code: 'IR')
+    Route.create(origin: origin, destination: destination)
+  end
+end
