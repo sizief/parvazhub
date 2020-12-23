@@ -20,6 +20,7 @@ class Suppliers::Flightio < Suppliers::Base
     { status: true, response: response.body, deeplink: deep_link }
   rescue *HTTP_ERRORS => e
     update_status(e.message)
+    HandleError.call(e)
     { status: false }
   end
 
