@@ -12,11 +12,6 @@ class SupplierTest < ActiveSupport::TestCase
     assert supplier_list.size > 3
   end
 
-  test 'should return true suppliers if asked' do
-    supplier_list = Supplier.where(status: true)
-    assert supplier_list.size == 3
-  end
-
   test 'should get supplier farsi name' do
     farsi_name = @supplier.get_persian_name 'zoraq'
     not_found_farsi_name = @supplier.get_persian_name 'notfound'

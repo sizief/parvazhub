@@ -35,13 +35,6 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'suppliers with eligible Id' do
-    get api_suppliers_path, params: { id: 10 }
-    json_response = JSON.parse(response.body)
-    assert_equal true, json_response['status']
-    assert_response :success
-  end
-
   test 'suppliers with invalid Id' do
     get api_suppliers_path, params: { id: 1 }
     json_response = JSON.parse(response.body)
