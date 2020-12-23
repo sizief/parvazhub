@@ -25,6 +25,7 @@ class Flight < ApplicationRecord
       rescue StandardError
         flight = Flight.find_by(route_id: route_id, flight_number: flight_number, departure_time: departure_time)
       end
+      binding.pry if flight.nil?
       flight.id
     end
   end
