@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 class Suppliers::Flightio < Suppliers::Base
-  require 'open-uri'
-  require 'uri'
-
+  URL = ENV['URL_FLIGHTIO_DEEPLINK']
   def register_request
     JSON.parse(
       Excon.post(
@@ -15,30 +13,23 @@ class Suppliers::Flightio < Suppliers::Base
   end
 
   def search_supplier
-    if Rails.env.test?
-      response = File.read('test/fixtures/files/domestic-flightio.log')
-      return { response: response, deeplink: 'http://flightio.com/fa/' }
-    end
-
-    begin
-      request_id = register_request['Data']
-      deep_link = ENV['URL_FLIGHTIO_DEEPLINK'] + request_id + '&CombinationID='
-      value = "/?value={%22FSL_Id%22:%22#{request_id}%22,%22PagingModel%22:{%22Page%22:1,%22Size%22:30,%22SortColumn%22:%22TotalChargeable%22,%22SortDirection%22:%220%22}}"
-      response = Excon.get(ENV['URL_FLIGHTIO_GET'] + value, headers: headers)
-    rescue StandardError
-      return { status: false }
-    end
+    request_id = register_request['Data']
+    deep_link = "#{URL + request_id}&CombinationID="
+    value = "/?value={%22FSL_Id%22:%22#{request_id}%22,%22PagingModel%22:{%22Page%22:1,%22Size%22:30,%22SortColumn%22:%22TotalChargeable%22,%22SortDirection%22:%220%22}}"
+    response = Excon.get(ENV['URL_FLIGHTIO_GET'] + value, headers: headers)
     { status: true, response: response.body, deeplink: deep_link }
+  rescue *HTTP_ERRORS => e
+    update_status(e.message)
+    { status: false }
   end
 
   def import_flights(response)
     flight_id = nil
     flight_prices = []
     flight_ids = []
-    update_status search_history_id, "Extracting(#{Time.now.strftime('%M:%S')})"
 
     JSON.parse(response[:response])['ResultModel']['ItemList'].each do |flight_item|
-      flight = flight_item['Items'].first["Segments"].first
+      flight = flight_item['Items'].first['Segments'].first
       airline_code = get_airline_code(flight['OperatingAirlineCode'])
       flight_number = airline_code + flight['FlightNumber']
       departure_time = "#{flight['DepartTime'][0..9]} #{flight['DepartTime'][11..]}"
@@ -63,7 +54,7 @@ class Suppliers::Flightio < Suppliers::Base
       flight_prices << FlightPrice.new(flight_id: flight_id.to_s, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: deeplink_url.to_s)
     end
 
-    complete_import flight_prices, search_history_id
+    complete_import(flight_prices)
     flight_ids
   end
 

@@ -14,7 +14,7 @@ class Suppliers::Safarestan < Suppliers::Base
       proxy: nil
     )
     { status: true, response: response.body }
-  rescue StandardError => e
+  rescue *HTTP_ERRORS => e
     update_status(e.message)
     { status: false }
   end
