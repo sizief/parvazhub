@@ -6,7 +6,7 @@ class SuppliersSafarestanTest < ActiveSupport::TestCase
   def setup
     origin = 'thr'
     destination = 'mhd'
-    date = (Date.today + 1).to_s
+    date = '2021-01-01'
     supplier_name = 'safarestan'
     route = Route.find_or_create_by(origin: origin, destination: destination)
     search_history = SearchHistory.create(supplier_name: supplier_name, route: route)
@@ -23,13 +23,10 @@ class SuppliersSafarestanTest < ActiveSupport::TestCase
   end
 
   test 'search supplier' do
-    response = @safarestan.search_supplier
-    assert response.is_a? Hash
-    assert_not response[:response].empty?
-  end
-
-  test 'get params' do
-    response = @safarestan.get_params
-    assert response.is_a? Hash
+    VCR.use_cassette('safarestan') do
+      response = @safarestan.search_supplier
+      assert response.is_a? Hash
+      assert_not response[:response].empty?
+    end
   end
 end

@@ -1,0 +1,55 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://mobileapp.safarestan.com/api/search
+    body:
+      encoding: UTF-8
+      string: '{"apikey":"c9672995-2d2d-11e7-bc7a-001c429a2edb","uid":"","clientVersion":4,"productType":"localFlight","searchFilter":{"sourceAirportCode":"THR","targetAirportCode":"MHD","sourceAllinFromCity":true,"targetAllinFromCity":true,"leaveDate":"2021-01-01","adultCount":1,"childCount":0,"infantCount":0,"oneWay":true,"productType":"localFlight","compressed":true,"expireTime":0,"validTimeout":0,"isNew":true},"deviceInfo":{}}'
+    headers:
+      Accept:
+      - "*/*"
+      User-Agent:
+      - rest-client/2.1.0 (linux-gnu x86_64) ruby/2.6.5p114
+      Content-Length:
+      - '419'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Date:
+      - Wed, 23 Dec 2020 23:01:12 GMT
+      Vary:
+      - Accept-Encoding
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains;
+      Server:
+      - ArvanCloud
+      Expires:
+      - Wed, 23 Dec 2020 23:01:12 GMT
+      Cache-Control:
+      - max-age=0
+      X-Xss-Protection:
+      - 1; mode=block
+      Ar-Poweredby:
+      - Arvan Cloud (arvancloud.com)
+      Ar-Atime:
+      - '10.763'
+      Ar-Request-Id:
+      - 202325f5333215f287d35120df491d53
+      Ar-Sid:
+      - '6100'
+    body:
+      encoding: ASCII-8BIT
+      string: '{"code":200,"message":"OK","result":{"searchId":"5cc21bf7-0864-4f7b-a34c-36404f1f2492","compressed":true,"products":"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","validTimeout":20,"hasNonStop":true}}'
+  recorded_at: Wed, 23 Dec 2020 23:01:12 GMT
+recorded_with: VCR 6.0.0
