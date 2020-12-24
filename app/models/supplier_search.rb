@@ -25,7 +25,7 @@ class SupplierSearch
       suppliers.each do |supplier|
         threads << Thread.new do
           search_supplier(supplier[:name], supplier[:class_name])
-        rescue StandardError
+        rescue StandardError => e
           HandleError.call(e)
         end
       end
@@ -34,7 +34,7 @@ class SupplierSearch
     update_all_after_supplier_search
   rescue Timeout::Error
     # do nothing
-  rescue StandardError
+  rescue StandardError => e
     HandleError.call(e)
   end
 
@@ -42,14 +42,14 @@ class SupplierSearch
     Timeout.timeout(timeout) do
       suppliers.each do |supplier|
         search_supplier(supplier[:name], supplier[:class_name])
-      rescue StandardError
+      rescue StandardError => e
         HandleError.call(e)
       end
     end
     update_all_after_supplier_search
   rescue Timeout::Error
     # do nothing
-  rescue StandardError
+  rescue StandardError => e
     HandleError.call(e)
   end
 
