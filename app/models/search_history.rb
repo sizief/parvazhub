@@ -4,7 +4,7 @@ class SearchHistory < ApplicationRecord
   belongs_to :route
 
   def append(status)
-    update(status: "#{self.status} | #{status}")
+    update(status: "#{self.status} | #{Time.now.strftime('%M:%S')}:#{status}")
   end
 
   def set_success

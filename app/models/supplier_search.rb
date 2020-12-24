@@ -21,57 +21,48 @@ class SupplierSearch
 
   def search_supplier_in_threads
     threads = []
-
-    begin
-      Timeout.timeout(timeout) do
-        supplier_list.each do |supplier|
-          threads << Thread.new do
-            search_supplier(supplier[:name], supplier[:class_name])
-          rescue StandardError
-            raise if Rails.env.development?
-          end
+    Timeout.timeout(timeout) do
+      suppliers.each do |supplier|
+        threads << Thread.new do
+          search_supplier(supplier[:name], supplier[:class_name])
+        rescue StandardError
+          HandleError.call(e)
         end
-        threads.each(&:join)
       end
-    rescue Timeout::Error
-      # do nothing
-    rescue StandardError
-      raise if Rails.env.development?
+      threads.each(&:join)
     end
-
     update_all_after_supplier_search
+  rescue Timeout::Error
+    # do nothing
+  rescue StandardError
+    HandleError.call(e)
   end
 
   def search_supplier_in_series
-    suppliers = supplier_list
-    begin
-      Timeout.timeout(timeout) do
-        suppliers.each do |supplier|
-          search_supplier(supplier[:name], supplier[:class_name])
-        rescue StandardError
-          raise if Rails.env.development?
-        end
+    Timeout.timeout(timeout) do
+      suppliers.each do |supplier|
+        search_supplier(supplier[:name], supplier[:class_name])
+      rescue StandardError
+        HandleError.call(e)
       end
-    rescue Timeout::Error
-      # do nothing
-    rescue StandardError
-      raise if Rails.env.development?
     end
-
     update_all_after_supplier_search
+  rescue Timeout::Error
+    # do nothing
+  rescue StandardError
+    HandleError.call(e)
   end
 
   def update_all_after_supplier_search
-    flight_ids = get_flight_ids
-    merge_and_update_all flight_ids
+    merge_and_update_all(
+      SearchFlightId.get_ids(
+        search_flight.token
+      )
+    )
     SearchFlightId.where(token: search_flight.token).delete_all
   end
 
-  def get_flight_ids
-    SearchFlightId.get_ids search_flight.token
-  end
-
-  def supplier_list
+  def suppliers
     suppliers = route.international ? Supplier.where(status: true, international: true) : Supplier.where(status: true, domestic: true)
 
     return suppliers.where(job_search_allowed: true) if search_initiator == 'job_search'

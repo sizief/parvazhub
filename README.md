@@ -36,6 +36,10 @@ For login go to `/users/sign_in`, then for admin access grant access by doing `u
 To see and store logs in production, uncomment `config/puma.rb` log line.
 
 For console do `bundle exec rails c -e production` in /var/www/parvazhub/current
+
+## TEST and CI/CD
+Every commit on the master would triggers a [build](https://travis-ci.org/github/sizief/parvazhub/builds/). All .env values are also copied into Travis too. Then the copistrano app would deploy it to the server is tests passes.
+
 ## TODO
 - proxies
 - clean seeds

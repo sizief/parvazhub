@@ -70,7 +70,7 @@ class Suppliers::Base
 
   def complete_import(flight_prices)
     if flight_prices.empty?
-      update_status("empty response(#{Time.now.strftime('%M:%S')})")
+      update_status("empty response")
     else
       ActiveRecord::Base.connection_pool.with_connection do
         FlightPrice.import flight_prices, validate: false
@@ -79,6 +79,7 @@ class Suppliers::Base
     end
     ActiveRecord::Base.connection_pool.with_connection do
       search_history.set_success
+      update_status("done")
     end
   end
 end
