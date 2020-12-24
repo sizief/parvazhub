@@ -31,16 +31,18 @@ class SearchResultController < ApplicationController
     )
   end
 
+  def notfound
+    render :notfound
+  end
+
+  private
+
   def flight_results(route, date, user_agent, user)
     # do not search supplier, just get results from db
     return get_flights(date, route, true) if is_bot(user_agent)
 
     save_search_history(route, date, 'website', user)
     get_flights(date, route, false)
-  end
-
-  def notfound
-    render :notfound
   end
 
   def index(route, date, flights)
@@ -61,8 +63,6 @@ class SearchResultController < ApplicationController
 
     render :index
   end
-
-  private
 
   def search_parameters(origin, destination, date, route)
     {

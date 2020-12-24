@@ -41,8 +41,8 @@ For console do `bundle exec rails c -e production` in /var/www/parvazhub/current
 Every commit on the master would triggers a [build](https://travis-ci.org/github/sizief/parvazhub/builds/). All .env values are also copied into Travis too. Then the copistrano app would deploy it to the server is tests passes.
 
 ## TODO
+- remove allow origin for all in api
 - proxies
-- clean seeds
 - community for reviewers
 
 ## Copyright
