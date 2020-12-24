@@ -79,16 +79,12 @@ class SearchResultController < ApplicationController
   end
 
   def save_search_history(route, date, channel, user)
-    unless Rails.env.production?
-      return UserSearchHistory.create(
-        route_id: route.id,
-        departure_time: date,
-        channel: channel,
-        user: user
-      )
-    end
-
-    UserSearchHistoryWorker.perform_async(route, date, channel, user)
+    UserSearchHistory.create(
+      route_id: route.id,
+      departure_time: date,
+      channel: channel,
+      user: user
+    )
   end
 
   def get_flights(date, route, is_bot)
