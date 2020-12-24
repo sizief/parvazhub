@@ -8,7 +8,7 @@ class FlightResultTest < ActiveSupport::TestCase
   end
 
   test 'get' do
-    response = @flight_result.get
+    response = @flight_result.call
     assert response.is_a? Array
   end
 end

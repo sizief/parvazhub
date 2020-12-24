@@ -88,9 +88,9 @@ class SearchResultController < ApplicationController
   end
 
   def get_flights(date, route, is_bot)
-    return FlightResult.new(route, date).get_archive if is_bot
+    return FlightResult.new(route, date).archive if is_bot
 
-    date >= Date.today.to_s ? FlightResult.new(route, date).get : []
+    date >= Date.today.to_s ? FlightResult.new(route, date).call : []
   end
 
   def date_in_human(date)
