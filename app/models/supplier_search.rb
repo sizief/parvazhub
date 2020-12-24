@@ -33,7 +33,8 @@ class SupplierSearch
     end
     update_all_after_supplier_search
   rescue Timeout::Error
-    # do nothing
+    update_all_after_supplier_search
+    # kill threads
   rescue StandardError => e
     HandleError.call(e)
   end
@@ -48,7 +49,7 @@ class SupplierSearch
     end
     update_all_after_supplier_search
   rescue Timeout::Error
-    # do nothing
+    update_all_after_supplier_search
   rescue StandardError => e
     HandleError.call(e)
   end
