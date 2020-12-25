@@ -13,7 +13,7 @@ class SupplierSearch
     @search_flight = SearchFlightId.create(token: DateTime.now.strftime('%Q'))
   end
 
-  def search
+  def call
     search_supplier_in_threads
     # search_supplier_in_threads if Rails.env.production?
     # search_supplier_in_series if Rails.env.development?

@@ -19,7 +19,7 @@ class FlightResult
         date: date,
         timeout: timeout,
         search_initiator: 'user'
-      ).search
+      ).call
     end
     Flight.new.flight_list(route, date, result_time_to_live)
   end
