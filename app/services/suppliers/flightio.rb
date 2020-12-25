@@ -9,7 +9,7 @@ class Suppliers::Flightio < Suppliers::Base
       RestClient::Request.execute(
         method: :post,
         url: URL,
-        proxy: nil,
+        proxy: Proxy.fetch_path(supplier_name),
         headers: headers,
         payload: { "ValueObject": params.to_json.to_s }.to_json
       ).body

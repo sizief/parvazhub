@@ -11,11 +11,11 @@ class Proxy < ApplicationRecord
 
   GAP = 5
 
-  def self.fetch_path(supplier)
-    proxy = Proxy.new.upread(supplier)
+  def self.fetch_path(supplier_name)
+    proxy = Proxy.new.upread(supplier_name)
     return nil if proxy.nil?
 
-    "https://#{proxy.ip}:#{proxy.port}"
+    "http://#{proxy.ip}:#{proxy.port}"
   end
 
   # Each proxy should be used once in GAP second for each supplier
@@ -24,15 +24,15 @@ class Proxy < ApplicationRecord
   # find the random one which its last use is under GAP seconds.
   # Name is the combination of update + read :D 
   # The metadata property is updated every time this method is called.
-  def upread(supplier)
+  def upread(supplier_name)
     Proxy.transaction do
       proxies = Proxy.lock.enabled
       return nil if proxies.empty?
 
       proxies.shuffle.each do |proxy|
-        next if proxy.metadata[slug_for(supplier)] + GAP.seconds > Time.now
+        next if proxy.metadata[supplier_name] + GAP.seconds > Time.now
 
-        proxy.metadata[slug_for(supplier)] = Time.now
+        proxy.metadata[supplier_name] = Time.now
         proxy.save
         return proxy
       end
@@ -52,9 +52,5 @@ class Proxy < ApplicationRecord
     self.metadata = Supplier.all.each_with_object({}) do |sp, hsh|
       hsh[sp.name] = Time.now
     end
-  end
-
-  def slug_for(supplier)
-    supplier.name
   end
 end
