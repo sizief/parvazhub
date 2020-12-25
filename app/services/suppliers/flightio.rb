@@ -14,7 +14,8 @@ class Suppliers::Flightio < Suppliers::Base
         payload: { "ValueObject": params.to_json.to_s }.to_json
       ).body
     )
-  rescue JSON::ParserError => e
+  rescue *HTTP_ERRORS => e
+    HandleError.call(e)
     update_status(e)
     nil
   end

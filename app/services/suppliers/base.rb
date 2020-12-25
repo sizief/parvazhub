@@ -7,10 +7,13 @@ class Suppliers::Base
     EOFError,
     Errno::ECONNRESET,
     Errno::EINVAL,
+    Errno::ECONNREFUSED,
+    Errno::EHOSTUNREACH,
     Net::HTTPBadResponse,
     Net::HTTPHeaderSyntaxError,
     Net::ProtocolError,
-    Timeout::Error
+    Timeout::Error,
+    JSON::ParserError
   ].freeze
 
   def initialize(args)
