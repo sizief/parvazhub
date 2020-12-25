@@ -100,7 +100,6 @@ GEM
     erubi (1.9.0)
     et-orbi (1.2.2)
       tzinfo
-    excon (0.71.1)
     execjs (2.7.0)
     faraday (1.1.0)
       multipart-post (>= 1.2, < 3)
@@ -356,7 +355,6 @@ DEPENDENCIES
   coffee-rails
   devise
   dotenv-rails
-  excon
   foreman (~> 0.82.0)
   guard (= 2.13.0)
   guard-minitest (= 2.4.4)

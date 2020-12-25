@@ -1,13 +1,17 @@
 # frozen_string_literal: true
 
 class Suppliers::Flightio < Suppliers::Base
-  URL = ENV['URL_FLIGHTIO_DEEPLINK']
+  DEEPLINK = ENV['URL_FLIGHTIO_DEEPLINK']
+  URL = ENV['URL_FLIGHTIO_GET']
+
   def register_request
     JSON.parse(
-      Excon.post(
-        ENV['URL_FLIGHTIO_GET'],
-        body: { "ValueObject": params.to_json.to_s }.to_json,
-        headers: headers
+      RestClient::Request.execute(
+        method: :post,
+        url: URL,
+        proxy: nil,
+        headers: headers,
+        payload: { "ValueObject": params.to_json.to_s }.to_json
       ).body
     )
   rescue JSON::ParserError => e
@@ -20,9 +24,14 @@ class Suppliers::Flightio < Suppliers::Base
     return { status: false } if registered_request.nil? || !registered_request['IsSuccessful']
 
     request_id = registered_request['Data']
-    deep_link = "#{URL + request_id}&CombinationID="
+    deep_link = "#{DEEPLINK + request_id}&CombinationID="
     value = "/?value={%22FSL_Id%22:%22#{request_id}%22,%22PagingModel%22:{%22Page%22:1,%22Size%22:30,%22SortColumn%22:%22TotalChargeable%22,%22SortDirection%22:%220%22}}"
-    response = Excon.get(ENV['URL_FLIGHTIO_GET'] + value, headers: headers)
+    response = RestClient::Request.execute(
+      method: :get,
+      url: URL + value,
+      proxy: nil,
+      headers: headers
+    )
     { status: true, response: response.body, deeplink: deep_link }
   rescue *HTTP_ERRORS => e
     update_status(e.message)
