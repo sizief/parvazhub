@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class Suppliers::Trip < Suppliers::Base
-  require 'uri'
-  require 'rest-client'
-
   def send_request(_request_type, url, params)
     if Rails.env.test?
       return '{"success": true,"sid": "5a11518313fb7ae1cb2b4bb5"}'
@@ -56,17 +53,7 @@ class Suppliers::Trip < Suppliers::Base
 
     wait 25, search_id # seconds maximum
 
-    if Rails.env.test?
-      if Route.select(:international).find_by(origin: origin, destination: destination).international
-        file = 'international-trip.log'
-      else
-        file = 'domestic-trip.log'
-      end
-      response = File.read('test/fixtures/files/' + file)
-    else
-      response = send_request('post', url, params)
-    end
-
+    response = send_request('post', url, params)
     raw_response = response.nil? ? { status: false } : { status: true, response: response }
     raw_response
   end

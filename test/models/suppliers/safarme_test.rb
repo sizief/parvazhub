@@ -23,12 +23,14 @@ class SuppliersSafarmeTest < ActiveSupport::TestCase
   end
 
   test 'Safarme search should return Hash' do
+    skip
     response = @safarme.search_supplier
     assert response.is_a? Hash
     # assert_not response[:response].empty?
   end
 
   test 'Save flights to database' do
+    skip
     response = @safarme.search_supplier
     assert_difference 'Flight.count', 38 do
       @safarme.import_flights(response)
@@ -36,6 +38,7 @@ class SuppliersSafarmeTest < ActiveSupport::TestCase
   end
 
   test 'Save flight prices to database' do
+    skip
     response = @safarme.search_supplier
     assert_difference 'FlightPrice.count', 38 do
       @safarme.import_flights(response)
@@ -43,6 +46,7 @@ class SuppliersSafarmeTest < ActiveSupport::TestCase
   end
 
   test 'get airline code' do
+    skip
     sepehran_code = @safarme.get_airline_code('SPN')
     unknown_code = @safarme.get_airline_code('ali')
     assert_equal sepehran_code, 'SR'

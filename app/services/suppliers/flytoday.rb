@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class Suppliers::Flytoday < Suppliers::Base
-  require 'uri'
-  require 'rest-client'
-
   def get_params
     shamsi_date = JalaliDate.new(date.to_date).strftime '%Y-%m-%d'
     params = { 'OriginLocationCodes[0]' => origin.upcase.to_s,
@@ -19,22 +16,16 @@ class Suppliers::Flytoday < Suppliers::Base
   end
 
   def search_supplier
-    begin
-      url = ENV['URL_FLYTODAY_SEARCH']
-      if Rails.env.test?
-        response = mock_results
-      else
-        response = RestClient::Request.execute(method: :post,
+    url = ENV['URL_FLYTODAY_SEARCH']
+    response = RestClient::Request.execute(method: :post,
                                                url: URI.parse(url).to_s,
                                                payload: get_params,
                                                proxy: nil)
-        response = response.body
-      end
-    rescue StandardError => e
-      update_status(e.message)
-      return { status: false }
-    end
+    response = response.body
     { status: true, response: response }
+  rescue StandardError => e
+    update_status(e.message)
+    { status: false }
   end
 
   def import_flights(response)

@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class Suppliers::Safarme < Suppliers::Base
-  require 'uri'
-  require 'rest-client'
-
   @@api_site_id = ENV['URL_SAFARME_KEY']
 
   def get_params
@@ -19,22 +16,16 @@ class Suppliers::Safarme < Suppliers::Base
   end
 
   def search_supplier
-    begin
-      url = ENV['URL_SAFARME_SEARCH']
-      if Rails.env.test?
-        response = mock_results
-      else
-        response = RestClient::Request.execute(method: :post,
+    url = ENV['URL_SAFARME_SEARCH']
+    response = RestClient::Request.execute(method: :post,
                                                url: URI.parse(url).to_s,
                                                payload: get_params,
                                                proxy: nil)
-        response = response.body
-      end
-    rescue StandardError => e
-      update_status(e.message)
-      return { status: false }
-    end
+    response = response.body
     { status: true, response: response }
+  rescue StandardError => e
+    update_status(e.message)
+    return { status: false }
   end
 
   def prepare_response(response)

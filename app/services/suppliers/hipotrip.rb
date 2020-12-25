@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class Suppliers::Hipotrip < Suppliers::Base
-  require 'uri'
-  require 'rest-client'
-
   def get_params
     { "origin_destination": [{
       "origin": "AAP#{origin.upcase}",
@@ -17,46 +14,33 @@ class Suppliers::Hipotrip < Suppliers::Base
   end
 
   def register_search
-    begin
-      url = ENV['URL_HIPO_GET']
-      if Rails.env.test?
-        response = { "request_id": '2473e8fcbacf4722', "estimated_delay_time": 5, "interval": 2 }
-      else
-        response = RestClient::Request.execute(method: :post,
+    url = ENV['URL_HIPO_GET']
+    response = RestClient::Request.execute(method: :post,
                                                url: URI.parse(url).to_s,
                                                payload: get_params.to_json,
                                                proxy: nil,
                                                headers: { 'Content-Type': 'application/json' })
-        response = JSON.parse response.body
-      end
-    rescue StandardError => e
-      update_status(e.message)
-      raise 'first request error'
-    end
-    response
-    end
+    JSON.parse response.body
+  rescue StandardError => e
+    update_status(e.message)
+    raise 'first request error'
+  end
 
   def search_supplier
     results = register_search
 
-    begin
-      request_id = results['request_id']
-      url = ENV['URL_HIPO_SEARCH'] + request_id.to_s
-      if Rails.env.test?
-        response = mock_results
-      else
-        delay = results['estimated_delay_time'].to_f == 0 ? 5 : results['estimated_delay_time'].to_f
-        sleep delay
-        response = RestClient::Request.execute(method: :get,
+    request_id = results['request_id']
+    url = ENV['URL_HIPO_SEARCH'] + request_id.to_s
+    delay = results['estimated_delay_time'].to_f == 0 ? 5 : results['estimated_delay_time'].to_f
+    sleep delay
+    response = RestClient::Request.execute(method: :get,
                                                url: URI.parse(url).to_s,
                                                proxy: nil)
-        response = response.body
-      end
-    rescue StandardError => e
-      update_status(e.message)
-      return { status: false }
-    end
+    response = response.body
     { status: true, response: response }
+  rescue StandardError => e
+    update_status(e.message)
+    { status: false }
   end
 
   def import_flights(response)

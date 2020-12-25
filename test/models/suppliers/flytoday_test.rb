@@ -23,17 +23,20 @@ class SuppliersFlytodayTest < ActiveSupport::TestCase
   end
 
   test 'search supplier' do
+    skip
     response = @flytoday.search_supplier
     assert response.is_a? Hash
     assert_not response[:response].empty?
   end
 
   test 'get params' do
+    skip
     response = @flytoday.get_params
     assert response.is_a? Hash
   end
 
   test 'to minutes' do
+    skip
     time1 = @flytoday.to_minutes '03:30'
     time2 = @flytoday.to_minutes '3:30'
     time3 = @flytoday.to_minutes '3:00'
@@ -46,6 +49,7 @@ class SuppliersFlytodayTest < ActiveSupport::TestCase
   end
 
   test 'import flights' do
+    skip
     response = @flytoday.search_supplier
     assert_difference 'Flight.count', 267 do
       @flytoday.import_flights(response)
@@ -53,6 +57,7 @@ class SuppliersFlytodayTest < ActiveSupport::TestCase
   end
 
   test 'save flight prices' do
+    skip
     response = @flytoday.search_supplier
     assert_difference 'FlightPrice.count', 267 do
       @flytoday.import_flights(response)

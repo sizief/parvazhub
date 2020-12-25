@@ -41,15 +41,6 @@ class Suppliers::Base
     SearchFlightId.create(token: search_flight_token, flight_ids: flight_ids)
   end
 
-  def mock_results
-    file = if route.international
-             "international-#{supplier_name.downcase}.log"
-           else
-             "domestic-#{supplier_name.downcase}.log"
-           end
-    File.read('test/fixtures/files/' + file)
-  end
-
   def calculate_stopover_duration(departures, arrivals)
     duration = 0
     if departures.count > 1
