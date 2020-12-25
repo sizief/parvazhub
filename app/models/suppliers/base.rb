@@ -33,6 +33,8 @@ class Suppliers::Base
 
     flight_ids = import_flights(response)
     save_flight_ids flight_ids
+  rescue JSON::ParserError => e
+    update_status(e)
   end
 
   def save_flight_ids(flight_ids)
@@ -70,7 +72,7 @@ class Suppliers::Base
 
   def complete_import(flight_prices)
     if flight_prices.empty?
-      update_status("empty response")
+      update_status('empty response')
     else
       ActiveRecord::Base.connection_pool.with_connection do
         FlightPrice.import flight_prices, validate: false
@@ -79,7 +81,7 @@ class Suppliers::Base
     end
     ActiveRecord::Base.connection_pool.with_connection do
       search_history.set_success
-      update_status("done")
+      update_status('done')
     end
   end
 end

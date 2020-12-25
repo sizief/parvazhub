@@ -1,0 +1,123 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.flightio.com/api/SearchFlight
+    body:
+      encoding: UTF-8
+      string: '{"ValueObject":"{\"ADT\":1,\"CHD\":0,\"INF\":0,\"CabinType\":\"1\",\"flightType\":\"2\",\"tripMode\":\"1\",\"DestinationInformationList\":[{\"DepartureDate\":\"T00:00:00\",\"DestinationLocationAirPortCode\":\"MHD\",\"DestinationLocationAllAirport\":true,\"DestinationLocationCityCode\":\"MHD\",\"Index\":1,\"OriginLocationAirPortCode\":\"THR\",\"OriginLocationAllAirport\":true,\"OriginLocationCityCode\":\"THR\"}]}"}'
+    headers:
+      Fuser:
+      - FlightioAppAndroid
+      Fpass:
+      - Pw4FlightioAppAndroid
+      Fapiversion:
+      - '1.1'
+      Content-Type:
+      - application/json
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '143'
+      Connection:
+      - keep-alive
+      Vary:
+      - Accept-Encoding, Accept-Encoding
+      Date:
+      - Fri, 25 Dec 2020 18:15:41 GMT
+      Cache-Control:
+      - max-age=0
+      Pragma:
+      - no-cache
+      Expires:
+      - Fri, 25 Dec 2020 18:15:41 GMT
+      Fsession:
+      - a30ecc68-a7e0-41d6-9a6a-4ce7fe642ea0
+      X-Aspnet-Version:
+      - 4.0.30319
+      Server:
+      - ArvanCloud
+      X-Xss-Protection:
+      - 1; mode=block
+      Ar-Poweredby:
+      - Arvan Cloud (arvancloud.com)
+      Ar-Atime:
+      - '0.362'
+      Ar-Request-Id:
+      - 1583aa36b9135241e2ae7db56ac117e9
+      Ar-Sid:
+      - '6100'
+      Accept-Ranges:
+      - bytes
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        eyJEYXRhIjoiMDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAwIiwiTWVzc2FnZUNvZGUiOm51bGwsIkVuZFVzZXJNZXNzYWdlIjoi2K7Yt9in24wg2LPZhdiqINiz2LHZiNixLiIsIlN0YXR1cyI6NCwiSXNTdWNjZXNzZnVsIjpmYWxzZX0=
+  recorded_at: Fri, 25 Dec 2020 18:15:41 GMT
+- request:
+    method: get
+    uri: https://api.flightio.com/api/SearchFlight/?value=%7B%22FSL_Id%22:%2200000000-0000-0000-0000-000000000000%22,%22PagingModel%22:%7B%22Page%22:1,%22Size%22:30,%22SortColumn%22:%22TotalChargeable%22,%22SortDirection%22:%220%22%7D%7D
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Fuser:
+      - FlightioAppAndroid
+      Fpass:
+      - Pw4FlightioAppAndroid
+      Fapiversion:
+      - '1.1'
+      Content-Type:
+      - application/json
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '203'
+      Connection:
+      - keep-alive
+      Vary:
+      - Accept-Encoding, Accept-Encoding
+      Date:
+      - Fri, 25 Dec 2020 18:15:43 GMT
+      Cache-Control:
+      - max-age=0
+      Pragma:
+      - no-cache
+      Expires:
+      - Fri, 25 Dec 2020 18:15:43 GMT
+      Fsession:
+      - ebdd3fc6-cc4c-411f-ada2-ce5ec12b4c38
+      X-Aspnet-Version:
+      - 4.0.30319
+      Server:
+      - ArvanCloud
+      X-Xss-Protection:
+      - 1; mode=block
+      Ar-Cache:
+      - BYPASS
+      Ar-Poweredby:
+      - Arvan Cloud (arvancloud.com)
+      Ar-Atime:
+      - '0.378'
+      Ar-Request-Id:
+      - cdfdd7e07c7647e99f2ed907529de239
+      Ar-Sid:
+      - '6100'
+      Accept-Ranges:
+      - bytes
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        eyJGbGlnaHRTZWFyY2hMb2dfSWQiOm51bGwsIlBhc3NlbmdlckNvdW50IjowLCJJU0NfSWQiOm51bGwsIkZsaWdodFR5cGUiOjAsIlRyaXBNb2RlIjowLCJSZXN1bHRNb2RlbCI6bnVsbCwiTWVzc2FnZUNvZGUiOm51bGwsIkVuZFVzZXJNZXNzYWdlIjoi2K7Yt9in24wg2LPZhdiqINiz2LHZiNixLiIsIlN0YXR1cyI6NiwiSXNTdWNjZXNzZnVsIjpmYWxzZX0=
+  recorded_at: Fri, 25 Dec 2020 18:15:43 GMT
+recorded_with: VCR 6.0.0

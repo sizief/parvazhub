@@ -10,10 +10,16 @@ class Suppliers::Flightio < Suppliers::Base
         headers: headers
       ).body
     )
+  rescue JSON::ParserError => e
+    update_status(e)
+    nil
   end
 
   def search_supplier
-    request_id = register_request['Data']
+    registered_request = register_request
+    return { status: false } if registered_request.nil? || !registered_request['IsSuccessful']
+
+    request_id = registered_request['Data']
     deep_link = "#{URL + request_id}&CombinationID="
     value = "/?value={%22FSL_Id%22:%22#{request_id}%22,%22PagingModel%22:{%22Page%22:1,%22Size%22:30,%22SortColumn%22:%22TotalChargeable%22,%22SortDirection%22:%220%22}}"
     response = Excon.get(ENV['URL_FLIGHTIO_GET'] + value, headers: headers)
