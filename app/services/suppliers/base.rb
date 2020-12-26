@@ -17,7 +17,8 @@ class Suppliers::Base
     Net::ProtocolError,
     Timeout::Error,
     JSON::ParserError,
-    RestClient::Forbidden
+    RestClient::Forbidden,
+    RestClient::Unauthorized
   ].freeze
 
   def initialize(args)
