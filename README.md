@@ -36,14 +36,21 @@ For login go to `/users/sign_in`, then for admin access grant access by doing `u
 To see and store logs in production, uncomment `config/puma.rb` log line.
 
 For console do `bundle exec rails c -e production` in /var/www/parvazhub/current
+For some reasons, `assets:precompile` does not add font folder to the public/assets. cp them manually from `/app/assets/fonts` to `/public/assets/fonts`
 
 ## TEST and CI/CD
 Every commit on the master would triggers a [build](https://travis-ci.org/github/sizief/parvazhub/builds/). All .env values are also copied into Travis too. Then the copistrano app would deploy it to the server is tests passes.
 
 ## TODO
-- remove allow origin for all in api
-- proxies
-- community for reviewers
++ name | impact 10 high | how hard 10 high = overall
+- proxies | 9 | 2 = 4.5
+- fetch and show airplane type | 9 | 4 = 2.25
+- add more prices | 8 | 4 = 2
+- fix the showing old data prices bug | 8 | 5 = 1.6
+- show progress | 9 | 6 = 1.5
+- add photos of the airplane by passengers | 7 | 5 = 1.4
+- community for reviewers | 4 | 6 = 0.7
+- remove allow origin for all in api | 0 | 1 = 0
 
 ## Copyright
 Do whatever you want. Just don't harm people.
