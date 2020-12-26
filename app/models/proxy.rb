@@ -9,7 +9,7 @@ class Proxy < ApplicationRecord
   serialize :metadata, Hash
   before_create :add_metadata
 
-  GAP = 5
+  GAP = 10
 
   def self.fetch_path(supplier_name)
     proxy = Proxy.new.upread(supplier_name)

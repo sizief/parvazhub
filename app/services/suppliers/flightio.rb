@@ -5,11 +5,12 @@ class Suppliers::Flightio < Suppliers::Base
   URL = ENV['URL_FLIGHTIO_GET']
 
   def register_request
+    update_status("using proxy: #{proxy}") unless proxy.nil?
     JSON.parse(
       RestClient::Request.execute(
         method: :post,
         url: URL,
-        proxy: Proxy.fetch_path(supplier_name),
+        proxy: nil,
         headers: headers,
         payload: { "ValueObject": params.to_json.to_s }.to_json
       ).body
@@ -24,6 +25,7 @@ class Suppliers::Flightio < Suppliers::Base
     registered_request = register_request
     return { status: false } if registered_request.nil? || !registered_request['IsSuccessful']
 
+    update_status("using proxy: #{proxy}") unless proxy.nil?
     request_id = registered_request['Data']
     deep_link = "#{DEEPLINK + request_id}&CombinationID="
     value = "/?value={%22FSL_Id%22:%22#{request_id}%22,%22PagingModel%22:{%22Page%22:1,%22Size%22:30,%22SortColumn%22:%22TotalChargeable%22,%22SortDirection%22:%220%22}}"
@@ -120,5 +122,9 @@ class Suppliers::Flightio < Suppliers::Base
       # "connection": 'close',
       # "Accept-Encoding": 'gzip'
     }
+  end
+
+  def proxy
+    @proxy ||= Proxy.fetch_path(supplier_name)
   end
 end

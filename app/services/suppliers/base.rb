@@ -9,11 +9,15 @@ class Suppliers::Base
     Errno::EINVAL,
     Errno::ECONNREFUSED,
     Errno::EHOSTUNREACH,
+    Errno::EACCES,
+    Errno::EFAULT,
+    Errno::ENOENT,
     Net::HTTPBadResponse,
     Net::HTTPHeaderSyntaxError,
     Net::ProtocolError,
     Timeout::Error,
-    JSON::ParserError
+    JSON::ParserError,
+    RestClient::Forbidden
   ].freeze
 
   def initialize(args)
