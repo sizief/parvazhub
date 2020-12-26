@@ -100,8 +100,7 @@
 												<span class="ui tiny rating">
 											    </span>
 												<span class="sub header" style="margin-top: 7px">
-													<span class="nm"><%= flight[:flight_number].split(",").first %></span>
-													<span class="mobile-only"><%= flight[:airplane_type].blank? ? "" : airplane_name_for(flight[:airplane_type]) %></span>													
+  <%= flight[:flight_number].split(",").first %></span>
 												</span>
 											</span>
 										</h5>
@@ -124,12 +123,18 @@
 						</td>
 						<td>
 							<div class="content" style="font-size: 0.9em;color: #1d1c1c;">
-								<i class="plane grey icon"></i>	
-								<%= hour_to_human flight[:departure_time].to_datetime.strftime("%H:%M") %>  
+<i class="plane grey icon"></i>	
+<%= hour_to_human flight[:departure_time].to_datetime.strftime("%H:%M") %>  
+    <span class="mobile-only">
+      <%= flight[:airplane_type].blank? ? "" : airplane_name_for(flight[:airplane_type]) %>
+    </span>	
 								<% unless flight[:arrival_date_time].nil? %>
 									<div style="width:100%; margin-top:5px;border-top: 1px dashed #eee;padding-top:6px;">
 										<i class="vertically flipped plane  grey icon"></i>
 										<%= hour_to_human flight[:arrival_date_time].to_datetime.strftime("%H:%M")  %>
+    <span class="mobile-only">
+      <%= flight[:airplane_type].blank? ? "" : airplane_name_for(flight[:airplane_type]) %>
+    </span>	
 									</div>
 								<% end %>
 				            	<div class="sub header" style="margin-top: 7px;color: gray;font-size: 0.8em;">
@@ -160,7 +165,7 @@
 							
 							<div class="suppliers-count">	
 								<a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight[:id]) %>" data-remote="false" style="color:black">	
-									 ارزان‌ترین قیمت بلیط از <b><%= flight[:supplier_count] %></b> سایت 
+									 ارزان‌ترین  بلیط از <b><%= flight[:supplier_count] %></b> سایت 
 								</a>
 							</div>
 						</td>
