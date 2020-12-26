@@ -33,6 +33,7 @@ gem 'sentry-ruby'
 gem 'sidekiq'
 gem 'sidekiq-scheduler'
 gem 'sidekiq-status'
+gem 'sprockets', '4.0.2'
 gem 'turbolinks', '5.0.1'
 gem 'uglifier', '3.0.0'
 
