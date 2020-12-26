@@ -10,13 +10,12 @@ class Suppliers::Flightio < Suppliers::Base
       RestClient::Request.execute(
         method: :post,
         url: URL,
-        proxy: nil,
+        proxy: proxy,
         headers: headers,
         payload: { "ValueObject": params.to_json.to_s }.to_json
       ).body
     )
   rescue *HTTP_ERRORS => e
-    HandleError.call(e)
     update_status(e)
     nil
   end
@@ -32,13 +31,12 @@ class Suppliers::Flightio < Suppliers::Base
     response = RestClient::Request.execute(
       method: :get,
       url: URL + value,
-      proxy: nil,
+      proxy: proxy,
       headers: headers
     )
     { status: true, response: response.body, deeplink: deep_link }
   rescue *HTTP_ERRORS => e
     update_status(e)
-    HandleError.call(e)
     { status: false }
   end
 

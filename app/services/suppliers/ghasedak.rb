@@ -13,7 +13,6 @@ class Suppliers::Ghasedak < Suppliers::Base
     { status: true, response: response.body }
   rescue *HTTP_ERRORS => e
     update_status(e.message)
-    HandleError.call(e)
     { status: false }
   end
 

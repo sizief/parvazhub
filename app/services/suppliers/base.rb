@@ -41,7 +41,8 @@ class Suppliers::Base
 
     flight_ids = import_flights(response)
     save_flight_ids flight_ids
-  rescue JSON::ParserError => e
+  rescue StandardError => e
+    HandleError.call(e)
     update_status(e)
   end
 

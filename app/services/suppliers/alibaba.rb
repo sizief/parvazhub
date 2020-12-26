@@ -13,7 +13,6 @@ class Suppliers::Alibaba < Suppliers::Base
     { status: true, response: full_response(token) }
   rescue *HTTP_ERRORS => e
     update_status(e.message)
-    HandleError.call(e)
     { status: false }
   end
 
@@ -84,7 +83,6 @@ class Suppliers::Alibaba < Suppliers::Base
     JSON.parse(res)['result']['requestId'] if res
   rescue *HTTP_ERRORS => e
     update_status(e.message)
-    HandleError.call(e)
     false
   end
 
@@ -101,5 +99,4 @@ class Suppliers::Alibaba < Suppliers::Base
       returnDate: nil
     }
   end
-
 end
