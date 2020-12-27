@@ -5,37 +5,33 @@ require 'test_helper'
 class FlightTest < ActiveSupport::TestCase
   def setup
     @route = Route.first
-    # @flight = Flight.new(route_id: "#{@route.id}",flight_number: "w5717", departure_time:"11:22:00", airline_code: "w5")
-    @flight = @route.flights.build(flight_number: 'w57171', departure_time: '11:22:00', airline_code: 'w5')
-    @new_flight = Flight.new
-    @date = Date.today.to_s
+    @now = Time.now
+    @flight = Flight.create(route: @route, flight_number: 'w57171', departure_time: @now, airline_code: 'w5')
   end
 
   test 'Flight number should be unique' do
-    @flight.save
-    # @second_flight = Flight.new(route_id: "15",flight_number: "w5717", departure_time:"11:22:00", airline_code: "w5")
-    @second_flight = @route.flights.build(flight_number: 'w57171', departure_time: '11:22:00', airline_code: 'w5')
-    assert_not @second_flight.valid?
+    second_flight = Flight.create(route: @route, flight_number: 'w57171', departure_time: @now, airline_code: 'w5')
+    assert_not second_flight.valid?
   end
 
   test 'airline_call_sign' do
     exist_airline_code = 'W5'
     non_exist_airline_code = 'TR'
-    assert_equal @new_flight.airline_call_sign(exist_airline_code), 'IRM'
-    assert_equal @new_flight.airline_call_sign(non_exist_airline_code), non_exist_airline_code
+    assert_equal Flight.new.airline_call_sign(exist_airline_code), 'IRM'
+    assert_equal Flight.new.airline_call_sign(non_exist_airline_code), non_exist_airline_code
   end
 
   test 'flight list' do
-    allow_time = 20
-    flight_list = @new_flight.flight_list(@route, @date, allow_time.to_f.minutes.ago)
-    assert !!flight_list
-    assert flight_list.is_a? Array
+    FlightPrice.create(flight: @flight, price: 100)
+    flight_list = Flight.new.for(route: @route, date: @now.to_date.to_s)
+
+    assert flight_list.count.positive?
   end
 
   test 'get_call_sign should return call sign' do
     flight_number = 'IR213'
     airline_code = 'IR'
-    call_sign = @new_flight.get_call_sign(flight_number, airline_code)
+    call_sign = Flight.new.get_call_sign(flight_number, airline_code)
     assert_equal call_sign, 'IRA213'
   end
 end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Suppliers::Base
-  attr_reader :origin, :destination, :date, :search_history, :supplier_name, :route, :search_flight_token
+  attr_reader :origin, :destination, :date, :search_history, :supplier_name, :route
 
   HTTP_ERRORS = [
     EOFError,
@@ -26,7 +26,6 @@ class Suppliers::Base
     destination:,
     date:,
     search_history:,
-    search_flight_token:,
     supplier_name:,
     route:
   )
@@ -34,28 +33,22 @@ class Suppliers::Base
     @destination = destination
     @date = date
     @search_history = search_history
-    @search_flight_token = search_flight_token
     @supplier_name = supplier_name
     @route = route
   end
 
   def search
     ActiveRecord::Base.connection_pool.with_connection do
-      FlightPrice.delete_old_flight_prices(supplier_name.downcase, route.id, date)
+      FlightPrice.delete_old_flight_prices(route, date)
     end
 
     response = search_supplier
     return unless response[:status]
 
-    flight_ids = import_flights(response)
-    save_flight_ids flight_ids
+    import_flights(response)
   rescue StandardError => e
     HandleError.call(e)
     update_status(e)
-  end
-
-  def save_flight_ids(flight_ids)
-    SearchFlightId.create(token: search_flight_token, flight_ids: flight_ids)
   end
 
   def calculate_stopover_duration(departures, arrivals)
@@ -82,14 +75,26 @@ class Suppliers::Base
     if flight_prices.empty?
       update_status('empty response')
     else
+      unique_fps = remove_duplicate(flight_prices)
       ActiveRecord::Base.connection_pool.with_connection do
-        FlightPrice.import flight_prices, validate: false
-        FlightPriceArchive.archive flight_prices
+        FlightPrice.import unique_fps, validate: false
+        FlightPriceArchive.archive unique_fps
       end
     end
     ActiveRecord::Base.connection_pool.with_connection do
       search_history.set_success
       update_status('done')
     end
+  end
+
+  def remove_duplicate(flight_prices)
+    unique_fps = []
+    flight_prices.each do |fp|
+      duplicate = unique_fps.select { |u| u.supplier == fp.supplier and u.flight_id == fp.flight_id }
+      next if duplicate.count.positive?
+
+      unique_fps << fp
+    end
+    unique_fps
   end
 end

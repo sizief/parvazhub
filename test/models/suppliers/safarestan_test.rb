@@ -17,7 +17,6 @@ class SuppliersSafarestanTest < ActiveSupport::TestCase
       route: route,
       date: date,
       search_history: search_history.id,
-      search_flight_token: search_flight_token,
       supplier_name: supplier_name
     )
   end

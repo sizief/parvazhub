@@ -54,7 +54,6 @@ class Suppliers::Ghasedak < Suppliers::Base
     end
 
     complete_import(flight_prices)
-    flight_ids
   end
 
   def get_airline_code(airline_code)

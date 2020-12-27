@@ -1,19 +1,67 @@
 # frozen_string_literal: true
 
 class Flight < ApplicationRecord
-  # validates :flight_number, :uniqueness => { :scope => :departure_time,:message => "already saved" }
   validates_uniqueness_of :route_id, scope: %i[flight_number departure_time]
 
-  # validates :route_id, presence: true
   belongs_to :route
   has_many :flight_prices
   has_one :flight_info
 
-  attr_accessor :suppliers_count
-  attr_accessor :airline_persian_name
-  attr_accessor :airline_english_name
-  attr_accessor :airline_rate_average
-  attr_accessor :best_price_dollar
+  def list(route, date)
+    route
+      .flights
+      .includes(:flight_prices)
+      .where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s)
+      .where.not(airline_code: nil)
+      .where.not(airline_code: '')
+      .order(:best_price)
+  end
+
+  def for(route:, date:, allow_with_old_price: false)
+    airline_list = Airline.list
+    responses = []
+
+    list(route, date).each do |flight|
+      next if allow_with_old_price || flight.flight_prices.count.zero?
+
+      response = {}
+      response[:id] = flight.id
+      response[:flight_number] = flight.flight_number
+      response[:departure_time] = flight.departure_time
+      response[:best_price] = flight.best_price
+      response[:best_price_dollar] = to_dollar(flight.best_price)
+      response[:price_by] = flight.price_by
+      response[:arrival_date_time] = flight.arrival_date_time
+      response[:trip_duration] = flight.trip_duration
+      response[:stops] = flight.stops
+
+      response[:supplier_count] = flight.flight_prices.count
+      response[:airline_code] = flight.airline_code.split(',')[0]
+      flight.airline_code = flight.airline_code.split(',').first # get first flight for multipart flights
+
+      # temp_airline_code = flight.airline_code.nil? ? "empty" : flight.airline_code
+      if airline_list[flight.airline_code.to_sym].nil?
+        response[:airline_english_name] = flight.airline_code
+        response[:airline_persian_name] = flight.airline_code
+        response[:airline_rate_average] = 0
+      else
+        response[:airline_english_name] = airline_list[flight.airline_code.to_sym][:english_name]
+        response[:airline_persian_name] = airline_list[flight.airline_code.to_sym][:persian_name]
+        response[:airline_rate_average] = airline_list[flight.airline_code.to_sym][:rate_average].nil? ? 0 : airline_list[flight.airline_code.to_sym][:rate_average]
+      end
+
+      if flight.airplane_type.blank?
+        unless flight.flight_info.nil?
+          response[:airplane_type] = flight.flight_info.airplane
+        end
+      else
+        response[:airplane_type] = flight.airplane_type
+      end
+
+      responses << response
+    end
+    responses
+  end
 
   def self.create_or_find_flight(route_id, flight_number, departure_time, airline_code, airplane_type, arrival_date_time = nil, stops = nil, trip_duration = nil)
     ActiveRecord::Base.connection_pool.with_connection do
@@ -25,7 +73,6 @@ class Flight < ApplicationRecord
       rescue StandardError
         flight = Flight.find_by(route_id: route_id, flight_number: flight_number, departure_time: departure_time)
       end
-      binding.pry if flight.nil?
       flight.id
     end
   end
@@ -43,10 +90,6 @@ class Flight < ApplicationRecord
       end
       flight.save
     end
-  end
-
-  def self.update_flight_price_count(flight_ids)
-    flight_ids.each { |flight_id| Flight.reset_counters(flight_id, :flight_prices) }
   end
 
   def get_lowest_price_timetable(origin, destination, date)
@@ -119,57 +162,6 @@ class Flight < ApplicationRecord
     airlines[airline_code].nil? ? airline_code : airlines[airline_code]
   end
 
-  def flight_list(route, date, result_time_to_live)
-    airline_list = Airline.list
-    responses = []
-    flight_list = route.flights.includes(:flight_info)
-                       .where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s)
-                       .where.not(best_price: 0)
-                       .where.not(airline_code: nil)
-                       .where.not(airline_code: '')
-                       .where('updated_at >= ?', result_time_to_live)
-                       .order(:best_price)
-
-    flight_list.each do |flight|
-      response = {}
-      response[:id] = flight.id
-      response[:flight_number] = flight.flight_number
-      response[:departure_time] = flight.departure_time
-      response[:best_price] = flight.best_price
-      response[:best_price_dollar] = to_dollar(flight.best_price)
-      response[:price_by] = flight.price_by
-      response[:arrival_date_time] = flight.arrival_date_time
-      response[:trip_duration] = flight.trip_duration
-      response[:stops] = flight.stops
-
-      response[:supplier_count] = flight.flight_prices_count
-      response[:airline_code] = flight.airline_code.split(',')[0]
-      flight.airline_code = flight.airline_code.split(',').first # get first flight for multipart flights
-
-      # temp_airline_code = flight.airline_code.nil? ? "empty" : flight.airline_code
-      if airline_list[flight.airline_code.to_sym].nil?
-        response[:airline_english_name] = flight.airline_code
-        response[:airline_persian_name] = flight.airline_code
-        response[:airline_rate_average] = 0
-      else
-        response[:airline_english_name] = airline_list[flight.airline_code.to_sym][:english_name]
-        response[:airline_persian_name] = airline_list[flight.airline_code.to_sym][:persian_name]
-        response[:airline_rate_average] = airline_list[flight.airline_code.to_sym][:rate_average].nil? ? 0 : airline_list[flight.airline_code.to_sym][:rate_average]
-      end
-
-      if flight.airplane_type.blank?
-        unless flight.flight_info.nil?
-          response[:airplane_type] = flight.flight_info.airplane
-        end
-      else
-        response[:airplane_type] = flight.airplane_type
-      end
-
-      responses << response
-    end
-    responses
-  end
-
   def get_call_sign(flight_number, airline_code)
     flight_number.upcase.sub airline_code.upcase, airline_call_sign(airline_code)
   end
@@ -179,4 +171,6 @@ class Flight < ApplicationRecord
   def to_dollar(amount)
     Currency.new.to_dollar amount
   end
+  
+  attr_accessor :suppliers_count, :airline_persian_name, :airline_english_name, :airline_rate_average, :best_price_dollar
 end

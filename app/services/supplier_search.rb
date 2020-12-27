@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SupplierSearch
-  attr_reader :origin, :destination, :date, :timeout, :search_initiator, :route, :search_flight_token
+  attr_reader :origin, :destination, :date, :timeout, :search_initiator, :route
 
   def initialize(args)
     @origin = args[:origin]
@@ -10,7 +10,6 @@ class SupplierSearch
     @timeout = args[:timeout]
     @search_initiator = args[:search_initiator]
     @route = Route.find_by(origin: origin, destination: destination)
-    @search_flight_token = DateTime.now.strftime('%Q')
   end
 
   def call
@@ -31,9 +30,9 @@ class SupplierSearch
       end
       threads.each(&:join)
     end
-    update_all_after_supplier_search
+    post_search_action
   rescue Timeout::Error
-    update_all_after_supplier_search
+    post_search_action
     # kill threads
   rescue StandardError => e
     HandleError.call(e)
@@ -55,11 +54,7 @@ class SupplierSearch
   end
 
   def post_search_action
-    merge_and_update_all(
-      SearchFlightId.ids(
-        search_flight_token
-      )
-    )
+    Flight.update_best_price route, date
   end
 
   def suppliers
@@ -68,11 +63,6 @@ class SupplierSearch
     return suppliers.where(job_search_allowed: true) if search_initiator == 'job_search'
 
     suppliers
-  end
-
-  def merge_and_update_all(flight_ids)
-    Flight.update_best_price route, date
-    Flight.update_flight_price_count flight_ids
   end
 
   def search_supplier(supplier_name, supplier_class)
@@ -92,7 +82,6 @@ class SupplierSearch
       route: route,
       date: date,
       search_history: search_history,
-      search_flight_token: search_flight_token,
       supplier_name: supplier_name
     ).search
   end

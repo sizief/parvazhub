@@ -17,7 +17,6 @@ class SuppliersFlightioTest < ActiveSupport::TestCase
       route: @route,
       date: @date,
       search_history: @search_history,
-      search_flight_token: @search_flight_token,
       supplier_name: @supplier_name
     )
   end
@@ -56,7 +55,6 @@ class SuppliersFlightioTest < ActiveSupport::TestCase
       route: @route,
       date: nil, # this should cases an error
       search_history: @search_history,
-      search_flight_token: @search_flight_token,
       supplier_name: @supplier_name
     )
     VCR.use_cassette('flightio-register-request') do

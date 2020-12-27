@@ -9,8 +9,6 @@ class FlightResult
   end
 
   def call
-    result_time_to_live = allow_response_time(date)
-
     if !response_available? && (date >= Date.today.to_s)
       timeout = route.international? ? ENV['TIMEOUT_INTERNATIONAL'].to_i : ENV['TIMEOUT_DOMESTIC'].to_i
       SupplierSearch.new(
@@ -21,11 +19,11 @@ class FlightResult
         search_initiator: 'user'
       ).call
     end
-    Flight.new.flight_list(route, date, result_time_to_live)
+    Flight.new.for(route: route, date: date)
   end
 
   def archive
-    Flight.new.flight_list(route, date, 1440.to_f.minutes.ago)
+    Flight.new.for(route: route, date: date, allow_with_old_price: true)
   end
 
   def get_flight_price(flight)

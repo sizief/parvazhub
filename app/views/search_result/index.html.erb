@@ -123,7 +123,7 @@
 						</td>
 						<td>
 							<div class="content" style="font-size: 0.9em;color: #1d1c1c;">
-<i class="plane grey icon"></i>	
+<i class="clock outline grey icon"></i>	
 <%= hour_to_human flight[:departure_time].to_datetime.strftime("%H:%M") %>  
     <span class="mobile-only">
       <%= flight[:airplane_type].blank? ? "" : airplane_name_for(flight[:airplane_type]) %>
@@ -148,7 +148,7 @@
 						<% end %>	
 						</td>
 						<td class="nm">
-							<%= flight[:airplane_type].blank? ? "-" : airplane_name_for(flight[:airplane_type]) %>
+							<%= flight[:airplane_type].blank? ? "" : airplane_name_for(flight[:airplane_type]) %>
 							
 							
 						</td>
@@ -164,8 +164,9 @@
 							</a>
 							
 							<div class="suppliers-count">	
-								<a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight[:id]) %>" data-remote="false" style="color:black">	
-									 ارزان‌ترین  بلیط از <b><%= flight[:supplier_count] %></b> سایت 
+                                                          <a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight[:id]) %>" data-remote="false" style="color:black">
+                                                            بهترین قیمت از <%= flight[:supplier_count] %> سایت 
+        
 								</a>
 							</div>
 						</td>

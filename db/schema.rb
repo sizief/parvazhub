@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_20_222108) do
+ActiveRecord::Schema.define(version: 2020_12_27_095753) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -210,12 +210,6 @@ ActiveRecord::Schema.define(version: 2020_12_20_222108) do
     t.datetime "updated_at", null: false
     t.boolean "international"
     t.index ["origin", "destination"], name: "index_routes_on_origin_and_destination"
-  end
-
-  create_table "search_flight_ids", id: :serial, force: :cascade do |t|
-    t.text "flight_ids"
-    t.string "token"
-    t.index ["token"], name: "index_search_flight_ids_on_token"
   end
 
   create_table "search_histories", id: :serial, force: :cascade do |t|

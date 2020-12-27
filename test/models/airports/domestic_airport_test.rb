@@ -16,17 +16,4 @@ class AirportsDomesticAirportTest < ActiveSupport::TestCase
   test 'should retrun date time' do
     assert @airport.get_date_time('جمعه', '05:00').is_a? DateTime
   end
-
-  test 'get_english_name should return name day' do
-    day = @airport.get_english_name 'یک شنبه'
-    assert day = 'sunday'
-  end
-
-  test 'Airports data should saved to flight details' do
-    Airports::DomesticAirport.airports.each do |airport|
-      assert_difference 'FlightDetail.count', airport[2] do
-        @airport.import(airport[0], airport[1])
-      end
-    end
-  end
 end
