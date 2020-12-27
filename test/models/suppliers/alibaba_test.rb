@@ -16,7 +16,7 @@ class SuppliersAlibabaTest < ActiveSupport::TestCase
       destination: destination,
       route: route,
       date: date,
-      search_history_id: search_history.id,
+      search_history: search_history,
       search_flight_token: search_flight_token,
       supplier_name: supplier_name
     )

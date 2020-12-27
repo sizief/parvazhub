@@ -171,7 +171,7 @@ class Flight < ApplicationRecord
   end
 
   def get_call_sign(flight_number, airline_code)
-    call_sign = flight_number.upcase.sub airline_code.upcase, airline_call_sign(airline_code)
+    flight_number.upcase.sub airline_code.upcase, airline_call_sign(airline_code)
   end
 
   private

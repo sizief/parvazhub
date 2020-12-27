@@ -21,14 +21,22 @@ class Suppliers::Base
     RestClient::Unauthorized
   ].freeze
 
-  def initialize(args)
-    @origin = args[:origin]
-    @destination = args[:destination]
-    @date = args[:date]
-    @search_history = SearchHistory.find(args[:search_history_id])
-    @search_flight_token = args[:search_flight_token]
-    @supplier_name = args[:supplier_name]
-    @route = args[:route]
+  def initialize(
+    origin:,
+    destination:,
+    date:,
+    search_history:,
+    search_flight_token:,
+    supplier_name:,
+    route:
+  )
+    @origin = origin
+    @destination = destination
+    @date = date
+    @search_history = search_history
+    @search_flight_token = search_flight_token
+    @supplier_name = supplier_name
+    @route = route
   end
 
   def search

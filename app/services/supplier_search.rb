@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SupplierSearch
-  attr_reader :origin, :destination, :date, :timeout, :search_initiator, :route, :search_flight
+  attr_reader :origin, :destination, :date, :timeout, :search_initiator, :route, :search_flight_token
 
   def initialize(args)
     @origin = args[:origin]
@@ -10,7 +10,7 @@ class SupplierSearch
     @timeout = args[:timeout]
     @search_initiator = args[:search_initiator]
     @route = Route.find_by(origin: origin, destination: destination)
-    @search_flight = SearchFlightId.create(token: DateTime.now.strftime('%Q'))
+    @search_flight_token = DateTime.now.strftime('%Q')
   end
 
   def call
@@ -56,11 +56,11 @@ class SupplierSearch
 
   def update_all_after_supplier_search
     merge_and_update_all(
-      SearchFlightId.get_ids(
-        search_flight.token
+      SearchFlightId.ids(
+        search_flight_token
       )
     )
-    SearchFlightId.where(token: search_flight.token).delete_all
+    SearchFlightId.where(token: search_flight_token).delete_all
   end
 
   def suppliers
@@ -72,7 +72,7 @@ class SupplierSearch
   end
 
   def merge_and_update_all(flight_ids)
-    update_flight_best_price
+    Flight.update_best_price route, date
     Flight.update_flight_price_count flight_ids
   end
 
@@ -92,13 +92,9 @@ class SupplierSearch
       destination: destination,
       route: route,
       date: date,
-      search_history_id: search_history.id,
-      search_flight_token: search_flight.token,
+      search_history: search_history,
+      search_flight_token: search_flight_token,
       supplier_name: supplier_name
     ).search
-  end
-
-  def update_flight_best_price
-    Flight.update_best_price route, date
   end
 end

@@ -17,7 +17,7 @@ db/test
 /tmp/pids/*
 !/log/.keep
 !/tmp/.keep
-
+temp
 # Ignore Byebug command history file.
 .byebug_history
 
