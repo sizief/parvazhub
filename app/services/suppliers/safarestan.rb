@@ -21,33 +21,20 @@ class Suppliers::Safarestan < Suppliers::Base
 
   def import_flights(response)
     flight_id = nil
-    flight_prices = []
-    flight_ids = []
-
     json_response = decode(JSON.parse(response[:response]))
+
     json_response[0..ENV['MAX_NUMBER_FLIGHT'].to_i].each do |flight|
       leg_data = prepare flight
       flight_id = find_flight_id leg_data, route.id
 
       next if leg_data.nil? || flight_id.nil?
 
-      flight_ids << flight_id
-
       price = (flight['singleAdultFinalPrice'] / 10).to_i
 
-      flight_price_so_far = flight_prices.select { |flight_price| flight_price.flight_id == flight_id }
-      unless flight_price_so_far.empty? # check to see a flight price for given flight is exists
-        next if flight_price_so_far.first.price.to_i <= price.to_i
-
-        flight_price_so_far.first.price = price
-        flight_price_so_far.first.deep_link = DEEPLINK
-      end
-
-      flight_prices << FlightPrice.new(flight_id: flight_id.to_s, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: DEEPLINK)
+      add_to_flight_prices(
+        FlightPrice.new(flight_id: flight_id.to_s, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: DEEPLINK)
+      )
     end
-
-    complete_import(flight_prices)
-    flight_ids
   end
 
   private

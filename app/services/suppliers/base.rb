@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Suppliers::Base
-  attr_reader :origin, :destination, :date, :search_history, :supplier_name, :route
+  attr_reader :origin, :destination, :date, :search_history, :supplier_name, :route, :flight_prices
 
   HTTP_ERRORS = [
     EOFError,
@@ -35,6 +35,7 @@ class Suppliers::Base
     @search_history = search_history
     @supplier_name = supplier_name
     @route = route
+    @flight_prices = {}
   end
 
   def search
@@ -46,6 +47,7 @@ class Suppliers::Base
     return unless response[:status]
 
     import_flights(response)
+    import_flight_prices
   rescue StandardError => e
     HandleError.call(e)
     update_status(e)
@@ -65,36 +67,36 @@ class Suppliers::Base
 
   private
 
+  def add_to_flight_prices(flight_price)
+    key = flight_price.flight_id
+    unless flight_prices.key?(key)
+      flight_prices[key] = flight_price
+      return
+    end
+
+    return if flight_prices[key].price.to_i <= flight_price.price.to_i
+
+    flight_prices[key] = flight_price
+  end
+
   def update_status(status)
     ActiveRecord::Base.connection_pool.with_connection do
       search_history.append(status)
     end
   end
 
-  def complete_import(flight_prices)
-    if flight_prices.empty?
+  def import_flight_prices
+    if flight_prices.values.empty?
       update_status('empty response')
     else
-      unique_fps = remove_duplicate(flight_prices)
       ActiveRecord::Base.connection_pool.with_connection do
-        FlightPrice.import unique_fps, validate: false
-        FlightPriceArchive.archive unique_fps
+        FlightPrice.import flight_prices.values, validate: false
+        FlightPriceArchive.archive flight_prices.values
       end
     end
     ActiveRecord::Base.connection_pool.with_connection do
       search_history.set_success
       update_status('done')
     end
-  end
-
-  def remove_duplicate(flight_prices)
-    unique_fps = []
-    flight_prices.each do |fp|
-      duplicate = unique_fps.select { |u| u.supplier == fp.supplier and u.flight_id == fp.flight_id }
-      next if duplicate.count.positive?
-
-      unique_fps << fp
-    end
-    unique_fps
   end
 end

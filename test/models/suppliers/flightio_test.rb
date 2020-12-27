@@ -21,29 +21,18 @@ class SuppliersFlightioTest < ActiveSupport::TestCase
     )
   end
 
-  test 'Search should return Hash' do
-    VCR.use_cassette('flightio') do
-      response = @flightio.search_supplier
-      assert response.is_a? Hash
-      assert response[:response].is_a? String
-      assert_not response[:response].empty?
-    end
-  end
-
   test 'Save flights to database' do
     VCR.use_cassette('flightio') do
-      response = @flightio.search_supplier
       assert_difference 'Flight.count', 17 do
-        @flightio.import_flights(response)
+        @flightio.search
       end
     end
   end
 
   test 'Save flight prices to database' do
     VCR.use_cassette('flightio') do
-      response = @flightio.search_supplier
       assert_difference 'FlightPrice.count', 17 do
-        @flightio.import_flights(response)
+        @flightio.search
       end
     end
   end

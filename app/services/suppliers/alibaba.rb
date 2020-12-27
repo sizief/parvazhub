@@ -18,8 +18,6 @@ class Suppliers::Alibaba < Suppliers::Base
 
   def import_flights(response)
     flight_id = nil
-    flight_prices = []
-    flight_ids = []
 
     response[:response].each do |flight|
       airline_code = flight['airlineCode']
@@ -30,25 +28,15 @@ class Suppliers::Alibaba < Suppliers::Base
       ActiveRecord::Base.connection_pool.with_connection do
         flight_id = Flight.create_or_find_flight(route.id, flight_number, departure_time, airline_code, airplane_type)
       end
-      flight_ids << flight_id
 
       price = flight['priceAdult'].to_f / 10
       deeplink_url = "#{DEEPLINK}#{origin.upcase}-#{destination.upcase}"
       deeplink_url += "?adult=1&child=0&infant=0&step=results&departing=#{date}&sort=leaveDateTime-asc"
 
-      flight_price_so_far = flight_prices.select { |flight_price| flight_price.flight_id == flight_id }
-      unless flight_price_so_far.empty?
-        next if flight_price_so_far.first.price.to_i <= price.to_i
-
-        flight_price_so_far.first.price = price
-        flight_price_so_far.first.deep_link = deeplink_url
-        next
-      end
-      flight_prices << FlightPrice.new(flight_id: flight_id.to_s, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: deeplink_url.to_s)
+      add_to_flight_prices(
+        FlightPrice.new(flight_id: flight_id.to_s, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: deeplink_url.to_s)
+      )
     end
-
-    complete_import(flight_prices)
-    flight_ids
   end
 
   private
