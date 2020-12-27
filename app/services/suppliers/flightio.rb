@@ -3,6 +3,8 @@
 class Suppliers::Flightio < Suppliers::Base
   DEEPLINK = ENV['URL_FLIGHTIO_DEEPLINK']
   URL = ENV['URL_FLIGHTIO_GET']
+  USERNAME = ENV['FLIGHTIO_USERNAME']
+  PASSWORD = ENV['FLIGHTIO_PASSWORD']
 
   def register_request
     update_status("using proxy: #{proxy}") unless proxy.nil?
@@ -10,7 +12,7 @@ class Suppliers::Flightio < Suppliers::Base
       RestClient::Request.execute(
         method: :post,
         url: URL,
-        proxy: proxy,
+        proxy: nil,
         headers: headers,
         payload: { "ValueObject": params.to_json.to_s }.to_json
       ).body
@@ -31,7 +33,7 @@ class Suppliers::Flightio < Suppliers::Base
     response = RestClient::Request.execute(
       method: :get,
       url: URL + value,
-      proxy: proxy,
+      proxy: nil,
       headers: headers
     )
     { status: true, response: response.body, deeplink: deep_link }
@@ -109,8 +111,8 @@ class Suppliers::Flightio < Suppliers::Base
 
   def headers
     {
-      "FUser": 'FlightioAppAndroid',
-      "FPass": 'Pw4FlightioAppAndroid',
+      "FUser": USERNAME,
+      "FPass": PASSWORD,
       "FApiVersion": '1.1',
       "Content-Type": 'application/json'
       # "FSession": '078ee89c-0cdd-43c8-b414-a4fe1113079a',
