@@ -47,20 +47,19 @@ class SupplierSearch
         HandleError.call(e)
       end
     end
-    update_all_after_supplier_search
+    post_search_action
   rescue Timeout::Error
-    update_all_after_supplier_search
+    post_search_action
   rescue StandardError => e
     HandleError.call(e)
   end
 
-  def update_all_after_supplier_search
+  def post_search_action
     merge_and_update_all(
       SearchFlightId.ids(
         search_flight_token
       )
     )
-    SearchFlightId.where(token: search_flight_token).delete_all
   end
 
   def suppliers
