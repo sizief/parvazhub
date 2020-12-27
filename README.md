@@ -52,6 +52,7 @@ Every commit on the master would triggers a [build](https://travis-ci.org/github
 - add photos of the airplane by passengers | 7 | 5 = 1.4
 - community for reviewers | 4 | 6 = 0.7
 - remove allow origin for all in api | 0 | 1 = 0
+- move codes from flight and flight price to collections
 
 ## Copyright
 Do whatever you want. Just don't harm people.

@@ -5,12 +5,12 @@ require 'test_helper'
 class FlightTest < ActiveSupport::TestCase
   def setup
     @route = Route.first
-    @now = Time.now
-    @flight = Flight.create(route: @route, flight_number: 'w57171', departure_time: @now, airline_code: 'w5')
+    @date_time = Time.now.to_datetime.beginning_of_day + 5.hours
+    @flight = Flight.create(route: @route, flight_number: 'w57171', departure_time: @date_time, airline_code: 'w5')
   end
 
   test 'Flight number should be unique' do
-    second_flight = Flight.create(route: @route, flight_number: 'w57171', departure_time: @now, airline_code: 'w5')
+    second_flight = Flight.create(route: @route, flight_number: 'w57171', departure_time: @date_time, airline_code: 'w5')
     assert_not second_flight.valid?
   end
 
@@ -23,7 +23,7 @@ class FlightTest < ActiveSupport::TestCase
 
   test 'flight list' do
     FlightPrice.create(flight: @flight, price: 100)
-    flight_list = Flight.new.for(route: @route, date: @now.to_date.to_s)
+    flight_list = Flight.new.for(route: @route, date: @date_time.to_date.to_s)
 
     assert flight_list.count.positive?
   end

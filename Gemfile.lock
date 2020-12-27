@@ -355,6 +355,7 @@ DEPENDENCIES
   coffee-rails
   devise
   dotenv-rails
+  execjs
   foreman (~> 0.82.0)
   guard (= 2.13.0)
   guard-minitest (= 2.4.4)

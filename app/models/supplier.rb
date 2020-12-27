@@ -31,6 +31,8 @@ class Supplier < ApplicationRecord
       'سفرستان'
     when 'hipotrip'
       'هیپوتریپ'
+    when 'snapptrip'
+      'اسنپ‌تریپ'
     else
       supplier_name
     end

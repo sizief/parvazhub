@@ -14,6 +14,7 @@ gem 'capistrano-rbenv', '~> 2.1'
 gem 'coffee-rails'
 gem 'devise'
 gem 'dotenv-rails', groups: %i[development test production local]
+gem 'execjs'
 gem 'foreman', '~> 0.82.0'
 gem 'jalalidate'
 gem 'jbuilder'
