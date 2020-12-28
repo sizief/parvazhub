@@ -2,17 +2,17 @@
 
 require 'test_helper'
 
-class SuppliersAlibabaTest < ActiveSupport::TestCase
+class SuppliersRespinaTest < ActiveSupport::TestCase
   include 'supplier_helper'
 
   def setup
     @supplier = create_supplier(
-      supplier: Suppliers::Alibaba
+      supplier: Suppliers::Respina24
     )
   end
 
   test 'Save flights to database' do
-    VCR.use_cassette('alibaba') do
+    VCR.use_cassette('respina24') do
       assert_difference 'Flight.count', 14 do
         @supplier.search
       end
@@ -20,7 +20,7 @@ class SuppliersAlibabaTest < ActiveSupport::TestCase
   end
 
   test 'Save flight prices to database' do
-    VCR.use_cassette('alibaba') do
+    VCR.use_cassette('respina24') do
       assert_difference 'FlightPrice.count', 14 do
         @supplier.search
       end
