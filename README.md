@@ -21,7 +21,7 @@ Providers are blocking Parvazhub constantly. We have two optins:
 ## Helpers
 To search on console:  
 ```
-x=Suppliers::Ghasedak.new(origin: "thr",destination: "mhd",date: (Date.today+1).to_s,timeout: 10,search_history: SearchHistory.last,route: Route.find_by(origin: origin, destination: destination),search_flight: SearchFlightId.last,supplier_name: "flightio")
+origin='mhd'; destination='thr';x=Suppliers::Ghasedak.new(origin: origin,destination: destination,date: (Date.today+1).to_s,search_history: SearchHistory.last,route: Route.find_by(origin: origin, destination: destination),supplier_name: "ghasedak")
 x.search_supplier
 x.register_request # for the ones that has two level RQ/RS
 ```
