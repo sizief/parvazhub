@@ -27,6 +27,7 @@ class Suppliers::Respina24 < Suppliers::Base
       airplane_type = flight['flightName']
       price = flight['pricereal'].to_f / 10
       next if price.nil? || price.zero?
+      next if price == 1000_000 # it means it is soldout :shrug:
 
       origin_in_persian = City.find_by(city_code: origin.downcase).persian_name
       destination_in_persian = City.find_by(city_code: destination.downcase).persian_name
