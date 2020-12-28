@@ -33,18 +33,21 @@ class Flight < ApplicationRecord
   end
 
   def self.update_best_price(route, date)
-    flights = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s)
-    flights.each do |flight|
-      stored_flight_prices = flight.flight_prices.select('price,supplier').order('price').first
-      if stored_flight_prices.nil?
-        flight.best_price = 0 # means the flight is no longer available
-      else
-        flight.best_price = stored_flight_prices.price
-        flight.price_by = stored_flight_prices.supplier
-        flight.updated_at = Time.now # ensure that the updated at is going to update even if the value is not changed
+    route
+      .flights
+      .includes(:flight_prices)
+      .where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s)
+      .each do |flight|
+        flight_price = flight.flight_prices.order('price').first
+        if flight_price.nil?
+          flight.best_price = 0 # means the flight is no longer available
+        else
+          flight.best_price = flight_price.price
+          flight.price_by = flight_price.supplier
+          flight.updated_at = Time.now # ensure that the updated at is updated even if the value is not changed
+        end
+        flight.save
       end
-      flight.save
-    end
   end
 
   def list(route, date)
@@ -177,6 +180,7 @@ class Flight < ApplicationRecord
   def get_call_sign(flight_number, airline_code)
     flight_number.upcase.sub airline_code.upcase, airline_call_sign(airline_code)
   end
+  attr_accessor :suppliers_count, :airline_persian_name, :airline_english_name, :airline_rate_average, :best_price_dollar
 
   private
 
@@ -184,5 +188,4 @@ class Flight < ApplicationRecord
     Currency.new.to_dollar amount
   end
 
-  attr_accessor :suppliers_count, :airline_persian_name, :airline_english_name, :airline_rate_average, :best_price_dollar
 end

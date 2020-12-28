@@ -52,6 +52,7 @@ Every commit on the master would triggers a [build](https://travis-ci.org/github
 - remove allow origin for all in api | 0 | 1 = 0
 - move codes from flight and flight price to collections
 - update Airplane type
+- Best price is not updated if threads runs out of timeout. post action for supplier search is never called if timeout is happens
 - [x] add more prices - snaptripp | 8 | 4 = 2
 - [x] fix the showing old data prices bug | 8 | 5 = 1.6
 - [x] add more prices - Respina24 | 8 | 3 = 2.3
