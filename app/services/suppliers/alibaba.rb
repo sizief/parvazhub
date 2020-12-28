@@ -17,24 +17,18 @@ class Suppliers::Alibaba < Suppliers::Base
   end
 
   def import_flights(response)
-    flight_id = nil
-
     response[:response].each do |flight|
       airline_code = flight['airlineCode']
       flight_number = airline_code + flight['flightNumber']
       departure_time = "#{flight['leaveDateTime'][0..9]} #{flight['leaveDateTime'][11..]}"
-
       airplane_type = flight['aircraft']
-      ActiveRecord::Base.connection_pool.with_connection do
-        flight_id = Flight.create_or_find_flight(route.id, flight_number, departure_time, airline_code, airplane_type)
-      end
-
       price = flight['priceAdult'].to_f / 10
       deeplink_url = "#{DEEPLINK}#{origin.upcase}-#{destination.upcase}"
       deeplink_url += "?adult=1&child=0&infant=0&step=results&departing=#{date}&sort=leaveDateTime-asc"
 
+      saved_flight = Flight.upsert(route.id, flight_number, departure_time, airline_code, airplane_type)
       add_to_flight_prices(
-        FlightPrice.new(flight_id: flight_id.to_s, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: deeplink_url.to_s)
+        FlightPrice.new(flight_id: saved_flight.id, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: deeplink_url)
       )
     end
   end

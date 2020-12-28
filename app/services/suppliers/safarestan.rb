@@ -32,7 +32,7 @@ class Suppliers::Safarestan < Suppliers::Base
       price = (flight['singleAdultFinalPrice'] / 10).to_i
 
       add_to_flight_prices(
-        FlightPrice.new(flight_id: flight_id.to_s, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: DEEPLINK)
+        FlightPrice.new(flight_id: flight_id, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: DEEPLINK)
       )
     end
   end

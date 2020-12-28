@@ -18,23 +18,17 @@ class Suppliers::Snapptrip < Suppliers::Base
   end
 
   def import_flights(response)
-    flight_id = nil
-
     JSON.parse(response[:response]).first['solutions'].each do |flight|
       airline_code = flight['airline']['code']
       flight_number = airline_code + flight['flightNumber']
       departure = flight['departure']
-
       airplane_type = flight['legs'].first['details'].first['aircraft']
-      ActiveRecord::Base.connection_pool.with_connection do
-        flight_id = Flight.create_or_find_flight(route.id, flight_number, departure, airline_code, airplane_type)
-      end
-
       price = flight['totalPrice']['amount'].to_f / 10
       deeplink_url = "https://www.snapptrip.com/flights/#{origin.upcase}/#{destination.upcase}?roundTrip=false&adultCount=1&childCount=0&inLapCount=0&date=#{date}&cabinType=E"
 
+      saved_flight = Flight.upsert(route.id, flight_number, departure, airline_code, airplane_type)
       add_to_flight_prices(
-        FlightPrice.new(flight_id: flight_id.to_s, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: deeplink_url.to_s)
+        FlightPrice.new(flight_id: saved_flight.id, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: deeplink_url)
       )
     end
   end

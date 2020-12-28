@@ -43,24 +43,18 @@ class Suppliers::Flightio < Suppliers::Base
   end
 
   def import_flights(response)
-    flight_id = nil
-
     JSON.parse(response[:response])['ResultModel']['ItemList'].each do |flight_item|
       flight = flight_item['Items'].first['Segments'].first
       airline_code = get_airline_code(flight['OperatingAirlineCode'])
       flight_number = airline_code + flight['FlightNumber']
       departure_time = "#{flight['DepartTime'][0..9]} #{flight['DepartTime'][11..]}"
-
       airplane_type = flight['AircraftName']
-      ActiveRecord::Base.connection_pool.with_connection do
-        flight_id = Flight.create_or_find_flight(route.id, flight_number, departure_time, airline_code, airplane_type)
-      end
-
       price = flight_item['TotalChargeable'].to_f / 10
       deeplink_url = response[:deeplink] + flight_item['CombinationID']
 
+      saved_flight = Flight.upsert(route.id, flight_number, departure_time, airline_code, airplane_type)
       add_to_flight_prices(
-        FlightPrice.new(flight_id: flight_id.to_s, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: deeplink_url.to_s)
+        FlightPrice.new(flight_id: saved_flight.id, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: deeplink_url)
       )
     end
   end

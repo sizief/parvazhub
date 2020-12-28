@@ -22,7 +22,6 @@ class Suppliers::Ghasedak < Suppliers::Base
   end
 
   def import_flights(response)
-    flight_id = nil
     json_response = JSON.parse(response[:response])
 
     json_response['data'].each do |flight|
@@ -30,17 +29,13 @@ class Suppliers::Ghasedak < Suppliers::Base
       flight_number = airline_code + flight_number_correction(flight['FlightNo'], airline_code)
       departure_time = flight['FlightDate']
       departure_time = departure_time[0..9] + ' ' + departure_time[11..-1]
-
       airplane_type = flight['Airplane']
-      ActiveRecord::Base.connection_pool.with_connection do
-        flight_id = Flight.create_or_find_flight(route.id, flight_number, departure_time, airline_code, airplane_type)
-      end
-
       price = flight['Price'].to_f / 10
       deeplink_url = flight['ReserveLink']
 
+      saved_flight = Flight.upsert(route.id, flight_number, departure_time, airline_code, airplane_type)
       add_to_flight_prices(
-        FlightPrice.new(flight_id: flight_id.to_s, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: deeplink_url.to_s)
+        FlightPrice.new(flight_id: saved_flight.id, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: deeplink_url)
       )
     end
   end

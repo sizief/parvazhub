@@ -63,17 +63,24 @@ class Flight < ApplicationRecord
     responses
   end
 
-  def self.create_or_find_flight(route_id, flight_number, departure_time, airline_code, airplane_type, arrival_date_time = nil, stops = nil, trip_duration = nil)
+  def self.upsert(route_id, flight_number, departure_time, airline_code, airplane_type)
     ActiveRecord::Base.connection_pool.with_connection do
-      begin
-        flight = Flight.create(route_id: route_id, flight_number: flight_number, departure_time: departure_time, arrival_date_time: arrival_date_time, airline_code: airline_code, airplane_type: airplane_type, stops: stops, trip_duration: trip_duration)
-        unless flight.id # flight is already exists
-          flight = Flight.find_by(route_id: route_id, flight_number: flight_number, departure_time: departure_time)
-        end
-      rescue StandardError
-        flight = Flight.find_by(route_id: route_id, flight_number: flight_number, departure_time: departure_time)
+      flight = Flight.find_by(route_id: route_id, flight_number: flight_number, departure_time: departure_time)
+
+      if flight.nil?
+        return Flight.create(
+          route_id: route_id,
+          flight_number: flight_number,
+          departure_time: departure_time,
+          airline_code: airline_code,
+          airplane_type: airplane_type
+        )
       end
-      flight.id
+
+      return flight unless flight.airplane_type.nil? || flight.airplane_type.empty?
+
+      flight.update(airplane_type: airplane_type)
+      flight
     end
   end
 
