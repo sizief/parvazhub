@@ -20,14 +20,21 @@ class Suppliers::Respina24 < Suppliers::Base
 
     json_response['data'].each do |flight|
       airline_code = airline_code(flight['airlineCode'])
+      next if airline_code.nil?
+
       flight_number = airline_code + flight['flightNumber']
       departure_time = "#{date} #{flight['takeoffTime']}:00"
       airplane_type = flight['flightName']
       price = flight['pricereal'].to_f / 10
+      next if price.nil? || price.zero?
+
+      origin_in_persian = City.find_by(city_code: origin.downcase).persian_name
+      destination_in_persian = City.find_by(city_code: destination.downcase).persian_name
+      deeplink = "https://respina24.ir/flight/search/#{origin.upcase}/#{destination.upcase}/بلیط-هواپیما-#{origin_in_persian}-#{destination_in_persian}?date=#{date}"
 
       saved_flight = Flight.upsert(route.id, flight_number, departure_time, airline_code, airplane_type)
       add_to_flight_prices(
-        FlightPrice.new(flight_id: saved_flight.id, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: deeplink_url)
+        FlightPrice.new(flight_id: saved_flight.id, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: deeplink)
       )
     end
   end
@@ -37,24 +44,37 @@ class Suppliers::Respina24 < Suppliers::Base
   end
 
   def airline_code(code)
-    airlines = {
-      '2' => 'W5',
-      '9' => 'AK',
-      '4' => 'B9',
-      '8' => 'I3',
-      '7' => 'JI',
-      '12' => 'IV',
-      '15' => 'SE',
-      '6' => 'ZV',
-      '10' => 'HH',
-      '11' => 'QB',
-      '1' => 'Y9',
-      '5' => 'EP',
-      '3' => 'IR',
-      '14' => 'SR'
-    }
-    raise code if airlines[code].nil? && Rails.env.development?
-
-    airlines[code]
+    case code
+    when 2
+      'W5'
+    when 9
+      'AK'
+    when 4
+      'B9'
+    when 8
+      'I3'
+    when 7
+      'JI'
+    when 12
+      'IV'
+    when 15
+      'SE'
+    when 6
+      'ZV'
+    when 10
+      'HH'
+    when 11
+      'QB'
+    when 1
+      'Y9'
+    when 5
+      'EP'
+    when 3
+      'IR'
+    when 14
+      'SR'
+    when 29
+      'VR'
+    end
   end
 end

@@ -7,6 +7,46 @@ class Flight < ApplicationRecord
   has_many :flight_prices
   has_one :flight_info
 
+  WRONG_AIRPLANE_TYPES = [0, '0', ' ', '', '-'].freeze
+
+  def self.upsert(route_id, flight_number, departure_time, airline_code, airplane_type)
+    ActiveRecord::Base.connection_pool.with_connection do
+      flight = Flight.find_by(route_id: route_id, flight_number: flight_number, departure_time: departure_time)
+      airplane_type = nil if WRONG_AIRPLANE_TYPES.include? airplane_type
+
+      if flight.nil?
+        return Flight.create(
+          route_id: route_id,
+          flight_number: flight_number,
+          departure_time: departure_time,
+          airline_code: airline_code,
+          airplane_type: airplane_type
+        )
+      end
+
+      return flight unless flight.airplane_type.nil? || flight.airplane_type.empty?
+      return flight if airplane_type.nil?
+
+      flight.update(airplane_type: airplane_type)
+      flight
+    end
+  end
+
+  def self.update_best_price(route, date)
+    flights = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s)
+    flights.each do |flight|
+      stored_flight_prices = flight.flight_prices.select('price,supplier').order('price').first
+      if stored_flight_prices.nil?
+        flight.best_price = 0 # means the flight is no longer available
+      else
+        flight.best_price = stored_flight_prices.price
+        flight.price_by = stored_flight_prices.supplier
+        flight.updated_at = Time.now # ensure that the updated at is going to update even if the value is not changed
+      end
+      flight.save
+    end
+  end
+
   def list(route, date)
     route
       .flights
@@ -63,41 +103,6 @@ class Flight < ApplicationRecord
     responses
   end
 
-  def self.upsert(route_id, flight_number, departure_time, airline_code, airplane_type)
-    ActiveRecord::Base.connection_pool.with_connection do
-      flight = Flight.find_by(route_id: route_id, flight_number: flight_number, departure_time: departure_time)
-
-      if flight.nil?
-        return Flight.create(
-          route_id: route_id,
-          flight_number: flight_number,
-          departure_time: departure_time,
-          airline_code: airline_code,
-          airplane_type: airplane_type
-        )
-      end
-
-      return flight unless flight.airplane_type.nil? || flight.airplane_type.empty?
-
-      flight.update(airplane_type: airplane_type)
-      flight
-    end
-  end
-
-  def self.update_best_price(route, date)
-    flights = route.flights.where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s)
-    flights.each do |flight|
-      stored_flight_prices = flight.flight_prices.select('price,supplier').order('price').first
-      if stored_flight_prices.nil?
-        flight.best_price = 0 # means the flight is no longer available
-      else
-        flight.best_price = stored_flight_prices.price
-        flight.price_by = stored_flight_prices.supplier
-        flight.updated_at = Time.now # ensure that the updated at is going to update even if the value is not changed
-      end
-      flight.save
-    end
-  end
 
   def get_lowest_price_timetable(origin, destination, date)
     route = Route.find_by(origin: origin, destination: destination)
@@ -178,6 +183,6 @@ class Flight < ApplicationRecord
   def to_dollar(amount)
     Currency.new.to_dollar amount
   end
-  
+
   attr_accessor :suppliers_count, :airline_persian_name, :airline_english_name, :airline_rate_average, :best_price_dollar
 end

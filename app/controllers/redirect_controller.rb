@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class RedirectController < ApplicationController
-  require 'uri'
-
   def define_args
     {
       origin_name: params[:origin_name],
@@ -28,27 +26,12 @@ class RedirectController < ApplicationController
 
     unless is_bot(request.user_agent)
       redirect.save
-      # text="👊 [#{Rails.env}] #{request.user_agent} #{request.remote_ip} \n #{@flight_price.supplier}"
-      # TelegramMonitoringWorker.perform_async(text)
     end
-  end
-
-  def create_deep_link(flight_price)
-    if flight_price.is_deep_link_url
-      deep_link = flight_price.deep_link
-    else
-      supplier_class = 'Suppliers::' + flight_price.supplier.capitalize
-      deep_link = supplier_class.constantize.create_deep_link flight_price.deep_link
-    end
-    deep_link += deep_link.include?('?') ? '&' : '?'
-    deep_link += 'utm_source=parvazhub_com&utm_medium=meta_search&utm_campaign=parvazhub_com'
   end
 
   def app_redirect
     user_id = UserController.new.get_app_user.id
-    redirect_to action: 'redirect', origin_name: params[:origin_name], destination_name: params[:destination_name], date: params[:date],
-                flight_id: params[:flight_id], flight_price_id: params[:flight_price_id],
-                channel: params[:channel], user_id: user_id
+    redirect_to action: 'redirect', origin_name: params[:origin_name], destination_name: params[:destination_name], date: params[:date], flight_id: params[:flight_id], flight_price_id: params[:flight_price_id], channel: params[:channel], user_id: user_id
   end
 
   def redirect
@@ -66,12 +49,10 @@ class RedirectController < ApplicationController
                                             args[:flight_id])
 
     if @flight_price
-      @action_link = create_deep_link @flight_price
+      @action_link = @flight_price.deep_link
       @supplier = @flight_price.supplier
       @method = 'GET'
       save_redirect args, @flight_price, @action_link, request
     end
   end
-
-  private
 end

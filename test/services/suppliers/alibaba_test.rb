@@ -3,8 +3,6 @@
 require 'test_helper'
 
 class SuppliersAlibabaTest < ActiveSupport::TestCase
-  include 'supplier_helper'
-
   def setup
     @supplier = create_supplier(
       supplier: Suppliers::Alibaba

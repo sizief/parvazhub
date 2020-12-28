@@ -45,7 +45,6 @@ Every commit on the master would triggers a [build](https://travis-ci.org/github
 + name | impact 10 high | how hard 10 high = overall
 - proxies | 9 | 2 = 4.5
 - fetch and show airplane type | 9 | 4 = 2.25
-- add more prices - Respina24 | 8 | 3 = 2.3
 - add more prices - Chamedoon | 8 | 4 = 2
 - show progress | 9 | 6 = 1.5
 - add photos of the airplane by passengers | 7 | 5 = 1.4
@@ -55,6 +54,7 @@ Every commit on the master would triggers a [build](https://travis-ci.org/github
 - update Airplane type
 - [x] add more prices - snaptripp | 8 | 4 = 2
 - [x] fix the showing old data prices bug | 8 | 5 = 1.6
+- [x] add more prices - Respina24 | 8 | 3 = 2.3
 
 ## Copyright
 Do whatever you want. Just don't harm people.

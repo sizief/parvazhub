@@ -13,19 +13,11 @@ class City < ApplicationRecord
     persian_name = persian_name.sub 'ي', 'ی'
 
     city = City.find_by(persian_name: persian_name.strip)
-    city_code = city.nil? ? false : city.city_code
-
-    # city_code = false
-    # City.list.each do |key,value|
-    #  if value[:fa] == persian_name.strip
-    #    city_code =  key.to_s
-    #  end
-    # end
-    city_code
+    city.nil? ? false : city.city_code
   end
 
   def self.get_city_code_based_on_english_name(name)
     city = City.find_by(english_name: name)
-    city_code = city.nil? ? false : city.city_code.downcase
+    city.nil? ? false : city.city_code.downcase
   end
 end
