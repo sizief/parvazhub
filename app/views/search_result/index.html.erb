@@ -5,20 +5,20 @@
 <% provide(:description,"لیست ارزان‌ترین قیمت‌های بلیط #{@search_parameter[:destination_persian_name]}. تمام پروازهای چارتری و سیستمی پرواز #{@search_parameter[:origin_persian_name]} به #{@search_parameter[:destination_persian_name]}  #{@search_parameter[:date_in_human]} سایت‌های معتبر را در پروازهاب ببینید") %>
 
 <div class="ui container" id="search-results-container">
-	<div class="ui grid" id="results-message">
-  		<div class="one column row">
-    		<div class="column">
-				<div class="results-header">
-					<i class="plane icon"></i> 
-					<%= @search_parameter[:origin_persian_name] %>
-				  	به	 
-				 	<%= @search_parameter[:destination_persian_name] %> 
-					 <%= JalaliDate.new(@search_parameter[:date].to_date).strftime "%A %e %b"   %>
-					   
-					<a class="light-yellow ui primary basic blue" onclick="$('#search-box-inner').transition('slide');" style="cursor:pointer; padding-left:5px; font-size:0.8em;">
-						<i class="yellow chevron down icon"></i> تغییر شهر/تاریخ
-					</a>
-				</div>
+  <div class="ui grid" id="results-message">
+    <div class="one column row">
+      <div class="column">
+        <div class="results-header">
+          <i class="plane icon"></i>
+          <%= @search_parameter[:origin_persian_name] %>
+          به
+          <%= @search_parameter[:destination_persian_name] %>
+          <%= JalaliDate.new(@search_parameter[:date].to_date).strftime("%A %e %b").to_fa %>
+
+          <a class="light-yellow ui primary basic blue" onclick="$('#search-box-inner').transition('slide');" style="cursor:pointer; padding-left:5px; font-size:0.8em;">
+            <i class="yellow chevron down icon"></i> تغییر شهر/تاریخ
+          </a>
+        </div>
 				<div style="font-size:0.8em">
 					<a class="light-yellow" href="<%= route_page_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name]) %>">
 						<i class="yellow line chart icon"></i> مقایسه قیمت در تمام ماه
@@ -66,7 +66,7 @@
 	  <% @flight_dates.each do |flight_date|%>
 	  	<div class=" grey statistic">
 		  <div class="valuee">
-			  <%= link_to(price_to_human(flight_date[:price]), search_link_builder(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],flight_date[:date]))   %> 
+		      <%= link_to(price_to_human(flight_date[:price]), search_link_builder(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],flight_date[:date]))   %> 
 		  </div>
 		  <div class="label statistic-label  web-font">
 		  	<%= link_to(day_name(flight_date[:date],@search_parameter[:date]), search_link_builder(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],flight_date[:date]))   %>
@@ -122,12 +122,17 @@
 							<% end %>	
 						</td>
 						<td>
-							<div class="content" style="font-size: 0.9em;color: #1d1c1c;">
-<i class="clock outline grey icon"></i>	
-<%= hour_to_human flight[:departure_time].to_datetime.strftime("%H:%M") %>  
-    <span class="mobile-only">
-      <%= flight[:airplane_type].blank? ? "" : airplane_name_for(flight[:airplane_type]) %>
-    </span>	
+  <div class="content" style="font-size: 0.9em;color: #1d1c1c;">
+    <div style='display:block'>
+      <i class="clock outline grey icon"></i>
+      <%= hour_to_human(flight[:departure_time].to_datetime.strftime("%k:%M")).to_fa %>
+    </div>
+    <div class="mobile-only" >
+      <div style='display: block'>
+        <%= flight[:airplane_type].blank? ? "" : airplane_name_for(flight[:airplane_type]) %>
+      </div>
+    </div>
+  </div>
 								<% unless flight[:arrival_date_time].nil? %>
 									<div style="width:100%; margin-top:5px;border-top: 1px dashed #eee;padding-top:6px;">
 										<i class="vertically flipped plane  grey icon"></i>
@@ -158,14 +163,14 @@
 							</div>
 							<a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight[:id]) %>" data-remote="false">	
 								<button class="ui submit yellow web-font fluid right labeled icon button flight-price-button" style="padding-right: 0 !important;">
-									<i class="right arrow icon"></i> از	
-									<span class="white"><%= "#{number_with_delimiter(flight[:best_price])} تومان " %></span>
+									<i class="right arrow icon"></i>
+									<span class="white"><%= "#{number_with_delimiter(flight[:best_price]).to_fa} تومان " %></span>
 								</button>
 							</a>
 							
 							<div class="suppliers-count">	
                                                           <a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight[:id]) %>" data-remote="false" style="color:black">
-                                                            بهترین قیمت از <%= flight[:supplier_count] %> سایت 
+                                                            بهترین قیمت از <%= flight[:supplier_count].to_s.to_fa %> سایت 
         
 								</a>
 							</div>

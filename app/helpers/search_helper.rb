@@ -19,7 +19,7 @@ module SearchHelper
   end
 
   def hour_to_human(time)
-    time +
+    "#{time} " +
       case time.to_s.tr(':', '').to_i
       when 400..1159 then 'صبح'
       when 1200..1559 then 'ظهر'

@@ -70,12 +70,8 @@ module SearchResultHelper
   end
 
   def price_to_human(price)
-    if price.nil?
-      message = "<i class='plane icon'></i>".html_safe
-    else
-      # number_with_delimiter(price)
-      message = ((price / 1000).to_s + "<sup><span style='font-size:0.5em'>هزارتومان</span></sup>").html_safe
-    end
-    message
+    return "<i class='plane icon'></i>".html_safe if price.nil?
+
+    "#{(price / 1000).to_s.to_fa} <sup><span style='font-size:0.5em'>هزارتومان</span></sup>".html_safe
   end
 end

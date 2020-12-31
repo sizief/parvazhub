@@ -54,8 +54,8 @@
 					<button class="ui submit big yellow web-font fluid right labeled  icon button waiting-modal link-dates-button" style="padding-left: 2.5em !important; font-size:0.9em !important;" >	
 					 بلیط 
 						<%= "#{@origin.persian_name} به #{@destination.persian_name}" %>
-						<%= JalaliDate.new(price[:date].to_date).strftime "%A %e %b"  %>	
-						<%= "از #{number_with_delimiter(price[:price])} تومان" unless price[:price].nil? %>		
+						<%= JalaliDate.new(price[:date].to_date).strftime("%A %e %b").to_fa  %>	
+						<%= "از #{number_with_delimiter(price[:price]).to_fa} تومان" unless price[:price].nil? %>		
 					
 						<i class="right arrow icon"></i>
 					</button>
@@ -106,13 +106,13 @@
 											<%= "#{@origin.persian_name}  #{@destination.persian_name}" %>
 											<%= JalaliDate.new(price[:date].to_date).strftime "%A"  %>	
 										</span>
-										<%= JalaliDate.new(price[:date].to_date).strftime "%e %b"  %>	
+										<%= JalaliDate.new(price[:date].to_date).strftime("%e %b").to_fa  %>	
 									</div>
 									<div class="route-calendar-price">
 										<% if number_with_delimiter(price[:price]).nil? %>
 											جستجو
 										<% else %>
-											<%= "از #{number_with_delimiter(price[:price])} تومان"  %>	
+											<%= "از #{number_with_delimiter(price[:price]).to_fa} تومان"  %>	
 										<% end %>
 										<i class="right arrow icon yellow"></i>
 									</div>

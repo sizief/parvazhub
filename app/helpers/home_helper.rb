@@ -23,11 +23,9 @@ module HomeHelper
   private
 
   def prepare_price_message(flight)
-    if flight.nil?
-      message = 'پر شد'
-    else
-      message = number_with_delimiter flight.best_price
-      message += ' تومان'
-    end
+    return '' if flight.nil?
+
+    message = number_with_delimiter(flight.best_price).to_s.to_fa
+    "#{message} تومان"
   end
 end
