@@ -130,8 +130,15 @@ class Flight < ApplicationRecord
     prices
   end
 
+  def get_lowest_price_for_a_week(origin, destination, start_date)
+    get_lowest_price_for(origin, destination, start_date, 7)
+  end
+
   def get_lowest_price_for_a_month(origin, destination, start_date)
-    duration = 21
+    get_lowest_price_for(origin, destination, start_date, 21)
+  end
+
+  def get_lowest_price_for(origin, destination, start_date, duration)
     prices = []
     route = Route.find_by(origin: origin, destination: destination)
     0.upto(duration) do |x|

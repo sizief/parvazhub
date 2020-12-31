@@ -164,7 +164,7 @@
 							<a href="<%= flight_prices_path(@search_parameter[:origin_english_name],@search_parameter[:destination_english_name],@search_parameter[:date],flight[:id]) %>" data-remote="false">	
 								<button class="ui submit yellow web-font fluid right labeled icon button flight-price-button" style="padding-right: 0 !important;">
 									<i class="right arrow icon"></i>
-									<span class="white"><%= "#{number_with_delimiter(flight[:best_price]).to_fa} تومان " %></span>
+									<span class="white"><%= "#{number_with_delimiter(flight[:best_price]).try(:to_fa)} تومان " %></span>
 								</button>
 							</a>
 							
