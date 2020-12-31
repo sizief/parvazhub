@@ -57,6 +57,7 @@ class Flight < ApplicationRecord
       .where(departure_time: date.to_datetime.beginning_of_day.to_s..date.to_datetime.end_of_day.to_s)
       .where.not(airline_code: nil)
       .where.not(airline_code: '')
+      .where.not(best_price: nil)
       .order(:best_price)
   end
 
