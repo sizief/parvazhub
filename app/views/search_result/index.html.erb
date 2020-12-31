@@ -106,13 +106,6 @@
 										</h5>
 									</a>
 								</div>
-								<div class="field">
-									<div class="mini ui basic  web-font rate-button dir-rtl text-right" data-content="امتیاز کاربران به <%= flight[:airline_persian_name] %>. برای ثبت کلیک کنید" >
-										<a href="<%= airline_review_page_path(flight[:airline_english_name]) %>" >
-											<%= get_star_icon(5,flight[:airline_rate_average],"green","small").html_safe %>
-										</a>
-									</div>	
-								</div>
 							</div>
 							<% if @search_parameter[:international] %>
 								<div style="font-size: 0.8em;color: #797777;">
