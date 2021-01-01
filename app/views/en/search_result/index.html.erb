@@ -106,13 +106,6 @@
 										</h5>
 									</a>
 								</div>
-								<div class="field">
-									<div class="mini ui basic  web-font rate-button text-left" data-content="User rating to <%= flight[:airline_english_name] %>" >
-										<a href="<%= airline_review_page_path(flight[:airline_english_name]) %>" >
-											<%= get_star_icon(5,flight[:airline_rate_average],"green","small").html_safe %>
-										</a>
-									</div>	
-								</div>
 							</div>
 							<% if @search_parameter[:international] %>
 								<div style="font-size: 0.8em;color: #797777;">
@@ -219,13 +212,6 @@
 	<%= render :partial => "en/route/price_chart", :locals => {prices: @prices, origin: @search_parameter[:origin_english_name], destination: @search_parameter[:destination_english_name] } %>
 
 </div>
-
-<div class="ui basic modal prices">
-      <p id="prices-modal-content"></p>
-</div>
-<script>
-	$('table').tablesort();
-	$('.rate-button').popup();
-</script>
+<script>$('table').tablesort();</script>
 <%= render 'en/layouts/searchbox-helper', date_picker_inline: false %>   
 <%= render 'en/layouts/footer' %>

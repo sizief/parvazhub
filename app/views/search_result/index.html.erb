@@ -226,13 +226,6 @@
 	<%= render :partial => "route/price_chart", :locals => {prices: @prices, origin: @search_parameter[:origin_persian_name], destination: @search_parameter[:destination_persian_name] } %>
 
 </div>
-
-<div class="ui basic modal prices">
-      <p id="prices-modal-content"></p>
-</div>
-<script>
-	$('table').tablesort();
-	$('.rate-button').popup();
-</script>
+<script>$('table').tablesort();</script>
 <%= render 'layouts/searchbox-helper', date_picker_inline: false %>   
 <%= render 'layouts/footer' %>
