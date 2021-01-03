@@ -60,7 +60,6 @@ class SearchResultController < ApplicationController
     )
     @is_mobile = browser.device.mobile?
     @prices = Flight.new.get_lowest_price_for_a_week(origin.city_code, destination.city_code, Date.today)
-    @suppliers = Supplier.active
     render :index
   end
 
