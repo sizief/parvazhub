@@ -122,10 +122,15 @@ $(document).ready(function(){
             },
       }); 
    }
-  
-  // fix for turbolink does not show waiting modal after first time of form submit
-  $("#flight_search").submit(function( event ) {$('.ui.basic.modal.waiting').modal('show');});
-  }); 
+
+  $("#flight_search").submit(function(event) {
+    event.preventDefault();
+    let origin = event.target.elements.origin.value
+    let destination = event.target.elements.destination.value
+    let date = event.target.elements["date-picker-field"].value
+    Turbolinks.visit(`/flights/${origin}-${destination}/${date}`)
+  });
+}); 
 
   //select input values after focus
   $(function(){

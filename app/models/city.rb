@@ -20,4 +20,10 @@ class City < ApplicationRecord
     city = City.find_by(english_name: name)
     city.nil? ? false : city.city_code.downcase
   end
+
+  def self.iran_cities_json_object
+    City.where(country_code: 'IR').each_with_object({}) do |city, json_object|
+      json_object[city.english_name.sub(' ', '_')] = city.persian_name.sub(' ', '')
+    end
+  end
 end

@@ -2,6 +2,7 @@
 
 class Supplier < ApplicationRecord
   validates :name, uniqueness: true
+  scope :active, -> { where(status: true) }
 
   def get_persian_name(supplier_name)
     case supplier_name
