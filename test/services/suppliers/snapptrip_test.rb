@@ -22,7 +22,7 @@ class SuppliersSnapptripTest < ActiveSupport::TestCase
 
   test 'Save flights to database' do
     VCR.use_cassette('snapptrip') do
-      assert_difference 'Flight.count', 18 do
+      assert_difference 'Flight.count', 15 do
         @alibaba.search
       end
     end
@@ -30,7 +30,7 @@ class SuppliersSnapptripTest < ActiveSupport::TestCase
 
   test 'Save flight prices to database' do
     VCR.use_cassette('snapptrip') do
-      assert_difference 'FlightPrice.count', 18 do
+      assert_difference 'FlightPrice.count', 15 do
         @alibaba.search
       end
     end
