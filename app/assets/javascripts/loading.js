@@ -33,9 +33,9 @@ $(document).ready(function(){
     var angle = 0;
     var angle_increment = 360/t;
     var intervalCounter = 0;
-
-    window.timer = window.setInterval(function () {
-      intervalCounter ++;
+    return (
+      window.setInterval(function () {
+        intervalCounter ++;
         circle.setAttribute("stroke-dasharray", angle + ", 361");
         myTimer.innerHTML = t - parseInt((angle/360)*t);
 
@@ -44,7 +44,7 @@ $(document).ready(function(){
         }
 
         angle += angle_increment/(1000/interval);
-    }.bind(this), interval);
+    }.bind(this), interval));
   }
 
   function isSearchResultPage(url) {
@@ -82,9 +82,15 @@ $(document).ready(function(){
     .modal({blurring: true})
     .modal('setting', 'closable', false)
     .modal('show');
-    countDown(timeoutDomestic);
+    window.timer = countDown(timeoutDomestic);
   });
   document.addEventListener("turbolinks:load", function() {
     $("#jsLoading").empty();
+    $('.ui.basic.modal.waiting').modal('hide');
+    window.clearInterval(window.timer);
+  });
+  document.addEventListener("turbolinks:before-visit", function() {
+    $("#jsLoading").empty();
+    window.clearInterval(window.timer);
   });
 });
