@@ -58,9 +58,9 @@ module SearchHelper
 
   def airplane_name_for(airplane_type)
     case airplane_type.upcase.delete(' ')
-    when 'MCDOUGLASMD-80SERIES', 'MD', 'BOINGMD-82', 'BOEINGMD-82', 'BOEINGMD-88', 'MD80', 'M82', 'MD-80', 'MD82', 'MD-82', 'MD83', 'MD-83', 'MD88', 'MD-88', 'MD.88', 'BOEINGMD', 'MS', 'M83', 'M80', 'BOEING-MD', 'MCDONNELLDOUGLASMD80', 'M88', 'MD8X'
+    when 'MCDOUGLASMD-80SERIES', 'MD', 'BOINGMD-82', 'BOEINGMD-82', 'BOEINGMD-88', 'MD80', 'M82', 'MD-80', 'MD82', 'MD-82', 'MD83', 'MD-83', 'MD88', 'MD-88', 'MD.88', 'BOEINGMD', 'MS', 'M83', 'M80', 'BOEING-MD', 'MCDONNELLDOUGLASMD80', 'M88', 'MD8X', 'BOEINGMD-83', 'بوئينگ'
       'بویینگ  ام دی'
-    when 'AB3'
+    when 'AB3', 'Airbus'
       'ایرباس'
     when 'A300-600', '300-600'
       'ایرباس ۳۰۰'

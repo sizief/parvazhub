@@ -99,4 +99,15 @@ class Suppliers::Base
       update_status('done')
     end
   end
+
+  def airline_code_correction(code)
+    airlines = {
+      'RV' => 'IV',
+      'ZZ' => 'SR',
+      'RZ' => 'SR',
+      'IS' => 'SR',
+      'SE' => 'SR'
+    }
+    airlines[code].nil? ? code : airlines[code]
+  end
 end

@@ -25,7 +25,7 @@ class Suppliers::Ghasedak < Suppliers::Base
     json_response = JSON.parse(response[:response])
 
     json_response['data'].each do |flight|
-      airline_code = get_airline_code(flight['Airline'])
+      airline_code = airline_code_correction(flight['Airline'])
       flight_number = airline_code + flight_number_correction(flight['FlightNo'], airline_code)
       departure_time = flight['FlightDate']
       departure_time = departure_time[0..9] + ' ' + departure_time[11..-1]
@@ -38,17 +38,6 @@ class Suppliers::Ghasedak < Suppliers::Base
         FlightPrice.new(flight_id: saved_flight.id, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: deeplink_url)
       )
     end
-  end
-
-  def get_airline_code(airline_code)
-    airlines = {
-      'RV' => 'IV',
-      'ZZ' => 'SR',
-      'RZ' => 'SR',
-      'IS' => 'SR',
-      'SE' => 'SR'
-    }
-    airlines[airline_code].nil? ? airline_code : airlines[airline_code]
   end
 
   def flight_number_correction(flight_number, airline_code)

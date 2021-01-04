@@ -19,8 +19,11 @@ class Suppliers::Snapptrip < Suppliers::Base
 
   def import_flights(response)
     JSON.parse(response[:response]).first['solutions'].each do |flight|
-      airline_code = flight['airline']['code']
-      flight_number = airline_code + flight['flightNumber']
+      airline_code = airline_code_correction(flight['airline']['code'])
+      flight_number = flight['flightNumber'].to_i
+      next if flight_number.zero?
+
+      flight_number = airline_code + flight_number.to_s
       departure = flight['departure']
       airplane_type = flight['legs'].first['details'].first['aircraft']
       price = flight['totalPrice']['amount'].to_f / 10

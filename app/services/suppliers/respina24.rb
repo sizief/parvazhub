@@ -19,7 +19,7 @@ class Suppliers::Respina24 < Suppliers::Base
     json_response = JSON.parse(response[:response])
 
     json_response['data'].each do |flight|
-      airline_code = airline_code(flight['airlineCode'])
+      airline_code = airline_code_correction(airline_code(flight['airlineCode']))
       next if airline_code.nil?
 
       flight_number = airline_code + flight['flightNumber']
