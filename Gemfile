@@ -35,7 +35,7 @@ gem 'sidekiq-scheduler'
 gem 'sidekiq-status'
 gem 'sprockets', '4.0.2'
 gem 'turbolinks', '5.0.1'
-gem 'uglifier', '3.0.0'
+gem 'uglifier', '4.2.0'
 
 group :development do
   gem 'listen'

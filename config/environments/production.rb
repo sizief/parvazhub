@@ -85,7 +85,7 @@ Rails.application.configure do
   config.serve_static_assets = false
   config.assets.compress = true
   config.assets.digest = true
-  config.assets.js_compressor = :uglifier
+  config.assets.js_compressor = Uglifier.new(harmony: true)
   config.assets.css_compressor = :sass
   config.assets.compile = true
   Rails.application.config.assets.precompile += %w(*.js ^[^_]*.css *.css.erb)
