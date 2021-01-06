@@ -50,7 +50,7 @@ $(document).ready(function(){
   function isSearchResultPage(url) {
     if (url.length != 6) return false
     if (url[3] != 'flights') return false
-    if (url[5].split('-').length != 3) return false
+    if ((url[5].split('-').length != 3) && (url[5] != 'today') && (url[5] != 'tomorrow')) return false
 
     return true
   }
