@@ -91,6 +91,7 @@ $(document).ready(function(){
   });
   document.addEventListener("turbolinks:before-visit", function() {
     $("#jsLoading").empty();
+    $('.ui.basic.modal.waiting').modal('hide');
     window.clearInterval(window.timer);
   });
 });
