@@ -39,11 +39,4 @@ class Suppliers::Ghasedak < Suppliers::Base
       )
     end
   end
-
-  def flight_number_correction(flight_number, airline_code)
-    if flight_number.include? airline_code
-      flight_number = flight_number.sub(airline_code, '')
-    end
-    flight_number.gsub(/[^\d,\.]/, '')
-  end
 end

@@ -62,7 +62,7 @@ module SearchHelper
       'بویینگ  ام دی'
     when 'AB3', 'Airbus'
       'ایرباس'
-    when 'A300-600', '300-600', 'A300B4-605R'
+    when 'A300-600', '300-600', 'A300B4-605R','AirbusA300-600'
       'ایرباس ۳۰۰'
     when 'A310', 'AIRBUSA310', 'MED', 'AIRBUS310', 'AIRBUS310-MMJ', '310'
       'ایرباس ۳۱۰'
