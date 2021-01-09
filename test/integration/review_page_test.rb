@@ -14,7 +14,7 @@ class ReviewPageTest < ActionDispatch::IntegrationTest
   end
 
   test 'browse supplier review page' do
-    get supplier_review_page_path 'zoraq'
+    get supplier_review_page_path 'ghasedak'
     assert_response :success
   end
 end
