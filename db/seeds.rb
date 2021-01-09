@@ -1,15 +1,23 @@
 # frozen_string_literal: true
-supplier_list = [{ "id": 7, "name": 'trip', "class_name": 'Suppliers::Trip', "status": false, "created_at": '2017-08-13T13:25:20.875Z', "updated_at": '2018-07-16T21:10:09.564Z', "international": true, "domestic": true, "job_search_allowed": false, "rate_count": 0, "rate_average": 0 }, { "id": 5, "name": 'ghasedak', "class_name": 'Suppliers::Ghasedak', "status": true, "created_at": '2017-08-07T00:00:00.000Z', "updated_at": '2018-07-16T22:00:11.036Z', "international": false, "domestic": true, "job_search_allowed": false, "rate_count": 4, "rate_average": 3 }, { "id": 11, "name": 'safarestan', "class_name": 'Suppliers::Safarestan', "status": true, "created_at": '2018-01-20T08:30:51.844Z', "updated_at": '2018-06-29T16:34:29.764Z', "international": false, "domestic": true, "job_search_allowed": false, "rate_count": 4, "rate_average": 5 }, { "id": 1, "name": 'flightio', "class_name": 'Suppliers::Flightio', "status": true, "created_at": '2017-06-10T14:33:43.632Z', "updated_at": '2018-06-29T17:01:17.159Z', "international": false, "domestic": true, "job_search_allowed": false, "rate_count": 4, "rate_average": 5 }, { "id": 3, "name": 'alibaba', "class_name": 'Suppliers::Alibaba', "status": false, "created_at": '2017-06-10T14:33:43.644Z', "updated_at": '2018-03-13T22:15:18.085Z', "international": false, "domestic": true, "job_search_allowed": false, "rate_count": 0, "rate_average": 0 }, { "id": 6, "name": 'respina', "class_name": 'Suppliers::Respina24', "status": false, "created_at": '2017-08-09T00:00:00.000Z', "updated_at": '2018-03-13T22:15:18.116Z', "international": false, "domestic": true, "job_search_allowed": false, "rate_count": 0, "rate_average": 0 }]
+supplier_list = [
+  { "id": 7, "name": 'trip', "class_name": 'Suppliers::Trip', "status": false, "international": true, "domestic": true, "job_search_allowed": false, "rate_count": 0, "rate_average": 0 },
+  { "id": 5, "name": 'ghasedak', "class_name": 'Suppliers::Ghasedak', "status": true, "international": false, "domestic": true, "job_search_allowed": false, "rate_count": 4, "rate_average": 3 },
+  { "id": 11, "name": 'safarestan', "class_name": 'Suppliers::Safarestan', "status": true, "international": false, "domestic": true, "job_search_allowed": false, "rate_count": 4, "rate_average": 5 },
+  { "id": 1, "name": 'flightio', "class_name": 'Suppliers::Flightio', "status": true, "international": false, "domestic": true, "job_search_allowed": false, "rate_count": 4, "rate_average": 5 },
+  { "id": 3, "name": 'alibaba', "class_name": 'Suppliers::Alibaba', "status": false, "international": false, "domestic": true, "job_search_allowed": false, "rate_count": 0, "rate_average": 0 },
+  { "id": 6, "name": 'respina', "class_name": 'Suppliers::Respina24', "status": false, "international": false, "domestic": true, "job_search_allowed": false, "rate_count": 0, "rate_average": 0 }
+]
 
 supplier_list.each do |supplier|
-  Supplier.create(name: supplier[:name],
-                  class_name: supplier[:class_name],
-                  status: supplier[:status],
-                  international: supplier[:international],
-                  domestic: supplier[:domestic],
-                  job_search_allowed: supplier[:job_search_allowed],
-                  rate_count: supplier[:rate_count],
-                  rate_average: supplier[:rate_average])
+  Supplier.create(
+    name: supplier[:name],
+    class_name: supplier[:class_name],
+    status: supplier[:status],
+    international: supplier[:international],
+    domestic: supplier[:domestic],
+    job_search_allowed: supplier[:job_search_allowed],
+    rate_count: supplier[:rate_count],
+    rate_average: supplier[:rate_average])
 end
 
 require 'csv'
@@ -43,7 +51,6 @@ Airline.create(code: 'PY', persian_name: 'پویا', english_name: 'pouya', coun
 Airline.find_by(code: 'VR').update(persian_name: 'وارش', english_name: 'varesh', country_code: 'IR')
 Airline.find_by(code: 'SA').update(persian_name: 'ساها', english_name: 'Saha', country_code: 'IR')
 Airline.find_by(code: 'FP').update(persian_name: 'فلای پرشیا', english_name: 'Fly Persia', country_code: 'IR')
-
 
 User.create(email: 'bot@parvazhub.com')
 User.create(email: 'job@parvazhub.com')
