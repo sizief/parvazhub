@@ -1,4 +1,5 @@
-<p class="alert success">
-    <i class="alarm outline icon teal"></i>
-    <%=       @message.html_safe    %>
-</p>
+<% if @message %>
+  <p class="alert success">
+    <%= @message %>
+  </p>
+<% end %>

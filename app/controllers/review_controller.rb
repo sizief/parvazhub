@@ -15,6 +15,7 @@ class ReviewController < ApplicationController
     @reviews = Review.where(page: @page).where.not(text: '').where(published: true)
     @user = current_user
     @category = 'airline'
+    @message = message
   end
 
   def supplier_reviews
@@ -29,6 +30,7 @@ class ReviewController < ApplicationController
     @reviews = Review.where(page: @page).where.not(text: '').where(published: true)
     @user = current_user
     @category = 'supplier'
+    @message = message
   end
 
   def not_found
@@ -46,21 +48,19 @@ class ReviewController < ApplicationController
     user = automatic_login(channel: channel, user_agent_request: request.user_agent)
     review = Review.create(author: author, text: text, page: page, rate: rate, user: user, category: category)
 
-    if review.nil?
-      @message = 'ببخشید خطایی رخ داد. لطفا دوباره آدرس را وارد کنید.'
-    else
-      update_user_name author, user.id
-      @message = succesful_message author, text
-      review_background_jobs page, author, text, rate, user, channel
-    end
+    review_background_jobs page, author, text, rate, user, channel
 
-    respond_to do |format|
-      format.js
-      format.html
-    end
+    redirect_to action: "#{category}_reviews", property_name: page, review_saved: review.persisted?
   end
 
   private
+
+  def message
+    return nil if params[:review_saved].nil?
+    return success_message if params[:review_saved] == 'true'
+
+    error_message
+  end
 
   def review_background_jobs(page, author, text, rate, user, channel)
     if Rails.env.production?
@@ -74,11 +74,11 @@ class ReviewController < ApplicationController
     user&.update(first_name: names[0], last_name: names[1])
   end
 
-  def succesful_message(author, text)
-    first_name = author.empty? ? 'دوست' : author.split(' ')[0]
-    message = "#{first_name} عزیز،  <br>"
-    message += 'نظرتان ثبت شد و بعد از حداکثر ۱۵ دقیقه در سایت نمایش داده می‌شود. ممنونم که نظرتان را با ما و بقیه کاربران پروازهاب به اشتراک گذاشتید.'
-    message += '<br> برای دیدن پیغام‌تان صفحه را رفرش کنید.' unless text.empty?
-    message += '<br><br> علی، مدیر پروازهاب'
+  def success_message
+    'دوست عزیز نظرتان ثبت شد. ممنونم که نظرتان را با ما و بقیه کاربران پروازهاب به اشتراک گذاشتید.'
+  end
+
+  def error_message
+    'نظر شما به دلیل خطا ثبت نشد. سعی می‌کنیم خطا را بررسی و رفع کنیم. لطفا اگر مایل بودید درآینده دوباره تلاش کنید. ممنونیم.'
   end
 end

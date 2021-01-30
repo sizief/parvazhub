@@ -3,7 +3,7 @@
 <% provide(:description,"نظر مسافران  #{@supplier_persian_name} را در پروازهاب بخوانید. انتفاد و نظر خودتان را ثبت کنید.")  %>
 
 <div class="ui container" id="search-results-container" style="direction:rtl">
-
+<%= render 'review/register' %>
 
     <div class="ui stackable grid review-header">    
         <div class="six wide column right floated">    
@@ -59,7 +59,7 @@
 
     <div id="review-register-alert" style="padding-top:1em;"></div>
     <div id="review-register-form">
-        <%= form_tag(register_review_path, method: :post, class: "ui form", remote: true) do %>	
+        <%= form_tag(register_review_path, method: :post, class: "ui form") do %>
             <h4 class="ui dividing header">نظرتان در مورد کیفیت خدمات 
             <%= @supplier_persian_name %>  
             چیست؟ </h4>
@@ -90,21 +90,19 @@
             </div>
             <div class="field center aligned">
                 <%= submit_tag "ثبت کن", class: "ui submit web-font blue button fluid" %>
-            </div>	
+            </div>
+            <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
         <%end%>
     </div>
-          
-</div> 
+</div>
 <script>
 $( "#review-button" ).click(function() {
     $('html, body').animate({
         scrollTop: $("#review-register-form").offset().top
-    }, 1000);   
+    }, 1000);
     $('#review-register-form')
      .transition('shake');
     });
 
 </script>
-    <br><br><br><br><br><br><br><br><br>
-    <%= render 'layouts/searchbox-helper', date_picker_inline: false %>   
-    <%= render 'layouts/footer' %>
+<%= render 'layouts/footer' %>

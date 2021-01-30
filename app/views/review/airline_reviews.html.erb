@@ -3,12 +3,12 @@
 <% provide(:description,"نظر مسافران  #{@airline_name} را در پروازهاب بخوانید و نظر و انتقاد خودتان را ثبت کنید")  %>
 
 <div class="ui container" id="search-results-container" style="direction:rtl">
+<%= render 'review/register' %>
 
-
-    <div class="ui stackable grid review-header">    
-        <div class="six wide column right floated">    
+    <div class="ui stackable grid review-header">
+        <div class="six wide column right floated">
             <h5 class="web-font" style="font-size:3.5em">
-                <%= airline_logo_for(@airline_code,"90px",false) %> 
+                <%= airline_logo_for(@airline_code,"90px",false) %>
                 <%= @airline_name %> 
             </h5> 
         </div>
@@ -57,9 +57,9 @@
     <div id="review-register-alert" style="padding-top:1em;"></div>
 
     <div id="review-register-form">
-        <%= form_tag(register_review_path, method: :post, class: "ui form", remote: true) do %>	
+        <%= form_tag(register_review_path, method: :post, class: "ui form") do %>
             <h4 class="ui dividing header">نظرتان در مورد کیفیت پروازهای 
-            <%= @airline_name %>  
+            <%= @airline_name %>
             چیست؟ </h4>
             <div class="field">
                 <div class="two fields">
@@ -70,7 +70,7 @@
                     <div class="field">
                         <label>ستاره</label>
                         <select class="ui fluid dropdown" name="rate">
-                            <option value="">انتخاب کنید</option>    
+                            <option value="">انتخاب کنید</option>
                             <option value="1">یک ستاره</option>
                             <option value="2">دو ستاره</option>
                             <option value="3">سه ستاره</option>
@@ -88,21 +88,19 @@
             </div>
             <div class="field center aligned">
                 <%= submit_tag "ثبت کن", class: "ui submit web-font blue button fluid" %>
-            </div>	
+            </div>
+            <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
         <%end%>
     </div>
-          
-</div> 
+</div>
+
 <script>
 $( "#review-button" ).click(function() {
     $('html, body').animate({
         scrollTop: $("#review-register-form").offset().top
-    }, 1000);   
+    }, 1000);
     $('#review-register-form')
      .transition('shake');
     });
-
 </script>
-    <br><br><br><br><br><br><br><br><br>
-    <%= render 'layouts/searchbox-helper', date_picker_inline: false %>   
-    <%= render 'layouts/footer' %>
+<%= render 'layouts/footer' %>
