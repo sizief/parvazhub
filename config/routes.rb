@@ -50,6 +50,7 @@ Rails.application.routes.draw do
   post 'notification/price_alert_register', to: 'notification#price_alert_register', as: 'price_alert_register'
 
   get '/policy', to: 'static_pages#policy', as: 'policy'
+  get '/terms', to: 'static_pages#terms', as: 'terms'
   get '/airline-review/', to: 'review#airline_index', as: 'airline_review_index_page'
   get '/airline-review/:property_name', to: 'review#airline_reviews', as: 'airline_review_page'
   get '/supplier-review/', to: 'review#supplier_index', as: 'supplier_review_index_page'
