@@ -22,14 +22,3 @@
   update_most_search_routes:
     cron: '0 0 3 * * *'
     class: MostSearchRouteWorker
-
-#daily background search
-#  daily_background_search:
-#    cron: '0 0 4 * * *'
-#    args: ["type": "daily"]
-#    class: BackgroundSearchWorker
-
-#hourly monitoring 
-#  Monitor_Search:
-#    cron: '0 0 5,11,17,23 * * *'
-#    class: MonitorSearchWorker
