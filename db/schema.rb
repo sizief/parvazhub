@@ -255,8 +255,8 @@ ActiveRecord::Schema.define(version: 2020_12_27_095753) do
   create_table "user_flight_price_histories", id: :serial, force: :cascade do |t|
     t.string "flight_id"
     t.string "channel"
-    t.datetime "created_at", default: "2019-12-21 09:28:09", null: false
-    t.datetime "updated_at", default: "2019-12-21 09:28:09", null: false
+    t.datetime "created_at", default: "2021-06-19 15:56:03", null: false
+    t.datetime "updated_at", default: "2021-06-19 15:56:03", null: false
     t.integer "user_id"
     t.index ["user_id"], name: "index_user_flight_price_histories_on_user_id"
   end

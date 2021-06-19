@@ -1,0 +1,49 @@
+
+version: '2.1'
+services:
+  redis:
+    image: "redis:alpine"
+  db:
+    image: postgres:13.3
+    volumes:
+      - /var/lib/postgresql/13.3/parvazhub:/var/lib/postgresql/data
+    env_file: .env
+    healthcheck:
+      test: ["CMD-SHELL", "psql -h localhost -p 5432 -U parvazhub -v ON_ERROR_STOP=1 -c 'select version()' &> /dev/null"]
+      test: ["CMD-SHELL", "pg_isready -U parvazhub"] #Are you really up?
+      interval: 2s
+      timeout: 30s
+      retries: 15
+  app:
+    build: .
+    env_file: .env
+    environment:
+      RAILS_ENV: $RAILS_ENV
+      ENTRYPOINT: app
+    depends_on:
+      db:
+        condition: service_healthy
+    links:
+      - db:db
+    ports:
+      - 3001:3000
+    volumes:
+      - .:/usr/src/app
+    tty: true
+    stdin_open: true
+  sidekiq:
+    build: .
+    env_file: .env
+    environment:
+      RAILS_ENV: $RAILS_ENV
+      ENTRYPOINT: sidekiq
+    depends_on:
+      db:
+        condition: service_healthy
+    links:
+      - db:db
+      - redis:redis
+    volumes:
+      - .:/usr/src/app
+    tty: true
+    stdin_open: true
