@@ -16,7 +16,7 @@ class FlightPriceController < ApplicationController
 
     date_in_human = date_to_human date
     @flight = Flight.find(flight_id)
-    @user = get_current_user(channel, nil)
+    @user = current_user
     @search_parameter = { origin_english_name: origin.english_name, origin_persian_name: origin.persian_name, origin_code: origin.city_code,
                           destination_english_name: destination.english_name, destination_persian_name: destination.persian_name, destination_code: destination.city_code,
                           date: date, date_in_human: date_in_human }
@@ -69,9 +69,5 @@ class FlightPriceController < ApplicationController
     else
       JalaliDate.new(date.to_date).strftime ' %d %b'
     end
-  end
-
-  def get_current_user(channel, user_agent_request)
-    user = automatic_login(channel: channel, user_agent_request: user_agent_request)
   end
 end

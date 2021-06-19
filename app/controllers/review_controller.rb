@@ -45,8 +45,7 @@ class ReviewController < ApplicationController
     category = params[:category]
     channel = 'website'
 
-    user = automatic_login(channel: channel, user_agent_request: request.user_agent)
-    review = Review.create(author: author, text: text, page: page, rate: rate, user: user, category: category)
+    review = Review.create(author: author, text: text, page: page, rate: rate, user: current_user, category: category)
 
     review_background_jobs page, author, text, rate, user, channel
 

@@ -15,7 +15,7 @@ class SearchResultController < ApplicationController
     date = date_to_code params[:date]
     channel = 'website'
     route = Route.new.get_route_by_english_name(origin_name, destination_name)
-    user = get_current_user(channel, request.user_agent)
+    user = current_user
 
     if date < Date.today.to_s
       redirect_to action: 'search', origin_name: origin_name, destination_name: destination_name, date: 'today'
@@ -112,9 +112,5 @@ class SearchResultController < ApplicationController
     else
       date
     end
-  end
-
-  def get_current_user(channel, user_agent_request)
-    automatic_login(channel: channel, user_agent_request: user_agent_request)
   end
 end

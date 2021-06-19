@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  devise_for :users
   require 'sidekiq/web'
   require 'sidekiq-scheduler/web'
 

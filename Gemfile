@@ -12,7 +12,6 @@ gem 'capistrano-env-config'
 gem 'capistrano-rails', '~> 1.3', require: false
 gem 'capistrano-rbenv', '~> 2.1'
 gem 'coffee-rails'
-gem 'devise'
 gem 'dotenv-rails', groups: %i[development test production local]
 gem 'execjs'
 gem 'foreman', '~> 0.82.0'
@@ -34,6 +33,7 @@ gem 'sidekiq-status'
 gem 'sprockets', '4.0.2'
 gem 'turbolinks', '5.0.1'
 gem 'uglifier', '4.2.0'
+gem 'google_sign_in'
 
 group :development do
   gem 'listen'

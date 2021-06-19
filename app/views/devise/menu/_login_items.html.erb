@@ -1,5 +1,0 @@
-<% if user_signed_in? %>
-  <%= link_to('<i class="bordered sign out icon"></i>'.html_safe, destroy_user_session_path, method: :delete, class:"menu-links") %>        
-<% else %>
-  <%= link_to('<i class="bordered sign in icon"></i>'.html_safe, new_user_session_path , class:"menu-links")  %>
-<% end %>

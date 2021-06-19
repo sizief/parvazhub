@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Review < ApplicationRecord
-  belongs_to :user
   enum category: %i[general airline supplier]
 
   def get_last_supplier_review

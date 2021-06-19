@@ -146,8 +146,4 @@ class ApiController < ApplicationController
   def flight_price_params
     params.permit(:id)
   end
-
-  def current_user
-    UserController.new.get_app_user
-  end
 end
