@@ -3,7 +3,7 @@
 class ReviewController < ApplicationController
   def airline_reviews
     airline = Airline.find_by(english_name: params[:property_name])
-    not_found if airline.nil?
+    raise ActionController::RoutingError, 'Not Found' if airline.nil?
 
     @airline_name = airline.persian_name
     @airline_code = airline.code
@@ -20,7 +20,7 @@ class ReviewController < ApplicationController
 
   def supplier_reviews
     supplier = Supplier.where('lower(name) = ?', params[:property_name]).first
-    not_found if supplier.nil?
+    raise ActionController::RoutingError, 'Not Found' if supplier.nil?
 
     @supplier_persian_name = Supplier.new.get_persian_name supplier.name.downcase
     @supplier_english_name = supplier.name.downcase
@@ -33,33 +33,27 @@ class ReviewController < ApplicationController
     @message = message
   end
 
-  def not_found
-    raise ActionController::RoutingError, 'Not Found'
-  end
-
   def create
-    author = params[:author]
-    rate = params[:rate]
-    text = params[:text]
-    page = params[:page]
-    category = params[:category]
-    channel = 'website'
-
+    binding.pry
     result = Reviews::Create.new(
-      author: author,
-      text: text,
-      page: page,
-      rate: rate,
+      author: create_params[:author],
+      text: create_params[:text],
+      page: create_params[:page],
+      rate: create_params[:rate],
       user: current_user,
-      category: category
+      category: create_params[:category]
     ).call
 
-    TelegramMonitoringWorker.perform_async("📣 #{page}, #{author}, #{text}, #{rate}")
+    TelegramMonitoringWorker.perform_async("📣 #{create_params[:author]}, #{create_params[:text]}")
 
-    redirect_to action: "#{category}_reviews", property_name: page, review_saved: result
+    redirect_to action: "#{create_params[:category]}_reviews", property_name: create_params[:page], review_saved: result
   end
 
   private
+
+  def create_params
+    @create_params ||= params.permit(:author, :text, :page, :rate, :category)
+  end
 
   def message
     return nil if params[:review_saved].nil?
