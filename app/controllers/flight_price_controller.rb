@@ -6,7 +6,6 @@ class FlightPriceController < ApplicationController
     destination_name = params[:destination_name].downcase
     date = params[:date]
     flight_id = params[:id]
-    channel = 'website'
     @dates = []
     @georgian_dates = []
     @prices = []
@@ -16,12 +15,17 @@ class FlightPriceController < ApplicationController
 
     date_in_human = date_to_human date
     @flight = Flight.find(flight_id)
-    @user = current_user
-    @search_parameter = { origin_english_name: origin.english_name, origin_persian_name: origin.persian_name, origin_code: origin.city_code,
-                          destination_english_name: destination.english_name, destination_persian_name: destination.persian_name, destination_code: destination.city_code,
-                          date: date, date_in_human: date_in_human }
+    @search_parameter = { 
+      origin_english_name: origin.english_name,
+      origin_persian_name: origin.persian_name,
+      origin_code: origin.city_code,
+      destination_english_name: destination.english_name,
+      destination_persian_name: destination.persian_name,
+      destination_code: destination.city_code,
+      date: date, date_in_human: date_in_human
+    }
 
-    @flight_prices = get_flight_price(@flight, channel, request.user_agent, current_user)
+    @flight_prices = FlightResult.new.get_flight_price(@flight)
     @flight_price_over_time = FlightPriceArchive.flight_price_over_time(flight_id, date)
     @flight_price_over_time.each do |date, price|
       @georgian_dates << date.to_s.to_date.strftime('%A %d %B')
@@ -35,29 +39,12 @@ class FlightPriceController < ApplicationController
     render :index
   end
 
-  def get_flight_price(flight, channel, user_agent_request, user)
-    unless is_bot(user_agent_request)
-      flight_price_background_archive(channel, flight, user)
-    end
-    FlightResult.new.get_flight_price(flight)
-  end
-
   private
 
-  def flight_price_background_archive(channel, flight, user)
-    if Rails.env.production?
-      UserFlightPriceHistoryWorker.perform_async(channel, flight.id, user.id)
-    else
-      UserFlightPriceHistory.create(flight_id: flight.id, channel: channel, user: user)
-    end
-  end
-
   def get_reviews(airline)
-    reviews = if airline.nil?
-                []
-              else
-                Review.where(page: airline.english_name).where.not(text: '')
-              end
+    return [] if airline.nil?
+
+    Review.where(page: airline.english_name).where.not(text: '')
   end
 
   def date_to_human(date)
