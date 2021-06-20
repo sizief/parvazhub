@@ -8,7 +8,7 @@ class User < ApplicationRecord
   has_many :user_search_histories, dependent: :destroy
   has_many :user_flight_price_histories, dependent: :destroy
   has_many :reviews
-  has_many :redirects
+  has_many :redirects, dependent: :destroy
 
   ANONYMOUS_EMAIL = 'anonymous@parvazhub.com'
 
