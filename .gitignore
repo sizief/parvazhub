@@ -1,4 +1,5 @@
 /data
+git_last_commit
 # Ignore bundler config.
 /.bundle
 /vendor/bundle

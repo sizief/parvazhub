@@ -12,7 +12,7 @@ x.register_request # for the ones that has two level RQ/RS
 For some reasons, `assets:precompile` does not add font folder to the public/assets. cp them manually from `/app/assets/fonts` to `/public/assets/fonts`
 
 ## TODO
-- remove data, redis, pg, and parvazhb service, www folder
+- remove user nonsense
 - add gmail login
 - add photos of the airplane by passengers | 7 | 5 = 1.4
 - community for reviewers | 4 | 6 = 0.7
