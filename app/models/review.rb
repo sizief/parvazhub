@@ -2,6 +2,7 @@
 
 class Review < ApplicationRecord
   enum category: %i[general airline supplier]
+  belongs_to :user
 
   def get_last_supplier_review
     review = get_not_null_text_review 'supplier'

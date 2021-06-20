@@ -54,7 +54,7 @@ Rails.application.routes.draw do
   get '/airline-review/:property_name', to: 'review#airline_reviews', as: 'airline_review_page'
   get '/supplier-review/', to: 'review#supplier_index', as: 'supplier_review_index_page'
   get '/supplier-review/:property_name', to: 'review#supplier_reviews', as: 'supplier_review_page'
-  post '/review', to: 'review#register', as: 'register_review'
+  post '/review', to: 'review#create', as: 'create_review'
 
   get '/api/v1/city_prefetch_suggestion', to: 'api#city_prefetch_suggestion', as: 'api_city_prefetch_suggestion'
   get '/api/v1/city_suggestion/:query', to: 'api#city_suggestion', as: 'api_city_suggestion'

@@ -37,7 +37,7 @@ class ReviewController < ApplicationController
     raise ActionController::RoutingError, 'Not Found'
   end
 
-  def register
+  def create
     author = params[:author]
     rate = params[:rate]
     text = params[:text]
@@ -45,11 +45,18 @@ class ReviewController < ApplicationController
     category = params[:category]
     channel = 'website'
 
-    review = Review.create(author: author, text: text, page: page, rate: rate, user: current_user, category: category)
+    result = Reviews::Create.new(
+      author: author,
+      text: text,
+      page: page,
+      rate: rate,
+      user: current_user,
+      category: category
+    ).call
 
-    review_background_jobs page, author, text, rate, user, channel
+    TelegramMonitoringWorker.perform_async("📣 #{page}, #{author}, #{text}, #{rate}")
 
-    redirect_to action: "#{category}_reviews", property_name: page, review_saved: review.persisted?
+    redirect_to action: "#{category}_reviews", property_name: page, review_saved: result
   end
 
   private
@@ -59,18 +66,6 @@ class ReviewController < ApplicationController
     return success_message if params[:review_saved] == 'true'
 
     error_message
-  end
-
-  def review_background_jobs(page, author, text, rate, user, channel)
-    if Rails.env.production?
-      TelegramMonitoringWorker.perform_async("📣 #{page}, #{author}, #{text}, #{rate}")
-    end
-  end
-
-  def update_user_name(author, user_id)
-    names = author.split(' ')
-    user =  User.find_by(id: user_id)
-    user&.update(first_name: names[0], last_name: names[1])
   end
 
   def success_message
