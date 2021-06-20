@@ -34,7 +34,6 @@ class ReviewController < ApplicationController
   end
 
   def create
-    binding.pry
     result = Reviews::Create.new(
       author: create_params[:author],
       text: create_params[:text],
