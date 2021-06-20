@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_27_095753) do
+ActiveRecord::Schema.define(version: 2021_06_20_182947) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -238,20 +238,6 @@ ActiveRecord::Schema.define(version: 2020_12_27_095753) do
     t.index ["name"], name: "index_suppliers_on_name", unique: true
   end
 
-  create_table "telegram_search_queries", id: :serial, force: :cascade do |t|
-    t.string "origin"
-    t.string "destination"
-    t.string "date"
-    t.string "flight_price"
-    t.string "chat_id"
-    t.integer "user_id"
-    t.index ["user_id"], name: "index_telegram_search_queries_on_user_id"
-  end
-
-  create_table "telegram_update_ids", id: :serial, force: :cascade do |t|
-    t.string "update_id"
-  end
-
   create_table "user_flight_price_histories", id: :serial, force: :cascade do |t|
     t.string "flight_id"
     t.string "channel"
@@ -299,7 +285,6 @@ ActiveRecord::Schema.define(version: 2020_12_27_095753) do
   add_foreign_key "reviews", "users"
   add_foreign_key "route_days", "routes"
   add_foreign_key "search_histories", "routes"
-  add_foreign_key "telegram_search_queries", "users"
   add_foreign_key "user_flight_price_histories", "users"
   add_foreign_key "user_search_histories", "users"
 end

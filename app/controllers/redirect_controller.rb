@@ -29,11 +29,6 @@ class RedirectController < ApplicationController
     end
   end
 
-  def app_redirect
-    user_id = UserController.new.get_app_user.id
-    redirect_to action: 'redirect', origin_name: params[:origin_name], destination_name: params[:destination_name], date: params[:date], flight_id: params[:flight_id], flight_price_id: params[:flight_price_id], channel: params[:channel], user_id: user_id
-  end
-
   def redirect
     args = define_args
 
