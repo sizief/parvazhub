@@ -15,6 +15,7 @@ services:
       timeout: 30s
       retries: 15
   app:
+    image: app
     build: .
     env_file: .env
     environment:
@@ -32,7 +33,7 @@ services:
     tty: true
     stdin_open: true
   sidekiq:
-    build: .
+    image: app
     env_file: .env
     environment:
       RAILS_ENV: $RAILS_ENV

@@ -15,7 +15,6 @@ class SearchResultController < ApplicationController
     date = date_to_code params[:date]
     channel = 'website'
     route = Route.new.get_route_by_english_name(origin_name, destination_name)
-    user = current_user
 
     if date < Date.today.to_s
       redirect_to action: 'search', origin_name: origin_name, destination_name: destination_name, date: 'today'
@@ -27,7 +26,7 @@ class SearchResultController < ApplicationController
     index(
       route,
       date,
-      flight_results(route, date, request.user_agent, user)
+      flight_results(route, date, request.user_agent)
     )
   end
 
@@ -37,12 +36,11 @@ class SearchResultController < ApplicationController
 
   private
 
-  def flight_results(route, date, user_agent, user)
-    # do not search supplier, just get results from db
-    return get_flights(date, route, true) if is_bot(user_agent)
-
-    save_search_history(route, date, 'website', user)
-    get_flights(date, route, false)
+  def flight_results(route, date, user_agent)
+    return  FlightResult.new(route, date).archive if is_bot(user_agent)
+    
+    save_search_history(route, date, 'website')
+    date >= Date.today.to_s ? FlightResult.new(route, date).call : []
   end
 
   def index(route, date, flights)
@@ -77,19 +75,15 @@ class SearchResultController < ApplicationController
     }
   end
 
-  def save_search_history(route, date, channel, user)
+  def save_search_history(route, date, channel)
+    return unless current_user
+
     UserSearchHistory.create(
       route_id: route.id,
       departure_time: date,
       channel: channel,
-      user: user
+      user: current_user
     )
-  end
-
-  def get_flights(date, route, is_bot)
-    return FlightResult.new(route, date).archive if is_bot
-
-    date >= Date.today.to_s ? FlightResult.new(route, date).call : []
   end
 
   def date_in_human(date)

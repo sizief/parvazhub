@@ -5,7 +5,7 @@ class ApiController < ApplicationController
 
   def cors_set_access_control_headers
     headers['Access-Control-Allow-Origin'] = '*'
-    headers['Access-Control-Allow-Methods'] = 'POST, GET'
+    headers['Access-Control-Allow-Methods'] = 'GET'
     headers['Access-Control-Allow-Headers'] = '*'
     headers['Access-Control-Request-Method'] = '*'
     headers['Access-Control-Max-Age'] = '1728000'
@@ -48,102 +48,9 @@ class ApiController < ApplicationController
     render json: city_list
   end
 
-  def service_test
-    sql = 'Select 1 from countries'
-    status = ActiveRecord::Base.connection.execute(sql)
-    if status
-      render json: {
-        status: 200
-      }.to_json
-    end
-  end
-
-  def flights
-    channel = search_params[:channel].nil? ? 'android' : search_params[:channel]
-    user_agent_request = channel
-    date = search_params[:date]
-    route = get_route search_params[:origin_name], search_params[:destination_name]
-
-    if route && date_is_valid(date)
-      body = get_flights(route, date, channel, user_agent_request)
-      status = true
-    else
-      body = 'Aamoo ina chi chie mifresi? '
-      unless date_is_valid(date)
-        body += 'Date is invalid. Correct date format contract: 2017-01-01.'
-        end
-      unless route
-        body += 'City codes are invalid. Correct origin and destination format contract: tehran or mashhad.'
-        end
-      status = false
-    end
-    render json: { status: status, search_params: api_search_params(route, date), body: body }
-  end
-
-  def suppliers
-    channel = search_params[:channel].nil? ? 'android' : search_params[:channel]
-    user_agent_request = channel
-    flight = Flight.find_by_id(flight_price_params[:id])
-
-    if flight
-      body = get_flight_price(flight, channel, user_agent_request, current_user)
-      status = true
-    else
-      body = 'Flight ID is invalid or out of date or sold out.' unless flight
-      status = false
-     end
-    render json: { status: status, body: body }
-  end
-
   private
 
   def english_result(city, country)
     { 'city': city.humanize, 'country': country.humanize }
-  end
-
-  def api_search_params(route, date)
-    unless route.nil?
-      origin = City.find_by(city_code: route.origin)
-      destination = City.find_by(city_code: route.destination)
-      {
-        origin_persian_name: origin.persian_name,
-        destination_persian_name: destination.persian_name,
-        date: date
-      }
-    end
-  end
-
-  def get_flight_price(flight, channel, user_agent_request, user)
-    FlightPriceController.new.get_flight_price(flight, channel, user_agent_request, user)
-  end
-
-  def date_is_valid(date)
-    date_array = date.split('-').map(&:to_i)
-    if Date.valid_date? date_array[0], date_array[1], date_array[2]
-      true
-    else
-      false
-    end
-  rescue StandardError
-  end
-
-  def get_route(origin_name, destination_name)
-    unless origin_name.nil? && destination_name.nil?
-      route = Route.new.get_route_by_english_name(origin_name, destination_name)
-    end
-  end
-
-  def get_flights(route, date, channel, user_agent_request)
-    SearchResultController
-      .new
-      .flight_results(route, date, user_agent_request, current_user)
-  end
-
-  def search_params
-    params.permit(:origin_name, :destination_name, :date, :channel)
-  end
-
-  def flight_price_params
-    params.permit(:id)
   end
 end
