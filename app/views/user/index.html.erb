@@ -1,2 +1,6 @@
 <%= render 'layouts/header' %>
 <%= @user.first_name %>
+<%= @user.last_name %>
+<p>
+  <%= button_to "Log out", {:controller => :login, :action => :destroy}, :method => :delete %>
+</p>

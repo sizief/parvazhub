@@ -5,10 +5,21 @@
   <div class="ui grid" id="header">
     <div class="two column row">
       <div class="right floated left aligned column">
+        <div class="login-wrapper">
+          <% if @user %>
+            <%= link_to profile_path do %>
+              <%= image_tag @user.avatar_url, alt: 'profile image', class: 'profile-image'%>
+              <div class='profile-name'><%= @user.first_name %></div>
+            <% end %>
+          <% else %>
+            <%= google_sign_in_button proceed_to: create_login_url, class: 'login-button' do %>
+              <i class="checked user icon"></i>
+              ورود به حساب کاربری
+            <% end %>
+          <% end %>
+        </div>
       </div>
-      <div class="left floated right aligned column">
-        <%#= render 'devise/menu/login_items' %>
-        <%#= render 'devise/menu/registration_items' %>
+      <div class="right floated right aligned column">
       </div>
     </div>
   </div>
@@ -71,7 +82,7 @@
 	
 </div>
 
-<% unless @user_last_searches.nil? %>
+<% unless @user_last_searches.empty? %>
 	<div class="ui horizontal divider">
 	آخرین جستجوهای شما
 	</div>

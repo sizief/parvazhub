@@ -16,7 +16,7 @@ class LoginController < ApplicationController
 
   def destroy
     cookies.signed[:user_id] = nil
-    redirect_to root
+    redirect_to root_path
   end
 
   private
