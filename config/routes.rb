@@ -62,5 +62,11 @@ Rails.application.routes.draw do
   get '/review/', to: redirect('/airline-review/', status: 301)
   get '/review/:property_name', to: redirect('/airline-review/%{property_name}', status: 301)
 
+  get 'login', to: 'login#new'
+  get 'login/create', to: 'login#create', as: :create_login
+  delete 'login/destroy', to: 'login#destroy', as: :destroy_login
+
+  get 'profile', to: 'user#index', as: :profile
+
   root 'home#index'
 end

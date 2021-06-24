@@ -36,6 +36,12 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
+    User.find(cookies.signed[:user_id])
+  rescue ActiveRecord::RecordNotFound
     nil
+  end
+
+  def authenticate_user
+    render :file => "static_pages/401", :status => :unauthorized if !current_user
   end
 end

@@ -5,6 +5,9 @@ class User < ApplicationRecord
   enum role: %i[admin user]
   after_initialize :set_default_role, if: :new_record?
 
+  validates :email, uniqueness: true
+  validates :google_user_id, uniqueness: true
+
   has_many :user_search_histories, dependent: :destroy
   has_many :user_flight_price_histories, dependent: :destroy
   has_many :reviews
@@ -18,12 +21,6 @@ class User < ApplicationRecord
 
   def set_default_role
     self.role ||= :user
-  end
-
-  def create_or_find_user_by_id(args)
-    user = User.find_by(id: args[:user_id])
-    user = create_guest_user(channel: args[:channel]) if user.nil?
-    user
   end
 
   def last_searches
@@ -69,9 +66,5 @@ class User < ApplicationRecord
       results << { route_id: route.to_s, dates: routes[route] }
     end
     results
-  end
-
-  def password
-    password = (0...8).map { rand(65..90).chr }.join
   end
 end
