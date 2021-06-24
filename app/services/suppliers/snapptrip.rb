@@ -13,6 +13,13 @@ class Suppliers::Snapptrip < Suppliers::Base
     )
     { status: true, response: ActiveSupport::Gzip.decompress(response.body) }
   rescue *HTTP_ERRORS => e
+  rescue RestClient::BadRequest => e
+  rescue RestClient::InternalServerError => e
+  rescue RestClient::Found => e
+  rescue RestClient::NotFound => e
+  rescue RestClient::Found => e
+  rescue RestClient::Found => e
+  rescue RestClient::InternalServerError => e
     update_status(e)
     { status: false }
   end
