@@ -12,6 +12,8 @@ class Suppliers::Ghasedak < Suppliers::Base
     )
     { status: true, response: response.body }
   rescue *HTTP_ERRORS => e
+  rescue OpenSSL::SSL::SSLError => e
+  rescue RestClient::SSLCertificateNotVerified => e
     update_status(e.message)
     { status: false }
   end
