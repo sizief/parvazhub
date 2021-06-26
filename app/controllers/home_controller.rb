@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class HomeController < ApplicationController
+  layout 'home'
+
   def index
     @routes = []
     routes = MostSearchRoute.new.get ENV['FIRST_PAGE_OFFERS'].to_i

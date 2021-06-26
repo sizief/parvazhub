@@ -1,4 +1,3 @@
-<%= render 'layouts/header' %>
 <% provide(:canonical,"<link rel=\"canonical\" href=\"http://parvazhub.com/flights/#{@search_parameter[:origin_english_name]}-#{@search_parameter[:destination_english_name]}\"/> ".html_safe)%>
 <% provide(:title,"بلیط  #{@search_parameter[:destination_persian_name]} | پرواز #{@search_parameter[:origin_persian_name]} #{@search_parameter[:destination_persian_name]} #{@search_parameter[:date_in_human]} #{airline_name_for(@airline)} #{hour_to_human_for_title(@flight.departure_time.to_datetime.strftime('%H:%M'))} | پروازهاب" ) %>
 <% provide(:description,"لیست بهترین قیمت‌های بلیط  #{@search_parameter[:origin_persian_name]} به  #{@search_parameter[:destination_persian_name]} #{JalaliDate.new(@search_parameter[:date].to_date).strftime('%d %b')} ایرلاین #{airline_name_for(@airline)} #{hour_to_human(@flight.departure_time.to_datetime.strftime('%H:%M'))}" ) %>
@@ -159,5 +158,3 @@
 </div>    
 
 <%= render 'layouts/searchbox-helper', date_picker_inline: false %>   
-<%= render 'layouts/footer' %>
-    

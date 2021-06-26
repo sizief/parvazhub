@@ -1,0 +1,17 @@
+  <head>
+    <title><%= yield(:title) %></title>
+    <%= csrf_meta_tags %>
+    <%= favicon_link_tag 'favicon.ico' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <meta name="theme-color" content="#FBBD08">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="<%= yield(:description) %>">
+    <meta property="og:title" content="<%= yield(:title) %>" />
+    <meta property="og:description" content="<%= yield(:description) %>" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.parvazhub.com" />
+    <meta property="og:image" content="https://www.parvazhub.com/logo.jpg" />
+    <%= yield(:canonical) %>    
+    <meta name="google-site-verification" content="whIYozl54Dyn0zmidp97ERdhDtAp4DU2AiUDZoizQ-I" />
+    <%= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track': "reload"  %>
+  </head>
