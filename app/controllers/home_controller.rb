@@ -16,7 +16,6 @@ class HomeController < ApplicationController
     @search_parameter = user_last_search_params
     @user_last_searches = current_user.nil? ? [] : current_user.last_searches_without_past_dates
     @user_last_searches_limit = 3
-    @user = current_user
   end
 
   def user_last_search_params

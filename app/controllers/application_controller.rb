@@ -3,6 +3,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :redirect_subdomain
+  before_action :set_current_user
 
   @suppliers = Supplier.where(status: true)
 
@@ -26,19 +27,15 @@ class ApplicationController < ActionController::Base
       redirect_to root_path
     end
   end
-
-  def set_cookie_user_id(user_id)
-    cookies.permanent.signed[:user_id] = user_id
-  end
-
-  def read_cookie_user_id
-    cookies.permanent.signed[:user_id]
-  end
-
+  
   def current_user
     User.find(cookies.signed[:user_id])
   rescue ActiveRecord::RecordNotFound
     nil
+  end
+
+  def set_current_user
+    @current_user ||= current_user
   end
 
   def authenticate_user
