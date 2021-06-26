@@ -11,31 +11,12 @@
 						<%= user_search_history(Date.today-x) %>
 					</div>
 					<div class="label web-font">
-						<%= JalaliDate.new(Date.today-x).strftime "%A %d "  %>
+						<%= JalaliDate.new(Date.today-x).strftime "%e %b "  %>
 					</div>
 				</div>
 			<% end %>
 		</div>
 	</div>
-
-	<% @channels.each do |channel| %>
-		<div class="row" style="padding: 1em">
-			<div class="ui label">
-			<%= channel %>: <%= user_search_history_all(channel) %>
-			</div>
-		</div>
-		<div class="row" style="direction: rtl">
-			<div class="ui mini seven statistics" >
-				<% 0.upto(6).each do |x| %>
-					<div class=" grey statistic" >
-						<div class="value ">
-							<%= user_search_history(Date.today-x,channel) %>
-						</div>
-					</div>
-				<% end %>
-			</div>
-		</div>
-	<% end %>
 
 
 	<div class="ui divider"></div>
@@ -53,32 +34,12 @@
 					  <%= user_flight_price_history(Date.today-x) %>
 				  </div>
 				  <div class="label web-font">
-					  <%= JalaliDate.new(Date.today-x).strftime "%A %d "  %>
+					  <%= JalaliDate.new(Date.today-x).strftime "%e %b "  %>
 				  </div>
 			  </div>
 		  <% end %>
 	  </div>
   </div>
-
-  <% @channels.each do |channel| %>
-	<div class="row" style="padding: 1em">
-		<div class="ui label">
-		<%= channel %>:  <%= user_flight_price_history_all(channel) %>
-		</div>
-	</div>
-	<div class="row" style="direction: rtl">
-		<div class="ui mini seven statistics" >
-		<% 0.upto(6).each do |x| %>
-			<div class=" grey statistic" >
-				<div class="value ">
-					<%= user_flight_price_history(Date.today-x,channel) %>
-				</div>
-			</div>
-		<% end %>
-		</div>
-	</div>
-  <% end %>
-
 
 	<div class="ui divider"></div>
 
@@ -95,31 +56,13 @@
 	  					<%= redirect Date.today-x %>
 	  				</div>
 		  			<div class="label web-font">
-	  					<%= JalaliDate.new(Date.today-x).strftime "%A %d "  %>
+	  					<%= JalaliDate.new(Date.today-x).strftime "%e %b "  %>
 	  				</div>
 	  			</div>
   			<% end %>
   		</div>
 	</div>
 	  
-	<% @channels.each do |channel| %>
-		<div class="row" style="padding: 1em">
-			<div class="ui label">
-			<%= channel %>: <%= redirect_all(channel) %>
-			</div>
-		</div>
-		<div class="row" style="direction: rtl">
-			<div class="ui mini seven statistics" >
-				<% 0.upto(6).each do |x| %>
-					<div class=" grey statistic" >
-						<div class="value ">
-							<%= redirect(Date.today-x,channel) %>
-						</div>
-					</div>
-				<% end %>
-			</div>
-		</div>
-	<% end %>
 
   	<div class="ui divider"></div>
 
@@ -137,7 +80,7 @@
 							<%= search_history Date.today-x %>
 						</div>
 						<div class="label web-font">
-							<%= JalaliDate.new(Date.today-x).strftime "%A %d "  %>
+							<%= JalaliDate.new(Date.today-x).strftime "%e %b "  %>
 						</div>
 					</div>
 				<% end %>

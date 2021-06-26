@@ -29,49 +29,48 @@
 	Details
 	</h4>
 
-	<table class="ui celled striped table ">
-		
-		<tbody>
-			<% @reviews.each do |review|  %>
-			<tr class="center aligned">
-				<td><%= review.id %></td>
-				<td>
-					<% if review.user_id.nil? %>
-						<%= review.author %>
-					<% else %>
-						<a href="<%= admin_show_user_path(id: review.user_id) %>">
-							<%= review.author %>
-						</a>
-					<% end %>
-				</td>
-				<td><%= review.page %></td>
-				<td><%= review.text %></td>
-				<td><%= review.rate %></td>
-				<td><%= time_ago_in_words(review.created_at) %></td>
-				<td>
-					<%= form_for(:review, url: admin_update_review_path, method: :post, html: {id:"review_form"}) do |f| %>
-						<%= f.hidden_field :id, {:value => review.id} %>
-						<% if review.published? %>
-							<%= f.hidden_field :published,{ :value => false} %>	
-							<div class="ui small basic icon buttons">
-  								<button type="submit" value="review[submit]" class="ui button"><i class="toggle on icon"></i></button>
-							</div>
-						<% else %>
-							<%= f.hidden_field :published,{ :value => true} %>	
-							<div class="ui small basic icon buttons">
-  								<button type="submit" value="review[submit]" class="ui button"><i class="toggle off icon"></i></button>
-							</div>
-						<% end %>					   
-					<%end%>
-					<%= form_for(:review, url: admin_update_review_path, method: :delete, html: {id:"review_form"}) do |f| %>
-						<%= f.hidden_field :id, {:value => review.id} %>
-						<div class="ui small basic icon buttons">
-  							<button type="submit" value="review[submit]" class="ui button"><i class="trash alternate icon"></i></button>
-						</div>
-					<% end %>					   
-				</td>
-			</tr>
-			<% end %>
-		</tbody>
-	</table>
+  <table class="ui celled striped table ">
+    <tbody>
+      <% @reviews.last(100).each do |review|  %>
+        <tr class="center aligned">
+          <td><%= review.id %></td>
+          <td>
+            <% if review.user.anonymous? %>
+              <%= review.author %>
+            <% else %>
+              <a href="<%= admin_show_user_path(id: review.user_id) %>">
+                <%= review.user.full_name %>
+              </a>
+            <% end %>
+          </td>
+          <td><%= review.page %></td>
+          <td><%= review.text %></td>
+          <td><%= review.rate %></td>
+          <td><%= time_ago_in_words(review.created_at) %></td>
+          <td>
+            <%= form_for(:review, url: admin_update_review_path, method: :post, html: {id:"review_form"}) do |f| %>
+              <%= f.hidden_field :id, {:value => review.id} %>
+              <% if review.published? %>
+                <%= f.hidden_field :published,{ :value => false} %>
+                <div class="ui small basic icon buttons">
+                  <button type="submit" value="review[submit]" class="ui button"><i class="toggle on icon"></i></button>
+                </div>
+              <% else %>
+                <%= f.hidden_field :published,{ :value => true} %>
+                <div class="ui small basic icon buttons">
+                  <button type="submit" value="review[submit]" class="ui button"><i class="toggle off icon"></i></button>
+                </div>
+              <% end %>
+            <%end%>
+            <%= form_for(:review, url: admin_update_review_path, method: :delete, html: {id:"review_form"}) do |f| %>
+              <%= f.hidden_field :id, {:value => review.id} %>
+                <div class="ui small basic icon buttons">
+                  <button type="submit" value="review[submit]" class="ui button"><i class="trash alternate icon"></i></button>
+                </div>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>
