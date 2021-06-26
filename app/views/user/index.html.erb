@@ -1,5 +1,44 @@
-<%= @user.first_name %>
-<%= @user.last_name %>
-<p>
-  <%= button_to "Log out", {:controller => :login, :action => :destroy}, :method => :delete %>
-</p>
+<% provide(:title,"پروفایل")%>
+
+<div class="article">
+  <div class="web-font article" style="padding-top:2em;">
+    <div>
+      <ul>
+        <li>
+          <%= @user.first_name %> <%= @user.last_name %>
+        </li>
+        <li>
+          <%= @user.email %>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <h4>آخرین جستجوها</h4>
+      <ul>
+        <% @user.user_search_histories.each do |sh| %>
+          <li>
+            <a href="<%= flight_page_path_by_route(sh.route_id, sh.departure_time)  %>">
+              <%= persian_title_by_route(sh[:route_id]) %>
+              <%= JalaliDate.new(sh.departure_time.to_date).strftime("%A %e %b").to_fa %>
+            </a>
+          </li>
+        <% end %> 
+      </ul>
+    </div>
+    <div>
+      <h4>کامنت‌ها</h4>
+      <ul>
+        <% @user.reviews.each do |review| %>
+          <li>
+            <%= JalaliDate.new(review.created_at.to_date).strftime("%A %e %b").to_fa %><br/>
+            <%= review.page %><br>
+            <%= review.text %>
+          </li>
+        <% end %> 
+      </ul>
+    </div>
+    <div>
+      <%= button_to "خروج از سیستم", {:controller => :login, :action => :destroy}, :method => :delete %>
+    </div>
+  </div>
+</div>
