@@ -51,8 +51,8 @@ class Admin::DashboardController < ApplicationController
   end
 
   def update_review
-    review = Review.find(review_params[:id])
-    review.update(review_params)
+    Review.find(review_params[:id]).update(review_params)
+    redirect_to action: 'reviews'
   end
 
   def delete_review
