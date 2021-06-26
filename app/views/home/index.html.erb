@@ -21,7 +21,8 @@
       </div>
     </a>
 
-    <h1 class="ui header inverted center aligned web-font" style="line-height: 2em;font-size: 1.28rem !important;">      <span id="slogan-description">
+    <h1 class="ui header inverted center aligned web-font" style="line-height: 2em;font-size: 1.28rem !important;">
+        <span id="slogan-description">
 				جستجو و مقایسه 
 				بلیط پروازهای
         <b class="yellow"> داخلی </b>
@@ -60,20 +61,26 @@
 
 
   <div>
-		<h4 class="home-calendar-title">
-		<i class="checked calendar icon"></i>
-			تاریخی برای سفرتان ندارید؟ ارزان‌ترین قیمت‌ها را روی تقویم ببینید:<br><br>
-			<%= link_to "تهران به کیش", route_page_path(origin_name:  "tehran",destination_name: "kish"),class:"city-page-link" %>،
-			<%= link_to "تهران به مشهد", route_page_path(origin_name:  "tehran",destination_name: "mashhad"),class:"city-page-link" %>
-		</h4>
-	</div>
-	
+    <h4 class="home-calendar-title">
+      <i class="checked calendar icon"></i>
+      تاریخی برای سفرتان ندارید؟ ارزان‌ترین قیمت‌ها را روی تقویم ببینید:<br><br>
+      <%= link_to "تهران به کیش", route_page_path(origin_name:  "tehran",destination_name: "kish"),class:"city-page-link" %>،
+      <%= link_to "تهران به مشهد", route_page_path(origin_name:  "tehran",destination_name: "mashhad"),class:"city-page-link" %>
+    </h4>
+  </div>
 </div>
 
-<% unless @user_last_searches.empty? %>
-	<div class="ui horizontal divider">
-	آخرین جستجوهای شما
-	</div>
+<div class="ui horizontal divider">
+  آخرین جستجوهای شما
+</div>
+
+<% if @current_user.nil?%>
+  <div class='dir-rtl'>
+    برای دیدن آخرین جستجوهایی که انجام داده‌اید لطفا وارد حساب کاربری  خود شوید: 
+    <div style='display: inline-block'>
+      <%= render 'layouts/login_link', locals: {basic: true} %>
+  </div>
+<% else %>
 	<div class="ui three stackable cards" style="width:70%;margin:auto;direction:rtl">
 		<% @user_last_searches.each do |user_last_search| %>
 			<div class="card">
@@ -96,14 +103,12 @@
 			</div>
 		<% end %>   
 	</div>
-
-	<div class="ui horizontal divider">
-		مسیرهای پر سفر
-	</div>
-
 <% end %>
 
 
+<div class="ui horizontal divider">
+  مسیرهای پر سفر
+</div>
 
 <div class="ui three stackable cards" style="width:70%;margin:auto;">
 	<% @routes.each do |route| %>

@@ -15,7 +15,7 @@
     <div>
       <h4>آخرین جستجوها</h4>
       <ul>
-        <% @user.user_search_histories.each do |sh| %>
+        <% @user.user_search_histories.limit(20).each do |sh| %>
           <li>
             <a href="<%= flight_page_path_by_route(sh.route_id, sh.departure_time)  %>">
               <%= persian_title_by_route(sh[:route_id]) %>
