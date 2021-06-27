@@ -1,11 +1,13 @@
 <div id="review-register-alert" style="padding-top:1em;"></div>
   <div id="review-register-form">
-    <div style='background: #29aae1; color: white; padding: 5px; dir: rtl. text-align: right '>
-      <i class="star large icon white"></i>
-      برای بهتر  دیده شدن  نظرتان، با یک کلید به سایت وارد شوید و سپس نظرتان را ثبت کنید. 
-    <div style='display: inline-block'>
-      <%= render 'layouts/login_widget', locals: {basic: true} %>
-  </div>
+    <% unless @current_user %>
+      <div style='background: #29aae1; color: white; padding: 5px; dir: rtl. text-align: right '>
+        <i class="star large icon white"></i>
+        برای بهتر  دیده شدن  نظرتان، با یک کلید به سایت وارد شوید و سپس نظرتان را ثبت کنید. 
+      <div style='display: inline-block'>
+        <%= render 'layouts/login_widget', locals: {basic: true} %>
+      </div>
+    <% end %>
     </div>
       <%= form_tag(create_review_path, method: :post, class: "ui form") do %>
           <h4 class="ui dividing header">نظرتان در مورد کیفیت خدمات 
@@ -22,7 +24,7 @@
                   <div class="field">
                       <label>ستاره</label>
                       <select class="ui fluid dropdown" name="rate">
-                          <option value="">انتخاب کنید</option>    
+                          <option value="">انتخاب کنید</option>
                           <option value="1">یک ستاره</option>
                           <option value="2">دو ستاره</option>
                           <option value="3">سه ستاره</option>
