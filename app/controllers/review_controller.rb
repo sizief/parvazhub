@@ -40,7 +40,6 @@ class ReviewController < ApplicationController
     ).call
 
     TelegramMonitoringWorker.perform_async("📣 #{create_params[:author]}, #{create_params[:text]}")
-
     redirect_to action: "#{create_params[:category]}_reviews", property_name: create_params[:page], review_saved: result
   end
 
