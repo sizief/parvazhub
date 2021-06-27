@@ -112,19 +112,8 @@
                     <%= airline_name_for @airline  %>
                 </h5>
                 <% unless @reviews.empty? %>
-                    <% @reviews.each do |review| %>
-                        <div class="ui grid review-section review-card" id="<%= review.id %>">
-                            <div class="column">
-                                    <% if (review.author.nil? or review.author == "") %>
-                                        ناشناس:
-                                    <% else %>
-                                        <%= review.author %>:
-                                    <% end %> 
-                                <%= review.text %>
-                            </div>
-                        </div>
-                    <% end %>
-                    <div class="ui grid review-section review-card" style="font-weight: bold;font-size: 1.1em;padding: 2%;">
+                  <%= render 'review/list' %>
+                  <div class="ui grid review-section review-card" style="font-weight: bold;font-size: 1.1em;padding: 2%;">
                         <a href="<%= airline_review_page_path @airline.english_name  %>" >
                             <i class="comment large icon"></i>
 

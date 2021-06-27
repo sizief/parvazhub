@@ -24,14 +24,6 @@ module ApplicationHelper
     Supplier.where(status: true)
   end
 
-  def get_last_supplier_review
-    Review.new.get_last_supplier_review
-  end
-
-  def get_last_airline_review
-    Review.new.get_last_airline_review
-  end
-
   def github_link
     return unless File.exist?('git_last_commit')
 

@@ -1,0 +1,56 @@
+<div id="review-register-alert" style="padding-top:1em;"></div>
+  <div id="review-register-form">
+    <div style='background: #29aae1; color: white; padding: 5px; dir: rtl. text-align: right '>
+      <i class="star large icon white"></i>
+      برای بهتر  دیده شدن  نظرتان، با یک کلید به سایت وارد شوید و سپس نظرتان را ثبت کنید. 
+    <div style='display: inline-block'>
+      <%= render 'layouts/login_widget', locals: {basic: true} %>
+  </div>
+    </div>
+      <%= form_tag(create_review_path, method: :post, class: "ui form") do %>
+          <h4 class="ui dividing header">نظرتان در مورد کیفیت خدمات 
+          <%= @page_name %>  
+          چیست؟ </h4>
+          <div class="field">
+              <div class="two fields">
+              <% unless @current_user %>
+                <div class="field">
+                  <label>اسم</label>
+                  <%= text_field_tag :author, "",class: "web-font" %>
+                </div>
+              <% end %>
+                  <div class="field">
+                      <label>ستاره</label>
+                      <select class="ui fluid dropdown" name="rate">
+                          <option value="">انتخاب کنید</option>    
+                          <option value="1">یک ستاره</option>
+                          <option value="2">دو ستاره</option>
+                          <option value="3">سه ستاره</option>
+                          <option value="4">چهار ستاره</option>
+                          <option value="5">پنج ستاره</option>
+                      </select>
+                  </div>
+              </div>
+          </div>
+          <div class="field">
+              <label>از تجربه‌ی خرید بلیط‌تان از  <%= @page_name %>   بنویسید</label>
+              <%= text_area_tag :text %>
+              <%= hidden_field_tag(:page, @page) %>
+              <%= hidden_field_tag(:category, "supplier") %>
+          </div>
+          <div class="field center aligned">
+              <%= submit_tag "ثبت کن", class: "ui submit web-font blue button fluid" %>
+          </div>
+          <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+      <%end%>
+  </div>
+</div>
+<script>
+$( "#review-button" ).click(function() {
+    $('html, body').animate({
+        scrollTop: $("#review-register-form").offset().top
+    }, 1000);
+    $('#review-register-form')
+     .transition('shake');
+    });
+</script>

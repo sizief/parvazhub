@@ -21,22 +21,25 @@
     <div class="two wide column"></div>
       <div class="six wide column">
         <div class="web-font footer-section">
-          <% review = get_last_supplier_review %>
+          <% review = Review.last_supplier_review %>
           <% unless review.nil? %>
             <div class="review-card-for-footer">
               <div style=" padding:5px; text-align:right; font-size:0.8em">
                   <i class="comment alternate icon"></i>
-                  <b><%= review["author"] %></b>
+                  <b><%= review.author_full_name %></b>
                   درباره  وب‌سایت
                   <b>
-                    <a href="<%= supplier_review_page_path(property_name: review["page"])%>">
-                    <%= review["persian_name"] %>
+                    <a href="<%= supplier_review_page_path(property_name: review.page)%>">
+                    <%= review.page_name %>
                     </a>
                   </b>
                    نوشته:
               </div>
               <div>
-                <%= review["text"][0..100] %><a href="<%= supplier_review_page_path(property_name: review["page"])%>/#<%= review["id"] %>">...</a>
+                <%= review.text[0..100] %>
+                <a href="<%= supplier_review_page_path(property_name: review.page)%>/#<%= review.id %>">
+                  <i class="arrow right icon"></i>
+                </a>
               </div>
             </div>
           <% end %>
@@ -51,22 +54,25 @@
 
     <div class="six wide column">
         <div class="web-font footer-section" >
-          <% review = get_last_airline_review %>
+          <% review = Review.last_airline_review %>
           <% unless review.nil? %>
             <div class="review-card-for-footer">
               <div style=" padding:5px; text-align:right; font-size:0.8em">
                   <i class="comment alternate icon"></i>
-                  <b><%= review["author"] %></b>
+                  <b><%= review.author_full_name %></b>
                   درباره خط هوایی 
                   <b>
-                    <a href="<%= airline_review_page_path(property_name: review["page"])%>">
-                    <%= review["persian_name"] %>
+                    <a href="<%= airline_review_page_path(property_name: review.page)%>">
+                    <%= review.page_name %>
                     </a>
                   </b>
                    نوشته:
               </div>
               <div>
-                <%= review["text"][0..100] %><a href="<%= airline_review_page_path(property_name: review["page"])%>/#<%= review["id"] %>">...</a>
+                <%= review.text[0..100] %>
+                <a href="<%= airline_review_page_path(property_name: review.page)%>/#<%= review.id %>">
+                  <i class="arrow right icon"></i>
+                </a>
               </div>
             </div>
           <% end %>

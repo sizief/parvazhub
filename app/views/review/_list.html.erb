@@ -1,0 +1,32 @@
+<% @reviews.each do |review| %>
+  <div class="ui grid review-section" id="<%= review.id %>">
+    <div class="five wide column">
+      <div class="review-author">
+
+        <% unless review.user.anonymous? %>
+          <%= image_tag(review.user.avatar_url, class: "airline-logo image ui inline") %>
+          <div style='display: inline-block; vertical-align:bottom'>
+            <%= review.author_full_name %>
+            <div class="review-date"><%= JalaliDate.new(review.created_at.to_date).strftime "%e %b %Y".to_fa  %></div>
+          </div>
+          <div style='font-size: 0.8em;background: aliceblue;width: 100px;padding: 5px;'>
+            <i class="check icon green"></i>
+            کاربر پروازهاب
+          </div>
+        <% else %>
+          <div style='display: inline-block; vertical-alig:bottom'>
+            <%= review.author_full_name %>
+            <div class="review-date"><%= JalaliDate.new(review.created_at.to_date).strftime "%e %b %Y".to_fa  %></div>
+          </div>
+        <% end %>
+
+      </div>
+      <% unless review.rate.nil? %>
+          <div class="review-rate"><%= get_star_icon(5,review.rate,"yellow","small").html_safe %></div>
+      <% end %>
+    </div>
+    <div class="eleven wide column">
+      <%= review.text %>
+    </div>
+  </div>
+<% end %>

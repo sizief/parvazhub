@@ -7,10 +7,10 @@ class LoginController < ApplicationController
 
   def create
     if user = authenticate_with_google
-      cookies.signed[:user_id] = user.id
-      redirect_to profile_path
+      cookies.signed.permanent[:user_id] = user.id
+      redirect_to home_path
     else
-      redirect_to new_session_url, alert: 'authentication_failed'
+      redirect_to home_path, alert: 'authentication_failed'
     end
   end
 

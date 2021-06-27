@@ -44,7 +44,13 @@ class FlightPriceController < ApplicationController
   def get_reviews(airline)
     return [] if airline.nil?
 
-    Review.where(page: airline.english_name).where.not(text: '')
+    Review
+      .where(page: airline.english_name)
+      .where.not(text: '')
+      .where(published: true)
+      .includes(:user)
+      .order('created_at DESC')
+      .sort_by { |r| r.user.anonymous? ? 1 : 0 }
   end
 
   def date_to_human(date)

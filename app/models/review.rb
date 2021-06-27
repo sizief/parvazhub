@@ -1,32 +1,49 @@
 # frozen_string_literal: true
 
 class Review < ApplicationRecord
-  enum category: %i[general airline supplier]
   belongs_to :user
+  enum category: %i[general airline supplier]
 
-  def get_last_supplier_review
-    review = get_not_null_text_review 'supplier'
-    unless review.nil?
-      review = review.attributes
-      review['author'] = review['author'].empty? ? 'ناشناس' : review['author']
-      review['persian_name'] = Supplier.new.get_persian_name review['page']
+  scope :last_text_review, ->(category) { 
+    where(category: category).where.not(text: nil).where.not(text: '').where(published: true).last
+  }
+
+  SUPPLIER = 'supplier'
+  AIRLINE = 'airline'
+  ANONYMOUS_NAME = 'ناشناس'
+
+  def self.last_supplier_review
+    last_text_review(SUPPLIER)
+  end
+
+  def self.last_airline_review
+    last_text_review(AIRLINE)
+  end
+
+  def author_full_name
+    return user.full_name unless user.anonymous?
+    return ANONYMOUS_NAME if author.nil?
+    return ANONYMOUS_NAME if author == ''
+
+    author
+  end
+
+  def page_name
+    if airline? 
+      Airline.new.get_persian_name_by_english_name(page)
+    elsif supplier?
+      Supplier.new.get_persian_name(page)
+    else
+      nil
     end
-    review
   end
 
-  def get_last_airline_review
-    review = get_not_null_text_review 'airline'
-    unless review.nil?
-      review = review.attributes
-      review['author'] = review['author'].empty? ? 'ناشناس' : review['author']
-      review['persian_name'] = Airline.new.get_persian_name_by_english_name review['page']
-    end
-    review
+  def airline?
+    category === AIRLINE
   end
 
-  private
-
-  def get_not_null_text_review(review_type)
-    Review.where(category: review_type).where.not(text: nil).where.not(text: '').where(published: true).last
+  def supplier?
+    category === SUPPLIER
   end
+
 end
