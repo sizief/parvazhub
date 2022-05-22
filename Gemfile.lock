@@ -223,7 +223,7 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     rbzip2 (0.3.0)
-    redis (4.3.1)
+    redis (4.6.0)
     redis-actionpack (5.2.0)
       actionpack (>= 5, < 7)
       redis-rack (>= 2.1.0, < 3)
@@ -261,7 +261,7 @@ GEM
       sprockets-rails
       tilt
     shellany (0.0.1)
-    sidekiq (6.2.1)
+    sidekiq (6.4.0)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
