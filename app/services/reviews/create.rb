@@ -22,6 +22,8 @@ module Reviews
     end
 
     def call
+      return nil if review.text.include? %w(dark drug deep)
+      
       review.user = User.anonymous_user if review.user.nil?
       review.save
     end
