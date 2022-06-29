@@ -30,7 +30,7 @@ class ReviewController < ApplicationController
   end
 
   def create
-    return nil if create_params[:text] =~ /dark|web|drug/
+    return nil if create_params[:text] =~ /dark|web|drug|onion|tor|market/
 
     result = Reviews::Create.new(
       author: create_params[:author],
