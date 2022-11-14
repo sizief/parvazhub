@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_admin
-     true if current_user.email = 'sizief@gmail.com'
+    true if current_user&.email = 'sizief@gmail.com' or Rails.env.development?
   end
   
   def current_user

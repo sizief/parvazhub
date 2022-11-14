@@ -22,7 +22,7 @@
       <div class="six wide column">
         <div class="web-font footer-section">
           <% review = Review.last_supplier_review %>
-          <% unless review.nil? %>
+          <% unless review.blank? %>
             <div class="review-card-for-footer">
               <div style=" padding:5px; text-align:right; font-size:0.8em">
                   <i class="comment alternate icon"></i>
@@ -55,7 +55,7 @@
     <div class="six wide column">
         <div class="web-font footer-section" >
           <% review = Review.last_airline_review %>
-          <% unless review.nil? %>
+          <% unless review.blank? %>
             <div class="review-card-for-footer">
               <div style=" padding:5px; text-align:right; font-size:0.8em">
                   <i class="comment alternate icon"></i>
