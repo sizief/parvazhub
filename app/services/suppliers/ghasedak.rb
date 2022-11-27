@@ -24,7 +24,7 @@ class Suppliers::Ghasedak < Suppliers::Base
     json_response['search']['flights'].each do |flight|
       airline_code = airline_code_correction(flight['airline_code'])
       flight_number = airline_code + flight_number_correction(flight['flight_no'], airline_code)
-      departure_time = flight['arrival_iso_datetime']
+      departure_time = flight['departure_iso_datetime']
       departure_time = departure_time[0..9] + ' ' + departure_time[11..-1]
       price = flight['price']
       deeplink_url = "https://ghasedak24.com/reservation/entries/#{flight['ticket_id']}/?adl=1&chd=0&inf=0&fr=0"

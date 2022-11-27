@@ -13,9 +13,9 @@ class SupplierSearch
   end
 
   def call
-    search_supplier_in_threads
-    # search_supplier_in_threads if Rails.env.production?
-    # search_supplier_in_series if Rails.env.development?
+    # search_supplier_in_threads
+     search_supplier_in_threads if Rails.env.production?
+     search_supplier_in_series if Rails.env.development?
   end
 
   def search_supplier_in_threads
