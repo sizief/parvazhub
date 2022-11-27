@@ -4,11 +4,10 @@ class Suppliers::Ghasedak < Suppliers::Base
   URL = ENV['URL_GHASEDAK_SEARCH']
 
   def search_supplier
-    response = RestClient::Request.execute(
-      method: :get,
-      url: URI.parse(URL + params).to_s,
-      proxy: nil,
-      payload: params
+    response = RestClient.post(
+      URL,
+      {date: date, number: '1-0-0', route: "#{origin.upcase}-#{destination.upcase}"}.to_json,
+      { content_type: :json, accept: :json }
     )
     { status: true, response: response.body }
   rescue *HTTP_ERRORS => e
@@ -18,24 +17,19 @@ class Suppliers::Ghasedak < Suppliers::Base
     { status: false }
   end
 
-  def params
-    search_date = date.to_date.to_s.gsub('-', '/')
-    "from=#{origin.upcase}&to=#{destination.upcase}&fromDate=#{search_date}&toDate=#{search_date}&userName=sepehr&password=1234&cs=1"
-  end
 
   def import_flights(response)
     json_response = JSON.parse(response[:response])
 
-    json_response['data'].each do |flight|
-      airline_code = airline_code_correction(flight['Airline'])
-      flight_number = airline_code + flight_number_correction(flight['FlightNo'], airline_code)
-      departure_time = flight['FlightDate']
+    json_response['search']['flights'].each do |flight|
+      airline_code = airline_code_correction(flight['airline_code'])
+      flight_number = airline_code + flight_number_correction(flight['flight_no'], airline_code)
+      departure_time = flight['arrival_iso_datetime']
       departure_time = departure_time[0..9] + ' ' + departure_time[11..-1]
-      airplane_type = flight['Airplane']
-      price = flight['Price'].to_f / 10
-      deeplink_url = flight['ReserveLink']
+      price = flight['price']
+      deeplink_url = "https://ghasedak24.com/reservation/entries/#{flight['ticket_id']}/?adl=1&chd=0&inf=0&fr=0"
 
-      saved_flight = Flight.upsert(route.id, flight_number, departure_time, airline_code, airplane_type)
+      saved_flight = Flight.upsert(route.id, flight_number, departure_time, airline_code, nil)
       add_to_flight_prices(
         FlightPrice.new(flight_id: saved_flight.id, price: price.to_s, supplier: supplier_name.downcase, flight_date: date.to_s, deep_link: deeplink_url)
       )
