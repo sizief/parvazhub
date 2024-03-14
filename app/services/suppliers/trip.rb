@@ -5,13 +5,23 @@ class Suppliers::Trip < Suppliers::Base
   DEEPLINK = ENV['URL_TRIP_DEEPLINK']
 
   def search_supplier
-    response = RestClient::Request.execute(
+    response1 = RestClient::Request.execute(
       method: :post,
       url: URL,
       headers: headers,
       payload: params.to_json
     )
-    { status: true, response: response.body}
+ 
+    search_id = JSON.parse(response1)['SearchId']
+    sleep 1
+    response2 = RestClient::Request.execute(
+      method: :post,
+      url: "#{URL}?searchId=#{search_id}",
+      headers: headers,
+      payload: params.to_json
+    )
+
+    { status: true, response: response2.body}
   rescue *HTTP_ERRORS => e
     update_status(e)
     { status: false }

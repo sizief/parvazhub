@@ -58,7 +58,7 @@ module SearchHelper
 
   def airplane_name_for(airplane_type)
     case airplane_type.upcase.delete(' ')
-    when 'MCDOUGLASMD-80SERIES', 'MD', 'MD8', 'BOINGMD-82', 'BOEINGMD-82', 'BOEINGMD-88', 'MD80', 'M82', 'MD-80', 'MD82', 'MD-82', 'MD83', 'MD-83', 'MD88', 'MD-88', 'MD.88', 'BOEINGMD', 'MS', 'M83', 'M80', 'BOEING-MD', 'MCDONNELLDOUGLASMD80', 'M88', 'MD8X', 'BOEINGMD-83', 'بوئينگ', 'MD-8X', 'BOEING','707'
+    when 'MCDONNELLDOUGLASMD-83', 'MCDOUGLASMD-80SERIES', 'MD', 'MD8', 'BOINGMD-82', 'BOEINGMD-82', 'BOEINGMD-88', 'MD80', 'M82', 'MD-80', 'MD82', 'MD-82', 'MD83', 'MD-83', 'MD88', 'MD-88', 'MD.88', 'BOEINGMD', 'MS', 'M83', 'M80', 'BOEING-MD', 'MCDONNELLDOUGLASMD80', 'M88', 'MD8X', 'BOEINGMD-83', 'بوئينگ', 'MD-8X', 'BOEING','707'
       'بویینگ  ام دی'
     when 'AB3', 'Airbus'
       'ایرباس'
@@ -76,7 +76,7 @@ module SearchHelper
       'ایرباس ۳۲۰'
     when 'BOEING727-200', '727', '727-200', 'B727', 'B.727', 'BOEING727'
       'بویینگ ۷۲۷'
-    when 'BOEING737(ALLSERIES-STAGE3)', 'B737', '737', '737-500', 'B737-400', '737-300', '737-600', '737-300', '737-700', '737-100', 'BOEING737', 'BOEING737-500'
+    when 'BOEING737-500(NOWINGLETS)', 'BOEING737-300(NOWINGLETS)','BOEING737(ALLSERIES-STAGE3)', 'B737', '737', '737-500', 'B737-400', '737-300', '737-600', '737-300', '737-700', '737-100', 'BOEING737', 'BOEING737-500'
       'بویینگ ۷۳۷'
     when '735'
       'بویینگ ۷۳۵'

@@ -11,6 +11,6 @@ x.register_request # for the ones that has two level RQ/RS
 ## Run
 `docker-compose up`  
 For some reasons, `assets:precompile` does not add font folder to the public/assets. cp them manually from `/app/assets/fonts` to `/public/assets/fonts`
-
+console: `docker-compose run app bundle exec rails c`
 ## Copyright
 Do whatever you want.
