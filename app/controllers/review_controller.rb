@@ -31,6 +31,7 @@ class ReviewController < ApplicationController
 
   def create
     return nil if create_params[:text] =~ /dark|web|drug|onion|tor|market/
+    return nil if !create_params[:text].scan(/\p{Cyrillic}/).empty? #Block Russian spams
 
     result = Reviews::Create.new(
       author: create_params[:author],
