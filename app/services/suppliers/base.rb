@@ -18,7 +18,11 @@ class Suppliers::Base
     Timeout::Error,
     JSON::ParserError,
     RestClient::Forbidden,
-    RestClient::Unauthorized
+    RestClient::Unauthorized,
+    RestClient::BadRequest,
+    RestClient::InternalServerError,
+    RestClient::NotFound,
+    RestClient::Found,
   ].freeze
 
   def initialize(

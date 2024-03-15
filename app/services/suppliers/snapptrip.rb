@@ -13,13 +13,6 @@ class Suppliers::Snapptrip < Suppliers::Base
     )
     { status: true, response: ActiveSupport::Gzip.decompress(response.body) }
   rescue *HTTP_ERRORS => e
-  rescue RestClient::BadRequest => e
-  rescue RestClient::InternalServerError => e
-  rescue RestClient::Found => e
-  rescue RestClient::NotFound => e
-  rescue RestClient::Found => e
-  rescue RestClient::Found => e
-  rescue RestClient::InternalServerError => e
     update_status(e)
     { status: false }
   end
@@ -74,8 +67,10 @@ class Suppliers::Snapptrip < Suppliers::Base
   end
 
   def headers
+    one_time_secret = secret
     {
-      'X-Request-Id': secret,
+      'X-Request-Id': one_time_secret,
+      'X-ST-Request-Id': one_time_secret,
       'Host': 'www.snapptrip.com',
       'Content-Type': 'application/json; charset=UTF-8',
       'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 10; E6883 Build/QQ3A.200805.001)',
