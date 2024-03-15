@@ -196,21 +196,5 @@
 		</div>
 	<% end %>
 
-	<% unless @route_days.size == 0 %>
-	<div class="city-calendar" >
-		<h4>
-			چه روزهایی
-			<%= "#{@origin.persian_name} به #{@destination.persian_name}" %> 
-			پرواز دارد؟
-		</h4>
-		<p>
-		<% @route_days.each do |day|   %>
-			<%= week_day_to_human_persian day  %>
-		<% end %>
-		</p>
-	</div>
-<% end %>
-
-
 </div>
 <%= render 'layouts/searchbox-helper', date_picker_inline: false %>   

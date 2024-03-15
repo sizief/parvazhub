@@ -24,20 +24,14 @@
         <b style="color:#29aae1;">قیمت </b>
         را در سایت فروشنده چک کنید.
 
-        <br/><br/>
-        <a href="<%= supplier_review_page_path(@supplier.downcase) %>" target="_blank">
-            در صفحه‌ی نظرهای  <%= @supplier %> در سایت ما از تجربه خریدتان بنویسید
-        </a>
     </h3>
 
     <div style="text-align: center;padding: 3em;direction: rtl;line-height: 1.5em;">
-        اگر به طور خودکار به سایت فروشنده منتقل نشدید روی لینک زیر کلیک کنید:
-        <br/>
         <a href="<%= @redirect_link %>" rel="nofollow"> انتقال به سایت فروشنده </a>
         <script>
           setTimeout(function(){
             window.location.href = "<%= @redirect_link.html_safe %>"; 
-          }, 5000);
+          }, 3000);
         </script>
     </div>
 <% end %>
