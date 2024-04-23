@@ -2,7 +2,7 @@
   - critical
   - default
   - low
-:concurrency: 5
+:concurrency: 1
 :schedule:
 #flightPrice remover 
   flight_price_remover:
