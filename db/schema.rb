@@ -192,7 +192,7 @@ ActiveRecord::Schema.define(version: 2024_10_26_171026) do
     t.integer "user_id"
     t.integer "category", default: 0
     t.boolean "published", default: true
-    t.index ["user_id", "text"], name: "index_reviews_on_user_id_and_text", unique: true
+    t.index ["author", "text", "rate"], name: "index_reviews_on_author_and_text_and_rate", unique: true
     t.index ["user_id"], name: "index_reviews_on_user_id"
   end
 
