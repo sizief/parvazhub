@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_26_135318) do
+ActiveRecord::Schema.define(version: 2024_10_26_171026) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -192,6 +192,7 @@ ActiveRecord::Schema.define(version: 2021_06_26_135318) do
     t.integer "user_id"
     t.integer "category", default: 0
     t.boolean "published", default: true
+    t.index ["user_id", "text"], name: "index_reviews_on_user_id_and_text", unique: true
     t.index ["user_id"], name: "index_reviews_on_user_id"
   end
 
@@ -241,8 +242,8 @@ ActiveRecord::Schema.define(version: 2021_06_26_135318) do
   create_table "user_flight_price_histories", id: :serial, force: :cascade do |t|
     t.string "flight_id"
     t.string "channel"
-    t.datetime "created_at", default: "2021-06-19 15:56:03", null: false
-    t.datetime "updated_at", default: "2021-06-19 15:56:03", null: false
+    t.datetime "created_at", default: "2022-11-13 17:16:49", null: false
+    t.datetime "updated_at", default: "2022-11-13 17:16:49", null: false
     t.integer "user_id"
     t.index ["user_id"], name: "index_user_flight_price_histories_on_user_id"
   end
