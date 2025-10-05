@@ -1,12 +1,17 @@
+# typed: true
 # frozen_string_literal: true
 
 class Review < ApplicationRecord
   belongs_to :user
   enum category: %i[general airline supplier]
 
-  scope :last_text_review, ->(category) { 
-    where(category: category).where.not(text: nil).where.not(text: '').where(published: true).last
-  }
+  def self.last_text_review(category)
+    where(category: category)
+    .where.not(text: nil)
+    .where.not(text: '')
+    .where(published: true)
+    .last
+  end
 
   SUPPLIER = 'supplier'
   AIRLINE = 'airline'
@@ -33,8 +38,6 @@ class Review < ApplicationRecord
       Airline.new.get_persian_name_by_english_name(page)
     elsif supplier?
       Supplier.new.get_persian_name(page)
-    else
-      nil
     end
   end
 
