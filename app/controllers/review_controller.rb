@@ -1,3 +1,4 @@
+# typed: true
 # frozen_string_literal: true
 
 class ReviewController < ApplicationController
@@ -30,8 +31,16 @@ class ReviewController < ApplicationController
   end
 
   def create
-    return nil if create_params[:text] =~ /dark|web|drug|onion|tor|market|iq|tube|https/
-    return nil if !create_params[:text].scan(/\p{Cyrillic}/).empty? #Block Russian spams
+    return nil if /dark|web|drug|onion|tor|market/.match?(create_params[:text])
+
+    #Block Russian spams
+    return nil unless create_params[:text].scan(/\p{Cyrillic}/).empty? 
+
+    #Block totally non Persian/Arabic reviews, unless user is registered (not anonymous)
+    persian_or_arabic_chars = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/
+    if (current_user.email != 'anonymous@parvazhub.com') && create_params[:text].scan(persian_or_arabic_chars).empty?
+      return nil
+    end
 
     result = Reviews::Create.new(
       author: create_params[:author],
